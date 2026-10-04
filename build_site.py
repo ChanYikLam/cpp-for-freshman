@@ -312,7 +312,11 @@ def main(argv):
     write_dir_indexes(docs)
     fix_generated_pages(docs)
 
-    # ⑥ 落一份建站产物说明，避免有人手改 docs/ 里的页面
+    # ⑥ 术语表提到显眼位置：生成器把 GLOSSARY 放在科目页**底部**的附件区，而这份课程的对象
+    #    是零基础新生——他们最需要的就是一个随时能翻的术语表，藏在最底下等于没有。
+    inject_glossary_links(docs, slugs)
+
+    # ⑦ 落一份建站产物说明，避免有人手改 docs/ 里的页面
     write_text(os.path.join(docs, 'BUILD.md'), BUILD_NOTE)
 
     broken = check_local_links(docs)
@@ -501,6 +505,80 @@ def fix_generated_pages(docs):
             if new != text:
                 write_text(page, new)
     print(f'  构建后规范化：资产路径修 {fixed_assets} 处 · .md→.html 改写 {fixed_md} 处')
+
+
+GLOSSARY_STYLE = """<style>
+.learn-glossary-callout{margin:var(--syo-space-4,1rem) 0 0;padding:14px 16px;border-radius:12px;
+ border:1px solid color-mix(in srgb,var(--syo-accent,#0a6c4f) 34%,transparent);
+ background:color-mix(in srgb,var(--syo-accent,#0a6c4f) 7%,transparent)}
+.learn-glossary-callout__head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0}
+.learn-glossary-callout__title{font-size:1rem;font-weight:600;margin:0}
+.learn-glossary-callout__body{margin:6px 0 0;font-size:.875rem;line-height:1.7;color:var(--syo-fg-muted,#555)}
+.learn-glossary-callout__go{display:inline-block;margin-top:10px;padding:7px 14px;border-radius:999px;
+ background:var(--syo-accent,#0a6c4f);color:#fff;font-size:.875rem;font-weight:600;text-decoration:none}
+.learn-glossary-callout__go:hover{filter:brightness(1.08)}
+</style>"""
+
+GLOSSARY_CALLOUT = GLOSSARY_STYLE + """
+<section class="learn-glossary-callout" aria-label="术语表">
+  <p class="learn-glossary-callout__head">
+    <span class="learn-glossary-callout__title">📖 术语表 · 遇到不懂的词先翻这里</span>
+  </p>
+  <p class="learn-glossary-callout__body">每个计算机专有名词都在这里写了「为什么需要它、它是什么、不要用哪个说法代替它」。
+  看书时卡在某个词上，直接来这里查——不用往前翻找它在哪一章出现过。</p>
+  <a class="learn-glossary-callout__go" href="{HREF}">打开术语表 →</a>
+</section>
+"""
+
+
+def in_comment(text, pos):
+    """pos 这个位置是不是落在 HTML 注释里（`<!--` 比 `-->` 更靠后就算）。"""
+    before = text[:pos]
+    return before.rfind('<!--') > before.rfind('-->')
+
+
+def inject_glossary_links(docs, slugs):
+    """把术语表放到两个「一眼就能看到」的位置。
+
+    生成器把 GLOSSARY 只挂在科目页**底部**的附件区（`术语与资源` 那一组）。这份课程的读者是
+    零基础新生，术语正是他们最需要随手翻的东西——放在最底下等于没有。所以这里在**课程首页**
+    与**科目页顶部**各插一张卡片。
+
+    为什么在打包阶段做而不是改生成器模板：`docs/` 本来就是生成产物，而模板属于学习系统的引擎，
+    改它会影响别的科目。卡片自带内联样式，不引外部文件，离线照样正常。
+    """
+    made = 0
+    for slug in slugs:
+        # ① 科目页：插在 <main> 开头，也就是「在做的项目」卡片之前，紧跟页头
+        page = os.path.join(docs, slug, 'index.html')
+        if os.path.isfile(page) and 'learn-glossary-callout' not in read_text(page):
+            text = read_text(page)
+            anchor = f'<main class="syo-container learn-main" id="learn-content">'
+            if anchor in text and not in_comment(text, text.find(anchor)):
+                text = text.replace(
+                    anchor, anchor + '\n' + GLOSSARY_CALLOUT.replace('{HREF}', 'GLOSSARY.html'), 1)
+                write_text(page, text)
+                made += 1
+
+        # ② 课程首页：插在 `<main>` 开头，也就是科目卡片列表之前，学生一进来就看得到。
+        #
+        # ⚠️ 锚点必须挑**注释之外**的字符串：模板会把大段说明注释原样留在产物里，注释里也写着
+        # `<div class="learn-subject-list">` 这类字样，拿它当锚点会把卡片插进注释里——
+        # 页面上什么都没有，而检查还"通过"（真实踩到过）。这里用 `<main …>` 开头那一行，
+        # 并额外确认插入点不在注释里。
+        home = os.path.join(docs, 'index.html')
+        if os.path.isfile(home) and '<section class="learn-glossary-callout"' not in read_text(home):
+            text = read_text(home)
+            anchor = '<main class="syo-container learn-main" id="learn-content">'
+            pos = text.find(anchor)
+            if pos >= 0 and not in_comment(text, pos):
+                # 首页在站点根，术语表在 <slug>/GLOSSARY.html，相对路径要带上科目目录
+                text = text[:pos + len(anchor)] + '\n' + \
+                    GLOSSARY_CALLOUT.replace('{HREF}', f'{slug}/GLOSSARY.html') + \
+                    text[pos + len(anchor):]
+                write_text(home, text)
+                made += 1
+    print(f'  术语表入口：插入 {made} 处（课程首页 + 科目页顶部）')
 
 
 if __name__ == '__main__':

@@ -220,6 +220,26 @@ body.is-ready .learn-subject-card { animation: none; }
 </header>
 
 <main class="syo-container learn-main" id="learn-content">
+<style>
+.learn-glossary-callout{margin:var(--syo-space-4,1rem) 0 0;padding:14px 16px;border-radius:12px;
+ border:1px solid color-mix(in srgb,var(--syo-accent,#0a6c4f) 34%,transparent);
+ background:color-mix(in srgb,var(--syo-accent,#0a6c4f) 7%,transparent)}
+.learn-glossary-callout__head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0}
+.learn-glossary-callout__title{font-size:1rem;font-weight:600;margin:0}
+.learn-glossary-callout__body{margin:6px 0 0;font-size:.875rem;line-height:1.7;color:var(--syo-fg-muted,#555)}
+.learn-glossary-callout__go{display:inline-block;margin-top:10px;padding:7px 14px;border-radius:999px;
+ background:var(--syo-accent,#0a6c4f);color:#fff;font-size:.875rem;font-weight:600;text-decoration:none}
+.learn-glossary-callout__go:hover{filter:brightness(1.08)}
+</style>
+<section class="learn-glossary-callout" aria-label="术语表">
+  <p class="learn-glossary-callout__head">
+    <span class="learn-glossary-callout__title">📖 术语表 · 遇到不懂的词先翻这里</span>
+  </p>
+  <p class="learn-glossary-callout__body">每个计算机专有名词都在这里写了「为什么需要它、它是什么、不要用哪个说法代替它」。
+  看书时卡在某个词上，直接来这里查——不用往前翻找它在哪一章出现过。</p>
+  <a class="learn-glossary-callout__go" href="cpp-basics/GLOSSARY.html">打开术语表 →</a>
+</section>
+
 
   <!-- 统计概览：数值由页面脚本从卡片的数据属性实时算出，生成器无需为此准备占位符。
        初始值写“–”而不是 0：脚本未运行时不显示一个错误的数字 -->

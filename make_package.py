@@ -20,7 +20,9 @@ import sys
 import zipfile
 
 INCLUDE_DIRS = ('docs', 'lab')
-INCLUDE_FILES = ('README.md',)
+# 解压后第一眼看到的两份说明：`先看这里.txt` 是给学生看的（含术语表入口），
+# `README.md` 是给维护者看的。
+INCLUDE_FILES = ('先看这里.txt', 'README.md')
 SKIP_DIRS = {'.git', '.studymate-stage', '.stage', 'dist', '__pycache__', '.DS_Store'}
 WARN_BYTES = 20 * 1024 * 1024
 
