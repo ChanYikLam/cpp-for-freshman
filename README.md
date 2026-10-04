@@ -23,9 +23,12 @@
 
 课程以命令行 `g++` 为主，第一章会手把手带装。简版：
 
-- **macOS**：终端里敲 `xcode-select --install`，然后 `g++ --version` 验证。
+- **macOS**：终端里敲 `xcode-select --install`（装的是 Apple 的命令行开发工具），装完 `g++ --version` 应该能打印出版本号。
+  - ⚠️ 一个容易误会的点：**macOS 上的 `g++` 其实不是 GCC，而是 Apple clang 的别名**。所以你看到版本号里写着 `Apple clang version …` 是**正常的**，不是装错了。本课程的命令与代码在两者上都一样。
 - **Windows**：装 Dev-C++ 或 VS Code + MinGW-w64；第一章有对照说明。
 - **Linux**：`sudo apt install g++`（Debian/Ubuntu 系）。
+
+全书统一用 `g++ 源文件.cpp -o 程序名` 这种命令行写法编译。**用 Dev-C++ 这类图形界面的同学不必改用命令行**：Dev-C++ 里按 F11 的效果与命令行一样，第一章会把两边的对应对照讲清。
 
 ## 目录结构
 
