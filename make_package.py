@@ -19,10 +19,11 @@ import os
 import sys
 import zipfile
 
-INCLUDE_DIRS = ('docs', 'lab')
-# 解压后第一眼看到的两份说明：`先看这里.txt` 是给学生看的（含术语表入口），
-# `README.md` 是给维护者看的。
-INCLUDE_FILES = ('先看这里.txt', 'README.md')
+INCLUDE_DIRS = ('docs', 'texts')
+# 解压后最外层看到的：`texts/` 里的三份引导说明（1-先读我 / 2-建议用电脑打开 / 3-学习指南）
+# 与 `README.md`（给维护者看的）。**文件名带数字前缀是有意的**——解压后按名字排序时，
+# 这三份会排在 `docs`、`README.md` 前面，学生一眼就看到；不带前缀的话它们会被夹在中间。
+INCLUDE_FILES = ('README.md',)
 SKIP_DIRS = {'.git', '.studymate-stage', '.stage', 'dist', '__pycache__', '.DS_Store'}
 WARN_BYTES = 20 * 1024 * 1024
 
@@ -51,7 +52,11 @@ def main(argv):
                     if fn in SKIP_DIRS:
                         continue
                     src = os.path.join(root, fn)
-                    z.write(src, os.path.join(name, os.path.relpath(src, repo)))
+                    # `texts/` 里的引导说明**平铺到压缩包最外层**，不放进子目录——
+                    # 学生解压后要一眼看到「1-先读我」，而不是先点进一个 texts 文件夹
+                    # （真实踩到过：引导放进子目录等于没有引导）。
+                    inner = fn if d == 'texts' else os.path.relpath(src, repo)
+                    z.write(src, os.path.join(name, inner))
                     count += 1
         for fn in INCLUDE_FILES:
             src = os.path.join(repo, fn)
@@ -62,7 +67,7 @@ def main(argv):
     size = os.path.getsize(zip_path)
     print(f'压缩包已生成：{zip_path}')
     print(f'  打包 {count} 个文件 · 体积 {size / 1024:.0f} KB')
-    print('  对方解压后：双击最外层的 docs/index.html 就能开始学')
+    print('  对方解压后：先看最外层的「1-先读我.md」，再双击 docs/index.html')
     if size > WARN_BYTES:
         print(f'  注意：超过 20MB，微信传文件可能较慢，也可直接发整个文件夹', file=sys.stderr)
     return 0

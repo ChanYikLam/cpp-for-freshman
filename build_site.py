@@ -168,18 +168,17 @@ def main(argv):
             )
             stats['subjects'] += 1
 
-        # 章节页：课件目录里的 HTML 平移到 docs/lessons/，引用同步改写
+        # 章节页：**不在这里单独拷一份**。
+        #
+        # 曾经这里把 `<科目>/lessons/*.html` 平移到 `docs/lessons/`，同时下面遍历子目录时
+        # 又拷了一份到 `docs/<slug>/lessons/`——于是站点里有两份一模一样的 18 页课件。
+        # 而**真正被用的是 `<slug>/lessons/`**（科目页上的链接写的是 `lessons/xxx.html`，
+        # 相对科目页解析），`docs/lessons/` 那份没有任何页面引用，且它的 lab 相对路径是错的
+        # （差一层）。结果断链自检去查那份孤本，报出一批实际点不到、也没人会点的死链。
+        # 现在只保留 `<slug>/lessons/` 一份，索引与相对路径都自洽。
         src_lessons = os.path.join(src_subj, 'lessons')
-        htmls = []
         if os.path.isdir(src_lessons):
-            htmls = sorted(n for n in os.listdir(src_lessons) if n.endswith('.html'))
-        dst_lessons = os.path.join(docs, 'lessons')
-        for name in htmls:
-            write_text(
-                os.path.join(dst_lessons, name),
-                rewrite(read_text(os.path.join(src_lessons, name)), LESSON_REWRITES),
-            )
-            stats['lessons'] += 1
+            stats['lessons'] = sum(1 for n in os.listdir(src_lessons) if n.endswith('.html'))
 
         # 参考页：gen_home.py 会把 GLOSSARY.md / RESOURCES.md 编译成同名 HTML，放在科目根。
         # 这类页面由科目主页的附件区链接，组件写成科目根相对路径（`assets/style.css`），
