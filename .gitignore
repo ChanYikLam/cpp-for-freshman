@@ -16,3 +16,8 @@ a.out
 # Python 字节码（跨解释器版本没用，不该进仓库；zip 包同理，见上面的 dist/）
 __pycache__/
 *.pyc
+
+# GPG 公钥不要进仓库：它是敏感度不高的公开信息，但没必要放进公开仓库，
+# 而且会暴露密钥里的邮箱。要登记到平台时用 `gpg --export --armor <指纹>` 临时导出即可。
+gpg-public-key.asc
+*.asc
