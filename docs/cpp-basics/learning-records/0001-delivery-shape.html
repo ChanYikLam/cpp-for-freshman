@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LR-0001 · 定下课程的交付形态与工程约束 · C++ 零基础入门（计算机专业大一）</title>
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回科目</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">学习记录</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>LR-0001 · 定下课程的交付形态与工程约束</h1>
+<p><strong>日期</strong>：2026-10-04<br><strong>来源</strong>：编写者（学习者本人）在开课盘问中的明确选择</p>
+<h2>决定</h2>
+<p>本套 C++ 课程的定位是<strong>给同专业大一新生自学的教材</strong>，不是编写者个人跟课学习。据此定下四条硬约束：</p>
+<ol>
+<li><strong>形态</strong>：产出为静态 HTML 文件夹 + 随包发布的 <code>lab/</code> 代码练习目录，<strong>离线可打开</strong>（不联网、无 CDN，KaTeX 已随包带上），可整体压缩后<strong>通过微信转发</strong>，手机浏览器可读。</li>
+<li><strong>范围</strong>：到<strong>指针</strong>为止。不含结构体、动态内存 <code>new</code>/<code>delete</code>、类与面向对象、模板、<code>std::vector</code>/<code>std::string</code>、STL、文件读写、多文件工程。引用只在讲完取地址后作一句预告。</li>
+<li><strong>工程边界</strong>：<code>kind: 实操</code> 与 <code>kind: 实验</code> 的节点会各产出一个真实 <code>lab/</code> 任务树（留白任务 + <code>solutions/</code> 参考解），因此课型数量受控——实验课<strong>恰好 3 个</strong>、实操节点<strong>不超过 7 个</strong>，其余为概念课。概念课的动手练习写在课件正文的 <code>::: practice</code> 块里（给完整可编译代码 + 编译命令 + 预期输出），不触发 lab 要求。</li>
+<li><strong>依据来源</strong>：首选编写者本机的《C++ Primer Plus：中文版（第六版）》，其余全网补齐；编写者明确「不用一味追求权威」，以<strong>技术结论准确、代码可编译</strong>为准。</li>
+</ol>
+<h2>为什么这么定</h2>
+<ul>
+<li>交付对象是一群没有任何编程基础的新生，微信是他们的实际分发渠道。任何「需要装环境才能看」或「需要联网加载样式」的形式都会在第一屏就劝退人，所以离线自包含是硬要求，不是优化项。</li>
+<li>学习系统默认的页面引用路径是按「学习工作区」的目录形状写死的（根主页 <code>.learning/../assets/…</code>、课件 <code>../../assets/…</code>）。直接把渲染产物发出去会变成没有样式的裸 HTML，因此必须有一步「重排目录 + 改写相对引用」的打包流程，并用断链自检把结果看住。</li>
+</ul>
+<h2>由此产生的工作方式（下次续做时照这个走）</h2>
+<ul>
+<li>课件不是手写 HTML，而是「内容文件 <code>.md</code> + 题库 <code>.quiz.json</code> → <code>render_lesson.py</code> → <code>gen_home.py</code> → <code>build_site.py</code>」这条链产出。</li>
+<li>改课内容改源文件，<strong>绝不手改 <code>docs/</code> 里的产物</strong>（下次构建会覆盖）。</li>
+<li>发出去之前必须看到 <code>build_site.py</code> 打印「本地引用自检：全部可达」。</li>
+<li>仓库提交<strong>一律 GPG 签名</strong>（全局 <code>commit.gpgsign=true</code>，签名密钥 <code>DA2F4CD368DE5C4F</code>）。</li>
+</ul>
+  <footer class="lesson-footer">
+    StudyMate · LR-0001 · 定下课程的交付形态与工程约束 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

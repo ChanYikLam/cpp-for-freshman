@@ -1,8 +1,14 @@
-# 生成/构建中间产物
+# 学习工作区与构建中间产物（不发出去）
 .studymate-stage/
 .stage/
+dist/
+
+# 编译产物
 build/
 *.o
 *.out
 *.exe
+a.out
+
+# 系统垃圾
 .DS_Store
