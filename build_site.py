@@ -48,6 +48,9 @@ LESSON_REWRITES = [         # 对 <repo>/docs/lessons/<NNNN>-<id>.html 用
     ('../index.html', '../index.html'),
 ]
 
+# 打包时跳过的目录/文件名（编辑用与系统垃圾，发课程不需要）
+SKIP_DIRS = {'.git', '.stage', '.studymate-stage', 'dist', '__pycache__', '.DS_Store'}
+
 
 def read_text(path):
     with open(path, 'r', encoding='utf-8') as f:
@@ -121,7 +124,7 @@ def main(argv):
         shutil.rmtree(docs)
     os.makedirs(docs)
 
-    stats = {'lessons': 0, 'subjects': 0, 'assets': 0, 'reference': 0}
+    stats = {'lessons': 0, 'subjects': 0, 'assets': 0, 'reference': 0, 'lab': 0}
 
     # ① 资源：整个共享层 + 每个科目的组件，一次性拷进 docs/assets/
     assets_dst = os.path.join(docs, 'assets')
@@ -200,7 +203,27 @@ def main(argv):
                 )
                 stats['reference'] += 1
 
-    # ④ 根目录再放一份术语表与资源清单：方便直接翻，不经过科目主页
+    # ④ 动手练习（lab/）：整份拷进 docs/lab/，让课件里那条 lab 链接在发出去的包里也点得开。
+    #    学生拿到的是「网页 + 可下载的任务文件」两样，手机上看网页、电脑上做题。
+    lab_count = 0
+    for slug in slugs:
+        src_lab = os.path.join(src_subjects, slug, 'lab')
+        if not os.path.isdir(src_lab):
+            continue
+        dst_lab = os.path.join(docs, 'lab')
+        for root, dirs, files in os.walk(src_lab):
+            dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+            for fn in sorted(files):
+                if fn in SKIP_DIRS:
+                    continue
+                src = os.path.join(root, fn)
+                dst = os.path.join(dst_lab, os.path.relpath(src, src_lab))
+                os.makedirs(os.path.dirname(dst), exist_ok=True)
+                shutil.copy2(src, dst)
+                lab_count += 1
+    stats['lab'] = lab_count
+
+    # ⑤ 根目录再放一份术语表与资源清单：方便直接翻，不经过科目主页
     for slug in slugs:
         src_subj = os.path.join(src_subjects, slug)
         for name in ('GLOSSARY.html', 'RESOURCES.html'):
@@ -213,13 +236,14 @@ def main(argv):
                                            ('assets/', 'assets/')]),
                 )
 
-    # ⑤ 落一份建站产物说明，避免有人手改 docs/ 里的页面
+    # ⑥ 落一份建站产物说明，避免有人手改 docs/ 里的页面
     write_text(os.path.join(docs, 'BUILD.md'), BUILD_NOTE)
 
     broken = check_local_links(docs)
     print(f'站点已生成：{docs}')
     print(f"  科目主页 {stats['subjects']} 个 · 章节 {stats['lessons']} 个 · "
-          f"参考页 {stats['reference']} 个 · 资源文件 {stats['assets']} 个")
+          f"参考页 {stats['reference']} 个 · 练习文件 {stats['lab']} 个 · "
+          f"资源文件 {stats['assets']} 个")
     if broken:
         print(f'  断链 {len(broken)} 条（必须修）：', file=sys.stderr)
         for page, ref in broken:
