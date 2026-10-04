@@ -86,15 +86,19 @@ def load_curriculum(subject):
 
 
 def collect_examples(subject):
-    """扫 .stage 下所有 learning-coach-*/examples/，返回 {stem: (节点id, 期望)}。"""
+    """示例登记表的来源：**优先 `<科目>/code/MANIFEST.txt`**（正式位置，收拢后的），
+    没有才回退到各批次暂存的 `examples/MANIFEST.txt`。
+
+    返回 {stem: (节点id, 期望)}。为什么改：批次暂存 `.stage/learning-coach-*` 交付前会被清掉，
+    工具只认它就等于只能用一次（真实踩到过：清理后再跑，工具说「一个示例都没有」）。
+    """
     out = {}
+    sources = [os.path.join(subject, 'code', 'MANIFEST.txt')]
     stage = os.path.join(subject, '.stage')
-    if not os.path.isdir(stage):
-        return out
-    for name in sorted(os.listdir(stage)):
-        if not name.startswith('learning-coach-'):
-            continue
-        man = os.path.join(stage, name, 'examples', 'MANIFEST.txt')
+    if os.path.isdir(stage):
+        sources += [os.path.join(stage, d, 'examples', 'MANIFEST.txt')
+                    for d in sorted(os.listdir(stage)) if d.startswith('learning-coach-')]
+    for man in sources:
         if not os.path.isfile(man):
             continue
         for line in read(man).splitlines():
@@ -102,7 +106,7 @@ def collect_examples(subject):
                 continue
             parts = [p.strip() for p in line.split('\t')]
             if len(parts) >= 2:
-                out[parts[0]] = (parts[1], parts[2] if len(parts) > 2 else '')
+                out.setdefault(parts[0], (parts[1], parts[2] if len(parts) > 2 else ''))
     return out
 
 

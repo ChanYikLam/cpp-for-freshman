@@ -53,6 +53,10 @@ def parse_manifest(path):
                 continue
             parts = [p.strip() for p in line.split('\t')]
             if len(parts) < 2:
+                # 没有 TAB 的是**说明行**（表头/注释），不是登记项——只提示、不当错误。
+                # 早先一律算错误，收拢后的总表里那条表头就让整次验收失败（真实踩到过）。
+                if '\t' not in line:
+                    continue
                 bad.append((lineno, line, '少于两列（应为 <stem>\\t<节点id>\\t<run|compile|fail>）'))
                 continue
             stem, node = parts[0], parts[1]
@@ -122,15 +126,34 @@ def main(argv):
         dirs = [d for d in sorted(os.listdir(stage)) if d.startswith('learning-coach-')] \
             if os.path.isdir(stage) else []
     if not dirs:
-        print('找不到任何 examples/ 目录（没传目录名，且 .stage 下没有 learning-coach-*）')
-        return 0
+        # 优先用**正式位置**：示例经 tools/collect_code.py 收拢到 `<科目>/code/`，
+        # 各批次的 `.stage/learning-coach-*` 在交付前会被清掉。只在没有 code/ 时才回退。
+        code_dir = os.path.join(subject, 'code')
+        if os.path.isfile(os.path.join(code_dir, 'MANIFEST.txt')):
+            dirs = ['code']   # 相对科目目录；下面会拼成 <subject>/code
+            print('（没传目录名；改用正式位置 code/MANIFEST.txt）')
+        else:
+            print('找不到任何 examples/ 目录（没传目录名，且 .stage 下没有 learning-coach-*，'
+                  '科目下也没有 code/MANIFEST.txt）')
+            return 0
 
     total = passed = 0
     failures = []
     legacy_seen = []
     for name in dirs:
-        base = name if os.path.isabs(name) else os.path.join(subject, '.stage', name)
-        manifest = os.path.join(base, 'examples', 'MANIFEST.txt')
+        # 绝对路径直接用；否则先看是不是「科目下的目录」（`.`、`code` 这类），最后才当批次名
+        if os.path.isabs(name):
+            base = os.path.normpath(name)
+        elif os.path.isdir(os.path.join(subject, name)):
+            base = os.path.join(subject, name)
+        else:
+            base = os.path.join(subject, '.stage', name)
+        # 两种布局：批次暂存 `<base>/examples/MANIFEST.txt`、收拢后的 `<base>/MANIFEST.txt`。
+        # 先看收拢后的那种——`code/` 就是这一种。
+        manifest, ex_dir = os.path.join(base, 'MANIFEST.txt'), base
+        if not os.path.isfile(manifest):
+            manifest = os.path.join(base, 'examples', 'MANIFEST.txt')
+            ex_dir = os.path.join(base, 'examples')
         print('=' * 74)
         print(f'{name}')
         if not os.path.isfile(manifest):
@@ -145,7 +168,7 @@ def main(argv):
             for stem, node, expect, legacy in entries:
                 if legacy:
                     legacy_seen.append(f'{name}: {stem} 用了旧写法 {legacy}')
-                cpp = os.path.join(base, 'examples', f'{stem}.cpp')
+                cpp = os.path.join(ex_dir, f'{stem}.cpp')
                 total += 1
                 if not os.path.isfile(cpp):
                     print(f'  [缺文件] {stem}.cpp  （节点 {node}）')

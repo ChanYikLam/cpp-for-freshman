@@ -95,7 +95,7 @@ def main(argv):
 
     # 合并成一份总表，标出来源批次，便于日后追溯
     lines = ['# 本课程全部示例代码', '',
-             '每行：`文件`  TAB  `所属节点`  TAB  `期望（run=能跑通 / compile=只编译 / fail=故意编译不过）`  TAB  `来源批次`',
+             '# 每行：`文件`  TAB  `所属节点`  TAB  `期望（run=能跑通 / compile=只编译 / fail=故意编译不过）`  TAB  `来源批次`',
              '']
     for batch, ex_dir in found:
         for line in open(os.path.join(ex_dir, 'MANIFEST.txt'), encoding='utf-8'):
