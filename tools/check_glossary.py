@@ -159,6 +159,19 @@ def context(text, start, end, width=16):
     return text[max(0, start - width):min(len(text), end + width)].replace('\n', ' ')
 
 
+# 「对比说明」的标志词：出现在别名**前面**一小段里时，作者是在解释叫法的区别，不是用错了词。
+# 例如「这个概念在别的书里也叫**生存期**，本课程统一说生命周期」——这是必要的对比教学。
+#
+# 为什么必须豁免：术语表里的别名有一半正是**正文该主动讲清**的东西（「别人这么叫，我们那么叫」）。
+# 不豁免就会逼着作者不敢讲区别，而讲清区别恰恰是这门课对零基础读者最大的价值之一。
+CONTRAST_RE = re.compile(r'(也叫|又称|也叫作|常叫|俗称|别名|换句话说|有人叫|不要叫|不叫|避免|别用|不要用)')
+
+
+def has_contrast_before(text, start, window=24):
+    """别名出现处往前看一小段，判断它是不是在被「对比着说」。"""
+    return bool(CONTRAST_RE.search(text[max(0, start - window):start]))
+
+
 def as_term_hits(text, alias):
     """找出「把 alias 当术语用」的位置：加粗、引号、反引号包裹。
 
@@ -221,7 +234,11 @@ def main(argv):
                 # 判据：只有「加粗/加引号地把别名当术语给出」才算错
                 for m in as_term_hits(body, alias):
                     ctx = context(body, m.start(), m.end())
-                    errors.append((path, alias, term, '正文', ctx))
+                    if has_contrast_before(body, m.start()):
+                        # 作者在讲「别人这么叫、我们那么叫」——这是必要的对比教学，不算错
+                        notes.append((path, alias, term, '正文（对比说明）', ctx))
+                    else:
+                        errors.append((path, alias, term, '正文', ctx))
                 # 代码块里的写法另记，只提示：代码里出现某个词往往是被注释引用的原文
                 for m in as_term_hits(fenced, alias):
                     ctx = context(fenced, m.start(), m.end())
@@ -238,7 +255,7 @@ def main(argv):
               '正文里把术语表明令避免的别名当成术语给出（加粗或加引号），读者会对不上号')
         show(errors, '错')
     if notes:
-        print(f'\n提示（{len(notes)} 处，不算错）：别名出现在代码块里被引用的原文中')
+        print(f'\n提示（{len(notes)} 处，不算错）：或是「别人这么叫、我们那么叫」的对比说明，或是代码块里被引用的原文')
         show(notes[:8], '提示')
         if len(notes) > 8:
             print(f'  …其余 {len(notes) - 8} 处略')

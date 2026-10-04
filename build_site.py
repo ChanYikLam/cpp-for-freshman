@@ -124,7 +124,7 @@ def main(argv):
         shutil.rmtree(docs)
     os.makedirs(docs)
 
-    stats = {'lessons': 0, 'subjects': 0, 'assets': 0, 'reference': 0, 'lab': 0}
+    stats = {'lessons': 0, 'subjects': 0, 'assets': 0, 'reference': 0, 'lab': 0, 'code': 0}
 
     # ① 资源：整个共享层 + 每个科目的组件，一次性拷进 docs/assets/
     assets_dst = os.path.join(docs, 'assets')
@@ -203,25 +203,30 @@ def main(argv):
                 )
                 stats['reference'] += 1
 
-    # ④ 动手练习（lab/）：整份拷进 docs/lab/，让课件里那条 lab 链接在发出去的包里也点得开。
-    #    学生拿到的是「网页 + 可下载的任务文件」两样，手机上看网页、电脑上做题。
-    lab_count = 0
-    for slug in slugs:
-        src_lab = os.path.join(src_subjects, slug, 'lab')
-        if not os.path.isdir(src_lab):
-            continue
-        dst_lab = os.path.join(docs, 'lab')
-        for root, dirs, files in os.walk(src_lab):
-            dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
-            for fn in sorted(files):
-                if fn in SKIP_DIRS:
-                    continue
-                src = os.path.join(root, fn)
-                dst = os.path.join(dst_lab, os.path.relpath(src, src_lab))
-                os.makedirs(os.path.dirname(dst), exist_ok=True)
-                shutil.copy2(src, dst)
-                lab_count += 1
-    stats['lab'] = lab_count
+    # ④ 动手练习（lab/）与示例代码（code/）：整份拷进 docs/，让课件里那两条链接
+    #    在发出去的包里也点得开。学生拿到的是「网页 + 可下载的代码文件」两样：
+    #    手机上看网页、电脑上做题。
+    #
+    #    code/ 由 `tools/collect_code.py` 从各讲述批次的 examples/ 收拢而来。
+    #    少了这一步，课件 `::: resources` 里的 `code/xxx.cpp` 就是死链。
+    for sub in ('lab', 'code'):
+        count = 0
+        for slug in slugs:
+            src_dir = os.path.join(src_subjects, slug, sub)
+            if not os.path.isdir(src_dir):
+                continue
+            dst_dir = os.path.join(docs, sub)
+            for root, dirs, files in os.walk(src_dir):
+                dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+                for fn in sorted(files):
+                    if fn in SKIP_DIRS:
+                        continue
+                    src = os.path.join(root, fn)
+                    dst = os.path.join(dst_dir, os.path.relpath(src, src_dir))
+                    os.makedirs(os.path.dirname(dst), exist_ok=True)
+                    shutil.copy2(src, dst)
+                    count += 1
+        stats[sub] = count
 
     # ⑤ 根目录再放一份术语表与资源清单：方便直接翻，不经过科目主页
     for slug in slugs:
@@ -242,7 +247,7 @@ def main(argv):
     broken = check_local_links(docs)
     print(f'站点已生成：{docs}')
     print(f"  科目主页 {stats['subjects']} 个 · 章节 {stats['lessons']} 个 · "
-          f"参考页 {stats['reference']} 个 · 练习文件 {stats['lab']} 个 · "
+          f"参考页 {stats['reference']} 个 · 练习文件 {stats['lab']} 个 · 示例代码 {stats['code']} 个 · "
           f"资源文件 {stats['assets']} 个")
     if broken:
         print(f'  断链 {len(broken)} 条（必须修）：', file=sys.stderr)
@@ -283,6 +288,13 @@ BUILD_NOTE = """# 这是生成产物，不要手改
 
 `docs/` 里的所有文件都是 `build_site.py` 从学习工作区（`<WS>/.learning/`）**生成**的，
 手工修改会在下次构建时被覆盖。
+
+| 目录 | 是什么 | 从哪来 |
+|------|--------|--------|
+| `docs/lessons/` | 每一章一个 HTML | `render_lesson.py` 从内容文件渲染 |
+| `docs/code/` | **课程里出现过的全部示例代码**（可直接编译运行） | `tools/collect_code.py` 从各讲述批次的 `examples/` 收拢 |
+| `docs/lab/` | 动手任务与参考解 | 出题环节产出 |
+| `docs/assets/` | 样式、脚本、字体（全本地，断网也能看） | 共享层 + 科目组件 |
 
 要改课内容，改 `.learning/subjects/<slug>/lessons/<NNNN>-<节点id>.md`（讲解）
 或同名的 `.quiz.json`（题目），然后在引擎目录重新渲染并重跑构建：

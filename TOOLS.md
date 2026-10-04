@@ -13,9 +13,16 @@ cpp-for-freshman/
 │   ├── cpp-basics/        #   科目页、术语表、资源清单、学习记录
 │   └── BUILD.md           #   提醒：docs/ 是生成产物，别手改
 ├── lab/                   # 动手练习：留白任务 + solutions/ 参考解
+├── code/                  # 全部示例代码（tools/collect_code.py 从各批次 examples/ 收拢）
 ├── build_site.py          # 构建①：把课程工作区打包成 docs/ 静态站点
 ├── make_package.py        # 构建②：打成可发微信的 zip（产出在 dist/）
-├── tools/validate_schema.py  # 数据文件的 schema 校验器
+├── tools/                 # 校验与构建辅助脚本（见下）
+│   ├── validate_schema.py #   数据文件的 schema 校验器
+│   ├── check_examples.py  #   用编译器验收课件里的每个示例
+│   ├── check_glossary.py  #   用词是否与术语表一致
+│   ├── check_course.py    #   每章有没有动手块、示例引用对不对得上
+│   ├── collect_code.py    #   把示例代码收拢到 code/
+│   └── make_briefs.py     #   从大纲算每个节点的派工说明
 └── README.md
 ```
 
