@@ -16,6 +16,22 @@
 </head>
 
 <body class="lesson-body">
+<div class="learn-reading-bar" id="learn-reading-bar">
+  <div class="learn-reading-bar__group">
+    <span class="learn-reading-bar__label">字号</span>
+    <button type="button" class="learn-reading-bar__btn" id="learn-scale-down"
+            aria-label="缩小字号" title="缩小字号">A−</button>
+    <span class="learn-reading-bar__value" id="learn-scale-value">100%</span>
+    <button type="button" class="learn-reading-bar__btn" id="learn-scale-up"
+            aria-label="放大字号" title="放大字号">A+</button>
+  </div>
+  <div class="learn-reading-bar__group learn-reading-bar__group--end">
+    <label class="learn-reading-bar__switch" title="切换深浅主题">
+      <span class="learn-reading-bar__label">深色</span>
+      <input type="checkbox" id="learn-reading-theme">
+    </label>
+  </div>
+</div>
 
 <nav class="lesson-bar">
   <a href="../index.html">← 返回课程</a>
@@ -98,7 +114,7 @@
     <figcaption>图 1 · 字符串在内存里的样子：有效内容到空字符为止</figcaption>
   </figure>
 
-  <p>一格一格地列字符太啰嗦，还得自己记住末尾那个 <code>'\0'</code>。C++ 允许直接用双引号里的字符串给字符数组初始化，编译器会把空字符自动补在末尾：</p>
+  <p>一格一格地列字符太麻烦，还得自己记住末尾那个 <code>'\0'</code>。C++ 允许直接用双引号里的字符串给字符数组初始化，编译器会把空字符自动补在末尾：</p>
 
   <pre data-lang="cpp"><code>char name2[8] = "Zhang";</code></pre>
 
@@ -456,5 +472,6 @@ Chen 的成绩是 95 分</code></pre>
 <script src="../../assets/quiz.js" defer></script>
 <script src="../../assets/lesson-toc.js" defer></script>
 <script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+<script src="../../assets/learn-reading.js"></script>
 </body>
 </html>

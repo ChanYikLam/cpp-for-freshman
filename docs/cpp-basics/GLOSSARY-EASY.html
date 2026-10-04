@@ -52,6 +52,26 @@
 </style>
 </head>
 <body class="lesson-body">
+<div class="learn-reading-bar" id="learn-reading-bar" data-glossary-other="GLOSSARY.html" data-glossary-other-label="规范版">
+  <div class="learn-reading-bar__group">
+    <span class="learn-reading-bar__label">字号</span>
+    <button type="button" class="learn-reading-bar__btn" id="learn-scale-down"
+            aria-label="缩小字号" title="缩小字号">A−</button>
+    <span class="learn-reading-bar__value" id="learn-scale-value">100%</span>
+    <button type="button" class="learn-reading-bar__btn" id="learn-scale-up"
+            aria-label="放大字号" title="放大字号">A+</button>
+  </div>
+  <div class="learn-reading-bar__group">
+    <span class="learn-reading-bar__label">术语表</span>
+    <a class="learn-reading-bar__btn learn-reading-bar__btn--go" href="GLOSSARY.html" title="规范版">规范版 →</a>
+  </div>
+  <div class="learn-reading-bar__group learn-reading-bar__group--end">
+    <label class="learn-reading-bar__switch" title="切换深浅主题">
+      <span class="learn-reading-bar__label">深色</span>
+      <input type="checkbox" id="learn-reading-theme">
+    </label>
+  </div>
+</div>
 <nav class="lesson-bar">
   <a href="index.html">← 返回科目</a>
   <span>C++ 零基础入门（计算机专业大一）</span>
@@ -411,5 +431,6 @@ if (p != nullptr) {
 </div>
 
 </article>
+<script src="../assets/learn-reading.js"></script>
 </body>
 </html>

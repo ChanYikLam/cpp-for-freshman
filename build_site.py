@@ -309,6 +309,7 @@ def main(argv):
     # 有些 .md 根本没有编译产物（gen_home.py 只编译 reference/ 与 learning-records/ 两类），
     # 改成 .html 反而制造新的死链——必须**先看文件在不在**。
     write_dir_indexes(docs)
+    inject_reading_bar(docs)
     fix_generated_pages(docs)
 
     # ⑥ 术语表提到显眼位置：生成器把 GLOSSARY 放在科目页**底部**的附件区，而这份课程的对象
@@ -429,15 +430,16 @@ def write_dir_indexes(docs):
             rows.append(f'<li><b>{html.escape(sub)}/</b></li>')
         for n in files:
             rows.append(f'<li><a href="{html.escape(n)}">{html.escape(n)}</a></li>')
-        body = ('<!DOCTYPE html><html lang="zh-CN"><meta charset="utf-8">'
-                '<meta name="viewport" content="width=device-width,initial-scale=1">'
-                f'<title>{html.escape(os.path.basename(d))} · 文件列表</title>'
-                '<style>body{font-family:system-ui,-apple-system,"PingFang SC",sans-serif;'
-                'max-width:44em;margin:2em auto;padding:0 1em;line-height:1.7}'
-                'li{margin:.15em 0}a{color:#0a6c4f}</style>'
-                f'<h1>{html.escape(os.path.basename(d))}</h1>'
+        # 骨架写全（head/body 都要有）：否则打包阶段没法往上插阅读条，
+        # 浏览器也会按怪异模式解析（真实踩到过：7 个落地页漏掉了字号与主题控件）。
+        body = ('<!DOCTYPE html>\n<html lang="zh-CN">\n<head>\n<meta charset="utf-8">\n'
+                '<meta name="viewport" content="width=device-width,initial-scale=1">\n'
+                f'<title>{html.escape(os.path.basename(d))} · 文件列表</title>\n'
+                '<style>body{max-width:44em;margin:2em auto;padding:0 1em;line-height:1.7}'
+                'li{margin:.15em 0}a{color:#0a6c4f}</style>\n</head>\n<body>\n'
+                f'<h1>{html.escape(os.path.basename(d))}</h1>\n'
                 '<p>这个目录里的文件（点开看或另存下来用）：</p><ul>' + ''.join(rows) + '</ul>'
-                '<p><a href="../../index.html">← 回到课程首页</a></p>')
+                '<p><a href="../../index.html">← 回到课程首页</a></p>\n</body>\n</html>\n')
         # 文件名用 README.html：课件里的链接写的就是 `.../README.html`（渲染器把 .md 换成 .html）
         write_text(os.path.join(d, 'README.html'), body)
         made += 1
@@ -532,6 +534,88 @@ GLOSSARY_CALLOUT = GLOSSARY_STYLE + """
   <a class="learn-glossary-callout__go learn-glossary-callout__go--alt" href="{HREF}">规范版</a>
 </section>
 """
+
+
+READING_BAR = """<div class="learn-reading-bar" id="learn-reading-bar"{GLOSSARY_ATTRS}>
+  <div class="learn-reading-bar__group">
+    <span class="learn-reading-bar__label">字号</span>
+    <button type="button" class="learn-reading-bar__btn" id="learn-scale-down"
+            aria-label="缩小字号" title="缩小字号">A−</button>
+    <span class="learn-reading-bar__value" id="learn-scale-value">100%</span>
+    <button type="button" class="learn-reading-bar__btn" id="learn-scale-up"
+            aria-label="放大字号" title="放大字号">A+</button>
+  </div>
+{GLOSSARY_GROUP}  <div class="learn-reading-bar__group learn-reading-bar__group--end">
+    <label class="learn-reading-bar__switch" title="切换深浅主题">
+      <span class="learn-reading-bar__label">深色</span>
+      <input type="checkbox" id="learn-reading-theme">
+    </label>
+  </div>
+</div>"""
+
+GLOSSARY_GROUP = """  <div class="learn-reading-bar__group">
+    <span class="learn-reading-bar__label">术语表</span>
+    <a class="learn-reading-bar__btn learn-reading-bar__btn--go" href="{OTHER}" title="{OTHER_LABEL}">{OTHER_LABEL} →</a>
+  </div>
+"""
+
+
+def inject_reading_bar(docs):
+    """给每一页顶部加阅读条（字号调节 + 主题开关；术语表两页另加版本切换）。
+
+    为什么在打包阶段注入而不是改引擎模板：模板有「占位符契约」，加自定义标记会让
+    引擎的模板预览与校验脚本报错；而 `docs/` 本来就是生成产物，在这里注入不碰契约，
+    也不会影响别的科目。
+
+    另外做一件配套的事：把字体子集从 `<repo>/assets/fonts/` 拷进 `docs/assets/fonts/`，
+    否则 @font-face 找不到文件、仿宋就显不出来。
+    """
+    # 字体子集：源在 <repo>/assets/fonts/，站点里放 docs/assets/fonts/
+    font_src = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'assets', 'fonts')
+    font_dst = os.path.join(docs, 'assets', 'fonts')
+    fonts = 0
+    if os.path.isdir(font_src):
+        os.makedirs(font_dst, exist_ok=True)
+        for fn in sorted(os.listdir(font_src)):
+            shutil.copy2(os.path.join(font_src, fn), os.path.join(font_dst, fn))
+            fonts += 1
+
+    pages = 0
+    for root, dirs, files in os.walk(docs):
+        dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+        for fn in files:
+            if not fn.endswith('.html'):
+                continue
+            page = os.path.join(root, fn)
+            text = read_text(page)
+            if 'learn-reading-bar' in text:
+                continue
+            # 术语表的两页：给出「切换到另一种版本」的入口，行为在 learn-reading.js
+            depth = os.path.relpath(root, docs).count(os.sep) + 1
+            up = '../' * (0 if os.path.relpath(root, docs) == '.' else depth)
+            if fn == 'GLOSSARY-EASY.html':
+                group = GLOSSARY_GROUP.format(OTHER='GLOSSARY.html', OTHER_LABEL='规范版')
+                attrs = ' data-glossary-other="GLOSSARY.html" data-glossary-other-label="规范版"'
+            elif fn == 'GLOSSARY.html':
+                group = GLOSSARY_GROUP.format(OTHER='GLOSSARY-EASY.html', OTHER_LABEL='大白话版')
+                attrs = (' data-glossary-other="GLOSSARY-EASY.html"'
+                         ' data-glossary-other-label="大白话版"')
+            else:
+                group, attrs = '', ''
+            bar = READING_BAR.replace('{GLOSSARY_GROUP}', group).replace('{GLOSSARY_ATTRS}', attrs)
+            # 插在 <body …> 之后
+            m = re.search(r'<body[^>]*>', text)
+            if not m:
+                continue
+            ins = m.end()
+            text = text[:ins] + '\n' + bar + text[ins:]
+            # 引脚本：放在主题脚本之后（LearnTheme 要先就位）
+            text = text.replace('</body>',
+                                '<script src="%sassets/learn-reading.js"></script>\n</body>'
+                                % up, 1)
+            write_text(page, text)
+            pages += 1
+    print(f'  阅读条：注入 {pages} 页 · 字体子集 {fonts} 个文件')
 
 
 def in_comment(text, pos):

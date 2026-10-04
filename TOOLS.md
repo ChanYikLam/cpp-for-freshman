@@ -14,6 +14,7 @@ cpp-for-freshman/
 │   └── BUILD.md           #   提醒：docs/ 是生成产物，别手改
 ├── lab/                   # 动手练习：留白任务 + solutions/ 参考解
 ├── code/                  # 全部示例代码（tools/collect_code.py 从各批次 examples/ 收拢）
+├── assets/fonts/          # 中文字体子集（仿宋，随包发布；见文末「字体」一节）
 ├── build_site.py          # 构建①：把课程工作区打包成 docs/ 静态站点
 ├── make_package.py        # 构建②：打成可发微信的 zip（产出在 dist/）
 ├── tools/                 # 校验与构建辅助脚本（见下）
@@ -77,3 +78,53 @@ python3 -X utf8 -B tools/validate_schema.py <schema.json> <数据文件>
 ```
 
 不要为了跑校验去改 python 环境——这个项目刻意不依赖 `pip install`。
+
+## 字体（重要，涉及授权与可替换性）
+
+课程正文的中文字体是**仿宋**。这个字体**不是** macOS / Windows / 手机自带的，所以**随包带了一份子集**，
+否则只有装过它的电脑能显示仿宋，学生的设备会全部回退成黑体或宋体。
+
+### 现在的做法
+
+| 项 | 说明 |
+|---|---|
+| 字体来源 | 主编者本机的 `~/Library/Fonts/仿宋_GB2312.ttf`（**版权方：长城计算机公司，1994，商标 GreatWall**） |
+| 实际发布物 | `assets/fonts/fangsong-subset.woff2`，**按课程用到的 2884 个汉字取子集** |
+| 体积 | 3.8 MB → 405 KB（10.4%） |
+| 生效范围 | `@font-face` 用 `unicode-range` 限定在汉字与中文标点 —— **英文、数字、代码完全不受影响** |
+| 缺字行为 | 字体里没有的字按栈回退（仿宋_GB2312 → 方正仿宋_GBK → STFangsong → 仿宋 → 宋体 → 衬线），**不会显示成方框** |
+
+### ⚠️ 授权提醒（请自行确认）
+
+长城仿宋是**商业字体**。本课程是免费发给学生自学用的教育材料，风险不高，但**「把字体文件放进压缩包分发给一群人」与「在自己电脑上用」是两件事**。
+如果这套课以后要放到公开仓库或更大范围传播，建议换成**开源许可**的仿宋／宋体替代，例如：
+
+- **Noto Serif CJK SC**（SIL OFL 1.1，可自由分发）
+- **思源宋体 / Source Han Serif SC**（SIL OFL 1.1）
+- **霞鹜文楷 LXGW WenKai**（SIL OFL 1.1）
+
+换法只有两步：把字体文件放到 `assets/fonts/`，改 `tools/subset_font.py` 的 `--src`，
+再改引擎的 `templates/assets/learn-theme.css` 里 `@font-face` 的 `font-family` 与字体栈首项。
+
+### 内容改了之后
+
+课程新增了汉字时，**重跑一次子集脚本**（缺字不会报错、只会回退成宋体，所以要主动跑）：
+
+```bash
+python3 -X utf8 -B tools/subset_font.py .
+```
+
+脚本会报告「课程汉字 N 种、子集缺 M 种」，**缺 0 种才算全课程命中仿宋**。
+
+### 引擎侧改了什么（如需回滚）
+
+为了让字体与字号调节对所有页面生效，改了 StudyMate 引擎的共享层（**这些文件不是 git 仓库，原文件已备份**）：
+
+| 文件 | 改动 | 备份位置 |
+|---|---|---|
+| `templates/assets/learn-theme.css` | 加 `@font-face`、中文字体栈、字号缩放变量 `--learn-font-scale`、阅读条样式 | `templates/assets/.orig-backup-2026-10-04/` |
+| `templates/assets/learn-reading.js` | **新增**：字号调节 + 主题开关 + 术语表版本切换与首次引导 | 新增文件，删除即可 |
+| `scripts/lessonfile.py` | `SHARED_FILES` 登记 `learn-reading.js` | 同上备份目录 |
+
+阅读条的 HTML 是**打包时注入**的（`build_site.py` 的 `inject_reading_bar`），**没有改引擎的页面模板** ——
+模板有占位符契约，加自定义标记会让引擎的模板校验报错。

@@ -177,6 +177,22 @@ body.is-ready .learn-subject-card { animation: none; }
 </head>
 
 <body>
+<div class="learn-reading-bar" id="learn-reading-bar">
+  <div class="learn-reading-bar__group">
+    <span class="learn-reading-bar__label">字号</span>
+    <button type="button" class="learn-reading-bar__btn" id="learn-scale-down"
+            aria-label="缩小字号" title="缩小字号">A−</button>
+    <span class="learn-reading-bar__value" id="learn-scale-value">100%</span>
+    <button type="button" class="learn-reading-bar__btn" id="learn-scale-up"
+            aria-label="放大字号" title="放大字号">A+</button>
+  </div>
+  <div class="learn-reading-bar__group learn-reading-bar__group--end">
+    <label class="learn-reading-bar__switch" title="切换深浅主题">
+      <span class="learn-reading-bar__label">深色</span>
+      <input type="checkbox" id="learn-reading-theme">
+    </label>
+  </div>
+</div>
 <a class="learn-skip" href="#learn-content">跳到课程列表</a>
 
 <nav class="syo-nav">
@@ -504,5 +520,6 @@ body.is-ready .learn-subject-card { animation: none; }
   window.setTimeout(function () { document.body.classList.add('is-ready'); }, 900);
 })();
 </script>
+<script src="assets/learn-reading.js"></script>
 </body>
 </html>

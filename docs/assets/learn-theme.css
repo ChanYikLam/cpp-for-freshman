@@ -14,16 +14,54 @@
    保证整站一套主题。改色只改这里与各自模板，不要改 sayo/sayo.css。
    ═══════════════════════════════════════════════════════════════ */
 
-/* ── 1. 字体：两个主题统一，中文走系统字体栈（离线可用、无网络字体） ── */
+/* ── 1. 中文字体：仿宋（随包带子集，任何设备都能显示） ──
+
+   为什么带字体文件而不是只写字体名：仿宋_GB2312 不是 macOS/Windows/手机自带的字体，
+   只写字体名的话，只有装过它的电脑能看到仿宋，学生的设备全都会回退成黑体或宋体。
+
+   · `unicode-range` 只留汉字与中文标点 —— **英文、数字、代码完全不受影响**，
+     继续走下面的 --syo-font-sans / --syo-font-mono（这是有意为之）；
+   · 子集由 `tools/subset_font.py` 从课程实际用到的字生成（约 2900 字 / 405 KB，
+     原字体 3.8 MB）。改课内容后出现新汉字时重跑那个脚本；
+   · 路径相对本文件：本文件在 `<WS>/.learning/assets/learn-theme.css`，
+     字体在 `<WS>/assets/fonts/`，所以是 `../fonts/…`。 */
+@font-face {
+  font-family: "FangSongBundled";
+  src: url("../fonts/fangsong-subset.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+  unicode-range: U+3000-303F, U+4E00-9FFF, U+FF00-FFEF;
+}
+
 :root {
-  --syo-font-sans: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", "Source Han Sans SC", system-ui, -apple-system, sans-serif;
+  /* 中文字体栈：随包的子集优先；没覆盖到的字（生僻字、后续新增的字）按下面的顺序回退，
+     所以最坏情况是「个别字不是仿宋」，而不是显示成方框或难看的默认字体。 */
+  --syo-font-sans: "FangSongBundled", "仿宋_GB2312", "方正仿宋_GBK", "STFangsong",
+                   "仿宋", "FangSong", "Songti SC", "宋体", "Noto Serif CJK SC",
+                   "Source Han Serif SC", serif;
+  /* 等宽：**不改**。代码要的是等宽字形，仿宋不是等宽，混进来反而毁掉代码对齐。 */
   --syo-font-mono: ui-monospace, "SF Mono", "Cascadia Mono", "JetBrains Mono", Consolas, "Liberation Mono", monospace;
 }
+
 
 /* 内容宽度：Sayo 默认 860px 偏窄（适合长文），主页/科目页当仪表盘用 1080px。
    窄屏交给 Sayo 自己的 @media (max-width: 768px) 规则，这里不抢。 */
 @media (min-width: 769px) {
   :root { --syo-container: 1080px; }
+}
+
+/* ── 1b. 字号缩放：页面顶部的 A− / A+ 按钮改的就是这个变量 ──
+
+   Sayo 里 `html { font-size: var(--syo-font-size) }`，而全站字号基本都用 rem，
+   所以**只调这一个值就能让整页文字等比缩放**（正文、标题、代码、表格一起动），
+   布局本身不变形。缩放比例由 assets/learn-reading.js 读写并记进浏览器本地存储。
+
+   为什么用乘法而不是直接改 px：乘法能保住「正文 15px、小字 13px」这类相对关系，
+   直接改 px 会把层次压平。 */
+:root {
+  --learn-font-scale: 1;
+  --syo-font-size: calc(15px * var(--learn-font-scale));
 }
 
 /* ── 2. 学习状态语义色（跨页面共用：科目状态、大纲节点状态） ── */
@@ -484,3 +522,89 @@ html[data-theme="light"] .syo-tabs input:checked + .syo-tab::after {
 html[data-theme="light"] .learn-hero__stars,
 html[data-theme="light"] .learn-hero__nebula { display: none; }
 html[data-theme="dark"] .learn-hero__grid { display: none; }
+
+/* ═══════════════════════════════════════════════════════════════
+   阅读条：字号调节 + 术语表版本切换（行为在 learn-reading.js）
+   ═══════════════════════════════════════════════════════════════
+   每页顶部一条，风格沿用 Sayo 的卡片与令牌，自动跟随亮/暗主题。
+   字号按钮改的是 --learn-font-scale，全站 rem 一起缩放。 */
+.learn-reading-bar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 7px clamp(12px, 3vw, 22px);
+  border-bottom: 1px solid var(--syo-border-muted, rgba(128, 128, 128, .25));
+  background: color-mix(in srgb, var(--syo-bg-base, #0d1117) 88%, transparent);
+  backdrop-filter: blur(8px);
+  font-size: .8125rem;
+}
+.learn-reading-bar__group {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.learn-reading-bar__group--end { margin-left: auto; }
+.learn-reading-bar__label {
+  color: var(--syo-fg-muted, #8b949e);
+  white-space: nowrap;
+}
+.learn-reading-bar__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 34px;
+  padding: 4px 10px;
+  border: 1px solid var(--syo-border-muted, rgba(128, 128, 128, .35));
+  border-radius: 7px;
+  background: transparent;
+  color: var(--syo-fg-default, #e6edf3);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .15s, background .15s, color .15s;
+}
+.learn-reading-bar__btn:hover {
+  border-color: var(--syo-accent, #8250df);
+  color: var(--syo-accent, #8250df);
+}
+.learn-reading-bar__btn:disabled { opacity: .35; cursor: default; }
+.learn-reading-bar__btn:disabled:hover { border-color: var(--syo-border-muted, rgba(128, 128, 128, .35)); color: var(--syo-fg-default, #e6edf3); }
+.learn-reading-bar__btn--go { border-color: var(--syo-accent, #8250df); color: var(--syo-accent, #8250df); text-decoration: none; }
+.learn-reading-bar__value {
+  min-width: 46px;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  color: var(--syo-fg-muted, #8b949e);
+}
+.learn-reading-bar__switch { display: inline-flex; align-items: center; gap: 4px; }
+.learn-reading-bar__switch input { margin: 0; }
+
+/* 首次进入术语表时的引导气泡 */
+.learn-glossary-hint {
+  margin: 10px clamp(12px, 3vw, 22px) 0;
+  padding: 12px 16px;
+  border: 1px solid color-mix(in srgb, var(--syo-accent, #8250df) 45%, transparent);
+  border-radius: 10px;
+  background: color-mix(in srgb, var(--syo-accent, #8250df) 10%, transparent);
+  font-size: .875rem;
+  line-height: 1.7;
+}
+.learn-glossary-hint__title { margin: 0; font-weight: 700; }
+.learn-glossary-hint__list { margin: 6px 0 0; padding-left: 1.2em; }
+.learn-glossary-hint__list li { margin: 3px 0; }
+.learn-glossary-hint__foot { margin: 8px 0 0; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.learn-glossary-hint__ok {
+  margin-left: auto;
+  padding: 4px 14px;
+  border: 1px solid var(--syo-accent, #8250df);
+  border-radius: 999px;
+  background: var(--syo-accent, #8250df);
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
