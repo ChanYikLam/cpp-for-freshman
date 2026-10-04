@@ -1,16 +1,17 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     int score = 150;
 
     if (score >= 60 && score <= 100)
     {
-        std::cout << "分数合法" << std::endl;
+        cout << "分数合法" << endl;
     }
     else
     {
-        std::cout << "分数不合法" << std::endl;
+        cout << "分数不合法" << endl;
     }
 
     return 0;

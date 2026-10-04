@@ -53,19 +53,20 @@
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
-    std::cout &lt;&lt; "请输入三门课的成绩：";
+    cout &lt;&lt; "请输入三门课的成绩：";
 
     int score1 = 0;
     int score2 = 0;
     int score3 = 0;
-    std::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;
+    cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;
 
     double average = (score1 + score2 + score3) / 3;
 
-    std::cout &lt;&lt; std::endl;
-    std::cout &lt;&lt; "平均分：" &lt;&lt; average &lt;&lt; std::endl;
+    cout &lt;&lt; endl;
+    cout &lt;&lt; "平均分：" &lt;&lt; average &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -90,8 +91,8 @@ int main()
       <tr><th>对象</th><th>方向</th><th>用途</th></tr>
     </thead>
     <tbody>
-      <tr><td><code>std::cout</code></td><td>程序 → 终端</td><td>输出，前面几课一直在用</td></tr>
-      <tr><td><code>std::cin</code></td><td>终端 → 程序</td><td>输入，这一课的主角</td></tr>
+      <tr><td><code>cout</code></td><td>程序 → 终端</td><td>输出，前面几课一直在用</td></tr>
+      <tr><td><code>cin</code></td><td>终端 → 程序</td><td>输入，这一课的主角</td></tr>
     </tbody>
   </table>
 
@@ -140,24 +141,25 @@ int main()
 
     <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int score = 0;
-    std::cout &lt;&lt; "请输入成绩：";
-    std::cin &lt;&lt; score;
+    cout &lt;&lt; "请输入成绩：";
+    cin &lt;&lt; score;
     return 0;
 }</code></pre>
 
     <pre data-lang="text"><code>broken-io-01.cpp:7:14: error: invalid operands to binary expression ('istream' (aka 'basic_istream&lt;char&gt;') and 'int')
-    7 |     std::cin &lt;&lt; score;
+    7 |     cin &lt;&lt; score;
       |     ~~~~~~~~ ^  ~~~~~</code></pre>
 
     <p>这一行的读法是：<code>&lt;&lt;</code> 左边应该是 <code>ostream</code>（输出流）一类的对象，可你给它的是 <code>istream</code>（输入流）。<b>看括号里那两个字就够了</b>——<code>istream</code> 和 <code>ostream</code> 差一个字母，含义完全不同：「往输出流里插」和「从输入流里取」是两件事。</p>
 
-    <p><code>std::cout &gt; "..."</code> 这种写反的半边也一样会被拦下：</p>
+    <p><code>cout &gt; "..."</code> 这种写反的半边也一样会被拦下：</p>
 
     <pre data-lang="text"><code>broken-io-02.cpp:6:15: error: invalid operands to binary expression ('ostream' (aka 'basic_ostream&lt;char&gt;') and 'const char[19]')
-    6 |     std::cout &gt; "请输入成绩：";
+    6 |     cout &gt; "请输入成绩：";
       |               ^ ~~~~~~~~~~~~~~</code></pre>
   </div>
 
@@ -167,13 +169,14 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int score = 0;
 
-    std::cout &lt;&lt; "请输入一个成绩：";
-    std::cin &gt;&gt; score;
-    std::cout &lt;&lt; "你输入的成绩是 " &lt;&lt; score &lt;&lt; std::endl;
+    cout &lt;&lt; "请输入一个成绩：";
+    cin &gt;&gt; score;
+    cout &lt;&lt; "你输入的成绩是 " &lt;&lt; score &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -185,14 +188,14 @@ int main()
   <p>三行代码各自负责一件事，缺一件就出问题：</p>
 
   <ol>
-    <li><code>std::cout &lt;&lt; "请输入一个成绩：";</code> 是<b>输入提示语</b>。它不参与计算，作用只是告诉屏幕前的人「现在该你了」。</li>
-    <li><code>std::cin &gt;&gt; score;</code> 从输入流取一个值放进 <code>score</code>。取不到东西，程序就在这里等。</li>
+    <li><code>cout &lt;&lt; "请输入一个成绩：";</code> 是<b>输入提示语</b>。它不参与计算，作用只是告诉屏幕前的人「现在该你了」。</li>
+    <li><code>cin &gt;&gt; score;</code> 从输入流取一个值放进 <code>score</code>。取不到东西，程序就在这里等。</li>
     <li>第三行把读到的值打印出来，让你确认读到的和你敲的是同一个。</li>
   </ol>
 
   <div class="lesson-warn">
     <b>忘记写提示语，看起来就像死机</b>
-    <p><code>std::cin &gt;&gt; score;</code> 执行时会<b>一直等</b>，直到输入流里来了数据。如果前面没有提示语，屏幕上就是一个静止的光标，敲键盘也没反应（因为字符还在缓冲区里、要按回车才送出去）。用户会以为程序卡死了。</p>
+    <p><code>cin &gt;&gt; score;</code> 执行时会<b>一直等</b>，直到输入流里来了数据。如果前面没有提示语，屏幕上就是一个静止的光标，敲键盘也没反应（因为字符还在缓冲区里、要按回车才送出去）。用户会以为程序卡死了。</p>
 
     <p>写输入代码的规矩：<b>每一个 <code>cin</code> 前面配一句提示语</b>，并且提示语要说清要输入的是什么、什么格式。<code>"请输入一个成绩："</code> 比 <code>"请输入："</code> 有用得多。</p>
   </div>
@@ -203,16 +206,17 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int age = 0;
     char grade = ' ';
 
-    std::cout &lt;&lt; "请输入年龄：";
-    std::cin &gt;&gt; age;
-    std::cout &lt;&lt; "请输入等级（A/B/C）：";
-    std::cin &gt;&gt; grade;
-    std::cout &lt;&lt; "年龄：" &lt;&lt; age &lt;&lt; "，等级：" &lt;&lt; grade &lt;&lt; std::endl;
+    cout &lt;&lt; "请输入年龄：";
+    cin &gt;&gt; age;
+    cout &lt;&lt; "请输入等级（A/B/C）：";
+    cin &gt;&gt; grade;
+    cout &lt;&lt; "年龄：" &lt;&lt; age &lt;&lt; "，等级：" &lt;&lt; grade &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -222,7 +226,7 @@ int main()
 请输入等级（A/B/C）：B
 年龄：18，等级：B</code></pre>
 
-  <p>也可以用一条语句连读多个：<code>std::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;</code>。<code>&gt;&gt;</code> 是从左往右依次执行的，效果和写三行一样。</p>
+  <p>也可以用一条语句连读多个：<code>cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;</code>。<code>&gt;&gt;</code> 是从左往右依次执行的，效果和写三行一样。</p>
 
   <p><b>空格分隔</b>是这里要掌握的一件实事：<code>cin &gt;&gt;</code> 取一个值时，会先自动跳过前面所有的空格、制表符和换行符，然后一直取到下一个空白为止。所以下面三种输入，程序读到的三个数完全相同：</p>
 
@@ -244,25 +248,26 @@ int main()
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 #include &lt;iomanip&gt;
 
+using namespace std;
 int main()
 {
     const int kSubjectCount = 3;
 
-    std::cout &lt;&lt; "请输入三门课的成绩（用空格或回车分开）：";
+    cout &lt;&lt; "请输入三门课的成绩（用空格或回车分开）：";
 
     double score1 = 0.0;
     double score2 = 0.0;
     double score3 = 0.0;
-    std::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;
+    cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;
 
     double total = score1 + score2 + score3;
     double average = total / kSubjectCount;
 
-    std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(1);
-    std::cout &lt;&lt; std::endl;
-    std::cout &lt;&lt; "三门成绩：" &lt;&lt; score1 &lt;&lt; "、" &lt;&lt; score2 &lt;&lt; "、" &lt;&lt; score3 &lt;&lt; std::endl;
-    std::cout &lt;&lt; "总分：" &lt;&lt; total &lt;&lt; std::endl;
-    std::cout &lt;&lt; "平均分：" &lt;&lt; average &lt;&lt; std::endl;
+    cout &lt;&lt; fixed &lt;&lt; setprecision(1);
+    cout &lt;&lt; endl;
+    cout &lt;&lt; "三门成绩：" &lt;&lt; score1 &lt;&lt; "、" &lt;&lt; score2 &lt;&lt; "、" &lt;&lt; score3 &lt;&lt; endl;
+    cout &lt;&lt; "总分：" &lt;&lt; total &lt;&lt; endl;
+    cout &lt;&lt; "平均分：" &lt;&lt; average &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -280,10 +285,10 @@ int main()
     <li><b>三个成绩声明成 <code>double</code></b>。成绩本身可能是 87.5，用 <code>int</code> 会在读入那一步就把小数切掉。</li>
     <li><b><code>const int kSubjectCount = 3;</code></b>。科目数只有一处定义，以后要改成五门就改这一行。</li>
     <li><b><code>total / kSubjectCount</code></b> 里两个操作数一个是 <code>double</code>：<code>kSubjectCount</code> 是 <code>int</code>，但 <code>total</code> 是 <code>double</code>，所以走的是小数除法——上一课那条规则的直接应用。</li>
-    <li><b>输出对齐用两行</b>：<code>std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(1);</code> 是<b>输出格式控制</b>，<code>&lt;iomanip&gt;</code> 是它所在的头文件。</li>
+    <li><b>输出对齐用两行</b>：<code>cout &lt;&lt; fixed &lt;&lt; setprecision(1);</code> 是<b>输出格式控制</b>，<code>&lt;iomanip&gt;</code> 是它所在的头文件。</li>
   </ul>
 
-  <p>第三条里的 <code>std::setprecision(1)</code> 是「小数点后保留 1 位」；<code>std::fixed</code> 是「用定点表示法，不要自己切换成科学计数法」。两者要一起用，只写 <code>setprecision</code> 在某些值上会变成有效位数，而不是小数位数。<code>std::fixed</code> 会一直生效到你改回来为止，所以上面那行只写一次，后面所有 <code>cout</code> 都按这个格式印——注意它连 <code>score1</code> 都影响到了，所以 <code>92</code> 印成了 <code>92.0</code>。</p>
+  <p>第三条里的 <code>setprecision(1)</code> 是「小数点后保留 1 位」；<code>fixed</code> 是「用定点表示法，不要自己切换成科学计数法」。两者要一起用，只写 <code>setprecision</code> 在某些值上会变成有效位数，而不是小数位数。<code>fixed</code> 会一直生效到你改回来为止，所以上面那行只写一次，后面所有 <code>cout</code> 都按这个格式印——注意它连 <code>score1</code> 都影响到了，所以 <code>92</code> 印成了 <code>92.0</code>。</p>
 
   <div class="lesson-tip">
     <b>为什么要给小数定精度</b>
@@ -299,17 +304,18 @@ int main()
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 #include &lt;iomanip&gt;
 
+using namespace std;
 int main()
 {
-    std::cout &lt;&lt; "请输入三个成绩：";
+    cout &lt;&lt; "请输入三个成绩：";
 
     double score1 = 0.0;
     double score2 = 0.0;
     double score3 = 0.0;
-    std::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;
+    cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;
 
-    std::cout &lt;&lt; "读到的三个数：" &lt;&lt; score1 &lt;&lt; " " &lt;&lt; score2 &lt;&lt; " " &lt;&lt; score3 &lt;&lt; std::endl;
-    std::cout &lt;&lt; "输入是否成功：" &lt;&lt; std::boolalpha &lt;&lt; static_cast&lt;bool&gt;(std::cin) &lt;&lt; std::endl;
+    cout &lt;&lt; "读到的三个数：" &lt;&lt; score1 &lt;&lt; " " &lt;&lt; score2 &lt;&lt; " " &lt;&lt; score3 &lt;&lt; endl;
+    cout &lt;&lt; "输入是否成功：" &lt;&lt; boolalpha &lt;&lt; static_cast&lt;bool&gt;(cin) &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -330,8 +336,8 @@ int main()
 
   <p>最后一条是最坑的地方：一次输入失败会让 <code>cin</code> 从此进入<b>失败状态</b>，后面读什么都读不到，而这一行 <code>abc</code> 还赖在队列里。所以失败之后不能直接再读，必须先做两件事：</p>
 
-  <pre data-lang="cpp"><code>std::cin.clear();
-std::cin.ignore(1000, '\n');</code></pre>
+  <pre data-lang="cpp"><code>cin.clear();
+cin.ignore(1000, '\n');</code></pre>
 
   <p><code>clear()</code> 清掉那个错误标记，让 <code>cin</code> 重新可用——这一步与数组、与指针都无关，就是「把错误状态复位」。<code>ignore(1000, '\n')</code> 是「从队列里丢掉字符」，最多丢 1000 个，或者丢到遇见换行符为止——这一步是把赖在队列里的 <code>abc</code> 清出去。</p>
 
@@ -339,24 +345,25 @@ std::cin.ignore(1000, '\n');</code></pre>
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int score = 0;
 
-    std::cout &lt;&lt; "请输入成绩：";
-    std::cin &gt;&gt; score;
+    cout &lt;&lt; "请输入成绩：";
+    cin &gt;&gt; score;
 
-    if (std::cin.fail())
+    if (cin.fail())
     {
-        std::cout &lt;&lt; "\n这一段不是数字，读入失败了。丢弃这一行，重新读一次。\n";
-        std::cin.clear();
-        std::cin.ignore(1000, '\n');
+        cout &lt;&lt; "\n这一段不是数字，读入失败了。丢弃这一行，重新读一次。\n";
+        cin.clear();
+        cin.ignore(1000, '\n');
 
-        std::cout &lt;&lt; "请重新输入成绩：";
-        std::cin &gt;&gt; score;
+        cout &lt;&lt; "请重新输入成绩：";
+        cin &gt;&gt; score;
     }
 
-    std::cout &lt;&lt; "最终读到：" &lt;&lt; score &lt;&lt; std::endl;
+    cout &lt;&lt; "最终读到：" &lt;&lt; score &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -371,8 +378,8 @@ int main()
 
   <div class="quiz" data-quiz='[
   {
-    "q": "一位同学敲进去的第二个成绩是 abc，程序\n后面全乱了：\n\n```cpp\ndouble score1 = 0.0;\ndouble score2 = 0.0;\ndouble score3 = 0.0;\nstd::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;\n\nstd::cout &lt;&lt; \"读到的三个数：\" &lt;&lt; score1 &lt;&lt; \" \"\n          &lt;&lt; score2 &lt;&lt; \" \" &lt;&lt; score3 &lt;&lt; std::endl;\n```\n\n```text\n请输入三个成绩：90 abc 80\n读到的三个数：90 0 0\n输入是否成功：false\n```\n\n① score2 和 score3 为什么都是 0？\n② 为什么「后面所有读取都会失败」？\n③ 要让程序重新问一次，必须补哪两步？",
-    "answer": "① abc 不是数字，读 score2 时就失败了；\n这个值没有进 score2，两个格子保持声明\n时的初值 0。\n② 读取失败会给 cin 设上一个错误标记，\n它从此进入失败状态，后面每一次读取都直\n接失败——包括本来要读 score3 的那一次；\n而且 abc 还留在输入队列里没被取走。\n③ 先复位、再丢坏输入：\n\n```cpp\nstd::cin.clear();\nstd::cin.ignore(1000, &#39;\\n&#39;);\n```",
+    "q": "一位同学敲进去的第二个成绩是 abc，程序\n后面全乱了：\n\n```cpp\ndouble score1 = 0.0;\ndouble score2 = 0.0;\ndouble score3 = 0.0;\ncin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;\n\ncout &lt;&lt; \"读到的三个数：\" &lt;&lt; score1 &lt;&lt; \" \"\n          &lt;&lt; score2 &lt;&lt; \" \" &lt;&lt; score3 &lt;&lt; endl;\n```\n\n```text\n请输入三个成绩：90 abc 80\n读到的三个数：90 0 0\n输入是否成功：false\n```\n\n① score2 和 score3 为什么都是 0？\n② 为什么「后面所有读取都会失败」？\n③ 要让程序重新问一次，必须补哪两步？",
+    "answer": "① abc 不是数字，读 score2 时就失败了；\n这个值没有进 score2，两个格子保持声明\n时的初值 0。\n② 读取失败会给 cin 设上一个错误标记，\n它从此进入失败状态，后面每一次读取都直\n接失败——包括本来要读 score3 的那一次；\n而且 abc 还留在输入队列里没被取走。\n③ 先复位、再丢坏输入：\n\n```cpp\ncin.clear();\ncin.ignore(1000, &#39;\\n&#39;);\n```",
     "criteria": "三问都要答到：\n· 读失败导致 score2/score3 保持初值 0\n  （不是被写成了 0）；\n· cin 进入失败状态，后续读取全部失败；\n· clear() 与 ignore(1000, 换行符) 两\n  步，少一步算部分通过。"
   }
 ]'></div>
@@ -400,7 +407,7 @@ int main()
 
       <ul>
         <li>每个 <code>cin</code> 前面都要有提示语，说清要输入什么、怎么分隔；</li>
-        <li>用 <code>std::fixed</code> 与 <code>std::setprecision(1)</code> 把平均分印成小数一位。</li>
+        <li>用 <code>fixed</code> 与 <code>setprecision(1)</code> 把平均分印成小数一位。</li>
       </ul>
 
       <p>补完之后，输入 <code>92 88 87.5</code> 应该看到这样：</p>
@@ -427,7 +434,7 @@ int main()
 读到的三个数：0 0 0
 输入是否成功：false</code></pre>
 
-      <p>三个格子<b>一个都没读到</b>——第一个值就读失败了，后面的连试都不试，三个都还是声明时的初值 0。最后一行 <code>false</code> 是 <code>std::cin</code> 自己被转成布尔值之后的样子，它说明 <code>cin</code> 已经进了失败状态：<b>从这里往后，所有的 <code>cin</code> 读取都会失败</b>。</p>
+      <p>三个格子<b>一个都没读到</b>——第一个值就读失败了，后面的连试都不试，三个都还是声明时的初值 0。最后一行 <code>false</code> 是 <code>cin</code> 自己被转成布尔值之后的样子，它说明 <code>cin</code> 已经进了失败状态：<b>从这里往后，所有的 <code>cin</code> 读取都会失败</b>。</p>
 
       <p>这就是问题的全貌，也是第 4 课那个 <code>clear()</code> 与 <code>ignore()</code> 的用处。按 <code>io-05.cpp</code> 的样子加上那两行，让程序在读到非数字之后重新问你一次：</p>
 
@@ -465,7 +472,7 @@ abc
   <div class="quiz" data-quiz='[
   {
     "q": "写一个完整程序，读入三个成绩，打印总分\n与平均分（平均分保留一位小数），并且第\n一次输入不是三个数时能重来。\n\n要求三条：\n① 每个读取前面都有说清格式的提示语；\n② 平均分不许被整数除法截断；\n③ 读到非数字之后能清掉失败状态、丢掉坏\n输入，重新读一次。",
-    "answer": "一份可运行的参考答案：\n\n```cpp\n#include &lt;iostream&gt;\n#include &lt;iomanip&gt;\n\nint main()\n{\n    std::cout &lt;&lt; \"请输入三门课的成绩（用空格或回车分开）：\";\n\n    double score1 = 0.0;\n    double score2 = 0.0;\n    double score3 = 0.0;\n\n    while (!(std::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3))\n    {\n        std::cout &lt;&lt; \"这组输入不是三个数，请重新输入：\";\n        std::cin.clear();\n        std::cin.ignore(1000, &#39;\\n&#39;);\n    }\n\n    const int kSubjectCount = 3;\n    double total = score1 + score2 + score3;\n    double average = total / kSubjectCount;\n\n    std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(1);\n    std::cout &lt;&lt; \"总分：\" &lt;&lt; total &lt;&lt; std::endl;\n    std::cout &lt;&lt; \"平均分：\" &lt;&lt; average &lt;&lt; std::endl;\n\n    return 0;\n}\n```\n\n要点：三个成绩用 double 接收，读入那一\n步就不会把小数切掉；分母写成\nconst int kSubjectCount = 3; 只有一个\n定义处；失败重试用 clear() 与\nignore(1000, 换行符) 两步配一次重读。",
+    "answer": "一份可运行的参考答案：\n\n```cpp\n#include &lt;iostream&gt;\n#include &lt;iomanip&gt;\n\nusing namespace std;\nint main()\n{\n    cout &lt;&lt; \"请输入三门课的成绩（用空格或回车分开）：\";\n\n    double score1 = 0.0;\n    double score2 = 0.0;\n    double score3 = 0.0;\n\n    while (!(cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3))\n    {\n        cout &lt;&lt; \"这组输入不是三个数，请重新输入：\";\n        cin.clear();\n        cin.ignore(1000, &#39;\\n&#39;);\n    }\n\n    const int kSubjectCount = 3;\n    double total = score1 + score2 + score3;\n    double average = total / kSubjectCount;\n\n    cout &lt;&lt; fixed &lt;&lt; setprecision(1);\n    cout &lt;&lt; \"总分：\" &lt;&lt; total &lt;&lt; endl;\n    cout &lt;&lt; \"平均分：\" &lt;&lt; average &lt;&lt; endl;\n\n    return 0;\n}\n```\n\n要点：三个成绩用 double 接收，读入那一\n步就不会把小数切掉；分母写成\nconst int kSubjectCount = 3; 只有一个\n定义处；失败重试用 clear() 与\nignore(1000, 换行符) 两步配一次重读。",
     "criteria": "逐条对：\n· 成绩声明成 double（或读入后按\n  double 参与运算），不是 int；\n· 除法里至少有一个操作数是小数；\n· 打印带 fixed 与 setprecision(1)；\n· 失败路径里有 clear() 与\n  ignore(1000, 换行符)；\n· 每个读取前有提示语。\n五条里缺两条以上按不通过；缺一条算部分\n通过。\n写出来自己编译运行，输入 abc 再输\n92 88 87.5 验收。"
   }
 ]'></div>

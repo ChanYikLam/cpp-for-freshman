@@ -441,7 +441,7 @@ $ ./parr-04
   <div class="quiz" data-quiz='[
   {
     "q": "这个函数里算出来的元素个数只有 2，统计\n结果自然也不对：\n\n```cpp\nint total(const int *p, int n)\n{\n    cout &lt;&lt; \"函数里 sizeof(p) = \" &lt;&lt; sizeof(p);\n    cout &lt;&lt; \" 字节\" &lt;&lt; endl;\n    int sum = 0;\n    for (int i = 0; i &lt; n; i++)\n        sum = sum + p[i];\n    return sum;\n}\n```\n\n```text\n函数里 sizeof(p) = 8 字节\n```\n\n① 为什么函数里量出来是 8？\n② main 里量同一个数组会是多少？\n③ 长度该怎么交给函数？",
-    "answer": "① 函数里的 p 是一个指针，不是一个数\n组。指针里只装一个地址，所以\nsizeof(p) 是地址的大小（本机 8 字\n节）。\n② main 里的 scores 是数组对象，sizeof\n得到整张表：5 个 int 一共 20 字节，除\n以 sizeof(scores[0]) 才是元素个数 5。\n③ 当成另一个参数传进去：\n\n```cpp\nstd::cout &lt;&lt; total(scores, 5) &lt;&lt; std::endl;\n```\n\n起点与长度一起给，是数组传参的固定搭\n配。main 里可以用\nsizeof(scores) / sizeof(scores[0]) 把\n个数算出来再传，但函数里永远算不出这个\n数。",
+    "answer": "① 函数里的 p 是一个指针，不是一个数\n组。指针里只装一个地址，所以\nsizeof(p) 是地址的大小（本机 8 字\n节）。\n② main 里的 scores 是数组对象，sizeof\n得到整张表：5 个 int 一共 20 字节，除\n以 sizeof(scores[0]) 才是元素个数 5。\n③ 当成另一个参数传进去：\n\n```cpp\ncout &lt;&lt; total(scores, 5) &lt;&lt; endl;\n```\n\n起点与长度一起给，是数组传参的固定搭\n配。main 里可以用\nsizeof(scores) / sizeof(scores[0]) 把\n个数算出来再传，但函数里永远算不出这个\n数。",
     "criteria": "说出函数里 p 是指针、sizeof 量的是地址\n大小 → 通过；\n第 ③ 问给出「长度当另一个参数传进去」\n才算完整。\n答成「在函数里也写 sizeof(scores)」→\n不通过（函数里根本没有数组对象）。"
   }
 ]'></div>

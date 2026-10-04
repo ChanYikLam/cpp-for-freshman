@@ -126,7 +126,7 @@ $ ./func-01
 
   <div class="quiz" data-quiz='[
   {
-    "q": "这份程序里两处 add 长得几乎一样：\n\n```cpp\nvoid printLine();            // 函数原型\nint add(int a, int b);       // 函数原型\n\nint main()\n{\n    printLine();\n    int total = add(90, 85);\n    std::cout &lt;&lt; \"两个成绩相加：\" &lt;&lt; total &lt;&lt; std::endl;\n    return 0;\n}\n\nint add(int a, int b)        // 函数定义\n{\n    return a + b;\n}\n```\n\n① 哪一处是函数原型，哪一处是函数定义？\n② 原型末尾多了什么、少了什么？\n③ 少了原型，编译到 main 里的\nadd(90, 85) 时会出什么事？",
+    "q": "这份程序里两处 add 长得几乎一样：\n\n```cpp\nusing namespace std;\nvoid printLine();            // 函数原型\nint add(int a, int b);       // 函数原型\n\nint main()\n{\n    printLine();\n    int total = add(90, 85);\n    cout &lt;&lt; \"两个成绩相加：\" &lt;&lt; total &lt;&lt; endl;\n    return 0;\n}\n\nint add(int a, int b)        // 函数定义\n{\n    return a + b;\n}\n```\n\n① 哪一处是函数原型，哪一处是函数定义？\n② 原型末尾多了什么、少了什么？\n③ 少了原型，编译到 main 里的\nadd(90, 85) 时会出什么事？",
     "answer": "① 末尾带分号的 int add(int a, int b);\n是原型；带花括号函数体的那一段是定义。\n② 原型末尾有分号、没有函数体；它只保留\n函数头的信息：吃什么、交回什么。\n③ 编译器读到调用那一行时还不知道 add\n吃几个、交回什么类型，只能靠猜或直接报\n错——所以原型要写在调用它之前。",
     "criteria": "三问都要答：认出原型与定义；说出原型只\n留函数头加一个分号；说出缺原型时编译器\n在调用处信息不足。\n把两者的区别说成「一个在前面一个在后\n面」→ 部分通过（位置是结果，不是区\n别）。"
   }
@@ -247,7 +247,7 @@ $ ./func-02
 
   <div class="quiz" data-quiz='[
   {
-    "q": "这段代码只能打印，交不出结果：\n\n```cpp\nvoid printScore(int score)\n{\n    std::cout &lt;&lt; \"成绩：\" &lt;&lt; score &lt;&lt; \" 分\" &lt;&lt; std::endl;\n}\n\nint main()\n{\n    printScore(86);\n    return 0;\n}\n```\n\n```text\n成绩：86 分\n```\n\n把它改成带返回值的函数：函数头写成\nint，函数体里用 return 把成绩交回，并\n说明函数头最前面那个类型是由什么决定\n的。",
+    "q": "这段代码只能打印，交不出结果：\n\n```cpp\nusing namespace std;\nvoid printScore(int score)\n{\n    cout &lt;&lt; \"成绩：\" &lt;&lt; score &lt;&lt; \" 分\" &lt;&lt; endl;\n}\n\nint main()\n{\n    printScore(86);\n    return 0;\n}\n```\n\n```text\n成绩：86 分\n```\n\n把它改成带返回值的函数：函数头写成\nint，函数体里用 return 把成绩交回，并\n说明函数头最前面那个类型是由什么决定\n的。",
     "answer": "```cpp\nint getScore(int score)\n{\n    return score;\n}\n```\n\n函数头最前面那个类型，由「要交回给调用\n者的那个结果是什么类型」决定。想交回成\n绩本身（int）就写 int；想交回等级字符\n就写 char；想交回平均分就写 double。要\n改回「只打印、不交回」，就写 void，并\n在函数头里把返回类型固定下来。",
     "criteria": "函数头写成 int（或与交回值一致的类\n型），函数体里有 return 交回成绩 → 通\n过。\n写成 void 却又 return 成绩 → 不通过\n（void 函数不能交回值，编译不过）。\n能说出返回类型由「要交回的结果」决定，\n而不只是抄了一个 int → 完整。"
   }
@@ -403,7 +403,7 @@ func-06.cpp:8:5: error: void function 'printScore' should not return a value</co
 
   <div class="quiz" data-quiz='[
   {
-    "q": "这个函数声明了交回 int，但 40 分那一次\n打印出来的值没有意义：\n\n```cpp\nint level(int score)\n{\n    if (score &gt;= 60)\n    {\n        return 1;\n    }\n}\n\nint main()\n{\n    std::cout &lt;&lt; level(75) &lt;&lt; std::endl;\n    std::cout &lt;&lt; level(40) &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n带上 -Wall 编译时，编译器给了这样一\n行：\n\n```text\nfunc-05.cpp:12:1: warning: non-void function does not return\n    a value in all control paths [-Wreturn-type]\n```\n\n① 漏在哪条路径上？\n② return 1 那一支为什么没问题？\n③ 补上漏的那条路径，再各调一次 75 与\n40。",
+    "q": "这个函数声明了交回 int，但 40 分那一次\n打印出来的值没有意义：\n\n```cpp\nusing namespace std;\nint level(int score)\n{\n    if (score &gt;= 60)\n    {\n        return 1;\n    }\n}\n\nint main()\n{\n    cout &lt;&lt; level(75) &lt;&lt; endl;\n    cout &lt;&lt; level(40) &lt;&lt; endl;\n    return 0;\n}\n```\n\n带上 -Wall 编译时，编译器给了这样一\n行：\n\n```text\nfunc-05.cpp:12:1: warning: non-void function does not return\n    a value in all control paths [-Wreturn-type]\n```\n\n① 漏在哪条路径上？\n② return 1 那一支为什么没问题？\n③ 补上漏的那条路径，再各调一次 75 与\n40。",
     "answer": "① 成绩小于 60 那条路径——走到函数末尾的\n右花括号就结束了，没有 return。\n② score &gt;= 60 时在 if 里就 return 了，\n这条路径有交回值。\n③ 补一条：\n\n```cpp\nint level(int score)\n{\n    if (score &gt;= 60)\n    {\n        return 1;\n    }\n    return 0;\n}\n```\n\n也可以在末尾统一 return。补完之后\n-Wall 那行警告消失，level(40) 打出 0。",
     "criteria": "指出漏的是「小于 60 走到函数末尾」那条\n路径；说出 -Wall 那行说的正是这件事；\n补法能让所有路径都有返回值 → 通过。\n把 level 的返回类型改成 void 来消警告\n→ 不通过。"
   }

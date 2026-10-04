@@ -1,5 +1,6 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     int chineseScore = 92;
@@ -7,7 +8,7 @@ int main()
     int englishScore = 87;
     int total = chineseScore + mathScore + englishScore;
 
-    std::cout << "三科总分：" << total << std::endl;
+    cout << "三科总分：" << total << endl;
 
     return 0;
 }

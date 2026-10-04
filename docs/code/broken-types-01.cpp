@@ -1,8 +1,9 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     const int kSubjectCount;
-    std::cout << kSubjectCount << std::endl;
+    cout << kSubjectCount << endl;
     return 0;
 }

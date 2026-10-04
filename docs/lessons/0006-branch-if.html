@@ -53,17 +53,18 @@
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int score = 87;
 
     if (score &gt;= 60)
     {
-        std::cout &lt;&lt; "及格" &lt;&lt; std::endl;
+        cout &lt;&lt; "及格" &lt;&lt; endl;
     }
     else
     {
-        std::cout &lt;&lt; "不及格" &lt;&lt; std::endl;
+        cout &lt;&lt; "不及格" &lt;&lt; endl;
     }
 
     return 0;
@@ -106,29 +107,30 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int score = 72;
 
     if (score &gt;= 90)
     {
-        std::cout &lt;&lt; "等级：优" &lt;&lt; std::endl;
+        cout &lt;&lt; "等级：优" &lt;&lt; endl;
     }
     else if (score &gt;= 80)
     {
-        std::cout &lt;&lt; "等级：良" &lt;&lt; std::endl;
+        cout &lt;&lt; "等级：良" &lt;&lt; endl;
     }
     else if (score &gt;= 70)
     {
-        std::cout &lt;&lt; "等级：中" &lt;&lt; std::endl;
+        cout &lt;&lt; "等级：中" &lt;&lt; endl;
     }
     else if (score &gt;= 60)
     {
-        std::cout &lt;&lt; "等级：及格" &lt;&lt; std::endl;
+        cout &lt;&lt; "等级：及格" &lt;&lt; endl;
     }
     else
     {
-        std::cout &lt;&lt; "等级：不及格" &lt;&lt; std::endl;
+        cout &lt;&lt; "等级：不及格" &lt;&lt; endl;
     }
 
     return 0;
@@ -249,17 +251,18 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     char grade = 'B';
 
     if (grade = 'A')
     {
-        std::cout &lt;&lt; "优秀" &lt;&lt; std::endl;
+        cout &lt;&lt; "优秀" &lt;&lt; endl;
     }
     else
     {
-        std::cout &lt;&lt; "这次不是优秀" &lt;&lt; std::endl;
+        cout &lt;&lt; "这次不是优秀" &lt;&lt; endl;
     }
 
     return 0;
@@ -280,13 +283,14 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int score = 45;
 
     if (score &gt;= 60);
     {
-        std::cout &lt;&lt; "及格" &lt;&lt; std::endl;
+        cout &lt;&lt; "及格" &lt;&lt; endl;
     }
 
     return 0;
@@ -312,17 +316,18 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int score = 150;
 
     if (60 &lt;= score &lt;= 100)
     {
-        std::cout &lt;&lt; "分数合法" &lt;&lt; std::endl;
+        cout &lt;&lt; "分数合法" &lt;&lt; endl;
     }
     else
     {
-        std::cout &lt;&lt; "分数不合法" &lt;&lt; std::endl;
+        cout &lt;&lt; "分数不合法" &lt;&lt; endl;
     }
 
     return 0;
@@ -337,17 +342,18 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int score = 150;
 
     if (score &gt;= 60 &amp;&amp; score &lt;= 100)
     {
-        std::cout &lt;&lt; "分数合法" &lt;&lt; std::endl;
+        cout &lt;&lt; "分数合法" &lt;&lt; endl;
     }
     else
     {
-        std::cout &lt;&lt; "分数不合法" &lt;&lt; std::endl;
+        cout &lt;&lt; "分数不合法" &lt;&lt; endl;
     }
 
     return 0;
@@ -360,7 +366,7 @@ int main()
 
   <div class="quiz" data-quiz='[
   {
-    "q": "这一段编译只给一行 warning，运行却打出\n「优秀」：\n\n```cpp\nchar grade = &#39;B&#39;;\n\nif (grade = &#39;A&#39;)\n{\n    std::cout &lt;&lt; \"优秀\" &lt;&lt; std::endl;\n}\n```\n\n① 为什么条件永远为真？\n② 编译器那行 warning 在说什么？\n③ 怎么改？",
+    "q": "这一段编译只给一行 warning，运行却打出\n「优秀」：\n\n```cpp\nchar grade = &#39;B&#39;;\n\nif (grade = &#39;A&#39;)\n{\n    cout &lt;&lt; \"优秀\" &lt;&lt; endl;\n}\n```\n\n① 为什么条件永远为真？\n② 编译器那行 warning 在说什么？\n③ 怎么改？",
     "answer": "① 单个等号是赋值：grade = &#39;A&#39; 把 &#39;A&#39;\n写进了 grade，同时这个赋值表达式的值就\n是刚赋进去的 &#39;A&#39;，它非 0，于是条件为\n真。\n② warning 说的是\nusing the result of an assignment\nas a condition without parentheses，意\n思是「你在条件里用了赋值的结果」——这是\n唯一一次提醒。\n③ 改成两个等号：if (grade == &#39;A&#39;)。想\n留住这个写法就补一层括号写成\nif ((grade = &#39;A&#39;))，但本课程不用这种写\n法。",
     "criteria": "三问都要答：赋值表达式的值非 0 所以恒\n真；warning 说的是「条件里用了赋值的结\n果」；改成 ==。\n只答「少写一个等号」而不说清为什么恒真\n→ 部分通过。"
   }
@@ -368,7 +374,7 @@ int main()
 
   <div class="quiz" data-quiz='[
   {
-    "q": "数学课上写 $60 \\le score \\le 100$ 表示\n「在 60 到 100 之间」，搬进 C++ 之后\n150 分被判成了合法：\n\n```cpp\nint score = 150;\n\nif (60 &lt;= score &lt;= 100)\n{\n    std::cout &lt;&lt; \"分数合法\" &lt;&lt; std::endl;\n}\n```\n\n① 为什么 150 也能判成合法？\n② C++ 里这个区间该怎么写？",
+    "q": "数学课上写 $60 \\le score \\le 100$ 表示\n「在 60 到 100 之间」，搬进 C++ 之后\n150 分被判成了合法：\n\n```cpp\nint score = 150;\n\nif (60 &lt;= score &lt;= 100)\n{\n    cout &lt;&lt; \"分数合法\" &lt;&lt; endl;\n}\n```\n\n① 为什么 150 也能判成合法？\n② C++ 里这个区间该怎么写？",
     "answer": "① 关系运算符从左往右算：60 &lt;= score 先\n算，150 让它得到 true，在需要数值的场\n合 true 是 1；接着算 1 &lt;= 100，得到\ntrue。两个条件串成了一个，分数多大都会\n说合法。\n② 用而且把两个条件连起来：\nif (score &gt;= 60 &amp;&amp; score &lt;= 100)。",
     "criteria": "第 ① 问必须说出「先算 60 &lt;= score 得到\ntrue / 1，再拿 1 去比 100」，只说\n「C++ 不支持连写」算部分通过；\n第 ② 问答出 &amp;&amp; 连写的区间判断才算过。"
   }
@@ -405,6 +411,7 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     char grade = 'B';
@@ -412,16 +419,16 @@ int main()
     switch (grade)
     {
     case 'A':
-        std::cout &lt;&lt; "优秀" &lt;&lt; std::endl;
+        cout &lt;&lt; "优秀" &lt;&lt; endl;
         break;
     case 'B':
-        std::cout &lt;&lt; "良好" &lt;&lt; std::endl;
+        cout &lt;&lt; "良好" &lt;&lt; endl;
         break;
     case 'C':
-        std::cout &lt;&lt; "及格" &lt;&lt; std::endl;
+        cout &lt;&lt; "及格" &lt;&lt; endl;
         break;
     default:
-        std::cout &lt;&lt; "不及格" &lt;&lt; std::endl;
+        cout &lt;&lt; "不及格" &lt;&lt; endl;
         break;
     }
 
@@ -446,19 +453,20 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int score = 0;
 
-    std::cout &lt;&lt; "请输入成绩（0 到 100）：";
-    while (!(std::cin &gt;&gt; score) || score &lt; 0 || score &gt; 100)
+    cout &lt;&lt; "请输入成绩（0 到 100）：";
+    while (!(cin &gt;&gt; score) || score &lt; 0 || score &gt; 100)
     {
-        std::cout &lt;&lt; "这个数不能用，请重新输入一个 0 到 100 的整数：";
-        std::cin.clear();
-        std::cin.ignore(1000, '\n');
+        cout &lt;&lt; "这个数不能用，请重新输入一个 0 到 100 的整数：";
+        cin.clear();
+        cin.ignore(1000, '\n');
     }
 
-    std::cout &lt;&lt; "收到的成绩是 " &lt;&lt; score &lt;&lt; std::endl;
+    cout &lt;&lt; "收到的成绩是 " &lt;&lt; score &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -473,10 +481,10 @@ int main()
   <p>这一段把前两课的东西全用上了：</p>
 
   <ul>
-    <li><code>std::cin &gt;&gt; score</code> 这个表达式本身的值可以当条件用：读成功为真，读失败为假，所以 <code>!(std::cin &gt;&gt; score)</code> 就是「读失败了」；</li>
+    <li><code>cin &gt;&gt; score</code> 这个表达式本身的值可以当条件用：读成功为真，读失败为假，所以 <code>!(cin &gt;&gt; score)</code> 就是「读失败了」；</li>
     <li>三个条件用 <code>||</code> 连起来：读失败、太小、太大，<b>任意一个成立就要重问</b>；</li>
     <li><code>&amp;&amp;</code> 的短路特性在这里换成 <code>||</code> 同样有用：读失败时，<code>score &lt; 0</code> 那半边已经为假，但 <code>!(...)</code> 已经为真，整个条件成立，直接进去重问；</li>
-    <li><code>std::cin.clear()</code> 与 <code>std::cin.ignore(1000, '\n')</code> 照第 4 课那样，清掉失败状态、丢掉坏输入。</li>
+    <li><code>cin.clear()</code> 与 <code>cin.ignore(1000, '\n')</code> 照第 4 课那样，清掉失败状态、丢掉坏输入。</li>
   </ul>
 
   <p><code>while (...)</code> 的意思是「只要括号里为真就重复做下面那段」。循环是下一课的主角，这里先当作「一直重问直到输入能用」来用。</p>
@@ -486,7 +494,7 @@ int main()
   <div class="quiz" data-quiz='[
   {
     "q": "把三件事串成一个能跑的完整程序：\n\n① 读入一个成绩，读到非数字、或数值不在\n0 到 100 之内，就重新问一次；\n② 读到合法成绩后打印它；\n③ 再按 90 及以上优、80 到 89 良、70 到\n79 中、60 到 69 及格、60 以下不及格打\n印等级。",
-    "answer": "拦输入这一段直接沿用课里的形状：\n\n```cpp\nint score = 0;\nstd::cout &lt;&lt; \"请输入成绩（0 到 100）：\";\nwhile (!(std::cin &gt;&gt; score) || score &lt; 0 || score &gt; 100)\n{\n    cout &lt;&lt; \"请重新输入一个 0 到 100 的整数：\";\n    std::cin.clear();\n    std::cin.ignore(1000, &#39;\\n&#39;);\n}\n```\n\n等级那一段用 else if 链，条件从最严格\n的一条往下排：\n\n```cpp\nif (score &gt;= 90)      std::cout &lt;&lt; \"等级：优\" &lt;&lt; std::endl;\nelse if (score &gt;= 80) std::cout &lt;&lt; \"等级：良\" &lt;&lt; std::endl;\nelse if (score &gt;= 70) std::cout &lt;&lt; \"等级：中\" &lt;&lt; std::endl;\nelse if (score &gt;= 60)\n    std::cout &lt;&lt; \"等级：及格\" &lt;&lt; std::endl;\nelse\n    std::cout &lt;&lt; \"等级：不及格\" &lt;&lt; std::endl;\n```",
+    "answer": "拦输入这一段直接沿用课里的形状：\n\n```cpp\nint score = 0;\ncout &lt;&lt; \"请输入成绩（0 到 100）：\";\nwhile (!(cin &gt;&gt; score) || score &lt; 0 || score &gt; 100)\n{\n    cout &lt;&lt; \"请重新输入一个 0 到 100 的整数：\";\n    cin.clear();\n    cin.ignore(1000, &#39;\\n&#39;);\n}\n```\n\n等级那一段用 else if 链，条件从最严格\n的一条往下排：\n\n```cpp\nif (score &gt;= 90)      cout &lt;&lt; \"等级：优\" &lt;&lt; endl;\nelse if (score &gt;= 80) cout &lt;&lt; \"等级：良\" &lt;&lt; endl;\nelse if (score &gt;= 70) cout &lt;&lt; \"等级：中\" &lt;&lt; endl;\nelse if (score &gt;= 60)\n    cout &lt;&lt; \"等级：及格\" &lt;&lt; endl;\nelse\n    cout &lt;&lt; \"等级：不及格\" &lt;&lt; endl;\n```",
     "criteria": "逐条对：\n· 用 !(cin &gt;&gt; score) 判断读失败，并同\n  时挡住小于 0 与大于 100；\n· 重问之前有 clear() 与 ignore(1000,\n  换行符)；\n· 等级链从最严格的条件往下排，每个条件\n  只写半边；\n· 60 分落在「及格」那一档（等于分档线\n  的取值要说清）。\n用 101、abc、-5、87、60 各跑一次自测；\n等级链顺序写反（把 &gt;= 60 放最前）不通\n过。"
   }
 ]'></div>

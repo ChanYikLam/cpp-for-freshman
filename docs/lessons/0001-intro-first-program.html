@@ -125,6 +125,31 @@ int main()
 
   <p><code>std::</code> 是<b>名称空间</b>（namespace）限定的写法。标准库的作者担心自己起的名字（比如 <code>cout</code>）和你的名字撞车，于是把所有标准库名字都放进一个叫 <code>std</code> 的柜子里。<code>std::cout</code> 读作「std 柜子里的 cout」，撞名就不会发生了。</p>
 
+  <h2>每次都写 <code>std::</code> 太累：<code>using namespace std;</code></h2>
+
+  <p>上一段那个写法完全正确，但你能看出来：<code>cout</code>、<code>endl</code>、后面要学的 <code>cin</code>，每用一个就要在它前面写一遍 <code>std::</code>。一行里出现两个，就得写两遍。</p>
+
+  <p>所以实际写代码时，几乎所有人都会在文件开头加一行<b>声明</b>，意思是「下面我用到的名字，先到 <code>std</code> 这个柜子里找」。把刚才那份存成 <code>intro-02.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+using namespace std;      // 以后写 cout 就等于写 std::cout
+
+int main()
+{
+    cout &lt;&lt; "Hello" &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <p>这一行加进去之后，从它下面开始，<code>cout</code> 和 <code>std::cout</code> 指的是同一个东西。<b>本课程后面所有的代码都用这种写法</b>，你照着敲就行。</p>
+
+  <div class="lesson-note">
+    <b>两种写法你会同时见到，都不是错的</b>
+    <p>别人的代码里三种写法都常见：<code>std::cout</code>（全写限定名）、<code>cout</code> + 开头 <code>using namespace std;</code>（本课程用这种）、以及 <code>using std::cout;</code>（只打开一个名字）。</p>
+
+    <p>它们指的是同一个东西，<b>你看到任何一种都不要慌</b>。本课程统一用第二种：少打字，又不至于把一大柜子名字全打开。你现在只要记住一件事——<b>这一行要写在 <code>#include</code> 之后、<code>main</code> 之前</b>，写漏了编译器会说 <code>cout</code> 未声明，那就是忘了它。</p>
+  </div>
+
   <p><b>语句</b>（statement）是一条完整的指令，C++ 里以分号结尾。程序就是按顺序执行的一条条语句——这解释了为什么下面那个反例里的分号那么要紧。</p>
 
   <h2>编译、运行、看到 Hello</h2>
@@ -244,7 +269,7 @@ int main()
 
   <div class="quiz" data-quiz='[
   {
-    "q": "编译器给了这样一屏：\n\n```text\nbroken-intro-01.cpp:5:38: error: expected &#39;;&#39; after\n    expression\n    5 |     std::cout &lt;&lt; \"Hello\" &lt;&lt; std::endl\n      |                                      ^\n      |                                      ;\n```\n\n这一屏里，哪一条信息是稳定能拿到的？\n（其余几行可能因为编译器不同而变样）",
+    "q": "编译器给了这样一屏：\n\n```text\nbroken-intro-01.cpp:5:38: error: expected &#39;;&#39; after\n    expression\n    5 |     cout &lt;&lt; \"Hello\" &lt;&lt; endl\n      |                                      ^\n      |                                      ;\n```\n\n这一屏里，哪一条信息是稳定能拿到的？\n（其余几行可能因为编译器不同而变样）",
     "opts": [
       "文件名与行号，也就是 broken-intro-01.cpp 的 5",
       "列号 38，以及 ^ 指着的那一列在哪个位置",

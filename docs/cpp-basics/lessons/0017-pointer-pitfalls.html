@@ -376,7 +376,7 @@ $ ./trap-08
 
   <div class="quiz" data-quiz='[
   {
-    "q": "这个指针从没赋过值：\n\n```cpp\nint *p;                 // 只说了 p 能存一个 int 的地址\n\nstd::cout &lt;&lt; \"p 里现在装着 \" &lt;&lt; p &lt;&lt; std::endl;\n```\n\n```text\np 里现在装着 0x1f4418018\n第二次运行，这个数又会不一样\n```\n\n① 打印出来为什么是一个随机地址？\n② 每次运行都不一样，说明了什么？\n③ 声明时该写什么来避免它？",
+    "q": "这个指针从没赋过值：\n\n```cpp\nint *p;                 // 只说了 p 能存一个 int 的地址\n\ncout &lt;&lt; \"p 里现在装着 \" &lt;&lt; p &lt;&lt; endl;\n```\n\n```text\np 里现在装着 0x1f4418018\n第二次运行，这个数又会不一样\n```\n\n① 打印出来为什么是一个随机地址？\n② 每次运行都不一样，说明了什么？\n③ 声明时该写什么来避免它？",
     "answer": "① int *p; 只说明了「p 能存一个 int 的\n地址」，没给它任何地址；它拿到的是那块\n内存上残留的旧字节。\n② 说明这个格子没有被初始化、内容由上一\n次谁用过它决定——不是一个有意义的地址，\n解引用它会碰运气：碰巧指向自己能访问的\n地方就悄悄改坏别的数据，指向别人的地盘\n就当场崩。\n③ 声明时就给一个值，还不知道指哪儿就先\n写 nullptr：\n\n```cpp\nint *p = nullptr;\n```",
     "criteria": "答出「指针没初始化，里面是残留的旧字\n节」→ 通过；\n第 ② 问答到「每次不同说明值没有意义、\n解引用会碰运气」（而不是「随机数」三个\n字）才算完整；第 ③ 问答 nullptr。"
   }
@@ -384,7 +384,7 @@ $ ./trap-08
 
   <div class="quiz" data-quiz='[
   {
-    "q": "指针走出数组末尾之后还在取数据，打印出\n来的数每次运行都不一样：\n\n```cpp\nint scores[5] = {88, 76, 95, 60, 82};\n\nint *p = scores;\nfor (int i = 0; i &lt; 3; i++)\n    p++;\n\nstd::cout &lt;&lt; *(p + 5) &lt;&lt; std::endl;\n```\n\n```text\n1871620352\n```\n\n① 这个数是从哪儿读来的？\n② 为什么读到它不报错？\n③ 越界写为什么更麻烦？",
+    "q": "指针走出数组末尾之后还在取数据，打印出\n来的数每次运行都不一样：\n\n```cpp\nint scores[5] = {88, 76, 95, 60, 82};\n\nint *p = scores;\nfor (int i = 0; i &lt; 3; i++)\n    p++;\n\ncout &lt;&lt; *(p + 5) &lt;&lt; endl;\n```\n\n```text\n1871620352\n```\n\n① 这个数是从哪儿读来的？\n② 为什么读到它不报错？\n③ 越界写为什么更麻烦？",
     "answer": "① 从数组外面那块内存读来的——p 从起点走\n了 3 格，再往后 5 格已经出了这张表。那\n里的字节不属于 scores，按 int 解释出来\n就是一个没有意义的数。\n② 解引用只是照着地址取几个字节，程序运\n行时不会替你对边界；标准也没有规定越界\n的后果，所以既不报错也不一定崩。\n③ 越界读最多算出一个看不懂的数；越界写\n会把别人的数据改掉，而且当场什么都不会\n发生，要等很久以后某次打印出奇怪的值才\n发现，那时报错的地方离出事的地方已经很\n远。",
     "criteria": "答出「读的是数组外面那块内存」→ 通过；\n第 ② 问答到「运行时不做边界检查」；\n第 ③ 问答到「越界写改掉别人的数据且当\n场不报错」才算完整。"
   }
@@ -491,7 +491,7 @@ $ ./trap-05
 
   <div class="quiz" data-quiz='[
   {
-    "q": "给这个统计函数补上判空与边界检查，让三\n种调用都不崩：\n\n```cpp\nint highest(const int *p, int n)\n{\n    int top = p[0];\n    for (int i = 1; i &lt; n; i++)\n        if (p[i] &gt; top)\n            top = p[i];\n    return top;\n}\n```\n\n```cpp\nint scores[5] = {88, 76, 95, 60, 82};\n\nstd::cout &lt;&lt; highest(scores, 5) &lt;&lt; std::endl;\nstd::cout &lt;&lt; highest(nullptr, 5) &lt;&lt; std::endl;\nstd::cout &lt;&lt; highest(scores, 0) &lt;&lt; std::endl;\n```\n\n① 检查要写在函数的哪个位置？\n② 两个条件分别挡住什么情况？\n③ 检查通过以后交回什么标志，调用方怎么\n用这个标志？",
+    "q": "给这个统计函数补上判空与边界检查，让三\n种调用都不崩：\n\n```cpp\nint highest(const int *p, int n)\n{\n    int top = p[0];\n    for (int i = 1; i &lt; n; i++)\n        if (p[i] &gt; top)\n            top = p[i];\n    return top;\n}\n```\n\n```cpp\nint scores[5] = {88, 76, 95, 60, 82};\n\ncout &lt;&lt; highest(scores, 5) &lt;&lt; endl;\ncout &lt;&lt; highest(nullptr, 5) &lt;&lt; endl;\ncout &lt;&lt; highest(scores, 0) &lt;&lt; endl;\n```\n\n① 检查要写在函数的哪个位置？\n② 两个条件分别挡住什么情况？\n③ 检查通过以后交回什么标志，调用方怎么\n用这个标志？",
     "answer": "函数开头先问一句「这张表到底存不存\n在」，再做 p[0] 那一步：\n\n```cpp\nint highest(const int *p, int n)\n{\n    if (p == nullptr || n &lt;= 0)\n        return -1;\n\n    int top = p[0];\n    for (int i = 1; i &lt; n; i++)\n        if (p[i] &gt; top)\n            top = p[i];\n    return top;\n}\n```\n\n① 写在函数开头、任何解引用之前——p[0]\n就是第一处解引用。\n② p == nullptr 挡住「表不存在」；n &lt;= 0\n挡住「表是空的、一格都没有」。\n③ 交回 -1 这个说得清的标志（正常成绩不\n会是负数），调用方拿到 -1 就知道「没有\n成绩表可用」，而不是去打印它。",
     "criteria": "检查写在解引用之前、两个条件都写齐 →\n通过；\n第 ③ 问给出 -1 这类标志并说明调用方怎\n么用才算完整。\n只写 p == nullptr 而漏掉 n &lt;= 0 → 部分\n通过（空表那次仍然越界读）。"
   }

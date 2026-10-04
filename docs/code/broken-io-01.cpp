@@ -1,9 +1,10 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     int score = 0;
-    std::cout << "请输入成绩：";
-    std::cin << score;
+    cout << "请输入成绩：";
+    cin << score;
     return 0;
 }

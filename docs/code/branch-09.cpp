@@ -1,12 +1,13 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     int score = 45;
 
     if (score >= 60);
     {
-        std::cout << "及格" << std::endl;
+        cout << "及格" << endl;
     }
 
     return 0;

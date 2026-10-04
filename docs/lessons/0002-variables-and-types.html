@@ -95,6 +95,7 @@
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int chineseScore = 92;
@@ -102,7 +103,7 @@ int main()
     int englishScore = 87;
     int total = chineseScore + mathScore + englishScore;
 
-    std::cout &lt;&lt; "三科总分：" &lt;&lt; total &lt;&lt; std::endl;
+    cout &lt;&lt; "三科总分：" &lt;&lt; total &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -173,18 +174,19 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     char firstLetter = 'L';
     int letterCode = firstLetter;
 
-    std::cout &lt;&lt; "首字母是 " &lt;&lt; firstLetter &lt;&lt; std::endl;
-    std::cout &lt;&lt; "它的编码是 " &lt;&lt; letterCode &lt;&lt; std::endl;
+    cout &lt;&lt; "首字母是 " &lt;&lt; firstLetter &lt;&lt; endl;
+    cout &lt;&lt; "它的编码是 " &lt;&lt; letterCode &lt;&lt; endl;
 
     firstLetter = firstLetter + 1;
     letterCode = firstLetter;
-    std::cout &lt;&lt; "再加 1，字符变成 " &lt;&lt; firstLetter
-              &lt;&lt; "，编码变成 " &lt;&lt; letterCode &lt;&lt; std::endl;
+    cout &lt;&lt; "再加 1，字符变成 " &lt;&lt; firstLetter
+              &lt;&lt; "，编码变成 " &lt;&lt; letterCode &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -259,6 +261,7 @@ int main()
 
       <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int chineseScore = 92;
@@ -267,7 +270,7 @@ int main()
     int total = chineseScore + mathScore + englishScore;
     double average = total / 3;
 
-    std::cout &lt;&lt; "总分：" &lt;&lt; total &lt;&lt; "，平均分：" &lt;&lt; average &lt;&lt; std::endl;
+    cout &lt;&lt; "总分：" &lt;&lt; total &lt;&lt; "，平均分：" &lt;&lt; average &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -341,7 +344,7 @@ $ ./uninit
 
   <div class="quiz" data-quiz='[
   {
-    "q": "一位同学想让「科目数」不再是一个写死的\n数字，写成了这样：\n\n```cpp\n#include &lt;iostream&gt;\n\nint main()\n{\n    const int kSubjectCount;\n    std::cout &lt;&lt; kSubjectCount &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n编译器直接把他拦下了：\n\n```text\nbroken-types-01.cpp:5:15: error: default initialization\n    of an object of const type &#39;const int&#39;\n    5 |     const int kSubjectCount;\n      |               ^\n```\n\n① 这一行错在哪？\n② 为什么常量必须在声明时就给值？\n③ 这一条和「普通变量忘了给初值」相比，\n哪一个更该高兴？",
+    "q": "一位同学想让「科目数」不再是一个写死的\n数字，写成了这样：\n\n```cpp\n#include &lt;iostream&gt;\n\nusing namespace std;\nint main()\n{\n    const int kSubjectCount;\n    cout &lt;&lt; kSubjectCount &lt;&lt; endl;\n    return 0;\n}\n```\n\n编译器直接把他拦下了：\n\n```text\nbroken-types-01.cpp:5:15: error: default initialization\n    of an object of const type &#39;const int&#39;\n    5 |     const int kSubjectCount;\n      |               ^\n```\n\n① 这一行错在哪？\n② 为什么常量必须在声明时就给值？\n③ 这一条和「普通变量忘了给初值」相比，\n哪一个更该高兴？",
     "answer": "① const int kSubjectCount; 声明之后没\n给值。\n② 常量一旦定下来就不允许再改，声明时不\n给值，这个名字就永远拿不到值了——编译器\n只能在门口拦下，不能放它过去。\n③ const 这一条更该高兴。普通变量忘给初\n值会读到内存里残留的随机值，编译通过、\n现象随机；const 忘给初值编译器当场拦\n住。",
     "criteria": "第 ① 问答「声明 const 时没给初值」；\n第 ② 问答到「值一旦固定就不能再改，所\n以声明处必须给出」，只说「语法规定」算\n部分通过；\n第 ③ 问说出编译器拦住比运行时读到随机\n值好，才算过。"
   }

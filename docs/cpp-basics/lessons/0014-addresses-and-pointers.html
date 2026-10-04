@@ -399,7 +399,7 @@ $ ./addr-03
 
   <div class="quiz" data-quiz='[
   {
-    "q": "这段程序打印出 60，改不动外面的变量：\n\n```cpp\nvoid tryByValue(int x)\n{\n    x = 100;\n}\n\nint main()\n{\n    int score = 60;\n    tryByValue(score);\n    std::cout &lt;&lt; score &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n① 形参 x 里装的是什么？\n② 函数体里那句 x = 100 改的是谁？\n③ 要让它改到 main 里的 score，形参该怎\n么写、调用处该怎么写？",
+    "q": "这段程序打印出 60，改不动外面的变量：\n\n```cpp\nusing namespace std;\nvoid tryByValue(int x)\n{\n    x = 100;\n}\n\nint main()\n{\n    int score = 60;\n    tryByValue(score);\n    cout &lt;&lt; score &lt;&lt; endl;\n    return 0;\n}\n```\n\n① 形参 x 里装的是什么？\n② 函数体里那句 x = 100 改的是谁？\n③ 要让它改到 main 里的 score，形参该怎\n么写、调用处该怎么写？",
     "answer": "① 一份副本——调用时另外找了一块地方，把\nscore 里的 60 抄了进去。\n② 改的是那份副本，函数返回后它就没了。\n③ 形参写成指针，调用时交出地址：\n\n```cpp\nvoid tryByAddress(int *p)\n{\n    *p = 100;\n}\n```\n\n调用处写 tryByAddress(&amp;score);——传的是\n地址的副本，副本指着同一间屋子，所以改\n得到原件。",
     "criteria": "说出形参是副本、所以改不动外面 → 通\n过；\n第 ③ 问答出形参写成 int *、调用处写\n&amp;score 才算完整。\n答成「在函数里 return 100 再赋值」→ 部\n分通过（能改到，但没答本题问的传地\n址）。"
   }
@@ -407,7 +407,7 @@ $ ./addr-03
 
   <div class="quiz" data-quiz='[
   {
-    "q": "读这段程序，判断 main 里那一行打印出什\n么：\n\n```cpp\nvoid tryByAddress(int *p)\n{\n    *p = 100;\n}\n\nint main()\n{\n    int score = 60;\n    tryByAddress(&amp;score);\n    std::cout &lt;&lt; score &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n① 打印 100 还是 60？\n② 形参 p 里装的是值还是地址？这份副本\n和原件是什么关系？\n③ 如果调用改写成 tryByAddress(score);\n（少一个 &amp;），编译器会说什么？",
+    "q": "读这段程序，判断 main 里那一行打印出什\n么：\n\n```cpp\nusing namespace std;\nvoid tryByAddress(int *p)\n{\n    *p = 100;\n}\n\nint main()\n{\n    int score = 60;\n    tryByAddress(&amp;score);\n    cout &lt;&lt; score &lt;&lt; endl;\n    return 0;\n}\n```\n\n① 打印 100 还是 60？\n② 形参 p 里装的是值还是地址？这份副本\n和原件是什么关系？\n③ 如果调用改写成 tryByAddress(score);\n（少一个 &amp;），编译器会说什么？",
     "answer": "① 打印 100。\n② p 里装的是一份地址的副本。副本与原件\n是同一个数，指向 main 里同一个 score，\n所以沿着它写进去的就是原件。\n③ 编译器会报类型对不上：int 的实参交给\nint * 的形参，大意是\ncannot initialize a parameter\nof type int * with an lvalue\nof type int。要传地址就老老实实写\n&amp;score。",
     "criteria": "第 ① 问答 100 → 必答；\n第 ② 问答出「地址的副本，指的还是同一\n片内存」才算过；\n第 ③ 问答出类型不匹配（int 不能当\nint * 用）。\n答成「p 是 score 的别名」→ 部分通过\n（结果对，但没说清是副本）。"
   }

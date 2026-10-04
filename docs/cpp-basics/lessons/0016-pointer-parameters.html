@@ -407,7 +407,7 @@ main 里 sizeof(scores) = 20 字节
 
   <div class="quiz" data-quiz='[
   {
-    "q": "把统计写成接收指针的函数：\n\n```cpp\nint total(int scores[5])\n{\n    int sum = 0;\n    for (int i = 0; i &lt; 5; i++)\n        sum = sum + scores[i];\n    return sum;\n}\n\nint main()\n{\n    int scores[5] = {88, 76, 95, 60, 82};\n    std::cout &lt;&lt; total(scores) &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n改写成接收指针参数、长度也能自己传的版\n本，并加一个只读的函数与一个会改数据的\n函数，让人一眼看得出来谁动数据。",
+    "q": "把统计写成接收指针的函数：\n\n```cpp\nusing namespace std;\nint total(int scores[5])\n{\n    int sum = 0;\n    for (int i = 0; i &lt; 5; i++)\n        sum = sum + scores[i];\n    return sum;\n}\n\nint main()\n{\n    int scores[5] = {88, 76, 95, 60, 82};\n    cout &lt;&lt; total(scores) &lt;&lt; endl;\n    return 0;\n}\n```\n\n改写成接收指针参数、长度也能自己传的版\n本，并加一个只读的函数与一个会改数据的\n函数，让人一眼看得出来谁动数据。",
     "answer": "```cpp\nint total(const int *p, int n)\n{\n    int sum = 0;\n    for (int i = 0; i &lt; n; i++)\n        sum = sum + p[i];\n    return sum;\n}\n\nvoid addBonus(int *p, int n, int bonus)\n{\n    for (int i = 0; i &lt; n; i++)\n        p[i] = p[i] + bonus;\n}\n```\n\n只读的加 const（写在 * 左边：顺着 p 读\n可以，通过 p 写不行）；要改数据的不加\nconst。调用处都写 total(scores, 5) 与\naddBonus(scores, 5, 2)，不用写 &amp;——数组\n名本身就是地址。",
     "criteria": "两个函数都用了指针形参，只读的那个标了\nconst、要改的那个没标 → 通过；\n调用处不写 &amp;、长度另外传 → 完整。\n在只读函数里写 p[i] = 0 → 不通过（标了\nconst 又去写，编译不过）。"
   }
@@ -415,7 +415,7 @@ main 里 sizeof(scores) = 20 字节
 
   <div class="quiz" data-quiz='[
   {
-    "q": "同一个数组，在 main 里量是 20 字节，在\n函数里量却是 8 字节：\n\n```cpp\nint total(const int *p, int n)\n{\n    int sum = 0;\n    for (int i = 0; i &lt; n; i++)\n        sum = sum + p[i];\n    return sum;\n}\n\nint main()\n{\n    int scores[5] = {88, 76, 95, 60, 82};\n    std::cout &lt;&lt; total(scores, 5) &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n① 两处量到的东西分别是什么？\n② 如果函数里写\nint n = sizeof(p) / sizeof(p[0]);，n\n会是多少、总分变成多少？\n③ 为什么长度必须当成另一个参数传进去？",
+    "q": "同一个数组，在 main 里量是 20 字节，在\n函数里量却是 8 字节：\n\n```cpp\nusing namespace std;\nint total(const int *p, int n)\n{\n    int sum = 0;\n    for (int i = 0; i &lt; n; i++)\n        sum = sum + p[i];\n    return sum;\n}\n\nint main()\n{\n    int scores[5] = {88, 76, 95, 60, 82};\n    cout &lt;&lt; total(scores, 5) &lt;&lt; endl;\n    return 0;\n}\n```\n\n① 两处量到的东西分别是什么？\n② 如果函数里写\nint n = sizeof(p) / sizeof(p[0]);，n\n会是多少、总分变成多少？\n③ 为什么长度必须当成另一个参数传进去？",
     "answer": "① main 里量的是数组对象 scores，5 个\nint 一共 20 字节；函数里量的是指针 p，\n一个地址 8 字节。\n② n = 8 / 4 = 2，循环只走两格，总分只\n加上前两个成绩：88 + 76 = 164。\n③ 因为数组交给函数时只递过去一个起点地\n址，长度不会跟着过去，函数里也没有数组\n对象可以量。所以「起点加长度」要一起\n给：total(scores, 5)。",
     "criteria": "两处量到的东西说清（数组对象 20 字节\n/ 指针 8 字节）→ 通过；\n第 ② 问答出 n = 2、总分 164 才算完整；\n第 ③ 问答出「只传了起点地址，长度没跟\n着过去」。"
   }

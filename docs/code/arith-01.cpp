@@ -1,5 +1,6 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     int chineseScore = 92;
@@ -8,13 +9,13 @@ int main()
     int total = chineseScore + mathScore + englishScore;
 
     int average = total / 3;
-    std::cout << "整数写法：" << total << " / 3 = " << average << std::endl;
+    cout << "整数写法：" << total << " / 3 = " << average << endl;
 
     double decimalAverage = total / 3.0;
-    std::cout << "小数写法：" << total << " / 3.0 = " << decimalAverage << std::endl;
+    cout << "小数写法：" << total << " / 3.0 = " << decimalAverage << endl;
 
     double castAverage = static_cast<double>(total) / 3;
-    std::cout << "强制转换：" << total << " 转成 double 再 / 3 = " << castAverage << std::endl;
+    cout << "强制转换：" << total << " 转成 double 再 / 3 = " << castAverage << endl;
 
     return 0;
 }

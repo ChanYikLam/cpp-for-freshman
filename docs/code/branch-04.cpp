@@ -1,16 +1,17 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     char grade = 'B';
 
     if (grade = 'A')
     {
-        std::cout << "优秀" << std::endl;
+        cout << "优秀" << endl;
     }
     else
     {
-        std::cout << "这次不是优秀" << std::endl;
+        cout << "这次不是优秀" << endl;
     }
 
     return 0;

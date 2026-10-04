@@ -340,7 +340,7 @@ cout &lt;&lt; victim;          // victim 可能已经不是 7 了</code></pre>
 
   <div class="quiz" data-quiz='[
   {
-    "q": "这两行写下去，victim 可能已经不是 7\n了：\n\n```cpp\nint victim = 7;\nint scores[5] = {90, 85, 78, 92, 88};\n\nscores[5] = 99;\nstd::cout &lt;&lt; victim &lt;&lt; std::endl;\n```\n\n```text\nvictim 打印出来是 99\n```\n\n① scores[5] 写到哪儿去了？\n② 为什么编译器不拦？\n③ 写循环访问数组时，怎么保证一格都不\n越？",
+    "q": "这两行写下去，victim 可能已经不是 7\n了：\n\n```cpp\nint victim = 7;\nint scores[5] = {90, 85, 78, 92, 88};\n\nscores[5] = 99;\ncout &lt;&lt; victim &lt;&lt; endl;\n```\n\n```text\nvictim 打印出来是 99\n```\n\n① scores[5] 写到哪儿去了？\n② 为什么编译器不拦？\n③ 写循环访问数组时，怎么保证一格都不\n越？",
     "answer": "① 写到了 scores 后面那块内存上——下标\n5 不在 0 到 4 这个范围里。\n② 下标是在运行时算出来的一个值，编译器\n不会替你检查它落到哪儿；语言标准也没有\n规定越界访问会发生什么，所以既不报错也\n不一定崩。\n③ 让循环变量从 0 开始、条件写 i &lt; N\n（N 是元素个数）：最后一轮 i 正好是\nN - 1，一格都不越。带上 -Wall 编译，写\n死的越界下标还会给一行警告。",
     "criteria": "指出越界写改到了数组后面的内存、可能正\n好是别的变量 → 通过；\n第 ② 问答到「运行时的下标编译器不检\n查」；\n第 ③ 问给出 i &lt; N 的边界写法。\n答成「越界会报错所以不该这么写」→ 不通\n过（它恰恰不报错）。"
   }

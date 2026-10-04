@@ -1,5 +1,6 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     char grade = 'B';
@@ -7,16 +8,16 @@ int main()
     switch (grade)
     {
     case 'A':
-        std::cout << "优秀" << std::endl;
+        cout << "优秀" << endl;
         break;
     case 'B':
-        std::cout << "良好" << std::endl;
+        cout << "良好" << endl;
         break;
     case 'C':
-        std::cout << "及格" << std::endl;
+        cout << "及格" << endl;
         break;
     default:
-        std::cout << "不及格" << std::endl;
+        cout << "不及格" << endl;
         break;
     }
 

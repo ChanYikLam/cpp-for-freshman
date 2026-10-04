@@ -197,7 +197,7 @@ $ ./loops-01
 
   <div class="quiz" data-quiz='[
   {
-    "q": "这个循环会依次打出 0 1 2 3 4：\n\n```cpp\nint i = 0;\nwhile (i &lt; 5)\n{\n    std::cout &lt;&lt; i &lt;&lt; \" \";\n    i++;\n}\n```\n\n```text\n0 1 2 3 4\n```\n\n① 初始化、测试、更新各执行了几次？\n② 循环体执行了几次？\n③ 循环结束后 i 等于多少？",
+    "q": "这个循环会依次打出 0 1 2 3 4：\n\n```cpp\nint i = 0;\nwhile (i &lt; 5)\n{\n    cout &lt;&lt; i &lt;&lt; \" \";\n    i++;\n}\n```\n\n```text\n0 1 2 3 4\n```\n\n① 初始化、测试、更新各执行了几次？\n② 循环体执行了几次？\n③ 循环结束后 i 等于多少？",
     "answer": "① 初始化 1 次（只在进入循环前做一\n次）；测试 6 次；更新 5 次。\n② 5 次。\n③ i 等于 5——正是最后一次测试（5 &lt; 5）\n为假时才停下来的。",
     "criteria": "三问都要答对：初始化 1 次、测试比循环\n体多一次、更新与循环体同次数；\n第 ③ 问答 5 才算过。答成「i 等于 4」是\n把最后一个执行过循环体的值当成了循环结\n束时的值 → 不通过。"
   }
@@ -291,8 +291,8 @@ $ ./loops-03
 
   <div class="quiz" data-quiz='[
   {
-    "q": "这段循环用结束标记 -1 收工，输入 90、\n85、78、-1 时打印总分 253：\n\n```cpp\ndouble sum = 0.0;\nint count = 0;\ndouble score;\n\nstd::cin &gt;&gt; score;\nwhile (score &gt;= 0)\n{\n    sum += score;\n    count++;\n    std::cin &gt;&gt; score;\n}\n```\n\n```text\n90\n85\n78\n-1\n```\n\n```text\n共 3 个成绩，总分 253\n```\n\n把它改写成 for 版，要求打印出来的两行\n与原来完全一样。",
-    "answer": "改写之后每次读取都配一句判断，用一个首\n轮必真的 for 把「先读一次、再判断」摊\n平：\n\n```cpp\nfor (int i = 0; ; i++)\n{\n    std::cin &gt;&gt; score;\n    if (score &lt; 0)\n        break;\n    sum += score;\n    count++;\n}\n```\n\n也可以保留原形状，只把三件事收进 for\n的圆括号：\n\n```cpp\nfor (std::cin &gt;&gt; score; score &gt;= 0; std::cin &gt;&gt; score)\n{\n    sum += score;\n    count++;\n}\n```\n\n两种写法都对。关键是结束标记那次不能被\n累加——判断必须在 sum += score 之前发\n生。",
+    "q": "这段循环用结束标记 -1 收工，输入 90、\n85、78、-1 时打印总分 253：\n\n```cpp\ndouble sum = 0.0;\nint count = 0;\ndouble score;\n\ncin &gt;&gt; score;\nwhile (score &gt;= 0)\n{\n    sum += score;\n    count++;\n    cin &gt;&gt; score;\n}\n```\n\n```text\n90\n85\n78\n-1\n```\n\n```text\n共 3 个成绩，总分 253\n```\n\n把它改写成 for 版，要求打印出来的两行\n与原来完全一样。",
+    "answer": "改写之后每次读取都配一句判断，用一个首\n轮必真的 for 把「先读一次、再判断」摊\n平：\n\n```cpp\nfor (int i = 0; ; i++)\n{\n    cin &gt;&gt; score;\n    if (score &lt; 0)\n        break;\n    sum += score;\n    count++;\n}\n```\n\n也可以保留原形状，只把三件事收进 for\n的圆括号：\n\n```cpp\nfor (cin &gt;&gt; score; score &gt;= 0; cin &gt;&gt; score)\n{\n    sum += score;\n    count++;\n}\n```\n\n两种写法都对。关键是结束标记那次不能被\n累加——判断必须在 sum += score 之前发\n生。",
     "criteria": "改成 for 形状、且结束标记不参与累加，\n两行输出与 while 版一致 → 通过。\n把 -1 也累加进去了（输出的总分变成\n252）→ 不通过。\n只要逻辑对，for 循环条件留空或把读取写\n在初始化与更新那一格都算合理替代方案。"
   }
 ]'></div>
@@ -503,7 +503,7 @@ int main()
 
   <div class="quiz" data-quiz='[
   {
-    "q": "这张成绩表的总分应该是 433，程序打出来\n的却是别的数：\n\n```cpp\nint scores[5] = {90, 85, 78, 92, 88};\n\ndouble total = 0.0;\nfor (int i = 0; i &lt;= 5; i++)\n{\n    total += scores[i];\n}\n\nstd::cout &lt;&lt; \"总分：\" &lt;&lt; total &lt;&lt; std::endl;\n```\n\n① 错在哪一行？\n② 为什么结果不对？\n③ 怎么改，才能让「数组有几个元素」和\n「循环走几轮」永远是同一个数？",
+    "q": "这张成绩表的总分应该是 433，程序打出来\n的却是别的数：\n\n```cpp\nint scores[5] = {90, 85, 78, 92, 88};\n\ndouble total = 0.0;\nfor (int i = 0; i &lt;= 5; i++)\n{\n    total += scores[i];\n}\n\ncout &lt;&lt; \"总分：\" &lt;&lt; total &lt;&lt; endl;\n```\n\n① 错在哪一行？\n② 为什么结果不对？\n③ 怎么改，才能让「数组有几个元素」和\n「循环走几轮」永远是同一个数？",
     "answer": "① 条件写成 i &lt;= 5。\n② 下标合法范围是 0 到 4；i 取到 5 时访\n问的是 scores[5]，那一格不属于这张表，\n读进来的是别处的字节，总分就掺进了一个\n没有意义的数。\n③ 把长度绑到一个常量上，两处都用同一个\n名字：\n\n```cpp\nconst int N = 5;\nint scores[N] = {90, 85, 78, 92, 88};\ndouble total = 0.0;\nfor (int i = 0; i &lt; N; i++)\n{\n    total += scores[i];\n}\n```\n\n以后数组改成 10 个元素，只改 N 一处，\n读数据的循环与统计的循环同时跟上。",
     "criteria": "指出 i &lt;= 5 越界、说出读到了不属于数组\n的内存 → 通过；\n第 ③ 问给出「长度与边界共用一个 const\n常量」这个做法才算完整。\n只说「把 5 改成 4」→ 部分通过（这一处\n对了，但留下两个各写一遍的数字）。"
   }

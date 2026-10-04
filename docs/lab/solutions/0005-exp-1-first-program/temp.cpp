@@ -7,20 +7,21 @@
 #include <iostream>
 #include <iomanip>
 
+using namespace std;
 int main()
 {
-    std::cout << "请输入体温（华氏度，例如 98.6）：";
+    cout << "请输入体温（华氏度，例如 98.6）：";
 
     double fahrenheit = 0.0;
-    std::cin >> fahrenheit;
+    cin >> fahrenheit;
 
     const double kOffset = 32.0;
     const double kScale = 5.0 / 9.0;
     double celsius = (fahrenheit - kOffset) * kScale;
 
-    std::cout << std::fixed << std::setprecision(1);
-    std::cout << "华氏 " << fahrenheit << " 度";
-    std::cout << " = 摄氏 " << celsius << " 度" << std::endl;
+    cout << fixed << setprecision(1);
+    cout << "华氏 " << fahrenheit << " 度";
+    cout << " = 摄氏 " << celsius << " 度" << endl;
 
     return 0;
 }

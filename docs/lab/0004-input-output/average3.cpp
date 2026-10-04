@@ -6,14 +6,15 @@
 #include <iostream>
 #include <iomanip>
 
+using namespace std;
 int main()
 {
-    std::cout << "请输入三门课的成绩（用空格或回车分开）：";
+    cout << "请输入三门课的成绩（用空格或回车分开）：";
 
     double score1 = 0.0;
     double score2 = 0.0;
     double score3 = 0.0;
-    std::cin >> score1 >> score2 >> score3;
+    cin >> score1 >> score2 >> score3;
 
     // TODO 1：科目数只该有一个定义处——把它声明成一个 const 常量。
     // TODO 2：算出三个成绩的总分，存进一个 total。
@@ -24,11 +25,11 @@ int main()
 
     // TODO 4：读到非数字时，cin 会进入失败状态，后面所有读取都会失败，
     //         坏输入还赖在输入队列里。在这里加一段「复位 + 丢掉坏输入 + 重新读」。
-    //         提示：std::cin.clear() 与 std::cin.ignore(1000, '\n')。
+    //         提示：cin.clear() 与 cin.ignore(1000, '\n')。
 
-    std::cout << std::fixed << std::setprecision(1);
-    std::cout << "总分：" << total << std::endl;
-    std::cout << "平均分：" << average << std::endl;
+    cout << fixed << setprecision(1);
+    cout << "总分：" << total << endl;
+    cout << "平均分：" << average << endl;
 
     return 0;
 }

@@ -1,5 +1,6 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     int chineseScore = 92;
@@ -8,7 +9,7 @@ int main()
     int total = chineseScore + mathScore + englishScore;
     double average = total / 3;
 
-    std::cout << "总分：" << total << "，平均分：" << average << std::endl;
+    cout << "总分：" << total << "，平均分：" << average << endl;
 
     return 0;
 }

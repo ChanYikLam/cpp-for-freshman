@@ -376,7 +376,7 @@ $ ./stats-06
 
   <div class="quiz" data-quiz='[
   {
-    "q": "五个成绩的总分应该是 433，这段程序打出\n来却是 345：\n\n```cpp\nint scores[5] = {90, 85, 78, 92, 88};\n\ndouble total = 0.0;\nfor (int i = 0; i &lt; 4; i++)\n{\n    total += scores[i];\n}\n\nstd::cout &lt;&lt; \"总分：\" &lt;&lt; total &lt;&lt; std::endl;\n```\n\n① 少的是谁？\n② 循环最后一轮的下标是多少？正确的边界\n应该怎么写？\n③ 数组长度以后改成 10、20，怎么写才不\n会再漏一格？",
+    "q": "五个成绩的总分应该是 433，这段程序打出\n来却是 345：\n\n```cpp\nint scores[5] = {90, 85, 78, 92, 88};\n\ndouble total = 0.0;\nfor (int i = 0; i &lt; 4; i++)\n{\n    total += scores[i];\n}\n\ncout &lt;&lt; \"总分：\" &lt;&lt; total &lt;&lt; endl;\n```\n\n① 少的是谁？\n② 循环最后一轮的下标是多少？正确的边界\n应该怎么写？\n③ 数组长度以后改成 10、20，怎么写才不\n会再漏一格？",
     "answer": "① 少的是最后一个成绩 88——433 减 345 正\n好是 88。\n② 最后一轮下标是 3；数组长度是 5，条件\n应写成 i &lt; 5，这样最后一轮下标正好是\n4。\n③ 把长度提成常量并让边界跟着它走：\n\n```cpp\nconst int N = 5;\nfor (int i = 0; i &lt; N; i++)\n{\n    total += scores[i];\n}\n```\n\n数组改成 20 个元素时只改 N 一处，读数\n据的循环与统计的循环同时跟上。",
     "criteria": "指出漏掉最后一个元素、算出 345 与 433\n相差 88 → 通过；\n给出 i &lt; N 的边界写法（或常量化的做\n法）才算完整。\n把 345 当成「算法本身有问题」→ 不通过\n（这是边界差一格）。"
   }

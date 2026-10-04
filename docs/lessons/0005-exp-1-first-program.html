@@ -132,14 +132,14 @@
 
   <div class="lesson-tip">
     <b>小数位没控住</b>
-    <p>打印成一长串小数，是少了 <code>std::fixed &lt;&lt; std::setprecision(1)</code>；这两个要一起用，<code>&lt;iomanip&gt;</code> 也要 include。</p>
+    <p>打印成一长串小数，是少了 <code>fixed &lt;&lt; setprecision(1)</code>；这两个要一起用，<code>&lt;iomanip&gt;</code> 也要 include。</p>
 
-    <pre data-lang="cpp"><code>std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(1);</code></pre>
+    <pre data-lang="cpp"><code>cout &lt;&lt; fixed &lt;&lt; setprecision(1);</code></pre>
   </div>
 
   <div class="lesson-warn">
     <b>漏了头文件</b>
-    <p><code>std::cin</code> 与 <code>std::cout</code> 都要 <code>#include &lt;iostream&gt;</code>；少了它，报错会说找不到这些名字。<code>std::setprecision</code> 在另一个头文件里——那一条报错就是这个提醒。</p>
+    <p><code>cin</code> 与 <code>cout</code> 都要 <code>#include &lt;iostream&gt;</code>；少了它，报错会说找不到这些名字。<code>setprecision</code> 在另一个头文件里——那一条报错就是这个提醒。</p>
   </div>
 
   <div class="lesson-note">

@@ -88,3 +88,4 @@ trap-07	pointer-pitfalls	compile	learning-coach-batch3
 trap-08	pointer-pitfalls	run	learning-coach-batch3
 trap-09	pointer-pitfalls	fail	learning-coach-batch3
 trap-10	pointer-pitfalls	run	learning-coach-batch3
+intro-02	intro-first-program	run	session

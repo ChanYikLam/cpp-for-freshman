@@ -1,3 +1,4 @@
+using namespace std;
 // temp.cpp -- 实验一 · 题目 A：体温换算
 //
 // 这是留白版：只有骨架和几处 TODO，交给你自己补完。

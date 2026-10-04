@@ -1,23 +1,24 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     int score = 0;
 
-    std::cout << "请输入成绩：";
-    std::cin >> score;
+    cout << "请输入成绩：";
+    cin >> score;
 
-    if (std::cin.fail())
+    if (cin.fail())
     {
-        std::cout << "\n这一段不是数字，读入失败了。丢弃这一行，重新读一次。\n";
-        std::cin.clear();
-        std::cin.ignore(1000, '\n');
+        cout << "\n这一段不是数字，读入失败了。丢弃这一行，重新读一次。\n";
+        cin.clear();
+        cin.ignore(1000, '\n');
 
-        std::cout << "请重新输入成绩：";
-        std::cin >> score;
+        cout << "请重新输入成绩：";
+        cin >> score;
     }
 
-    std::cout << "最终读到：" << score << std::endl;
+    cout << "最终读到：" << score << endl;
 
     return 0;
 }

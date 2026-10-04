@@ -72,16 +72,17 @@
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int a = 7;
     int b = 3;
 
-    std::cout &lt;&lt; "7 / 3 = " &lt;&lt; a / b &lt;&lt; std::endl;
-    std::cout &lt;&lt; "7 % 3 = " &lt;&lt; a % b &lt;&lt; std::endl;
-    std::cout &lt;&lt; "1 + 2 * 3 = " &lt;&lt; 1 + 2 * 3 &lt;&lt; std::endl;
-    std::cout &lt;&lt; "(1 + 2) * 3 = " &lt;&lt; (1 + 2) * 3 &lt;&lt; std::endl;
-    std::cout &lt;&lt; "1 + 2.0 = " &lt;&lt; 1 + 2.0 &lt;&lt; std::endl;
+    cout &lt;&lt; "7 / 3 = " &lt;&lt; a / b &lt;&lt; endl;
+    cout &lt;&lt; "7 % 3 = " &lt;&lt; a % b &lt;&lt; endl;
+    cout &lt;&lt; "1 + 2 * 3 = " &lt;&lt; 1 + 2 * 3 &lt;&lt; endl;
+    cout &lt;&lt; "(1 + 2) * 3 = " &lt;&lt; (1 + 2) * 3 &lt;&lt; endl;
+    cout &lt;&lt; "1 + 2.0 = " &lt;&lt; 1 + 2.0 &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -132,6 +133,7 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int chineseScore = 92;
@@ -140,13 +142,13 @@ int main()
     int total = chineseScore + mathScore + englishScore;
 
     int average = total / 3;
-    std::cout &lt;&lt; "整数写法：" &lt;&lt; total &lt;&lt; " / 3 = " &lt;&lt; average &lt;&lt; std::endl;
+    cout &lt;&lt; "整数写法：" &lt;&lt; total &lt;&lt; " / 3 = " &lt;&lt; average &lt;&lt; endl;
 
     double decimalAverage = total / 3.0;
-    std::cout &lt;&lt; "小数写法：" &lt;&lt; total &lt;&lt; " / 3.0 = " &lt;&lt; decimalAverage &lt;&lt; std::endl;
+    cout &lt;&lt; "小数写法：" &lt;&lt; total &lt;&lt; " / 3.0 = " &lt;&lt; decimalAverage &lt;&lt; endl;
 
     double castAverage = static_cast&lt;double&gt;(total) / 3;
-    std::cout &lt;&lt; "强制转换：" &lt;&lt; total &lt;&lt; " 转成 double 再 / 3 = " &lt;&lt; castAverage &lt;&lt; std::endl;
+    cout &lt;&lt; "强制转换：" &lt;&lt; total &lt;&lt; " 转成 double 再 / 3 = " &lt;&lt; castAverage &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -208,14 +210,15 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     int score = 89;
 
-    std::cout &lt;&lt; std::boolalpha;
-    std::cout &lt;&lt; "score &lt; 60 -&gt; " &lt;&lt; (score &lt; 60) &lt;&lt; std::endl;
-    std::cout &lt;&lt; "score &gt;= 60 -&gt; " &lt;&lt; (score &gt;= 60) &lt;&lt; std::endl;
-    std::cout &lt;&lt; "score &gt;= 60 &amp;&amp; score &lt; 90 -&gt; " &lt;&lt; (score &gt;= 60 &amp;&amp; score &lt; 90) &lt;&lt; std::endl;
+    cout &lt;&lt; boolalpha;
+    cout &lt;&lt; "score &lt; 60 -&gt; " &lt;&lt; (score &lt; 60) &lt;&lt; endl;
+    cout &lt;&lt; "score &gt;= 60 -&gt; " &lt;&lt; (score &gt;= 60) &lt;&lt; endl;
+    cout &lt;&lt; "score &gt;= 60 &amp;&amp; score &lt; 90 -&gt; " &lt;&lt; (score &gt;= 60 &amp;&amp; score &lt; 90) &lt;&lt; endl;
 
     return 0;
 }</code></pre>
@@ -225,7 +228,7 @@ score &lt; 60 -&gt; false
 score &gt;= 60 -&gt; true
 score &gt;= 60 &amp;&amp; score &lt; 90 -&gt; true</code></pre>
 
-  <p><code>score &lt; 60</code> 这种写法叫关系表达式，它的值是 <code>true</code> 或 <code>false</code>，也就是<b>布尔值</b>——布尔这个词来自 19 世纪的数学家 George Boole，他建立了用代数表示逻辑推理的方法。<code>std::boolalpha</code> 是让 <code>cout</code> 把布尔值印成 <code>true</code>/<code>false</code> 而不是 <code>1</code>/<code>0</code> 的开关；<code>&amp;&amp;</code> 是「并且」，两个条件都成立才为真。这一行先当作「比大小能算出一个值」来认识，怎么用它让程序分岔，是第 6 课的事。</p>
+  <p><code>score &lt; 60</code> 这种写法叫关系表达式，它的值是 <code>true</code> 或 <code>false</code>，也就是<b>布尔值</b>——布尔这个词来自 19 世纪的数学家 George Boole，他建立了用代数表示逻辑推理的方法。<code>boolalpha</code> 是让 <code>cout</code> 把布尔值印成 <code>true</code>/<code>false</code> 而不是 <code>1</code>/<code>0</code> 的开关；<code>&amp;&amp;</code> 是「并且」，两个条件都成立才为真。这一行先当作「比大小能算出一个值」来认识，怎么用它让程序分岔，是第 6 课的事。</p>
 
   <h2>强制转换：把意图写出来</h2>
 
@@ -257,16 +260,17 @@ score &gt;= 60 &amp;&amp; score &lt; 90 -&gt; true</code></pre>
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     double score = 4.5;
-    std::cout &lt;&lt; score % 2 &lt;&lt; std::endl;
+    cout &lt;&lt; score % 2 &lt;&lt; endl;
 
     return 0;
 }</code></pre>
 
   <pre data-lang="text"><code>broken-arith-01.cpp:6:24: error: invalid operands to binary expression ('double' and 'int')
-    6 |     std::cout &lt;&lt; score % 2 &lt;&lt; std::endl;
+    6 |     cout &lt;&lt; score % 2 &lt;&lt; endl;
       |                  ~~~~~ ^ ~
 1 error generated.</code></pre>
 
@@ -281,13 +285,14 @@ int main()
 
   <pre data-lang="cpp"><code>#include &lt;iostream&gt;
 
+using namespace std;
 int main()
 {
     double a = 0.1 + 0.2;
 
-    std::cout &lt;&lt; "a = " &lt;&lt; a &lt;&lt; std::endl;
-    std::cout &lt;&lt; "0.3 = " &lt;&lt; 0.3 &lt;&lt; std::endl;
-    std::cout &lt;&lt; "a == 0.3 的结果：" &lt;&lt; (a == 0.3) &lt;&lt; std::endl;
+    cout &lt;&lt; "a = " &lt;&lt; a &lt;&lt; endl;
+    cout &lt;&lt; "0.3 = " &lt;&lt; 0.3 &lt;&lt; endl;
+    cout &lt;&lt; "a == 0.3 的结果：" &lt;&lt; (a == 0.3) &lt;&lt; endl;
 
     return 0;
 }</code></pre>

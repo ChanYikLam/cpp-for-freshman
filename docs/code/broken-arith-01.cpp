@@ -1,9 +1,10 @@
 #include <iostream>
 
+using namespace std;
 int main()
 {
     double score = 4.5;
-    std::cout << score % 2 << std::endl;
+    cout << score % 2 << endl;
 
     return 0;
 }
