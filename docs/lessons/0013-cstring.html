@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>字符数组与字符串函数 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../assets/ -->
+<link rel="stylesheet" href="../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0013</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0013 · 字符数组与字符串函数</span>
+    <h1>字符数组与字符串函数</h1>
+    <p class="lesson-goal"><b>本节目标：</b>用字符数组存下姓名，用 <code>strcmp</code> 判断两个姓名是否相同</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <p>成绩表上光有分数不够，还得知道这份分数是谁的。姓名在 C++ 里是一串字符，这一课要把它存进数组，并让程序能比较两个姓名。</p>
+
+  <p>上一课的数组装的是数字，一个下标对一个数，各占各的格子。姓名不一样：它是一串有先后顺序的字符，第一个字是什么、第二个字是什么都有意义。这一课要解决的就是「怎么把一串字符放进数组」，以及随之而来的几个坑。</p>
+
+  <h2>一串字符在内存里长什么样</h2>
+
+  <p>先看看字符数组和上一课的数字数组有什么不同。</p>
+
+  <p>存成一个字符数组，最直白的办法是把每个字符分别写进数组的每一格：</p>
+
+  <p>存成 <code>cstr-01.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>char name1[8] = {'L', 'i', 'u', '\0'};</code></pre>
+
+  <p><code>char</code> 是专门存一个字符的数据类型，<code>'L'</code> 是字符常量，用一个字符占一格。到第 8 格为止，前 3 格装了 <code>L</code>、<code>i</code>、<code>u</code>，第 4 格装的是 <code>'\0'</code>。<code>'\0'</code> 读作「空字符」，它的编码值是 0，在 C++ 里专门用来标记「这一串字符到这里就完了」。</p>
+
+  <p>这一串字符加上末尾的空字符，就是 C++ 里的<b>字符串</b>。字符串并不要求你把整张表填满，<code>name1</code> 有 8 格，只用掉 4 格，剩下 4 格里是什么没人关心，后面的函数看到 <code>'\0'</code> 就停。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="字符数组 name1 的 8 格内存，前四格依次是 L、i、u、空字符，后四格未使用">
+<svg viewBox="0 0 840 250" role="img" aria-hidden="true" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <text x="20" y="34" font-size="22" fill="currentColor">char name1[8] = {'L', 'i', 'u', '\0'};</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="20" y="70" width="90" height="80"/>
+    <rect x="110" y="70" width="90" height="80"/>
+    <rect x="200" y="70" width="90" height="80"/>
+    <rect x="290" y="70" width="90" height="80"/>
+    <rect x="380" y="70" width="90" height="80" stroke-dasharray="7 6"/>
+    <rect x="470" y="70" width="90" height="80" stroke-dasharray="7 6"/>
+    <rect x="560" y="70" width="90" height="80" stroke-dasharray="7 6"/>
+    <rect x="650" y="70" width="90" height="80" stroke-dasharray="7 6"/>
+  </g>
+  <text x="65" y="122" font-size="30" text-anchor="middle" fill="currentColor">L</text>
+  <text x="155" y="122" font-size="30" text-anchor="middle" fill="currentColor">i</text>
+  <text x="245" y="122" font-size="30" text-anchor="middle" fill="currentColor">u</text>
+  <text x="335" y="122" font-size="22" text-anchor="middle" fill="currentColor">\0</text>
+  <text x="425" y="122" font-size="20" text-anchor="middle" fill="currentColor">?</text>
+  <text x="515" y="122" font-size="20" text-anchor="middle" fill="currentColor">?</text>
+  <text x="605" y="122" font-size="20" text-anchor="middle" fill="currentColor">?</text>
+  <text x="695" y="122" font-size="20" text-anchor="middle" fill="currentColor">?</text>
+  <g font-size="18" text-anchor="middle" fill="currentColor">
+    <text x="65" y="176">[0]</text>
+    <text x="155" y="176">[1]</text>
+    <text x="245" y="176">[2]</text>
+    <text x="335" y="176">[3]</text>
+    <text x="425" y="176">[4]</text>
+    <text x="515" y="176">[5]</text>
+    <text x="605" y="176">[6]</text>
+    <text x="695" y="176">[7]</text>
+  </g>
+  <path d="M245 196 v22 h90 v-22" stroke="currentColor" stroke-width="2" fill="none"/>
+  <text x="290" y="240" font-size="19" text-anchor="middle" fill="currentColor">到这里就结束了</text>
+  <text x="695" y="228" font-size="19" text-anchor="middle" fill="currentColor">用不上的格子</text>
+</svg>
+    <figcaption>图 1 · 字符串在内存里的样子：有效内容到空字符为止</figcaption>
+  </figure>
+
+  <p>一格一格地列字符太啰嗦，还得自己记住末尾那个 <code>'\0'</code>。C++ 允许直接用双引号里的字符串给字符数组初始化，编译器会把空字符自动补在末尾：</p>
+
+  <pre data-lang="cpp"><code>char name2[8] = "Zhang";</code></pre>
+
+  <p><code>"Zhang"</code> 是字符串常量，它本身就已经带着末尾的空字符。这里数组开了 8 格，只用了 6 格（5 个字母加 1 个空字符）。</p>
+
+  <p>双引号和单引号在这里是两件东西：<code>'L'</code> 是一个字符，<code>"L"</code> 是一个字符串（<code>L</code> 加上空字符）。两者互换会编译不过，编译器会告诉你类型对不上。</p>
+
+  <p>把两个数组都打印出来看一眼。</p>
+
+  <p>存成 <code>cstr-01.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// cstr-01.cpp -- 字符数组是怎么存一串字符的
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;          // strlen 声明在这个头文件里
+using namespace std;
+
+int main()
+{
+    // 写法一：一个一个字符地列出来，最后一个必须是 '\0'
+    char name1[8] = {'L', 'i', 'u', '\0'};
+
+    // 写法二：直接用双引号里的字符串初始化，'\0' 由编译器自动补在末尾
+    char name2[8] = "Zhang";
+
+    cout &lt;&lt; "名字一：" &lt;&lt; name1 &lt;&lt; endl;
+    cout &lt;&lt; "名字二：" &lt;&lt; name2 &lt;&lt; endl;
+
+    cout &lt;&lt; "name1 里装了 " &lt;&lt; sizeof(name1) &lt;&lt; " 字节" &lt;&lt; endl;
+    cout &lt;&lt; "name1 这个名字有 " &lt;&lt; strlen(name1) &lt;&lt; " 个字符" &lt;&lt; endl;
+
+    cout &lt;&lt; "name2 里装了 " &lt;&lt; sizeof(name2) &lt;&lt; " 字节" &lt;&lt; endl;
+    cout &lt;&lt; "name2 这个名字有 " &lt;&lt; strlen(name2) &lt;&lt; " 个字符" &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ cstr-01.cpp -o cstr-01
+$ ./cstr-01
+名字一：Liu
+名字二：Zhang
+name1 里装了 8 字节
+name1 这个名字有 3 个字符
+name2 里装了 8 字节
+name2 这个名字有 5 个字符</code></pre>
+
+  <p>用 <code>cout</code> 打印一个字符数组，它会连着往下打印，直到遇见空字符为止。这正是空字符存在的意义：数组有多长不重要，<code>cout</code> 只需要知道在哪里停下。</p>
+
+  <h2>strlen 与 sizeof 差在哪里</h2>
+
+  <p>上一课用 <code>sizeof</code> 量过数组占多少字节，那是整个数组的大小。处理字符串时更常问的是另一个问题：这串字符有几个字符？</p>
+
+  <p>这个问题由 <code>strlen</code> 回答。<code>strlen</code> 从数组的第一个格子开始数，数到空字符前面那一格为止，把数出来的个数交回给你。空字符本身不算在内。</p>
+
+  <p>于是同一个数组会有两个数字，含义完全不同：</p>
+
+  <table>
+    <thead>
+      <tr><th>问法</th><th>写法</th><th>对 <code>name1</code> 的结果</th><th>对 <code>name2</code> 的结果</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>这个数组占多少格</td><td><code>sizeof(name1)</code></td><td>8</td><td>8</td></tr>
+      <tr><td>这串字符有几个字符</td><td><code>strlen(name1)</code></td><td>3</td><td>5</td></tr>
+    </tbody>
+  </table>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="同一个字符数组上，sizeof 量出全部 8 格，strlen 只数到空字符前面">
+<svg viewBox="0 0 840 280" role="img" aria-hidden="true" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <text x="20" y="32" font-size="22" fill="currentColor">char name2[8] = "Zhang";</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="120" y="60" width="70" height="70"/>
+    <rect x="190" y="60" width="70" height="70"/>
+    <rect x="260" y="60" width="70" height="70"/>
+    <rect x="330" y="60" width="70" height="70"/>
+    <rect x="400" y="60" width="70" height="70"/>
+    <rect x="470" y="60" width="70" height="70"/>
+    <rect x="540" y="60" width="70" height="70" stroke-dasharray="7 6"/>
+    <rect x="610" y="60" width="70" height="70" stroke-dasharray="7 6"/>
+  </g>
+  <g font-size="26" text-anchor="middle" fill="currentColor">
+    <text x="155" y="106">Z</text>
+    <text x="225" y="106">h</text>
+    <text x="295" y="106">a</text>
+    <text x="365" y="106">n</text>
+    <text x="435" y="106">g</text>
+  </g>
+  <text x="505" y="106" font-size="20" text-anchor="middle" fill="currentColor">\0</text>
+  <text x="575" y="106" font-size="20" text-anchor="middle" fill="currentColor">?</text>
+  <text x="645" y="106" font-size="20" text-anchor="middle" fill="currentColor">?</text>
+  <path d="M120 148 H680" stroke="currentColor" stroke-width="2" fill="none"/>
+  <path d="M120 140 v16 M680 140 v16" stroke="currentColor" stroke-width="2" fill="none"/>
+  <text x="400" y="180" font-size="20" text-anchor="middle" fill="currentColor">sizeof(name2) = 8 字节</text>
+  <path d="M120 200 H540" stroke="currentColor" stroke-width="2" fill="none"/>
+  <path d="M120 192 v16 M540 192 v16" stroke="currentColor" stroke-width="2" fill="none"/>
+  <text x="330" y="232" font-size="20" text-anchor="middle" fill="currentColor">strlen(name2) = 5</text>
+  <text x="690" y="232" font-size="19" text-anchor="middle" fill="currentColor">空字符不计入</text>
+</svg>
+    <figcaption>图 2 · 同一个数组，两个问题，两个数字</figcaption>
+  </figure>
+
+  <div class="lesson-tip">
+    <b>数组开大一点没坏处</b>
+    <p>处理字符串的函数都是按空字符停下来的，不看数组有多长，所以数组开得比名字长只是浪费几格，不会出错。真正要小心的是反过来：数组开得刚好够放名字，却忘了给空字符留一格。</p>
+
+    <p><code>char name[5] = "Zhang";</code> 会编译不过——5 个字母加 1 个空字符一共需要 6 格。这个错编译器能替你抓住，属于运气好的那一类。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "一个字符数组装了姓名：\n\n```cpp\nchar name[8] = \"Zhang\";\n```\n\n① 这 8 格里用了几个、&#39;\\0&#39; 在第几格？\n② 不留那一格会出什么事？\n③ 为什么 cout 能自己停下来？",
+    "answer": "① 用掉 6 格：Z h a n g 五格加末尾一格\n&#39;\\0&#39;；&#39;\\0&#39; 在下标 5 那一格，后面两格没\n人管。\n② 空字符没了，cout 与字符串函数都会继\n续往下读，一直读到偶然遇见一个 0 才\n停，打印出来的东西后面跟着一串看不懂的\n字符；写进去时更糟，会把周围的变量改\n坏。\n③ 因为 &#39;\\0&#39; 就是「到这里结束」的标记：\n数组有多长不重要，读到它就停。",
+    "criteria": "三问都要答：&#39;\\0&#39; 占一格且不计入字符个\n数；缺了它会让 cout 与字符串函数读过\n头；停下来的依据是 &#39;\\0&#39; 而不是数组长\n度。\n答成「数组会自动补 0 所以不用留」→ 不\n通过（只有用双引号初始化时才由编译器\n补）。"
+  }
+]'></div>
+
+  <h2>拷贝与比较：两个必须用函数的动作</h2>
+
+  <p>字符串有两个日常动作，用 <code>=</code> 和 <code>==</code> 都做不成，必须调用函数。</p>
+
+  <p>先说比较。两个姓名是不是同一个人，直觉上应该写 <code>nameA == nameB</code>。数组名在 C++ 里代表的是「这个数组住在哪里」，所以 <code>==</code> 比较的是两个数组各自的住址，跟里面装的名字一个字都没关系。两个内容完全一样的姓名，住址不同，<code>==</code> 也会说它们不同。</p>
+
+  <p>比较内容要用 <code>strcmp</code>（string compare 的缩写）。它接收两个字符数组，逐格比较字符，然后交回一个整数：</p>
+
+  <table>
+    <thead>
+      <tr><th><code>strcmp(a, b)</code> 的返回值</th><th>含义</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>0</td><td>两串字符完全相同</td></tr>
+      <tr><td>正数</td><td><code>a</code> 排在 <code>b</code> 后面（按字符编码顺序）</td></tr>
+      <tr><td>负数</td><td><code>a</code> 排在 <code>b</code> 前面</td></tr>
+    </tbody>
+  </table>
+
+  <p>所以判断两个姓名相同，写 <code>strcmp(a, b) == 0</code>。</p>
+
+  <p>存成 <code>cstr-03.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// cstr-03.cpp -- 比较两个姓名：为什么 == 不管用，strcmp 怎么用
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;          // strcmp 声明在这个头文件里
+using namespace std;
+
+int main()
+{
+    char a[8] = "Zhang";
+    char b[8] = "Zhang";
+    char c[8] = "Liu";
+
+    if (a == b)                       // 比的是两个数组各自的地址
+        cout &lt;&lt; "a == b 说：两个名字相同" &lt;&lt; endl;
+    else
+        cout &lt;&lt; "a == b 说：两个名字不同（其实内容是一样的）" &lt;&lt; endl;
+
+    if (strcmp(a, b) == 0)            // 比的是逐个字符的内容
+        cout &lt;&lt; "strcmp(a, b) 说：两个名字相同" &lt;&lt; endl;
+    else
+        cout &lt;&lt; "strcmp(a, b) 说：两个名字不同" &lt;&lt; endl;
+
+    if (strcmp(a, c) != 0)
+        cout &lt;&lt; "strcmp(a, c) 说：两个名字不同" &lt;&lt; endl;
+
+    cout &lt;&lt; "strcmp(a, c) 返回 " &lt;&lt; strcmp(a, c) &lt;&lt; "（正数表示 a 排在 c 后面）" &lt;&lt; endl;
+    cout &lt;&lt; "strcmp(c, a) 返回 " &lt;&lt; strcmp(c, a) &lt;&lt; "（负数表示 c 排在 a 前面）" &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ cstr-03.cpp -o cstr-03
+$ ./cstr-03
+a == b 说：两个名字不同（其实内容是一样的）
+strcmp(a, b) 说：两个名字相同
+strcmp(a, c) 说：两个名字不同
+strcmp(a, c) 返回 14（正数表示 a 排在 c 后面）
+strcmp(c, a) 返回 -14（负数表示 c 排在 a 前面）</code></pre>
+
+  <p><code>strcmp</code> 交回的具体数字不用记，只需要记它的符号：0 就是相同，非 0 就是不同。前面的 <code>14</code> 是两个首字符编码的差，换个编译器或换一对姓名，这个数会变，你只要判断它是不是 0。</p>
+
+  <div class="lesson-warn">
+    <b>编译器其实提醒过你</b>
+    <p>写 <code>if (a == b)</code> 时，编译器会打一行警告：<code>array comparison always evaluates to false</code>。它知道两个不同的数组地址不会相等，所以这个条件恒为假。警告不是错误，程序照样编译出来，但这类警告值得停下来看一眼。</p>
+  </div>
+
+  <p>第二个动作是拷贝。数组名不能直接赋值，<code>nameA = nameB</code> 会编译报错，因为数组名不是可以改的东西。要把一个名字搬到另一个数组里，用 <code>strcpy</code>（string copy）：</p>
+
+  <p>存成 <code>cstr-02.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// cstr-02.cpp -- 数组不够大时，拷贝会把名字截断
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;          // strncpy、strlen 声明在这个头文件里
+using namespace std;
+
+int main()
+{
+    char name[6];           // 最多装 5 个字符，剩下的那 1 格留给 '\0'
+
+    // 用备份来接收从别处拷过来的名字：最多拷 5 个字符，不写 '\0'
+    strncpy(name, "Zhang", 5);
+    name[5] = '\0';         // 自己补上结尾标记，这一格刚好是数组的最后一格
+
+    cout &lt;&lt; "拷贝后的名字：" &lt;&lt; name &lt;&lt; endl;
+    cout &lt;&lt; "它占了多少格：" &lt;&lt; strlen(name) &lt;&lt; endl;
+
+    // 如果来的名字更长，多出来的部分会被丢掉，数组里不会多塞东西
+    char shortName[6];
+    strncpy(shortName, "ZhangSan", 5);
+    shortName[5] = '\0';
+
+    cout &lt;&lt; "更长名字存进来只剩：" &lt;&lt; shortName &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ cstr-02.cpp -o cstr-02
+$ ./cstr-02
+拷贝后的名字：Zhang
+它占了多少格：5
+更长名字存进来只剩：Zhang</code></pre>
+
+  <p>这里用的是带 <code>n</code> 的版本 <code>strncpy</code>，它多收一个数字：最多拷几个字符。它不会替你在末尾补空字符——<code>strncpy(dest, src, n)</code> 拷贝完 <code>n</code> 个字符就交差，补 <code>'\0'</code> 是调用方自己的事。所以 <code>name[5] = '\0';</code> 这一句不能省，它把最后一格指定成空字符，字符串才算完整。</p>
+
+  <div class="lesson-warn">
+    <b>名字比数组长的时候</b>
+    <p><code>strcpy</code> 只看源字符串的空字符在哪，不管目标数组有多大。如果名字比数组长，多出来的字符会被写到数组外面去，把旁边的变量悄悄改掉。</p>
+
+    <p><code>char name[6]; strcpy(name, "ZhangSan");</code> 就是这个情形。编译器会给出提示：<code>'strcpy' will always overflow; destination buffer has size 6, but the source string has length 9</code>。这类提示值得当成错误来看——它指出的正是后面会看到的那种「运行着运行着别处的数据变了」的怪事。</p>
+  </div>
+
+  <div class="lesson-note">
+    <b>字符串函数都在 cstring 里</b>
+    <p><code>strlen</code>、<code>strcpy</code>、<code>strncpy</code>、<code>strcmp</code> 都是标准库函数，声明在 <code>&lt;cstring&gt;</code> 这个头文件里。用到哪个，就在文件开头 <code>#include &lt;cstring&gt;</code>。漏了这一行，编译器会说找不到这个名字。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "char a[8] 与 char b[8] 里装的内容完全\n一样，要判断两串内容是否相同，if 的条\n件该写哪一句？",
+    "opts": [
+      "if (strcmp(a, b) == 0) 这一句",
+      "if (a == b) 这一句",
+      "if (strlen(a) == strlen(b)) 这一句",
+      "if (strcmp(a, b)) 这一句"
+    ],
+    "ans": 0,
+    "why": "数组名在表达式里代表它住的那个地址，所\n以 a == b 比的是住址、结果永远为假。\nstrcmp 逐个字符比内容，交回 0 才是「相\n同」；直接写 strcmp(a, b) 恰好反过来——\n非 0 才算相同。"
+  }
+]'></div>
+
+  <h2>让成绩表带上姓名</h2>
+
+  <p>现在把姓名接到成绩管理系统上。一张表存分数，另一张表存姓名，两张表用同一个下标对齐：<code>names[i]</code> 的分数就是 <code>scores[i]</code>。</p>
+
+  <p>存成 <code>cstr-04.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// cstr-04.cpp -- 成绩表带上"谁"：姓名表与分数表用同一个下标对齐
+#include &lt;iostream&gt;
+#include &lt;cstring&gt;
+using namespace std;
+
+int main()
+{
+    char names[4][10] = {"Zhang", "Liu", "Chen", "Wang"};
+    int  scores[4]    = {88, 76, 95, 60};
+    int n = 4;
+
+    cout &lt;&lt; "成绩表：" &lt;&lt; endl;
+    for (int i = 0; i &lt; n; i++)
+        cout &lt;&lt; "  " &lt;&lt; names[i] &lt;&lt; "  " &lt;&lt; scores[i] &lt;&lt; " 分" &lt;&lt; endl;
+
+    // 找一个人：把所有姓名挨个比一遍
+    char who[10] = "Chen";
+    int found = -1;                     // 约定 -1 表示没找到
+    for (int i = 0; i &lt; n; i++)
+        if (strcmp(names[i], who) == 0)
+            found = i;
+
+    if (found &gt;= 0)
+        cout &lt;&lt; who &lt;&lt; " 的成绩是 " &lt;&lt; scores[found] &lt;&lt; " 分" &lt;&lt; endl;
+    else
+        cout &lt;&lt; "表里没有 " &lt;&lt; who &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ cstr-04.cpp -o cstr-04
+$ ./cstr-04
+成绩表：
+  Zhang  88 分
+  Liu  76 分
+  Chen  95 分
+  Wang  60 分
+Chen 的成绩是 95 分</code></pre>
+
+  <p><code>char names[4][10]</code> 是二维字符数组，可以读成「4 行，每行 10 格」：4 个姓名，每个姓名最多占 9 个字符加 1 个空字符。<code>names[i]</code> 取出来的就是第 <code>i</code> 行那个字符数组，可以直接交给 <code>strcmp</code> 和 <code>cout</code>。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "成绩表上要带上姓名：\n\n```cpp\nchar names[4][10] = {\"Zhang\", \"Liu\", \"Chen\", \"Wang\"};\nint  scores[4]    = {88, 76, 95, 60};\n```\n\n① names 与 scores 之间靠什么联系起来？\n② 要找 Chen 的成绩，该怎么做？\n③ 如果 names 里某一行的字符比 9 个还长\n会怎样？",
+    "answer": "① 靠同一个下标：names[i] 的那个人的成\n绩就是 scores[i]。两张表的下标必须一直\n对齐。\n② 从头挨个比一遍，用\nstrcmp(names[i], who) == 0 判断命中，\n命中的那个 i 就是下标，再去取\nscores[i]；一个都没命中时要有个说得清\n的标志（例如先记成 -1）。\n\n```cpp\nchar who[10] = \"Chen\";\nint found = -1;\nfor (int i = 0; i &lt; 4; i++)\n{\n    if (strcmp(names[i], who) == 0)\n    {\n        found = i;\n    }\n}\n```\n\n③ 那 9 个字符加一个 &#39;\\0&#39; 就装不下了：\n字符串被截断，或者 &#39;\\0&#39; 被挤到数组外\n面，读的时候会顺着往下读到别人的内存。",
+    "criteria": "说出「两张表靠同一个下标对齐」→ 通过；\n第 ② 问用 strcmp 比较、并处理没找到的\n情况；\n第 ③ 问答到「9 个字符加空字符装不\n下」。\n答成「把姓名也存进 scores 数组」→ 不通\n过（类型不同，装不进同一个数组）。"
+  }
+]'></div>
+
+  <p>存成 <code>cstr-04.cpp</code> 再编译。动手之前先把上面这段自己敲一遍：把 <code>who</code> 改成表里没有的姓名，看程序走的是哪条分支；再把某个姓名改长一点，看看 10 格够不够。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 1 步 · 用换行分隔的姓名打印成绩表</span>
+    </div>
+
+      <p>把 <code>cstr-04.cpp</code> 里的 4 个姓名改成你宿舍四个人的名字，编译运行，确认打印出来的格式还是整齐的。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 2 步 · 比较两个姓名</span>
+    </div>
+
+      <p>再写一个程序：用 <code>cin</code> 读入两个姓名（用空格分开），用 <code>strcmp</code> 判断它们是否相同、并按字典顺序打印谁在前。运行两次，一次输入相同的两个名字，一次输入不同的两个名字。</p>
+  </div>
+
+  <ul class="lesson-resources">
+    <li>《C++ Primer Plus（第六版）》第 4 章「复合类型」的字符串部分<span class="lesson-resources__meta">本地教材：<code>reference/C++PrimerPlus-第6版-中文版-04-复合类型.md</code></span></li>
+    <li>本课代码：<code>code/cstr-01.cpp</code>、<code>code/cstr-02.cpp</code>、<code>code/cstr-03.cpp</code>、<code>code/cstr-04.cpp</code></li>
+  </ul>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0012-exp-2-score-storage.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">实验二：存下并统计一批成绩</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0014-addresses-and-pointers.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">内存地址与取地址符</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0013 字符数组与字符串函数 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../assets/sayo/sayo.js"></script>
+
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

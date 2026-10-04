@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>实验二：存下并统计一批成绩 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0012</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0012 · 实验二：存下并统计一批成绩</span>
+    <h1>实验二：存下并统计一批成绩</h1>
+    <p class="lesson-goal"><b>本节目标：</b>做出能存 10 个成绩、并算出总分、平均分与最高分的程序，编译无警告、输出与预期一致。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <div class="lesson-note">
+    <b>这一课是验收课</b>
+    <p>单个语法点都学过了：数组会声明、循环会写、函数会包。这次把它们串成<b>成绩管理系统的第一个可用版本</b>——给它一批成绩，它吐出三个数字。</p>
+  </div>
+
+  <h2>这次要做出什么</h2>
+
+  <p>一个程序，按顺序做四件事：</p>
+
+  <ol>
+    <li>用一个数组存下 <b>10 个成绩</b>；</li>
+    <li>第一个循环把 10 个成绩读进来；</li>
+    <li>第二个循环算出<b>总分</b>与<b>最高分</b>；</li>
+    <li>均分用小数算，保留一位小数，最后按「总分、平均分、最高分」三行打印。</li>
+  </ol>
+
+  <p>两个要求：</p>
+
+  <ul>
+    <li><b>成绩个数只写一处</b>：用一个常量表示 10，声明数组、读入循环、统计调用都用它。以后换成 50 个成绩，只改这一行。</li>
+    <li><b>两个统计各自写成函数</b>，<code>main</code> 里只留「读数据、调函数、打结果」。</li>
+  </ul>
+
+  <h2>交付物</h2>
+
+  <p>一份<b>你自己写的</b> <code>.cpp</code> 源文件，建议叫 <code>scorestats.cpp</code>：</p>
+
+  <ul>
+    <li><code>g++ -std=c++17 -Wall -Wextra scorestats.cpp -o scorestats</code> 编译通过，<b>没有任何 warning</b>；</li>
+    <li>运行输出与下面的预期逐字一致；</li>
+    <li>代码不少于 40 行（含注释与空行）。</li>
+  </ul>
+
+  <p>留白任务在 <a href="../../lab/0012-exp-2-score-storage/">实验二任务</a>，里面有起始文件、四份输入、预期输出与自查清单。</p>
+
+  <h2>怎么算过</h2>
+
+  <p>逐条核：</p>
+
+  <ol>
+    <li>编译带 <code>-Wall -Wextra</code>，没有 <code>error</code>、也没有 <code>warning</code>；</li>
+    <li>输入 <code>10个成绩.in</code> 那十个成绩，打印 <code>总分：869</code>、<code>平均分：86.9</code>、<code>最高分：95</code>；</li>
+    <li>自己手加一遍总分（92 + 88 + 95 + 79 + 84 + 91 + 76 + 88 + 90 + 86 = 869），与屏幕上的数字一致；</li>
+    <li>换 <code>10个相同成绩.in</code>（十个 60）再跑：总分 600、平均分 60.0、最高分 60；</li>
+    <li>换 <code>另一批10个.in</code> 再跑，三个数字都对——说明代码里没有写死数字；</li>
+    <li>交之前把 <code>lab/exp-2-score-storage/自查清单.md</code> 从头核一遍。</li>
+  </ol>
+
+  <p>第 4 条最值得跑：<b>十个成绩全一样</b>时，擂主初值写错、边界少一格、比较号写反，都会在这里露出来。</p>
+
+  <h2>自查清单</h2>
+
+  <ul>
+    <li>数组只开一次、够 10 格，长度只有一个定义处。</li>
+    <li>两个统计各自在函数里：函数头有返回类型，函数体有 <code>return</code>。</li>
+    <li>最高分的擂主初值取的是数组的<b>第一个元素</b>，不是 0。</li>
+    <li>累加器在进循环之前等于 0。</li>
+    <li>均分用了小数（除法的两个操作数里至少一个是小数）。</li>
+    <li>循环条件写 <code>i &lt; N</code>，最后一轮下标正好是 <code>N - 1</code>。</li>
+    <li>结果不对时，是<b>先打印中间值定位</b>，不是直接改代码。</li>
+  </ul>
+
+  <h2>最可能卡在哪</h2>
+
+  <div class="lesson-warn">
+    <b>擂主不能随手写 0</b>
+    <pre data-lang="cpp"><code>int best = 0;   // 所有成绩都比 0 大时，0 一直站在台上</code></pre>
+
+    <p>擂台上的初值要是「表里真实存在的那个数」，所以让<b>第一个元素</b>先站上去，从第二个元素开始挑战。换成十个相同成绩试一次，这一处错立刻显形。</p>
+  </div>
+
+  <div class="lesson-warn">
+    <b>均分被整数除法吃掉</b>
+    <pre data-lang="cpp"><code>double average = total / N;      // total 与 N 都是 int，先整除再赋值</code></pre>
+
+    <p>小数在这一步就没有了。改成 <code>static_cast&lt;double&gt;(total) / N</code>，或者把总和存成小数。</p>
+  </div>
+
+  <div class="lesson-warn">
+    <b>循环边界少一格</b>
+    <p><code>for (int i = 0; i &lt; 4; i++)</code> 配 5 个元素，最后一个成绩永远进不了统计。<b>盯住最后一轮的下标</b>：写 <code>i &lt; N</code>，最后一轮就是 <code>N - 1</code>。</p>
+  </div>
+
+  <div class="lesson-warn">
+    <b>数组开小了</b>
+    <p>数组开 5 格却按 10 个读入，第九、第十个成绩会写到数组外面去——把旁边的变量悄悄改坏，而且当场不报错。读入之前先确认长度那个常量与数组声明是同一个数。</p>
+  </div>
+
+  <div class="lesson-note">
+    <b>算错了先别改代码</b>
+    <p>在循环里打印每一轮的下标与累加结果：</p>
+
+    <pre data-lang="cpp"><code>cout &lt;&lt; i &lt;&lt; " " &lt;&lt; scores[i] &lt;&lt; " " &lt;&lt; sum &lt;&lt; endl;</code></pre>
+
+    <p>少算的那一格、多算的那个数，一眼就现形。改之前先知道错在哪一步，比来回改快得多。</p>
+  </div>
+
+  <h2>卡壳顺序</h2>
+
+  <ol>
+    <li>读报错：文件名、行号、那一行的上一行。</li>
+    <li>看这一页的「最可能卡在哪」。</li>
+    <li>看 <a href="../../lab/0012-exp-2-score-storage/">任务目录</a> 里的 <code>自查清单.md</code>。</li>
+    <li>回看第 10、11 课（数组、遍历统计）的形状。</li>
+    <li>还是卡住，才对照 <code>lab/solutions/exp-2-score-storage/scorestats.cpp</code>。</li>
+  </ol>
+
+  <ul class="lesson-resources">
+    <li><a href="../../lab/0012-exp-2-score-storage/README.html">实验二任务（含预期输出与自查清单）</a><span class="lesson-resources__meta">本课程 · 留白任务、四份输入与验收标准</span></li>
+    <li><a href="https://www.oreilly.com/library/view/c-primer-plus/9780132781145/">C++ Primer Plus（第六版）</a><span class="lesson-resources__meta">书 · 第 4 章、第 5 章的综合实例</span></li>
+  </ul>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0011-array-loop-stats.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">遍历数组做统计</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0013-cstring.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">字符数组与字符串函数</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0012 实验二：存下并统计一批成绩 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

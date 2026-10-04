@@ -29,6 +29,7 @@ import html
 import os
 import re
 import shutil
+from urllib.parse import unquote
 import sys
 import unicodedata
 
@@ -43,12 +44,23 @@ SUBJECT_REWRITES = [        # 对 <repo>/docs/<slug>/index.html 用
     ('../../../index.html', '../index.html'),
 ]
 LESSON_REWRITES = [         # 对 <repo>/docs/lessons/<NNNN>-<id>.html 用
-    ('../../../assets/', '../../assets/'),
-    ('../assets/', '../../assets/'),
+    # 页面在 docs/lessons/ 下，而资源在 docs/assets/ 下——**只差一层**，所以是 `../assets/`。
+    # 早先写成 `../../assets/`，从 docs/lessons/ 出发会解析到 docs/ 之上（<repo>/assets/），
+    # 于是 18 页 × 7 条资源引用全是断链（真实踩到过，而且断链自检当时没拦住）。
+    ('../../../assets/', '../assets/'),
+    ('../assets/', '../assets/'),
     ('../index.html', '../index.html'),
+    # 注意：`lab/`、`code/` 这两棵目录的父级层数**因页面所在目录而异**（docs/lessons/ 要退两层、
+    # docs/cpp-basics/lessons/ 只要退一层），所以不在这里写死规则——统一交给构建后的
+    # `fix_generated_pages()` 按每个文件的真实深度重算。写死规则的结果是：一处放对、另一处放错
+    # （真实踩到过：20 条死链，两个方向都有）。
 ]
 
 # 打包时跳过的目录/文件名（编辑用与系统垃圾，发课程不需要）
+# 生成页里指向 `xxx.md` 的链接：站点里那些 .md 是以编译后的 .html 形式存在的，
+# 指回 .md 会 404。用替换函数而不是 `\1` 后向引用——后者容易在多层转义里被写坏。
+MD_HREF_RE = re.compile(r'(href="[^"]+?)\.md(?![/\w])(#[^"]*)?"')
+
 SKIP_DIRS = {'.git', '.stage', '.studymate-stage', 'dist', '__pycache__', '.DS_Store'}
 
 
@@ -176,32 +188,14 @@ def main(argv):
         for name in sorted(os.listdir(src_subj)):
             if not name.endswith('.html') or name == 'index.html':
                 continue
-            write_text(
-                os.path.join(dst_subj, name),
-                rewrite(read_text(os.path.join(src_subj, name)), ref_rules),
-            )
+            text = read_text(os.path.join(src_subj, name))
+            # `.md` 链接要改成 `.html`：站点里那些资料是以 gen_home.py 编译出的 .html
+            # 形式存在的，指回 .md 会 404（真实踩到过）。
+            text = MD_HREF_RE.sub(
+                lambda m: 'href="' + m.group(1)[6:] + '.html'
+                + (m.group(2) or '') + '"', text)
+            write_text(os.path.join(dst_subj, name), rewrite(text, ref_rules))
             stats['reference'] += 1
-
-        # 子目录里的编译产物（如 gen_home.py 把「学习记录」编译成的 learning-records/*.html）：
-        # 它们同样挂在科目主页的附件区，所以必须跟着走，否则主页上那几条是死链。
-        # 目录深度与科目根相差一层，回链与组件的相对路径都要多退一层。
-        sub_rules = [
-            ('../../../index.html', '../index.html'),
-            ('../../assets/', '../assets/'),
-            ('assets/', '../assets/'),
-        ]
-        for sub in sorted(os.listdir(src_subj)):
-            sub_dir = os.path.join(src_subj, sub)
-            if sub.startswith('.') or not os.path.isdir(sub_dir):
-                continue
-            for name in sorted(os.listdir(sub_dir)):
-                if not name.endswith('.html'):
-                    continue
-                write_text(
-                    os.path.join(dst_subj, sub, name),
-                    rewrite(read_text(os.path.join(sub_dir, name)), sub_rules),
-                )
-                stats['reference'] += 1
 
     # ④ 动手练习（lab/）与示例代码（code/）：整份拷进 docs/，让课件里那两条链接
     #    在发出去的包里也点得开。学生拿到的是「网页 + 可下载的代码文件」两样：
@@ -228,18 +222,95 @@ def main(argv):
                     count += 1
         stats[sub] = count
 
+        # 子目录里的编译产物：`gen_home.py` 会把科目下的 .md 编译成同名 .html 挂到附件区。
+        # 它们必须跟着走，否则附件区那几条是死链（真实踩到过：168 条断链）。
+        #
+        # **相对路径按目录深度算**，别一套规则套所有层：
+        #   深度 1（learning-records/、reference/ 的直下文件）→ 回链与组件各差一层
+        #   深度 2（reference/<子目录>/）→ 再退一层
+        # x.text() 的链接是 URL 编码的，os.listdir 给的是原文，两边不会撞。
+        def sub_rules(depth):
+            up = '../' * depth
+            return [
+                ('../../../index.html', up + 'index.html'),
+                ('../../assets/', up + 'assets/'),
+                ('assets/', up + 'assets/'),
+            ]
+
+        for sub in sorted(os.listdir(src_subj)):
+            sub_dir = os.path.join(src_subj, sub)
+            if sub.startswith('.') or not os.path.isdir(sub_dir):
+                continue
+            # reference/ 与 sources/ 的资料要**整份**跟着走（不只是 .html）：
+            # 生成出来的 GLOSSARY/RESOURCES 页面会链到 `reference/xxx.md` 与
+            # `sources/xxx.md`，只带 HTML 过去那些链接还是死的。
+            # sources/ 按规范不挂科目主页，但它被 RESOURCES 页面引用，学生点进去也该能看到。
+            # `sources/` 是**内部依据**（资料收集抓的原文，供讲解写课件时核对），
+            # 不属于学生该看到的东西：它占 2.5 MB×2，而全站只有 1 条链接指向它。
+            # 所以不发布它，那条链接在下面被替换成一句说明。
+            keep_all = sub == 'reference'
+            for root, dirs, files in os.walk(sub_dir):
+                dirs[:] = [d for d in dirs if d not in SKIP_DIRS and not d.startswith('.')]
+                depth = os.path.relpath(root, src_subj).count(os.sep) + 1
+                for name in sorted(files):
+                    if name in SKIP_DIRS or name.startswith('.'):
+                        continue
+                    if not keep_all and not name.endswith('.html'):
+                        continue
+                    rel = os.path.relpath(os.path.join(root, name), src_subj)
+                    dst = os.path.join(dst_subj, rel)
+                    src_path = os.path.join(root, name)
+                    if name.endswith('.html'):
+                        # 生成页里的 `.md` 链接要改成对应的 `.html`——那些 .md 在站点里
+                        # 是以编译后的 .html 形式存在的，指回 .md 会 404。
+                        text = read_text(src_path)
+                        # 拼回整段匹配：结尾那个引号在两处捕获之外，只用 group(1)+group(2)
+                        # 会把它吞掉，生成 `href="a.html` 这种半截属性（真实踩到过）。
+                        text = MD_HREF_RE.sub(
+                            lambda m: 'href="' + m.group(1)[6:] + '.html'
+                            + (m.group(2) or '') + '"', text)
+                        write_text(dst, rewrite(text, sub_rules(depth)))
+                    else:
+                        os.makedirs(os.path.dirname(dst), exist_ok=True)
+                        shutil.copy2(src_path, dst)
+                    stats['reference'] += 1
+
+
     # ⑤ 根目录再放一份术语表与资源清单：方便直接翻，不经过科目主页
     for slug in slugs:
         src_subj = os.path.join(src_subjects, slug)
         for name in ('GLOSSARY.html', 'RESOURCES.html'):
             s = os.path.join(src_subj, name)
-            if os.path.isfile(s):
-                write_text(
-                    os.path.join(docs, name),
-                    rewrite(read_text(s), [('../../../index.html', 'index.html'),
-                                           ('../../assets/', 'assets/'),
-                                           ('assets/', 'assets/')]),
-                )
+            if not os.path.isfile(s):
+                continue
+            text = read_text(s)
+            # 根目录这份也在站点根，所以它引用的 `reference/…` 与 `sources/…` 必须在
+            # **站点根**能找到（下面那步会把两棵资料树也拷到 docs/ 根）。同理改掉 .md 链接。
+            text = MD_HREF_RE.sub(
+                lambda m: 'href="' + m.group(1)[6:] + '.html'
+                + (m.group(2) or '') + '"', text)
+            write_text(
+                os.path.join(docs, name),
+                rewrite(text, [('../../../index.html', 'index.html'),
+                               ('../../assets/', 'assets/'),
+                               ('assets/', 'assets/')]),
+            )
+
+    # ⑤b 资料树也放一份到站点根：根上的 GLOSSARY/RESOURCES 页面链的是 `reference/…`
+    #     与 `sources/…`（站点根相对路径），只拷到 `<slug>/` 下的话那些链接是死的。
+    for slug in slugs:
+        src = os.path.join(src_subjects, slug, 'reference')
+        if os.path.isdir(src):
+            shutil.copytree(src, os.path.join(docs, 'reference'), dirs_exist_ok=True)
+
+    # ⑤c 构建后统一规范化：① 资产路径按文件深度算 ② 把「有同名 .html」的 .md 链接改成 .html。
+    #
+    # 两件事都必须**事后**做，因为深度由产物目录决定，写进规则表会随层级爆炸（真实踩到过：
+    # reference/ 下三层的生成页把 `../../../assets/` 留了下来）。 .md 那件也不能无脑改：
+    # 有些 .md 根本没有编译产物（gen_home.py 只编译 reference/ 与 learning-records/ 两类），
+    # 改成 .html 反而制造新的死链——必须**先看文件在不在**。
+    write_dir_indexes(docs)
+    fix_generated_pages(docs)
 
     # ⑥ 落一份建站产物说明，避免有人手改 docs/ 里的页面
     write_text(os.path.join(docs, 'BUILD.md'), BUILD_NOTE)
@@ -278,7 +349,11 @@ def check_local_links(docs):
                 ref = m.group(1)
                 if re.match(r'^(?:https?:|//|mailto:|data:|#)', ref):
                     continue
-                target = os.path.normpath(os.path.join(root, ref.split('#')[0]))
+                # **必须解码**：`gen_home.py` 生成的附件链接是 URL 编码的
+                # （`C%2B%2BPrimerPlus…`），不解码就会把真实存在的文件判成断链
+                # （真实踩到过：自检报 13 条断链，而独立复核解码后是 0 条）。
+                target = os.path.normpath(os.path.join(
+                    root, unquote(ref.split('#')[0])))
                 if not os.path.exists(target):
                     broken.append((os.path.relpath(page, docs), ref))
     return broken
@@ -308,6 +383,125 @@ python3 -X utf8 -B <root>/scripts/gen_home.py <WS>
 python3 -X utf8 -B build_site.py <WS> <repo>
 ```
 """
+
+# 只匹配**路径段本身**（一串 `../` 后面跟 assets/），不碰引号、不碰 `href=` 前缀。
+# 早先的写法把 `href="` 也框进匹配里，替换时拼不回原样，等于把每个 href 的路径都咬掉一截
+# （真实踩到过：规范化这一步把课件里的 lab 链接全改坏了）。
+# 相对引用（资产、lab、code）在生成页里都写成「一串 `../` + 目录名」，产物目录一变就对不上。
+# 这里统一按**文件在站点里的实际深度**重算前缀，一次修对所有目录。
+REL_REF_RE = re.compile(r'((?:\.\./)+)(assets|lab|code)/')
+
+
+def write_dir_indexes(docs):
+    """给 `lab/*/` 与配套源码目录补一份 `index.html` 落地页。
+
+    这些目录里的说明是 `.md`，而 `gen_home.py` 只编译 `reference/` 与 `learning-records/` 两类，
+    所以课件里 `.../README.html` 这类链接会 404（真实踩到过）。补一份**极简**落地页，
+    列出目录里的文件；不发样式、不引组件，纯 HTML，学生双击就能看到有哪些文件。
+
+    在**站点侧**生成而不是写回学习工作区：源树里只有 .md，站点里才是给人看的形态。
+    """
+    made = 0
+    targets = []
+    lab = os.path.join(docs, 'lab')
+    if os.path.isdir(lab):
+        for d in sorted(os.listdir(lab)):
+            full = os.path.join(lab, d)
+            if os.path.isdir(full) and d != 'solutions':
+                targets.append(full)
+    # 配套源码目录在站点里有**两份**：根上的 `sources/…` 与科目下的 `<slug>/sources/…`
+    # （科目主页那份的附件区链的是后者）。两份都要落地页，否则总有一边是死链。
+    for base in (os.path.join(docs, 'sources'), *(os.path.join(docs, d, 'sources')
+                                                  for d in sorted(os.listdir(docs))
+                                                  if os.path.isdir(os.path.join(docs, d)))):
+        cand = os.path.join(base, 'C++PrimerPlus-第6版-官方配套源码')
+        if os.path.isdir(cand):
+            targets.append(cand)
+
+    for d in targets:
+        files = sorted(n for n in os.listdir(d) if os.path.isfile(os.path.join(d, n)))
+        dirs = sorted(n for n in os.listdir(d) if os.path.isdir(os.path.join(d, n)))
+        rows = []
+        for sub in dirs:
+            rows.append(f'<li><b>{html.escape(sub)}/</b></li>')
+        for n in files:
+            rows.append(f'<li><a href="{html.escape(n)}">{html.escape(n)}</a></li>')
+        body = ('<!DOCTYPE html><html lang="zh-CN"><meta charset="utf-8">'
+                '<meta name="viewport" content="width=device-width,initial-scale=1">'
+                f'<title>{html.escape(os.path.basename(d))} · 文件列表</title>'
+                '<style>body{font-family:system-ui,-apple-system,"PingFang SC",sans-serif;'
+                'max-width:44em;margin:2em auto;padding:0 1em;line-height:1.7}'
+                'li{margin:.15em 0}a{color:#0a6c4f}</style>'
+                f'<h1>{html.escape(os.path.basename(d))}</h1>'
+                '<p>这个目录里的文件（点开看或另存下来用）：</p><ul>' + ''.join(rows) + '</ul>'
+                '<p><a href="../../index.html">← 回到课程首页</a></p>')
+        # 文件名用 README.html：课件里的链接写的就是 `.../README.html`（渲染器把 .md 换成 .html）
+        write_text(os.path.join(d, 'README.html'), body)
+        made += 1
+    print(f'  目录落地页：生成 {made} 份')
+
+
+def fix_generated_pages(docs):
+    """构建后统一修两件事：资产路径按深度算、`.md` 链接在确有 .html 时才改写。
+
+    · 资产路径：生成页里可能是 `../../../assets/`（按源目录形状写的），产物目录一变就对不上。
+      这里按**文件在站点里的实际深度**重算，深度不同也能一次修对。
+    · `.md` 链接：只在该 .md 旁边确实存在同名 `.html` 时才改；没有编译产物的保持 `.md`
+      （浏览器会按纯文本显示，仍然可用），避免把好链接改成死链。
+    """
+    fixed_assets = fixed_md = 0
+    for root, dirs, files in os.walk(docs):
+        dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+        for fn in files:
+            if not fn.endswith('.html'):
+                continue
+            page = os.path.join(root, fn)
+            text = read_text(page)
+            rel_dir = os.path.relpath(root, docs)
+            depth = 0 if rel_dir == '.' else rel_dir.count(os.sep) + 1
+            up = '../' * depth
+
+            def sub_asset(m):
+                nonlocal fixed_assets
+                if m.group(1) != up:
+                    fixed_assets += 1
+                return up + m.group(2) + '/'
+
+            new = REL_REF_RE.sub(sub_asset, text)
+
+            def sub_md(m):
+                nonlocal fixed_md
+                target = m.group(1)
+                html = os.path.normpath(os.path.join(root, target + '.html'))
+                if os.path.isfile(html):
+                    fixed_md += 1
+                    return 'href="%s.html%s"' % (target, m.group(2) or '')
+                # 没有编译产物就别改成 .html——那会把一个能用的 .md 链接变成死链。
+                return m.group(0)
+
+            new = MD_HREF_RE.sub(sub_md, new)
+
+            # 教材 OCR 原文里 `ar2[0]` 会被生成器当成标签（下标方括号 + 数字 → `<a ...>`），
+            # 页面里就留下 `<a href="c">` 这种空链接，目标是字面量 `c`，必然 404。
+            # 这不是内容缺陷而是**解析痕迹**，站点侧统一拆掉，只留下原文里的字面量。
+            new = re.sub(r'<a href="c">\s*', '', new)
+
+            # `sources/` 不发布，指向它的链接换成一句说明——**既不留死链，也不假装它在包里**
+            new = re.sub(r'<a href="(?:\.\./)*(?:[\w.-]+/)?sources/[^"]*"[^>]*>(.*?)</a>',
+                         lambda m: m.group(1) + '（内部依据，未随课程发布）', new)
+
+            # 已知的坏链接：RESOURCES 里那条「官方配套源码/README.md」，那个目录下其实
+            # 没有顶层 README（说明在 `Chapter N/` 子目录里）。指向目录落地页才点得开。
+            new = new.replace(
+                'href="sources/C++PrimerPlus-第6版-官方配套源码/README.html"',
+                'href="sources/C++PrimerPlus-第6版-官方配套源码/README.html"')
+            new = new.replace(
+                'href="sources/C++PrimerPlus-第6版-官方配套源码/README.md"',
+                'href="sources/C++PrimerPlus-第6版-官方配套源码/README.html"')
+            if new != text:
+                write_text(page, new)
+    print(f'  构建后规范化：资产路径修 {fixed_assets} 处 · .md→.html 改写 {fixed_md} 处')
+
 
 if __name__ == '__main__':
     sys.exit(main(sys.argv))

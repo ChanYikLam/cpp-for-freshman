@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>内存地址与取地址符 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../assets/ -->
+<link rel="stylesheet" href="../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0014</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0014 · 内存地址与取地址符</span>
+    <h1>内存地址与取地址符</h1>
+    <p class="lesson-goal"><b>本节目标：</b>把变量的地址打印出来，再用一个指针读出它指向的那个值</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <p>第 9 章留下了一个没解释的现象：在函数里把形参改成 100，回到 <code>main</code> 一打印，<code>score</code> 还是 60。当时的说法是「函数拿到的是副本」。这一课从另一个角度回答同一个问题：副本和原件，住在不同的地方。要能说出一份数据住在哪里，才谈得上让函数去改原件。</p>
+
+  <h2>为什么需要「地址」这个概念</h2>
+
+  <p>先把上一课那个程序再跑一遍。</p>
+
+  <p>存成 <code>addr-00.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// addr-00.cpp -- 第 9 章那个没解释的现象
+#include &lt;iostream&gt;
+using namespace std;
+
+void tryByValue(int x)
+{
+    x = 100;
+    cout &lt;&lt; "函数里 x 现在是 " &lt;&lt; x &lt;&lt; endl;
+}
+
+int main()
+{
+    int score = 60;
+    tryByValue(score);
+    cout &lt;&lt; "回到 main，score 还是 " &lt;&lt; score &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ addr-00.cpp -o addr-00
+$ ./addr-00
+函数里 x 现在是 100
+回到 main，score 还是 60</code></pre>
+
+  <p>现在换一个问题问：函数里那个 <code>x</code>，和 <code>main</code> 里那个 <code>score</code>，是两个东西还是同一个东西？</p>
+
+  <p>它们是两个。调用 <code>tryByValue(score)</code> 的时候，程序另外找了一块地方，把 <code>score</code> 里的 60 抄了一份放进去，函数里改的是这份抄件。要证明这一点，得有一种办法把「这块数据住在哪里」也打印出来。这种办法就是取地址。</p>
+
+  <h2>内存里的每块地方都有编号</h2>
+
+  <p>先建立画面。程序运行时用到的数据都放在内存里，内存可以想成一长排编了号的格子，每个格子有一个编号，这个编号就是<b>内存地址</b>。变量就住在这排格子上：一个 <code>int</code> 占 4 个格子，一个 <code>double</code> 占 8 个格子。</p>
+
+  <p>这个编号是实实在在的数字，可以打印出来看。</p>
+
+  <p>存成 <code>addr-01.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// addr-01.cpp -- 把变量住的门牌号打印出来
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    int score = 87;
+    int other = 92;
+    double avg = 88.5;
+
+    cout &lt;&lt; "score 的值是 " &lt;&lt; score &lt;&lt; endl;
+    cout &lt;&lt; "score 的地址是 " &lt;&lt; &amp;score &lt;&lt; endl;
+
+    cout &lt;&lt; "other 的值是 " &lt;&lt; other &lt;&lt; endl;
+    cout &lt;&lt; "other 的地址是 " &lt;&lt; &amp;other &lt;&lt; endl;
+
+    cout &lt;&lt; "avg 的地址是 " &lt;&lt; &amp;avg &lt;&lt; endl;
+
+    // sizeof 也能量地址本身：一个地址占多少字节
+    cout &lt;&lt; "存一个地址要 " &lt;&lt; sizeof(&amp;score) &lt;&lt; " 字节" &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ addr-01.cpp -o addr-01
+$ ./addr-01
+score 的值是 87
+score 的地址是 0x16f5a3b8c
+other 的值是 92
+other 的地址是 0x16f5a3b88
+avg 的地址是 0x16f5a3b80
+存一个地址要 8 字节</code></pre>
+
+  <p>你机器上打印出来的地址不会和这里一样，每次运行也都会变——地址由系统在程序启动时决定。具体数字不用记，盯住三件事就够了：</p>
+
+  <ul>
+    <li>地址确实是一个数，写成 <code>0x</code> 开头的一串十六进制数；</li>
+    <li><code>score</code> 和 <code>other</code> 的地址不一样，各占各的地方；</li>
+    <li>两个 <code>int</code> 的地址相差 4，两个地址之间隔着的那几个编号，就是它们各占的格子。</li>
+  </ul>
+
+  <p>写 <code>&amp;</code> 在变量前面，就得到这个变量的地址。<code>&amp;</code> 叫<b>取地址运算符</b>。它不改变变量，只是把「这里住的是谁」这个信息交给你。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="一排编号的内存格子，score 占四个格子住在一个地址上，other 占相邻的四个格子">
+<svg viewBox="0 0 880 300" role="img" aria-hidden="true" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <text x="20" y="34" font-size="22" fill="currentColor">内存是一长排编了号的格子</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="40" y="80" width="80" height="70"/>
+    <rect x="120" y="80" width="80" height="70"/>
+    <rect x="200" y="80" width="80" height="70"/>
+    <rect x="280" y="80" width="80" height="70"/>
+    <rect x="360" y="80" width="80" height="70"/>
+    <rect x="440" y="80" width="80" height="70"/>
+    <rect x="520" y="80" width="80" height="70"/>
+    <rect x="600" y="80" width="80" height="70"/>
+    <rect x="680" y="80" width="80" height="70"/>
+  </g>
+  <g font-size="19" text-anchor="middle" fill="currentColor">
+    <text x="80" y="124">87</text>
+    <text x="160" y="124">87</text>
+    <text x="240" y="124">87</text>
+    <text x="320" y="124">87</text>
+    <text x="400" y="124">92</text>
+    <text x="480" y="124">92</text>
+    <text x="560" y="124">92</text>
+    <text x="640" y="124">92</text>
+    <text x="720" y="124">…</text>
+  </g>
+  <g font-size="17" text-anchor="middle" fill="currentColor">
+    <text x="80" y="178">…b88</text>
+    <text x="160" y="178">…b89</text>
+    <text x="240" y="178">…b8a</text>
+    <text x="320" y="178">…b8b</text>
+    <text x="400" y="178">…b8c</text>
+    <text x="480" y="178">…b8d</text>
+    <text x="560" y="178">…b8e</text>
+    <text x="640" y="178">…b8f</text>
+    <text x="720" y="178">…</text>
+  </g>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <path d="M40 200 H360"/>
+    <path d="M40 192 v16 M360 192 v16"/>
+    <path d="M400 200 H720"/>
+    <path d="M400 192 v16 M720 192 v16"/>
+  </g>
+  <text x="200" y="228" font-size="20" text-anchor="middle" fill="currentColor">score（4 个格子）</text>
+  <text x="560" y="228" font-size="20" text-anchor="middle" fill="currentColor">other（4 个格子）</text>
+  <text x="200" y="262" font-size="19" text-anchor="middle" fill="currentColor">首格编号就是 &amp;score</text>
+  <text x="560" y="262" font-size="19" text-anchor="middle" fill="currentColor">首格编号就是 &amp;other</text>
+</svg>
+    <figcaption>图 1 · 变量住在内存里，每个字节有自己的编号</figcaption>
+  </figure>
+
+  <div class="lesson-note">
+    <b>地址在 Windows 上和这里不一样</b>
+    <p>64 位系统上地址写成 <code>0x</code> 加 12 位十六进制数，占 8 字节。用 32 位的 Dev-C++ 编译器时，地址会短一些，形如 <code>0x0061ff2c</code>，<code>sizeof(&amp;score)</code> 是 4。地址的位数和长短不同，但 <code>&amp;</code> 做的事完全一样。</p>
+  </div>
+
+  <h2>指针：专门用来存地址的变量</h2>
+
+  <p>地址是一个数。既然变量能存数，就能有一个变量专门用来存地址。这样的变量叫<b>指针</b>。</p>
+
+  <p>为什么需要单独一个名字？因为地址和普通数字不一样：它不能拿来加减乘除，它唯一的用途是「到那个地方去」。C++ 用它自己的类型把这件事说清楚——指针的类型写成「它指向的那个东西的类型」加一个 <code>*</code>。</p>
+
+  <table>
+    <thead>
+      <tr><th>变量类型</th><th>存地址的变量写成</th><th>读作</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>int</code></td><td><code>int *p;</code></td><td>p 是一个指针，指向一个 <code>int</code></td></tr>
+      <tr><td><code>double</code></td><td><code>double *q;</code></td><td>q 是一个指针，指向一个 <code>double</code></td></tr>
+      <tr><td><code>char</code></td><td><code>char *r;</code></td><td>r 是一个指针，指向一个 <code>char</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>声明时那个 <code>*</code> 属于类型，不属于变量名。<code>int *p;</code> 和 <code>int* p;</code> 和 <code>int * p;</code> 是同一件事，本课程统一写成 <code>int *p;</code>，把 <code>*</code> 挨着变量名。</p>
+
+  <p>类型必须对上：<code>int</code> 变量的地址只能交给 <code>int *</code>，<code>double</code> 变量的地址只能交给 <code>double *</code>。</p>
+
+  <div class="lesson-warn">
+    <b>类型写错，编译器会拦下来</b>
+    <p>把 <code>double</code> 的地址交给 <code>int *</code>，编译器会告诉你这两个类型对不上：</p>
+
+    <pre data-lang="text"><code>error: cannot initialize a variable of type 'int *' with an rvalue of type 'double *'</code></pre>
+
+    <p>这一条拦得住是好事。类型对不上的话，按地址去读数据时读几个字节、怎么解释这些字节，全都错了。</p>
+  </div>
+
+  <h2>顺着地址去访问：解引用</h2>
+
+  <p>有了存地址的指针，接下来要能「按着这个地址，到地方取数据」。写在指针前面的 <code>*</code> 就是做这件事的。它叫<b>解引用运算符</b>，意思是「顺着这个地址，去访问那个地址上的数据」。</p>
+
+  <p>同一个 <code>int</code>，两种写法，含义完全不同：</p>
+
+  <table>
+    <thead>
+      <tr><th>写法</th><th>含义</th><th>类型</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>p</code></td><td>指针里存的那个地址（门牌号）</td><td>地址</td></tr>
+      <tr><td><code>*p</code></td><td>顺着地址找到的那个 <code>int</code>（房子里的东西）</td><td><code>int</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>存成 <code>addr-02.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// addr-02.cpp -- 用一个指针读到它指向的那个变量的值
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    int score = 87;
+
+    int *p = &amp;score;        // p 里存的是 score 的地址
+
+    cout &lt;&lt; "score 的值是 " &lt;&lt; score &lt;&lt; endl;
+    cout &lt;&lt; "score 的地址是 " &lt;&lt; &amp;score &lt;&lt; endl;
+    cout &lt;&lt; "p 里存的地址是 " &lt;&lt; p &lt;&lt; endl;      // 和上一行是同一个数
+
+    cout &lt;&lt; "顺着 p 找到的房子装的是 " &lt;&lt; *p &lt;&lt; endl;   // 87
+
+    *p = 100;               // 按门牌号进屋，把里面的东西换成 100
+
+    cout &lt;&lt; "改完之后 score 是 " &lt;&lt; score &lt;&lt; endl;
+    cout &lt;&lt; "p 里存的地址还是 " &lt;&lt; p &lt;&lt; "（没变）" &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ addr-02.cpp -o addr-02
+$ ./addr-02
+score 的值是 87
+score 的地址是 0x16f5a3b8c
+p 里存的地址是 0x16f5a3b8c
+顺着 p 找到的房子装的是 87
+改完之后 score 是 100
+p 里存的地址还是 0x16f5a3b8c（没变）</code></pre>
+
+  <p>这个程序里有四件事值得逐行对一遍：</p>
+
+  <ol>
+    <li><code>&amp;score</code> 和 <code>p</code> 打印出来是同一个数——<code>p</code> 里存的就是 <code>score</code> 的地址；</li>
+    <li><code>*p</code> 打印出 87——顺着地址走进去，拿到的是 <code>score</code> 的值；</li>
+    <li>给 <code>*p</code> 赋值 100，再打印 <code>score</code>，出来的是 100——这一句改的是 <code>score</code> 本人，<code>p</code> 只是带路；</li>
+    <li><code>p</code> 自己存的那个地址一直没变。</li>
+  </ol>
+
+  <p>第 3 条是整节课的重点。函数里改不动外面那个变量的原因，现在有了另一种说法：函数拿到的是值 60 的一份副本，它手里没有 <code>score</code> 的地址；如果函数拿到的是地址，它就能走到 <code>score</code> 住的地方去改。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="左边格子写着 p 存有地址 b8c，箭头指向右边格子 score，score 里装着 87">
+<svg viewBox="0 0 880 320" role="img" aria-hidden="true" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <text x="20" y="34" font-size="21" fill="currentColor">int score = 87;  int *p = &amp;score;</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="40" y="70" width="220" height="90"/>
+    <rect x="580" y="70" width="240" height="90"/>
+  </g>
+  <text x="150" y="102" font-size="20" text-anchor="middle" fill="currentColor">p</text>
+  <text x="150" y="140" font-size="22" text-anchor="middle" fill="currentColor">0x…b8c</text>
+  <text x="700" y="102" font-size="20" text-anchor="middle" fill="currentColor">score</text>
+  <text x="700" y="140" font-size="24" text-anchor="middle" fill="currentColor">87</text>
+  <path d="M260 115 H570" stroke="currentColor" stroke-width="2.5" fill="none"/>
+  <path d="M570 115 l-18 -10 v20 z" fill="currentColor" stroke="none"/>
+  <text x="415" y="100" font-size="19" text-anchor="middle" fill="currentColor">p 里存着 score 的地址</text>
+  <text x="150" y="196" font-size="20" text-anchor="middle" fill="currentColor">p：门牌号</text>
+  <text x="700" y="196" font-size="20" text-anchor="middle" fill="currentColor">score：那间屋子</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <path d="M40 230 H260"/>
+    <path d="M40 222 v16 M260 222 v16"/>
+  </g>
+  <text x="150" y="262" font-size="19" text-anchor="middle" fill="currentColor">打印 p 得到这个数</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <path d="M580 230 H820"/>
+    <path d="M580 222 v16 M820 222 v16"/>
+  </g>
+  <text x="700" y="262" font-size="19" text-anchor="middle" fill="currentColor">打印 *p 得到这个数</text>
+  <text x="440" y="306" font-size="19" text-anchor="middle" fill="currentColor">*p = 100 改的是右边这间屋子，左边那个门牌号不动</text>
+</svg>
+    <figcaption>图 2 · p 存门牌号，\*p 是那间屋子里的东西</figcaption>
+  </figure>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "指针和它指向的东西，打印出来是两个不同\n的数：\n\n```cpp\nint score = 87;\nint *p = &amp;score;\n```\n\n① p 是什么？\n② *p 是什么？\n③ 执行 *p = 100; 之后，score 变成几？p\n里存的地址变了吗？",
+    "answer": "① p 是 score 的内存地址，也就是门牌\n号。\n② *p 是顺着这个地址访问到的那个 int，\n也就是 score 的值 87。\n③ score 变成 100——改的是那间屋子里的东\n西；p 里存的地址一直是同一个数，没有\n变。",
+    "criteria": "把 p 说成地址、*p 说成地址上的值 → 通\n过；\n第 ③ 问答出「score 变 100、p 不变」才\n算完整。\n答成「*p 是指向 p 的指针」或「p 和 *p\n是同一个东西」→ 不通过。"
+  }
+]'></div>
+
+  <h2>用指针改掉外面的数据</h2>
+
+  <p>把开头那个程序改一处，就能看到「改得动」和「改不动」的差别。</p>
+
+  <p>存成 <code>addr-03.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// addr-03.cpp -- 同一个变量，值传递改不动，传地址改得动
+#include &lt;iostream&gt;
+using namespace std;
+
+void tryByValue(int x)          // 形参是 int：拿到的是副本
+{
+    x = 100;
+}
+
+void tryByAddress(int *p)       // 形参是 int *：拿到的是地址
+{
+    *p = 100;
+}
+
+int main()
+{
+    int score = 60;
+
+    tryByValue(score);
+    cout &lt;&lt; "值传递之后 score 是 " &lt;&lt; score &lt;&lt; endl;
+
+    tryByAddress(&amp;score);       // 把 score 的地址交出去
+    cout &lt;&lt; "传地址之后 score 是 " &lt;&lt; score &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ addr-03.cpp -o addr-03
+$ ./addr-03
+值传递之后 score 是 60
+传地址之后 score 是 100</code></pre>
+
+  <p>两个函数看着只差一个 <code>*</code>，做的事却完全不同。<code>tryByValue</code> 拿到 60 的副本，改副本；<code>tryByAddress</code> 拿到 <code>score</code> 的地址，顺着地址进屋改原件。第 9 章的疑问到这里就有了答案，而这个答案的用法，第 16 章会接着展开。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="值传递时函数拿到一份拷贝，原变量不变；传地址时函数拿到地址，顺着地址改到原变量">
+<svg viewBox="0 0 880 400" role="img" aria-hidden="true" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <text x="20" y="30" font-size="20" fill="currentColor">值传递：tryByValue(score)</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="40" y="46" width="170" height="72"/>
+    <rect x="600" y="46" width="200" height="72"/>
+  </g>
+  <text x="125" y="76" font-size="19" text-anchor="middle" fill="currentColor">score</text>
+  <text x="125" y="104" font-size="21" text-anchor="middle" fill="currentColor">60</text>
+  <text x="700" y="76" font-size="19" text-anchor="middle" fill="currentColor">形参 x</text>
+  <text x="700" y="104" font-size="21" text-anchor="middle" fill="currentColor">100</text>
+  <path d="M212 82 H596" stroke="currentColor" stroke-width="2" stroke-dasharray="8 6" fill="none"/>
+  <path d="M596 82 l-18 -10 v20 z" fill="currentColor" stroke="none"/>
+  <text x="404" y="70" font-size="19" text-anchor="middle" fill="currentColor">抄一份 60 过去</text>
+  <text x="125" y="146" font-size="19" text-anchor="middle" fill="currentColor">原件没被碰过</text>
+  <text x="700" y="146" font-size="19" text-anchor="middle" fill="currentColor">改的是抄件</text>
+  <path d="M20 180 H860" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 6" fill="none"/>
+  <text x="20" y="222" font-size="20" fill="currentColor">传地址：tryByAddress(&amp;score)</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="40" y="238" width="170" height="72"/>
+    <rect x="600" y="238" width="200" height="72"/>
+  </g>
+  <text x="125" y="268" font-size="19" text-anchor="middle" fill="currentColor">score 的地址</text>
+  <text x="125" y="296" font-size="21" text-anchor="middle" fill="currentColor">0x…b8c</text>
+  <text x="700" y="268" font-size="19" text-anchor="middle" fill="currentColor">形参 p</text>
+  <text x="700" y="296" font-size="21" text-anchor="middle" fill="currentColor">0x…b8c</text>
+  <path d="M212 274 H596" stroke="currentColor" stroke-width="2" fill="none"/>
+  <path d="M596 274 l-18 -10 v20 z" fill="currentColor" stroke="none"/>
+  <text x="404" y="262" font-size="19" text-anchor="middle" fill="currentColor">地址本身也是一份副本</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="40" y="330" width="170" height="56"/>
+  </g>
+  <text x="125" y="366" font-size="21" text-anchor="middle" fill="currentColor">score 变成 100</text>
+  <text x="700" y="366" font-size="19" text-anchor="middle" fill="currentColor">*p = 100 走过去改原件</text>
+</svg>
+    <figcaption>图 3 · 两种形参走的两条路</figcaption>
+  </figure>
+
+  <div class="lesson-note">
+    <b>一句话预告：引用</b>
+    <p>C++ 里还有一种写法能让函数直接改到调用方的变量：把形参写成 <code>int &amp;x</code>，调用时照旧写 <code>tryByAddress(score)</code>，不用写 <code>&amp;</code>。那个 <code>&amp;</code> 在这里是另一个概念，叫引用。本课程不展开它，你知道有这么一件东西就够了。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "这段程序打印出 60，改不动外面的变量：\n\n```cpp\nvoid tryByValue(int x)\n{\n    x = 100;\n}\n\nint main()\n{\n    int score = 60;\n    tryByValue(score);\n    std::cout &lt;&lt; score &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n① 形参 x 里装的是什么？\n② 函数体里那句 x = 100 改的是谁？\n③ 要让它改到 main 里的 score，形参该怎\n么写、调用处该怎么写？",
+    "answer": "① 一份副本——调用时另外找了一块地方，把\nscore 里的 60 抄了进去。\n② 改的是那份副本，函数返回后它就没了。\n③ 形参写成指针，调用时交出地址：\n\n```cpp\nvoid tryByAddress(int *p)\n{\n    *p = 100;\n}\n```\n\n调用处写 tryByAddress(&amp;score);——传的是\n地址的副本，副本指着同一间屋子，所以改\n得到原件。",
+    "criteria": "说出形参是副本、所以改不动外面 → 通\n过；\n第 ③ 问答出形参写成 int *、调用处写\n&amp;score 才算完整。\n答成「在函数里 return 100 再赋值」→ 部\n分通过（能改到，但没答本题问的传地\n址）。"
+  }
+]'></div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "读这段程序，判断 main 里那一行打印出什\n么：\n\n```cpp\nvoid tryByAddress(int *p)\n{\n    *p = 100;\n}\n\nint main()\n{\n    int score = 60;\n    tryByAddress(&amp;score);\n    std::cout &lt;&lt; score &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n① 打印 100 还是 60？\n② 形参 p 里装的是值还是地址？这份副本\n和原件是什么关系？\n③ 如果调用改写成 tryByAddress(score);\n（少一个 &amp;），编译器会说什么？",
+    "answer": "① 打印 100。\n② p 里装的是一份地址的副本。副本与原件\n是同一个数，指向 main 里同一个 score，\n所以沿着它写进去的就是原件。\n③ 编译器会报类型对不上：int 的实参交给\nint * 的形参，大意是\ncannot initialize a parameter\nof type int * with an lvalue\nof type int。要传地址就老老实实写\n&amp;score。",
+    "criteria": "第 ① 问答 100 → 必答；\n第 ② 问答出「地址的副本，指的还是同一\n片内存」才算过；\n第 ③ 问答出类型不匹配（int 不能当\nint * 用）。\n答成「p 是 score 的别名」→ 部分通过\n（结果对，但没说清是副本）。"
+  }
+]'></div>
+
+  <h2>动手把地址打印出来</h2>
+
+  <p>先看一眼第三个可能被忽略的地址：指针自己也是变量，也住在某个地方。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="三个格子的关系：score 住在一个地址上装着 87，指针 p 住在另一个地址上，p 的内容是 score 的地址，而 &amp;p 是 p 自己的地址">
+<svg viewBox="0 0 880 320" role="img" aria-hidden="true" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <text x="20" y="34" font-size="21" fill="currentColor">int score = 87;  int *p = &amp;score;</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="60" y="80" width="230" height="76"/>
+    <rect x="570" y="80" width="190" height="76"/>
+  </g>
+  <text x="175" y="110" font-size="19" text-anchor="middle" fill="currentColor">p（它自己的地址 &amp;p）</text>
+  <text x="175" y="142" font-size="22" text-anchor="middle" fill="currentColor">0x…b70</text>
+  <text x="665" y="110" font-size="19" text-anchor="middle" fill="currentColor">score</text>
+  <text x="665" y="142" font-size="24" text-anchor="middle" fill="currentColor">87</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="60" y="196" width="230" height="76"/>
+    <rect x="570" y="196" width="190" height="76"/>
+  </g>
+  <text x="175" y="226" font-size="19" text-anchor="middle" fill="currentColor">p 里装的（打印 p）</text>
+  <text x="175" y="258" font-size="22" text-anchor="middle" fill="currentColor">0x…b8c</text>
+  <text x="665" y="226" font-size="19" text-anchor="middle" fill="currentColor">score 的地址 &amp;score</text>
+  <text x="665" y="258" font-size="22" text-anchor="middle" fill="currentColor">0x…b8c</text>
+  <path d="M296 234 H564" stroke="currentColor" stroke-width="2.5" fill="none"/>
+  <path d="M564 234 l-18 -10 v20 z" fill="currentColor" stroke="none"/>
+  <path d="M230 160 V192" stroke="currentColor" stroke-width="2.5" fill="none"/>
+  <path d="M230 192 l-9 -14 h18 z" fill="currentColor" stroke="none"/>
+  <text x="430" y="222" font-size="19" text-anchor="middle" fill="currentColor">同一个数</text>
+  <text x="20" y="304" font-size="19" fill="currentColor">p 和 &amp;p 打印出来不同：一个是 score 的地址，一个是 p 自己的地址</text>
+</svg>
+    <figcaption>图 4 · p 的内容和 p 自己的地址是两个不同的数</figcaption>
+  </figure>
+
+  <p>存成 <code>addr-01.cpp</code> 再编译。这一课的概念都落在两个打印上，自己敲两遍比看两遍熟得快。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 1 步 · 把三个变量的地址打印出来</span>
+    </div>
+
+      <p>打开 <code>addr-01.cpp</code>，再加两个变量：一个 <code>char</code> 和一个 <code>int</code> 数组的前两个元素。把它们的地址也打印出来，看看同一类型的变量地址相差多少。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 2 步 · 用指针改一次值</span>
+    </div>
+
+      <p>在 <code>addr-02.cpp</code> 里加一段：再声明一个 <code>int *q</code>，让它也指向 <code>score</code>（写 <code>q = p;</code> 或 <code>q = &amp;score;</code>）。通过 <code>*q = 77;</code> 改一次值，然后打印 <code>score</code>、<code>*p</code>、<code>*q</code> 三个数，确认它们都是 77。</p>
+
+      <p>结论要能自己说出来：<code>p</code> 和 <code>q</code> 是两个不同的指针，存着同一个地址，所以指向同一个变量。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 3 步 · 把地址与自己的地址都打印出来</span>
+    </div>
+
+      <p>在 <code>addr-02.cpp</code> 里加一句 <code>cout &lt;&lt; "p 自己的地址是 " &lt;&lt; &amp;p &lt;&lt; endl;</code>。比较 <code>p</code> 和 <code>&amp;p</code> 两个打印结果：一个是它指向的地址，一个是它自己住的地址，两个数不一样。</p>
+  </div>
+
+  <ul class="lesson-resources">
+    <li>《C++ Primer Plus（第六版）》第 4 章「复合类型」的指针部分<span class="lesson-resources__meta">本地教材：<code>reference/C++PrimerPlus-第6版-中文版-04-复合类型.md</code></span></li>
+    <li>本课代码：<code>code/addr-00.cpp</code>、<code>code/addr-01.cpp</code>、<code>code/addr-02.cpp</code>、<code>code/addr-03.cpp</code></li>
+  </ul>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0013-cstring.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">字符数组与字符串函数</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0015-pointer-and-array.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">指针与数组</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0014 内存地址与取地址符 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../assets/sayo/sayo.js"></script>
+
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

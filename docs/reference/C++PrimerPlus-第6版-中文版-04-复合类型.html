@@ -1,0 +1,1869 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 4 章 复合类型 · C++ 零基础入门（计算机专业大一）</title>
+<link rel="stylesheet" href="../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回科目</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">参考文档</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>第 4 章 复合类型</h1>
+<blockquote><p>来源：《C++ Primer Plus（第 6 版）中文版》Stephen Prata 著，张海龙、袁国忠译，人民邮电出版社。<br>本地 PDF：<code>/Users/chenyilin/Desktop/电子书/计算机/C++ Primer Plus：中文版（第六版） (Stephen Prata) (z-library.sk, 1lib.sk, z-lib.sk).pdf</code><br>对应 PDF 第 88–142 页 / 原书第 70–124 页。<br>转换方式：PyMuPDF 抽取原扫描件内置文本层（该 PDF 为 2013 年扫描件，内置文本层由 OCR 生成，<strong>中文标点与少数汉字有识别错误，代码行偶有粘连</strong>）。<strong>本节内容的权威性以原书为准；引用技术结论前请回查 PDF 原页。</strong></p></blockquote>
+<h2>4.1 本章要讲什么（原书小节结构）</h2>
+<ul>
+<li>4.1 数组 … 70</li>
+<li>4.1.1 程序说明 … 72</li>
+<li>4.1.2 数组的初始化规则 … 73</li>
+<li>4.1.3 C++11数组初始化方法 … 73</li>
+<li>4.2 字符串 … 74</li>
+<li>4.2.1 拼接字符串常量 … 75</li>
+<li>4.2.2 在数组中使用字符串 … 76</li>
+<li>4.2.3 字符串输入 … 77</li>
+<li>4.2.4 每次读取一行字符串输入 … 78</li>
+<li>4.2.5 混合输入字符串和数字 … 81</li>
+<li>4.3 string类简介 … 82</li>
+<li>4.3.1 C++11字符串初始化 … 83</li>
+<li>4.3.2 赋值、拼接和附加 … 83</li>
+<li>4.3.3 string类的其他操作 … 84</li>
+<li>4.3.4 string类I/O … 86</li>
+<li>4.3.5 其他形式的字符串字面值 … 87</li>
+<li>4.4 结构简介 … 88</li>
+<li>4.4.1 在程序中使用结构 … 89</li>
+<li>4.4.2 C++11结构初始化 … 91</li>
+<li>4.4.3 结构可以将string类作为成员吗 … 91</li>
+<li>4.4.4 其他结构属性 … 91</li>
+<li>4.4.5 结构数组 … 93</li>
+<li>4.4.6 结构中的位字段 … 94</li>
+<li>4.5 共用体 … 94</li>
+<li>4.6 枚举 … 95</li>
+<li>4.6.1 设置枚举量的值 … 97</li>
+<li>4.6.2 枚举的取值范围 … 97</li>
+<li>4.7 指针和自由存储空间 … 97</li>
+<li>4.7.1 声明和初始化指针 … 100</li>
+<li>4.7.2 指针的危险 … 101</li>
+<li>4.7.3 指针和数字 … 102</li>
+<li>4.7.4 使用new来分配内存 … 102</li>
+<li>4.7.5 使用delete释放内存 … 104</li>
+<li>4.7.6 使用new来创建动态数组 … 104</li>
+<li>4.8 指针、数组和指针算术 … 106</li>
+<li>4.8.1 程序说明 … 107</li>
+<li>4.8.2 指针小结 … 109</li>
+<li>4.8.3 指针和字符串 … 111</li>
+<li>4.8.4 使用new创建动态结构 … 114</li>
+<li>4.8.5 自动存储、静态存储和动态存储 … 117</li>
+<li>4.9 类型组合 … 118</li>
+<li>4.10 数组的替代品 … 120</li>
+<li>4.10.1 模板类vector … 120</li>
+<li>4.10.2 模板类array(C++11) … 120</li>
+<li>4.10.3 比较数组、vector对象和array对象 … 120</li>
+<li>4.11 总结 … 122</li>
+<li>4.12 复习题 … 123</li>
+<li>4.13 编程练习 … 123</li>
+</ul>
+<hr>
+<h2>正文</h2>
+<h3>第 70 页</h3>
+<p>第4章复合类型</p>
+<p>本章内容包括:</p>
+<p>• 创建和使用数组。</p>
+<p>• 创建和使用c-风格字符亭。</p>
+<p>• 创建和使用string类字符亭。</p>
+<p>• 使用方法get1ine()和get()读取字符串。</p>
+<p>• 混合输入字符串和数字。</p>
+<p>• 创建和使用结构。</p>
+<p>• 创建和使用共用休。</p>
+<p>• 创建和使用枚举。</p>
+<p>• 创建和使用指针。</p>
+<p>• 使用new和delete管理动态内存。</p>
+<p>• 创建动态数组。</p>
+<p>• 创建动态结构。</p>
+<p>• 自动存储、静态存储和动态存储。</p>
+<p>• vector和array类简介。</p>
+<p>假设您开发了一个名叫User-Hostilc的计算机游戏，玩家币需要用智慧来应对一个神秘、险恶的计算机界面。现在，必须编写一个程序来跟踪5年来游戏每月的销售量，或者希望盘点一下与黑客英雄累积的较量回合。您很快发现，需要一些比C朴的简单基本类型更复杂的东西，才能满足这些数据的要求.C++也提供了这样的东西一一复合类型。这种类型是基于基本鹦裂和浮点类型创建的。影响最为深远的复合类型是类，它是将学习的OOP的堡垒。然而.C++还支持儿种更普通的复合类型，它们都来自C语言。例如，数组可以存储多个同类型的值.一种特殊的数组可以存储字符1$(一系列字符).结构可以存储多个不同类型的值.而指针则是一种将数据所处位置告诉计算机的变量.本主军将介绍所有这些复合类型(类除外).还将介绍new和dclctc及如何使用它们来管理数据.另外，还将简要地介绍s仿ing类，它提供了另一种处理字符净的途径.</p>
+<h2>4.1 数组</h2>
+<p>数组( array)是一种数据格式，能够存储多个同类型的值。例如，数组可以存储60 个int 类型的值(这些值表示游戏5年来的销售量〉、12个short 值(这些值表示每个月的天数〉或365个float值(这些值指出一年中每天在食物方面的开销〉。每个值都存储在一个独立的数组元素中，计算机在内存中依次存储数组的各个元素。要创建数组，可使用声明语句.数组声明应指出以下三点:</p>
+<h3>第 71 页</h3>
+<p>---~存储在每个元素中的值的类型:宁‘</p>
+<p>• 数组名;.-‘. -. _’一</p>
+<p>o-数组电的元素接.</p>
+<p>在C++中，吁以通过修改衔正在变莹的声明，添力u &lt;P.括号〈其中包含元素数目〉来完成数组声明，例如a下面的声明创重重「个名丸montlis的数缝，湾数组有‘t2“个元素，每伞元素都再以存锁了:: ’f_ short;类型:航值..</p>
+<p>sho~~ mont;hs 112彭、、ftcreates: arra汇OFUSHqrke</p>
+<p>事实上，...i军以将数组申的每个元索着作是一个简单变量。</p>
+<p>,</p>
+<p>声明数组的jjJ[用格式直n下3-、</p>
+<p>typèNaR埠_ arrayName. ~arraySj，ze)“‘ -、·、</p>
+<p>表达式ártaySiie指定冗素数路，它必须在接型常狼〈如1ò) !íX;∞nst值，也瓦时处常量袭达式〈剑8 *.sit.èof.( int).)机11JJ-其中所有的值在编译时都是巳知的.黑体地说，. arraySize :ïþ能是变室去，变量-的值是在程序·运行时设置悦。然而~本意稍后将介绍如何使用new-运算符来避开这种限制.</p>
+<p>作兔复合类型的数绩</p>
+<p>数组之所以被称为复合类型，也是民为它是使用其他，类型来创建的(C语言使用术语“派生类型” 阳但由于ct+对类关系使现术，语“派生”;殊阶它必须创建一个新术证〉。耳可能仅仅将某种戒毒声明方数组，它必·._ 须是特定类型的数结b没有选用的数纽类型，但存在很多特之位数纽.类型生，如cñäf 数级或lonε 数组。例如--..<em>二二，请看吹页的声明; 主. .; . . “ ~.”‘二;二主芒一丁; 工</em>.“二-二\-JJ:，斗·…七二-二~.</p>
+<p>fl。画军-l oan s..l2“(Í);”;·亏</p>
+<p>一-一一</p>
+<p>10ans怜类型不是‘敬饵’←而是“f]oat 数组” 。这强豆凡-T10oos..数维茫俊府f1oat.类型创建饰。</p>
+<p>数组的很多周途都建基于这样一个事实s可时单独访问数组元案。1王法是使用下标或絮引来对元东边行编号.C!H-数组从。开始统号(这没有商量的余地，必须E从0究生5.阳Sca1和BASIC用户必须调整三喜悦〉τC事使用带索引的方括号表示法来指定数组元素.例如，nionths阴是months.数组的第斗个元素，months[1 1 r .是最后一个元素v注意，军后…个jG索的索寻阮也数组长度小.r(参~图4.1)。因此，数组芦晚能够使用一个声明创建大量的变量俨然后便可以府索引来标识和访问各企元索。</p>
+<pre><code class="language-cpp">int ragnar[71;</code></pre>
+<p>5 6‘一一下标</p>
+<p>I I</p>
+<p>(Ja黛引〉</p>
+<p>i 骂:握国…ragnar</p>
+<p>r略MI‘是一个包含7个元素的数组.每个元.</p>
+<p>部是1细嚼涩的变量</p>
+<p>国4.1创建敛组</p>
+<h3>第 72 页</h3>
+<p>有效下标值的重要性</p>
+<p>编译器不会检查使用的下标是否有效。例如，如果将一个位赋给不存在的元素mon也[101] ，编译器并不会指出错误。但是程序运行后，这种赋值可能引发问题，它可能破坏数据或代码，也可能导致程序井常终止。所以必须确保程序只使用有效的丁析、位。</p>
+<p>程序清单4.1中的马铃薯分析程序说明了数组的一些属性，包括声明数组、给数组元素赋值以及初始化数组.</p>
+<p>程序清单4.1arrayone.cpp</p>
+<pre><code class="language-cpp">// arrayone.cpp --small arrays of integers
+排include&lt;iostream&gt;
+int main()
+using namespace std;
+int yams[3); // creates array with three elements
+yams[O) = 7; // assign value to f irst element
+yams[1 ) = 8;
+yams(2) = 6;
+int yamcosts[3) = {20, 30, 5}; /1 create, initialize ar艺ay
+// NOTE: If your C++ compiler or translator can&#x27;t initialize
+// this array, use static int yamcosts[3) instead of
+// int yamcosts (3)
+cout &lt;&lt; flTotal yams :: &quot;;
+cout &lt;&lt; yams[O) + yams[1 1 + yams(2) &lt;&lt; endl;
+cout &lt;&lt; &quot;The package with .. &lt;&lt; yams [1) &lt;&lt; &quot; yams costs &quot;;
+cout &lt;&lt; yamcosts[1) &lt;&lt; &quot; cents per yam.\n&quot;;
+int total = yams[Q) • yamcosts[O)φyams[1) • yamcosts[1);
+total = total + yams[2) • yamcosts[2);
+cout &lt;&lt; &quot;The total yam expense is &quot; &lt;&lt; total &lt;&lt; • cents.\口..•
+cout &lt;&lt; &quot;\nSize of yams array = &quot; &lt;&lt; sizeof yams;
+cout &lt;&lt; &quot; bytes.\n&#x27;;
+cout &lt;&lt; &quot;Size of one element = &quot; &lt;&lt; sizeof yams[O);
+cout &lt;&lt; 11 bytes. \n&quot; ;
+return 0;</code></pre>
+<p>下丽是该程序的输出:</p>
+<pre><code class="language-cpp">Total yams = 21
+The package with 8 yams costs 30 cents per yam.
+The total yam expense is 410 cents.
+Size o f yams array • 12 bytes.
+Size of one element = 4 bytes.</code></pre>
+<h3>4.1.1 程序说明</h3>
+<p>该程序首先创建一个名为yams的包含3个元索的数组。由于yams 有3个元素，它们的编号为0-2.因此arrayone.cpp使用索引0-2分别给这三个元索赋值.Yam的每个元素都是int，都有int 类型的权力和特权，因此町ayone叩p能够将值赋给元素、将元素相加和相乘，并显示它们。</p>
+<h3>第 73 页</h3>
+<p>程序给yarn的元素赋值时，绕了一个大弯。C++允许在声明语句中初始化数组元素。程1于清单4.1使用这种徒径来给yarncosts数组赋值:</p>
+<pre><code class="language-cpp">int yamcostsl3 J = {20. 30. 5};</code></pre>
+<p>只需提俗一个用逗号公隔的值列表(初始化列表) .并将它们用花括号括起即可.列表帕馆将是可选的。如I来没有初始化函盘是中定义的数组，则其元素值将是不确定的，这怠味着元素的值为以前驻ti.在该内存轧元中的值。</p>
+<p>接下来a程序使用数络值遂行一些封算.程序的这部分胆子包含了下标和扼号，脱以看上去有些混乱。第5章将介绍for循环，在可以一提供一种功能强大的万法来处理数组，因而不用显式地书军每命索引.同时，我们仍然坚持使殉小型数组.</p>
+<p>您可能还记得~srzeof 运算符返回类型或数据对象的长度(单位&gt;JJ字节~).注意，如果将血ωf运算乎在阵气F数组名，得到的将是整个数组中的字节数1但如果将sizeof 用于敛组元素，则得到的将是元素他长度(单位为字惟).这表明yarns是一个数组，随yarns[tJ只是一个mt变最.</p>
+<p>4.1.2 墨宝组的初始化规则</p>
+<p>8++有儿条-关于;ji}J始化数组的规贝lJ.r它们限制子;ji}1始化的时‘亥l院决定了数组的元素数目与初始化稳中值的数嗣啪同昨将发主的情况。我们来看着这些规则「</p>
+<p>只有在定文数组时才能使用初始化，此后躲不能使用了，也不能将一个数组赋给另一个数组</p>
+<pre><code class="language-cpp">int cards[41 = {耳.6. 8-; 10 }-; f L øRay
+int hand [4J ; / f okay</code></pre>
+<p>ha咀d=[4J=抖r6, 7 ，组七二ι notallowed</p>
+<p>Irand .= cards;耳/not allowed</p>
+<p>然而，可以使用下标穷则给数组中的元素赋1H.</p>
+<p>初始{t数组时，提供的值P}i以少于数组的76索数目。例如，下丽的语句只初始化‘hotelTips的前两千元素-</p>
+<pre><code class="language-cpp">float_ hotel Tips [5J = {5. 0, 2..5};</code></pre>
+<p>如果只对领组的一部分进位初始化，贝。统译槌革夺世主n也元素设置为的因此，将数组中所有的z元素都初始化为0非常简单一一只妥显式‘地将第-管冗索初始化为0，然后让编译者器将-其他元索都初始化为0即可:</p>
+<pre><code class="language-cpp">løng Cot als (5∞L= {σr;</code></pre>
+<p>如果和始化丸{I }而不是{OJ~则第一个元素被设置为1.某他元素都被设置为o.</p>
+<p>如柴初始化数组时方括号内(E-l J 为空.C++编译器将计算元索个数。例如. _对于=f雨的声明</p>
+<p>shor~ things [) = ，忌“5, 3，包}←</p>
+<p>编译糯将使things数组包含矿个元素.</p>
+<p>让编译器去做了</p>
+<p>ii 位:让编译2it 集元素个数是种很糟的做法，因为其it数百F能与您想象的尽一链。例如，您可能不小心在列哀，帘这漏丁一个位。处份1这种方若对于4毛主主符数纽初始it..为一个字符带来说比较安全，~很民.t，I除F绍侄E将明白这一气，凯如采主妥关以这样做:</p>
+<p>shO艺tthing叫)= {旱5 户3.，8 t于</p>
+<pre><code class="language-cpp">int num_~lements = s i zeof things / s Fzeof (short) ;</code></pre>
+<p>这丰手做是有1可还是优懒取决于具体情况。,</p>
+<p>,</p>
+<p>4 .1.3 ‘ C村11数组初始化方法</p>
+<p>第~~章说过;‘C+-HI将使用火括L号的初始化(列求初始化〉作为一种通用初始化方式，二可用于所有英、·二:</p>
+<p>『</p>
+<p>L._ -:--自-</p>
+<p>--</p>
+<p>-、-磊、:--...-</p>
+<ul>
+<li>---~~.:..':: ~ 『.-</li>
+</ul>
+<h3>第 74 页</h3>
+<p>型.数组以前就可使用列表初始化，但C++11中的列表初始化新糟了一些功能.</p>
+<p>首先，初始化数组时，可省略等号(=)，</p>
+<p>double earnings [4] {1.2时，1.6肘，1.1e4, 1.7e叫;// okay with C++11</p>
+<p>其次，可不在大括号内包含任何东西，这将把所有元素都设置为零:</p>
+<pre><code class="language-cpp">unsigned int counts[lOI % {}; // al l elements set to 0
+float ba1ances [100] {}; // all elements set to 0</code></pre>
+<p>第三，列表初始化禁止缩窄转换，这在第3章介绍过:</p>
+<pre><code class="language-cpp">10ng plifs [) % {25 , 92 , 3.0}; / / not allowed
+char slifs [4] {&#x27;h&#x27; , &#x27;i&#x27; , 1122011, &#x27;\O ,}; // not allowed
+char tlifs (4] {&#x27;h &#x27; , &#x27;i&#x27; , 112, &#x27;\O &#x27; }; // allowed</code></pre>
+<p>在上述代码中，第一条语句不能通过编译，因为将浮点数转换为‘要型是缩窄操作，即使浮点数的小数点后面为零.第二条语句也不能通过编译，因为1122011超出了char变量的取值范围〈这里假设char 变蠢的长度为8位).第三条语句可通过编译，因为虽然112是一个int 值，但它在char变蠢的取值范围内.</p>
+<p>C++标准模板库(STL)提供了一种数组警代品一一模板类vector，而C++ll新增了模板类array 。这些替代品比内置复合类型数组更复杂、更灵活，本意将简要地讨论它们，而第16j在将更详细地讨论它们.</p>
+<h2>4.2 ~千字串</h2>
+<p>字符串是存储在内存的连续字节中的一系列字符.C++处理字符净的方式有两种。第一种来自C语言，常被称为C-风格字符串(C-stylestring).本意将首先介绍宫，然后介绍另一种基于string类库的方法.</p>
+<p>存储在连续字节中的一系列字符意味着可以将字符串存储在char数组中，其中每个字符都位于自己的数组元素中.字符*提供了一种存储文本信息的便捷方式，如提供给用户的消息(“消告诉我您的瑞士银行账号”)或来自用户的响应(“您肯定在开玩笑”).c-风格字符串具有一种特殊的性质:以空字符( null character)结尾，空字符被写作飞0，其ASClI码为0 ，用来标记字符串的结尾.例如，请看下面两个声明:</p>
+<pre><code class="language-cpp">char d吨[ 81= { &#x27; b &#x27; , &#x27;e&#x27; , &#x27; a &#x27; , &#x27;u&#x27; , IX&#x27;, , ，中，&#x27; I &#x27;} ; // not a string!
+charcat(81 = {&#x27; f &#x27; , &#x27; a &#x27; , &#x27;t&#x27; , &#x27;el, &#x27;5&#x27; , &#x27;5&#x27; , &#x27;a&#x27; , I飞O&#x27;} ; // a strìng!</code></pre>
+<p>这两个数组都是char 数组，但只有第二个数组是字符净.空字符对C-风格字符E扫而言至关重要.例如，C忡有很多处理字符净的函数，其中包括∞ut使用的那些函数.它们都逐个地处理字符感中的字符，直到到达空字符为止.如果使用cout 显示上面的cat 这样的字符卑，则将显示前7个字符，发现空字符后停止.但是，如果使用∞ut显示上面的dog数组(它不是字符串)，∞ut将打印出数组中的8个字母，并接着将内存中随后的各个字节解释为要打印的字符，直到遇到空字符为止.由于空字符〈实际上是被设置为0的字节〉在内存中很常见，因此这一过程将很快停止.但尽管如此，还是不应将不是字符串的字符数组当作字符E归来处理.</p>
+<p>在cat数组示例中，将数组初始化为字符串的工作者上去冗长乏味一一使用大量单引号，且必须记住加上空字符.不必担心，有一种更好的、将字符数组初始化为字符净的方法一一只需使用一个用引号括起的字符串E阿，这种字符串被称为字符串常量(彼ingconstant)或字符净字面值(string literal) ，如下所示:</p>
+<pre><code class="language-cpp">char bird[l l] % &quot;Mr. Cheeps&quot;; // the飞ois understood
+char fish[] = &quot;Subb1es&#x27;; // let the compiler count</code></pre>
+<p>用号| 号括起的字符事隐式地包括结尾的空字符，因此不用显式地包括它〈参见图4.2)。另外，各种</p>
+<h3>第 75 页</h3>
+<p>C++输入工王军通过键盘输末，将字符*读大到c!iar数组中时，将自动加上络尾的空字符(如果在运行程序清单4.1中的程序时发现，必须使用关键字static来初始化数组，则;fJJ始化上述char数组时也必须使用该关键字〉。</p>
+<p>当然，应确保数组足够大，能够存储字符*中所有字符一一包括空字符。使用字符串常盘初始化字符数组是这样的一种情况.~让编译椿计算元素数目更为安全。让数组比字符南长没有什么害处，只是会浪费一些空间而已。这是因为处理字符净的函数根据空字符的位置，而不是数组长度来进行处理。C++对字符串长度没有限制.</p>
+<p>警告:在确定存储字符串所需的最短数主且时，另IJ 忘了将给足，的空字符计算在内。</p>
+<p>~ 4.2 ~鲁数组初始化为字符*</p>
+<p>注意，字符串常重〈使用双引号)不能与字符常蠢(使用单引号〉互换。字符活量〈如‘S’)是字符*编码的简写表示。在ASClI系统上，‘S’只是83的另一种写法，因此，下丽的语句将83赋给shirt size:</p>
+<p>char shirt size = ‘ $ ’; // this is fine</p>
+<p>但“S”不是字符常髦，宫表示的是两个字符(字符S和\0)组成的字符净。更糟糕的是t“S”实际上表示的是字符净所在的内存，地址。因此下面的语句试图将一个内存地址赋给shirt_size:</p>
+<p>char shirt size : USII ; // illegal type mismatch</p>
+<p>由于地址在C忡中处-种独立的类型，因此C++编译器不允许这种不合理的做法〈本王军后面讨论指针后，将回过头来讨论这个问题〉。</p>
+<p>4.2.1 拼接字符事常量</p>
+<p>有时候，字符串很长，无法放到一行中.C++允许拼接字符串字面值，即将两个用引号括起的字符串合并为一个.事实上，任何两个由空白〈空格、常IJ表符和换行符)分隔的字符净‘扇’量都将自动饼接成一个.因此，下面所有的输出语句都是等效的:</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;I&#x27;d give my right arm to be&quot; &quot; a great violinist.\n&quot;;
+cout &lt;&lt; &quot;l&#x27;d give my right arm to be a great violin主st. \ nlf;
+cout &lt;&lt; &quot;1&#x27; d give my right ar&quot;
+&quot;m to be a great violinist. \n&quot;;</code></pre>
+<p>注意，饼按时不会在被连接的字符串之间添加空格，第二个字符串的第一个字符将紧跟在第一个字符净的续后一个字符(不考虑飞0)后面@第一个字符审中的飞0字符将被第二个字符串的第一个字符取代。</p>
+<h3>第 76 页</h3>
+<h3>4.2.2 在数组中使用字符~</h3>
+<p>要将字符串存储到数组中，最常用的方法有两种一-将数组初她化为乡符串常晕、将键盘或文件输入读入到数组中.程序清单4 .2演示了这两种方法，它将一个数维初始化为用引兮括起的字符息，并使用J“ci-n将_.个输入字符串放到另F千数组卑。该程序还使用了标准￠语言库函数strlen(陈确定字符串的长度。标准头文件cstring(老式实现为string .h)提供了该i'iI数以及很多与字符串栩关的其他踊数的声明.程序清单4.2string.cpp// strings.cpp . . storing strings i n an array~include &lt;fbstream&gt;件include&lt;cstring&gt; / J-for the strlen ()吾unct ion int mairr(:.l</p>
+<pre><code class="language-cpp">using namespace std;
+const-int Si ze = 15;
+char namel[Sizel ;-// empt y array
+char name2 [Size) = &quot;C++owboy&quot;; /，ιini t }alize~ array
+t/ NOTE: S。由eimprementations may require the static keywor
+/.f to initia-l r ze the array nameê
+cout &lt;&lt; &quot;Howdyl 1 ‘ m &#x27;1 &lt;&lt; name2;
+cout &lt;&lt;比JWhat&#x27;s your &#x27;name?飞n&quot;;
+。&#x27;~i:&#x27;~&gt;.;.:、&#x27;~amel:&#x27;.&#x27;._ . ..,</code></pre>
+<p>“”‘二、.’，. --</p>
+<pre><code class="language-cpp">CQut&lt;&lt;
+.&quot;Well叹&quot;.&#x27;~:&lt;. name l-&lt;&#x27;&lt;.&quot; yqu~ .n~me has飞.</code></pre>
+<p>二...:.:.: :句=‘;. “~C己ut ;” &lt;&lt; “st'tle吨! na.m哩川、川etter;’arid- is枣。~ed~.n.勺-三、骂~- 、</p>
+<p>-T! -</p>
+<p>国品--，_可.工汽气M-rc。ut时‘吐仔anarray of. • &lt;只i“5 1 毛.ë9~( name，lf.”τ主二’. ‘byteι飞:’:~.:T丁… __ -…‘一-… ~二~丁子_.~.’co民飞~.&lt;~Y。出i.~iÚai‘1，.Sι’;;.&lt; .n牛耐n咀r~&lt;.;飞\ri‘~i’坷二号飞飞画-:- .，.ø‘_ιr 卢’，‘五二</p>
+<p>.</p>
+<p>, ...</p>
+<p>L二~户二~~C2 ~3)云~. .~\d~ / .. - _“ .~. ..唱‘-/1:set.. t豆. <del>il.:<em>çh</del>主cter飞二二二二二二…二..\ -1二二二二</em>..-..二…-气，. cout &lt; &lt; -’;-Her;-:à~e ~ the ‘，fi~S't’:.” -i. ‘ihä苍山SÒf可nanie:可二’二二.. 二i二一、.丁二二二-二-. .‘~--二</p>
+<p>二门二.‘叮二二-;乙‘工忘、元二二，:.~:芦“二二γ、.二- ”, ~二-飞俨〈气~ =..-飞亏，守.’-~. :.;~-川片J气、守--: ‘. 二，. .户、’<em>~vι4气￡勺‘;ι-俨~’.. ρz t 二飞二国...~，;.~:} .~气~t:et，:rn与忡飞<del>..“.</em>:: - <em>‘，飞”&lt;...:-:... “-”’::</del> -$立~.f -‘:,’=. th 二巳-己-.. -:二-C-</em> “,‘ .1’、~.-<em> :‘、</em> 气7...__二.-:.: -:’J叮女斗. ，之二ζ二---<em>.缸言</em>; ‘~<em>:iõo. 三穹;~. ...: ’，-气J一--.~ .♂-，主;.~ζ\号:fdJj‘二:二E面呈该程序的运衍悔况飞二号’::.:‘ ... ~:.云飞:. -’-:，.:~</em>.~~-:τ三+三王二二~‘;~.’ -~~~~~.i~寻:”:_‘:-. .&lt;“”’..子-气，二二。-二三气气. __. -‘:‘Howpyf’.‘.I ’.111‘ .c+飞Qwbþy C wtra.t. s ~ yo，y，J: jãmßi;::、实.. --._-三品、“二、三、-:’，.:‘, ’:=‘-;” ~ ~.:...“” &lt;、“</p>
+<p>，-一,, ，Baøi咽an...,‘.. ..~...二，二_ ._-二-’..:.:.“.::..二.</p>
+<p>. ",' ã</p>
+<p>•</p>
+<p>s:'</p>
+<p>.~‘:..也~~. ’<em>.:.-i;.、‘Well:.-;号，Bas r'cmliti; ::;;-õu~ ~a:nié: há) êtter~ ’ånd :‘ià ~ iitoÏ:ed.. (’ ::: :~:， ::\i 骂飞‘--川二’记‘飞~:‘~:’:i~:.吨，也町饨，可. :1号与yt句.，‘</em>’￥~::.:.<em>‘:三</em>.’:... ..: ...;..:...~. ;，:三气·在.: ~:...=.，气三月主-.~~.~:- “ . 7 ‘:.:!:.-=兰’，:‘.~i:~”“.’一,Yòur i~tiål: is B~ .”二，.. 二-二. ----: -『EL -飞工丁:T:; -‘<em> 町,.--2Hde fte ;!heEE1尹t: :;: C!hå~a&lt;:; ，t号EEffhyp一é:C+’+. ...二飞:... .，...言之; 二三. -三“丁二f三二三- 斗.乓丐F巳7二卢~:::...‘飞.亏节7二--j.J-.f汇:伫ι-二~- ~-” -: </em>’ 7‘:“’_~~二♂‘E二2亏芋汇.λ工?协寸宁宁i-JF1、. 程序阳}说仰兑肘R白月τ二~-’二二三:.~习. _寸丁-η.歹λ咱工二、工、二飞子吨...νλe.. 三‘，’，.”二4、可.“飞兰:气二二f手.丘φ”二飞‘:.-丛程1序字清单4 立啦可些等学辑争捂至阶3垄各纣J竖星?予.首辑批~ . s凶of运算符捕咱y男E个合敖数塑皑长庭.(豆字节f 咀雪的èri()函\二三.’二、，.掣返回的是夺储‘在费1理_1i’~字符争的长度主而:11‘是整组走身的长度〈另外::strle.iO只jt算碍见的哼符，-而.气-不祀空手符诽算1:E内L因此，对于~Bisí~~~~f返回的值为ι:jfiï不是:以如果飞忘ìniê 是字符峰fr则要存储，“町二三声字符夺;数组的长度吏能短予strteil(CÒS币ω毛氏二!”，.~ 二‘r::~::-. :~、立…，.气、.二二.二-二二-飞’，，‘.~ --干飞由牙于苍吧n纣.和和叽n二;ι，- ’_-二.扯到数组的第:;-‘:’1‘在容r; 习外，~.:该程片将p.äme2[3]设叠，为空字符.这使得亨-符吊在贯主个宅待后即结爽，f:写λ且汇然数当主电还有其饨的学符(参见图公)0.二.. :_二、Jfzt : 三二，二:云二、二;二二...-=二“:---;-77 --.- 二二二该程度旋用符-号角露:来指定数组的状度.程序常常有多条语句使用了数组长度.使用符号常’量来表示-二-</p>
+<p>~..: .. ~ .. .&lt;:=: :‘<del> :’:‘:’-.:.，.:. ‘:’ :‘: ;::二-:</del>-.，与歹.;~~~;...ι~吧!工.:~-+-..’二: ~_.斗“可二--vf号... 二、-</p>
+<p>'';_ ...,</p>
+<p>、.,</p>
+<h3>第 77 页</h3>
+<p>数组长度后，当需要修改程序以使用不同的数组长度时，了作将变得更简单一一只需在定义符号常蠢的地方进行修改即可。</p>
+<p>阁4.3使用\0截短字符::r:</p>
+<p>4.2.3 字符事输入</p>
+<p>程F于，strings呻p 有一个缺陷，这种缺陷通过精心选择输入被掩盖掉了。程序清单4.3揭开了它的丽纱，揭示丁字符串输入的技巧.</p>
+<p>程序清单4.3instr~ .cpp</p>
+<pre><code class="language-cpp">11 instrl.cpp - -reading more than one string
+#include , iostream&gt;
+int main ()
+using namespace std;
+const int ArSize ~ 20;
+char name (ArSize);
+char dessert(ArS孟1:e);
+cout &lt;&lt; . Enter your name:\n. ;
+Cln &gt;&gt; name;
+cout &lt;&lt; . Enter your favorite dessert : \n&quot;;
+cin &gt;&gt; dessert;
+cout &lt;&lt; . 1 have some delicious &quot; &lt;&lt; dessert;
+cout &lt; &lt; • for you , 11 &lt;&lt;. name &lt;&lt; .1. \口&quot;.
+return 0;</code></pre>
+<p>该程序的意图很简单:读取来自键盘的用户名和用户喜欢的甜点，然后显示这些信息。下面是该程序的运行情况:</p>
+<pre><code class="language-cpp">Enter your name:
+Alistair Dreeb
+Enter your favorite dessert
+1 have 90me de l 孔ciousDreeb for you , Alistai r.</code></pre>
+<p>珑们其至还没有对“输入甜点的提示”作出反应，程序便把它显示出来了，然后立即显示最后一行.</p>
+<p>cin是如何确定已完成字符串输入呢?由于不能通过键盘输入空字符，因此cin 需要用别的方法来确定</p>
+<h3>第 78 页</h3>
+<p>字符串的结尾位置ocin使用空白〈空格、伽j表符和换行符〉来确定字符E祀的结束位置，这意味着cin在获取字符数组输入时只读取一个单词。读取该单词后.cin将该字符郁放到数组中，并自动在练尾添加空字符.这个例子的实际结果是.cm把Alistair作为第一个字符串，并将它放到name数组中。这把Dreeb留在输入队列中.当crn在输入队列中搜索用户喜欢的甜点时.它发现了Dreeb .因此cin读取Dreeb.并将它放到dessert数组中〈参见图4 .4 ) •</p>
+<p>..JIII:...国0“</p>
+<p>-</p>
+<p>第1个字符串第2个乎符a串</p>
+<pre><code class="language-cpp">, iAl~;j... !叫..阳ENTEA
+&#x27;1</code></pre>
+<p>t章取第1个字符串.1|棚叩…第蜘附…2价呐个仰棉</p>
+<p>添加空值字符.1=添昏加吉空E健亭符.</p>
+<p>放在“‘8徽组中.1 放在曲目的S数级中.</p>
+<p>|ω咽..，叫-</p>
+<p>因4.4使用cin读取字符串输入时的情况</p>
+<p>另一个问题是，输入字符审可能比目标数组长〈运行中没有揭示出来〉。像这个例子一样使用cin ，确实不能防止将包含30 个字符的字符串放到20个字符的数组中的情况发生。</p>
+<p>很多程序都依赖于字符串输入，因此有必要对该主题做迸一步探讨.我们必须使用cin的较高级特性，这将在第17章介绍。</p>
+<h3>4.2.4 每次读取一行字符串输入</h3>
+<p>每次读取一个单词通常不是最好的选择.例如，假设程序要求用户输入城市名，用户输入NewYork或SaoPaulo。您希望程序i卖取并存储完整的姊T排名，而不仅仅是New 或Sao。妥将孩条短语而不是一个单一一一一-词作为号符串输入，需要采用劳一种字符廓读取方法。具体地说.需要采局面向行而不在面向单词的方法。-一一一一一幸运的是.-istream 唱的类〈虫ncin)提供了一些面向行的类成员民数:getline()和getO .这两个函数都设取二-行输入，直到到达换行符。然而，随后getline()将丢弃换行符俨而get( )将换行符保留在输入序列9:‘.下面详细介绍它们，首先介绍get!Jn~( )-.</p>
+<p>} 面向行的输入:getlineÇ)</p>
+<p>getline( )函数读取整行，它使用通追回车键输λ的换银丰寄来确定输入综尾。要调用这种-方法，可以使用cin.getlineω.该函数有两个参数.第一个参数是用来存饨输入行的数组的名称，第二个参数是要读取的字符数.如果这个参数为20.则函数越多读取19t:装箱，余下的空间用王存储自动在结尾处添加的空字符.getline().成员函数在读取指定数目的字智或遇到换行符时停止读取.</p>
+<p>例如，假设要使用getline()将姓名读入到一个包含20个元索的name数组中e可以使用这样的局数调用:cin.getline (name, 2 01;</p>
+<p>这将把ι行读入到name数组中一一如果这行包含的字符不超过t~-t.Cgetliñe(守成员函数还可以接受「第三个可~参数，这将在第t7j袁讨论。〉</p>
+<h3>第 79 页</h3>
+<p>程序清单4.4 将程序消单4.3修改为使用cin.getline仆，而不是简单的cin .除此之外，该程序没有做其他修改.</p>
+<p>程序清单4.4instr2.cpp</p>
+<pre><code class="language-cpp">// instr2.cpp --reading more than one word with getline
+#include &lt;iostream~
+int main O
+using namespace std;
+const int ArSize = 20;
+char namelArSizel;
+char dessertlArSi zel;
+cout &lt;&lt; &quot;Enter your name:\n&quot;;
+cin.getline(name. ArSize); // reads through newline
+cout &lt;&lt; &quot;Ent er your favorite dessert: \n&quot;;
+cin.getline(dessert, ArSize};
+cout &lt;&lt; &quot; 1 have some delicious &quot; &lt;&lt; dessert;
+cout &lt;&lt; U for you, &quot; &lt;&lt; narne &lt;&lt; It. \n&quot; ;
+return 0;</code></pre>
+<p>下面是该程序的输出2</p>
+<pre><code class="language-cpp">Enter your name:
+Dirk Hammernose
+Enter your favorite dessert:
+Radish Torte
+1 have some delicious Radish Torte for you, Dirk Hammernose.</code></pre>
+<p>该程序现在可以读取完整的姓名以及用户喜欢的甜点!getline()函数每次读取一行.它通过换行符来确定行尾，但不保存换行符.相反，在存储字符串时，它用空字符来替换换行符(参见图4.5).</p>
+<p>C何arn..e[ “1;</p>
+<pre><code class="language-cpp">cout &lt;&lt; .Enter your na...: .;
+cin.getline(闹剧.11);</code></pre>
+<p>用户键入M耕出响应·阳下(ENTER)</p>
+<p>Enter your nue: Jud (ENTER)</p>
+<p>elD. 伊tllneO..• Jud.以及用户</p>
+<p>锺!n__副金属的钱行符.并将鲁智</p>
+<p>符.镰为空字符</p>
+<p>|J IωI d I \e疆</p>
+<p>换行~:撞H为空字符</p>
+<p>回4.5getline()该取并替换换行符</p>
+<h3>第 80 页</h3>
+<p>2 面向行的输入:get()</p>
+<p>我们来试试另一种方法。istream类有另一个名为get( )的成员函数，该函数有几种变体.其中一种变体的工作方式与getline( )类似，它们接受的参数相同，解释参数的方式也相同，并且都读取到行尾。但get并不再读取并丢弃换行符，而是将其留在输入队列中.假设我们连续两次调用get( ):</p>
+<pre><code class="language-cpp">cin.geC(name, ArSize) ;
+cin.get(dessert ，且rsize);// a problem</code></pre>
+<p>由于第一次调用后，换行符将留在输入队列中，因此第二次调用时看到的第一个字符便是换行符.因此get()认为己~J达行尾，而没有发现任何可读取的内容.如果不借助于帮助，getO将不能跨过该换行符。</p>
+<p>幸运的是，get()有另一种变体.使用不带任何参数的cin.get( )调用可读取下一个字符〈即使是换行符)，因此可以用它来处理换行符，为读取下一行输入做好准备.也就是说，可以采用下丽的调用序列:</p>
+<pre><code class="language-cpp">cin.get(name , ArSize); // read f irst l ine
+cin.get(); // read newline
+cin.get(dessert. Arsize); // read second l ine</code></pre>
+<p>另一种使用get()的方式是将两个类成员函数拼接起来〈合并)，如下所示:</p>
+<pre><code class="language-cpp">cin.get(name , ArSize) .get(); // concatenate member functions</code></pre>
+<p>之所以可以这样做，是由于cin.get( name, ArSize)返回一个cm 对象，该对象随后将被用来调剧院t()函数.同样，下面的语句将把输入中连续的两行分别读入到数组namel和name2中，其效果与两次调用cin.getline( )相同:</p>
+<pre><code class="language-cpp">cin.qetline (namel , ArSize ) .getline(name2, ArSize);</code></pre>
+<p>程序消单4.5采用了饼接方式.第11意将介绍如何在类定义中使用这项特性.</p>
+<p>程序清单4 .5instr3.cpp</p>
+<pre><code class="language-cpp">// instr3.cpp --reading more than one word with get () &amp; get ()
+#include &lt;iostream&gt;
+int main()
+using namespace std;
+const int ArS i ze = 20 ;
+char name [ArSizel ;
+char dessert(ArSize);
+cout &lt;&lt; &quot;Enter your name:\n&quot;;
+cin .get(name , ArSize) .get () ; // read string, newl ine
+cout &lt;&lt; &quot;Enter your favorite dessert:\n &quot;;
+cin .get (dessert. ArSize) .get( ) ;
+cout &lt;&lt; &quot;r have 5αne delicious &quot; &lt;&lt; dessert;
+cout &lt;&lt; 11 for you, M &lt;&lt; name &lt;&lt; ..\n&quot;;
+return 0;</code></pre>
+<p>下面是程序消单4.5中程序的运行情况:</p>
+<pre><code class="language-cpp">Enter your name:
+Mai Parfait
+Enter your favorite dessert:
+Chocolate Mousse
+1 have some delicious Chocolate Mousse for you, Mai Parfait.</code></pre>
+<p>需要指出的一点是，C忡允许函数有多个版本，条件是这些版本的参数列表不同。如果使用的是cin.get(name . ArSize).则编译著苦知道是要将一个字符事放入数组中，因而将使用适当的成员函数.如果使用的是cin .get()，则编译器知道是主要读取一个字符。第8宣言将探索这种特性一一函数重载。</p>
+<h3>第 81 页</h3>
+<p>为什么要使用getO.而不是getline( )呢?首先，老式实现没有getline().其次.getO使输入更仔细.例如，假设用get()将一行读入数组中.如何知道停止读取的原因是由于已经读取了整行，而不是由于数组已填满呢?查看下一个输入字符，如果是换行符，说明已读取了，重行:否则，说明该行中还有其他输入.第17j在将介绍这种技术.总之.ge地line()使用起来简单一些，但get( )使得检查错误更简单些.可以用其中的任何一个来读取一行输入:只是应该知道，它们的行为稍有不同。</p>
+<p>3.空行和其他问题</p>
+<p>当getline()或get( )读取空行时，将发生什么情况?最初的做法是，下一条输入语句将在前一条getline( )或get()结束读取的位室开始读取:但当前的做法是，当get()(不是getline() )读取空行后将设置失效位( failbit ).这意味着接下来的输入将被阻断，但可以用下面的命令来恢复输入:</p>
+<pre><code class="language-cpp">cin. clear () ;</code></pre>
+<p>另一个潜在的问题是，输入字符串可能比分配的空间长.如果输入行包含的字符数比指定的多，则ge副ne()和ge叹)将把余下的字符留在输入队列中，而且etline()还会设贸失效位，并关闭后面的输入.</p>
+<p>第二6意和第1 71震将介绍这些属性，并探讨程序如何避免这些问题.</p>
+<h3>4.2.5 混合输入字符$和数字</h3>
+<p>混合输入数字和面向行的字符串会导致问题.请看程序清单4.6中的简单程序。</p>
+<p>程序清单4.6numstr.cpp</p>
+<pre><code class="language-cpp">11 numstr .cpp --fol1owing number input with line input
+#include &lt;iostream&gt;
+int main{)
+{
+using namespace std;
+cout &lt;&lt; &quot;What year was your house bui1t?\n&quot;;
+int year;
+Ci n &gt;&gt; year;
+cout &lt;&lt; .What is i ts street address?\n&quot;;
+char address[801;
+cin.getline (address , 80);
+cout &lt;&lt; .Year bui1t: &quot; &lt;&lt; year &lt;&lt; endl;
+cout &lt;&lt; &quot;Address: • &lt;&lt; address &lt;&lt; endl;
+cout &lt;&lt; &quot;Done! \n&quot; ;
+return 0;</code></pre>
+<p>该理汗，的运行情况如下:</p>
+<p>What year was your house built?</p>
+<p>1966</p>
+<pre><code class="language-cpp">What is i ts street address?
+Year bui1t: 1966
+Address
+Done!</code></pre>
+<p>用户根本没有输入地址的机会.问题在子，当cin读取年份，将回车键生成的换行符留在了输入队列中.后面的cin.getline( )看到换行符后，将认为是一个空行，并将一个空字符$赋给address数组。解泱之道是，在读取地址之前先读取并丢弃换行符.这可以通过儿种方法来完成，其中包括使用没有参数的get( )和使用接受一个char 参数的getO.如前丽的例子所示.可以单独进行调用:</p>
+<pre><code class="language-cpp">Cln &gt;&gt; year;
+cin.get (); // or cin.get(ch);</code></pre>
+<h3>第 82 页</h3>
+<p>也可以利用表达式cin&gt;&gt;year 返回cin对象，将调用饼接起来2</p>
+<pre><code class="language-cpp">(cin &gt;&gt; year) .get(); //or (cin &gt;&gt; year) .get(ch) ;</code></pre>
+<p>按上述任何一种方法修改程序，消单4.6后，它便可以正常工作:</p>
+<p>What year was your house buil t?</p>
+<p>1966</p>
+<pre><code class="language-cpp">What is its street address?
+43821 unsigned Short Street
+Year built: 1966
+Address: 43821 Unsi gned Short Street
+Done!</code></pre>
+<p>C++程序常使用指针〈而不是数组〉来处理字符串.我们将在介绍指针后，再介绍字符串这个方面的特性.下丽介绍一种较新的处理字符净的方式:C忡string 类.</p>
+<h2>4.3 string类简介</h2>
+<p>ISO从NSIC忡锦标准通过添加string 类扩展了C++库，因此现在可以string 类型的变量(使用C++的话说是对象〉而不是字符数组来存储字符串.您将看到，string类使用起来比数组简单，同时提供了将字符串作为一种数据类型的表示方法。</p>
+<p>要使用string 类，必须在程序中包含头文件stnng.stnng 类位于名称空间std中，因此您必须提供一条using编译指令，或者使用std::s创ng来寻| 用它.string类定义隐藏了字符串的数组性质，让您能够像处理普通变量那样处理字符E轧程序清单4.7说明了stríng 对象与字符数组之间的一些相同点和不同点.</p>
+<p>程序清单4.7strtype1 .cpp</p>
+<pre><code class="language-cpp">// strtypel.cpp --using the C++ string class
+#include &lt;i ostream&gt;
+#incl ude &lt;string&gt; // make stri ng class availabl e
+int mai n()
+using namespace std;
+char charrl[201; // create an empty array
+char charr2 [20J = &quot;jaguar&quot;; / / create an initialized array
+string strl; // create an empty string object
+string str2 = &quot;panther&quot;; // create an i nitialized st ring
+cout &lt;&lt; &quot;Enter a kind of feline: &quot; ;
+cin &gt;&gt; charrl;
+cout &lt;&lt; &quot;Enter another kind of feline : •
+cin &gt;&gt; strl; // use c1n for i nput
+cout &lt;&lt; &quot;Here are some fel ines:\n&quot;;
+cout &lt;&lt; char rl &lt;&lt; &quot; 11 &lt;&lt; charr2 &lt;&lt; tI &quot;
+&lt;&lt; strl &lt;&lt; &quot; &quot; &lt;&lt; str2 1/ use cout for output
+&lt;&lt; endl;
+cout &lt;&lt; &quot;The third letter i n 11 &lt;&lt; charr2 &lt;&lt; 11 i s 11
+&lt;&lt; charr2[2J &lt;&lt; endl;
+cout &lt;&lt; &quot;The third letter in &quot; &lt;&lt; str2 &lt;&lt; 11 is
+&lt;&lt; str2(2) &lt;&lt; endl; 11 use array notation
+return 0;</code></pre>
+<h3>第 83 页</h3>
+<p>下面是该程序的运往情况3</p>
+<p>Enter a ki nd'of . feline: ocelot -</p>
+<p>... -</p>
+<pre><code class="language-cpp">Enter. anothe.r &#x27; kind. of fe J.ine: t勾er-ι‘
+Here. are s。而efellnes:</code></pre>
+<p>-panther . ... . ...</p>
+<p>,</p>
+<p>、-.-.‘。èelot.jag也at飞ti.ge x:.:.~</p>
+<p>Thethird .l etter in .jaguar:...iS 9. .一-</p>
+<p>The t:hird. l e:tter‘. in pàn'ther “is n’ ... 气.也飞:二飞二气丁.. ” .<em>.-. .‘ ’.~ ‘“ 二.’ .\‘飞以这介示‘i9iJ可知，.在很多方面γ使用s创吨对象的为式与使用字符数组相同o”...</em> : . ’ --</p>
+<p>..‘可以使用c:风格字符E挣来初始化string 对象。-、.、e0“可以使用己in 来将键盘输λ存储到s协19 对象中.</p>
+<p>ι、、</p>
+<p>..可以使用叩ut 采芷示~trìii.g对象。.</p>
+<p>• ..在?</p>
+<p>.吁以使用数组表示法来访问存储在strlng对象“中的宰符.</p>
+<p>程序消单4.7 表明，吨i吨对象和字符数组二二.间.的主要医别是，可以将string 对象声唤为简单变景，;罹·‘不是数组:二〕斗』二.. string.:.:-s.~rr; <em>. ;</em>~二.气、:-:<em>.11‘ cre~te </em> a2..e&lt;ψ~Y :.~!，主哩ob.jec t..一-...~.. -.. ~::<em>’;:‘.~ .~ -~:’: </em>‘.. . ~:-=ι」“. .st r.in宜?可2”:s“~panlil田”工/l create -布.in♂t i~:t-izeφstril1g气-三了~ ..</p>
+<p>类技计让程.Ef能够自动处理项ng 的大小。例如ι，tr γ的声明创建一个长度为0的stnng 对象，但穆序-将输入读取到此r.中的;:-*守自动调整s.ti~的长度，</p>
+<p>~in &gt;&gt;..strl; ~/l..耳茸~ _.resîz~d .;to ‘ f 抖;inpi.tt.二三二-“...</p>
+<p>这使得与使用数组相比“使用striI‘1g:到象~来使民抱里去全飞从理论丰说，可以将char数维视为千缆γ”. 用予存储兮千字符净的战缸存储单元，丽;string 类变是;是二个表示字符府的实体.、, :4;3.’1 . C~+1 L;:1=:符It初跑化.二、正如您预期的“.C:t'i'J1也允讲将列表初始化用于心风格字符碍圭和string 对象:: ..chai f~rst_;:date‘ [ f二:~岐Le.Cl运~on ,ò6dü;: ) ;二·ιchili二econ函，..dÄte f ] .. I” ’I:he.. 田、白antPi~e:e“ }‘iγ”, strí呵由王时，_date:;’ t ‘!The :Sread’:Sowl‘’‘};’</p>
+<p>string fourth...;.date {咽ank‘ a I1Íl'le Eats .’胁};... …...þ...</p>
+<p>... 、</p>
+<p>4，:，l2..赋值、饼接和附加ι、、</p>
+<p>使用string类的，某些操作比使胜数组峙史简耻例如，不能将?个敛组赋给现一个数组，但可以将一个stnng 对象赋给另一个string_路象:</p>
+<pre><code class="language-cpp">char charrl (20þ; / / create-an- empf.y ar芷ay
+c-l飞archarrZ&#x27;120] = &#x27;jaguar&quot; ;-/1 create an initialize&lt;:Farray
+string strl; /1 create田an_ emptys ~ring object户
+string str2 =. &quot;pantl&#x27;r运r&quot;;// creatE•an i ni.Cia1ized&#x27;&quot; st.rìng
+charr.l= = ch啤rr2;// INVALID, no array assignment
+strl ~ st.r2; / / VAllID ~ object assi gnment.. ok</code></pre>
+<p>strÎng 类简化了字符$合并操你.可以使用运算街+将两个由mg对象:合并起来，还吁以使那运算符恒将字符审时拗IlflJ.string 对象的东窟。继续前面的优码，您可以这本主做:</p>
+<pre><code class="language-cpp">str括19str3;
+str3 ~ strlφstr2; / / assign str3 t he joi ned-strings
+ser1&#x27;&quot; += str 2; / / add str2 to the-end of s t rl</code></pre>
+<p>程底消~4 .8演示了这些厨法.可以将C虱揣字符E位或s仕íñg-对象与~stñng_对象相力日，或将它们的加到s往ing 对象的末展。</p>
+<h3>第 84 页</h3>
+<p>阳、.<em>吃艺7口.圳.ι ~飞-</em>. -‘.卢..-’八…-、 -叩ι“‘;-’ 俨E卢‘ :’; ..二Ei.. 二‘..、，::. ~ ..~ ’ 、、牙儿... -、~-:、二士::.”<em>，;-...“”.‘:-气-’:: “:: …</em>., - . . .，~ -，.<em>...-:、俨气-‘J飞.. ..，..:.几:.、ττ’ .:-一乙‘.乍斗.--: ... .吨品飞、γ、’- ”!吨乎飞℃乒二、二二予予‘:担程序清尊要引啊争事甏俨‘.:“~芋ti巾~P’仰U闽仰6臼饵2宾;8中b巨￥=二L 乞ι-二，γr产. ...川，，‘:’.飞--ψ气飞.，土三4与号ε，..~.•• •• 忌i二、~.飞兰J;二与二三‘，&gt;二三-ii 4己”:ii~气á t'rtýp句.: cpþ“ -=~ a’á9 i.~i早宫:飞句号o;i~i吨) , !lid. ~ppenQi呵土.. ;.: .‘ . ~ ’.‘二’-:-.‘..J: ‘!..川”二二.-七乙.~. .，~ ;:’. ø.. 玄之:.:!. ~:~‘; 可曾趴G-l:Udè:.&lt;iostre.a:ni&gt;.:- ;与二.</em>\二-、、-亏乞f工.<em>;.二...沪r .-二.#盯includ岱画&lt;9’吭tr.ing飞二.-,</em>. ::~. ~月~ :., “. int ‘mairi n .”. ’~.γ_ .. . ..ρ的.. ‘飞“’:”、“.二叮-二‘-’-‘..龟-ι沪产⑤ 咆~.λ0.’ .‘ . ..using n.all)espace st c;i ;.二</p>
+<p>• .二.s't~ iit~J‘ ’sJ..;.: :‘ 1I'p-eii~i~l; ~二、-τ Jγ</p>
+<p>‘..一仇τ 二.stEing:s~ ，.. s3; .飞矿·、.-气t争气. ’ 江</p>
+<p>.,.;...:. . <em>. . '.-" .. . ." </em>.</p>
+<p>.,:,. :. ... :-<em>. ‘会飞飞飞.:.:.A. ..</em>: ’:,:.: :::. 二、-. ‘;-气’7‘亏。二，飞、飞• . ‘ ·’、、二、-τ_._. . ~.ζ.~ 宁‘. -. -‘ 卢cout王三吨。ucan:: assign’ one.‘ s t:i-ing ’ obj'ect.‘ to an'othe.i :~ι2’= ‘sl\n份;-“..._ι-、寸、士。</p>
+<p>.;:: .‘s2 . =;’: 91 ;-.、‘. .)’-;，毛-}.‘ .: . ，’、</p>
+<pre><code class="language-cpp">cout.&lt;ι&quot;51: &quot;之:&lt;S1 &#x27; &lt;,&lt;&#x27;.. 52&#x27;:&quot; &lt;.&lt; .&#x27;52 &lt;ιendl辛</code></pre>
+<p>C叩t饵.YCiucan. á9sign a t-st“yle ‘ string_to a雪t'ri咱r 。叫ec~，\n”;也-</p>
+<pre><code class="language-cpp">C喝ut&lt;&lt;. &quot;92.. = \.!&#x27;bu~za&#x27;rd\&quot;\n.;…、号、，
+92 &#x27; = &quot;buzzard&quot;;</code></pre>
+<p>cout飞&lt;...lls2.，:.. ...&lt;&lt;‘s2“&lt;鸣在ndFr-’-飞气、</p>
+<p>.</p>
+<p>.. 93.</p>
+<p>-</p>
+<p>, qo斗t，，&lt;&lt;叮‘pu.c~p’ c~ncate~~e. 9巳rl咱号:=号气92)0 “1，”-S~ ‘.“, ” 91 • ’$2; . -, .~ .片~飞·‘.‘:---、飞</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;53: &quot; ,&lt;&lt;. 53 &lt;&lt; endl;
+cout,&lt;&lt; &quot;You can append s t: rïngs.飞n&quot; ;
+...sF -t= 92; . _ _</code></pre>
+<p>、</p>
+<p>. ÇO飞t.. .&lt;&lt;‘:’s1 乒“.s.2yields . sl 雪、飞巳&lt;~.sl &lt;&lt;‘Ie~çn; 产”.、钮，</p>
+<p>‘.92,: ..~...“ .for: 、a'cI_中ay.; ? ”牛飞;牛</p>
+<pre><code class="language-cpp">C坦ut&lt;&lt;&quot; 92 .= \. for a:- day\: ..y~ elds.. .92 = &quot; &lt;.&lt; s2&#x27;主&lt;endl; &#x27;</code></pre>
+<p>;.: ‘</p>
+<p>re t.urn.. O;二千-ζ‘_:. . ... .、. . -、‘7...</p>
+<p>.~--. '-</p>
+<p>转义序歹d\“表示双引号J 而不是字符串结尾.该程婷的输出如下=</p>
+<p>You: C铠1. ass.i gn“one.‘ string。问e.c.ttO. ano;;her: 52.. =’ 81~ι;:-: ，‘ s.l:p四gui口;.S~~、penguin’. ‘:.. .,’ .” ; . _: Y。飞ca.n.:a..f:l!l气9阜a'C -的ylè斗tring 二to钱st飞irig?bjec_t :,-::‘.;’:.‘ : 82 ;’‘’‘...’‘I&gt;uzzard . ..~ . 7... .:’ ‘.; . “’. ‘. ::.”</p>
+<p>‘夏2:“bu茸~a t;:&lt;i.. -”、-二手兰YP1ca寸~~o~c~.t~n.at斗屯:ing豆汽::“;’..毛1，.-钉主ι二‘ι寸手’♂年二:5.3.‘( pèr.9~~iíbuz~ard二;?.;.♂二二，、二’二，气亏:~~~，，-:::: ‘ .’刀;::” &gt;..二‘七飞:…二二三二ιe，::“:，_;.:γ二，二二:也xòu 白宫dpp￥nd~s~rilig~/气62飞?工’r兰、江心俑;.::三二三、-F川、t士‘::’: ”“‘5 1二+e’.82恬yi.e.~d&amp;sl，，;;”岳eng~~nb.iizia t;:d乙哥儿三7、:.“‘-’:~: \”“::‘:::A’ ~...，、二亘古”“~for丁a面豆”忑抬出‘’1‘.S.~. 亏’出z骂声rd:‘föl;“.手da'y二，... ，户主;: .-.’:_叫品</p>
+<p>': _:-: - ... .. .</p>
+<p>‘. 二二二.;:...:;.;:’7γ;λ二二号i:~‘~_.~:==2::~.~’.:~:.户::-.二三</p>
+<p>、</p>
+<p>..~ “::;;‘/、.. 协山习’.t”.‘二:.;:f &lt;.4川人‘以吨’吃三、:工飞与二三{ζ ~“7 ...段.-二二士、二飞~~::;: - .:~”:~~ ..~: ;7 .~-. .~，:-.:.::飞:-~￥d飞‘飞4 注;斗~二芝;λM气t.:汽ε~~~于二?λ; -』T气吧变咛!合:$η?仨-二;二-早s创I口叫巾归dg 辈阳其他事挚:f仨‘ :..;:-.豆.，誓二;二二i主二~;，.::~，.兰二气~: 二二二二e〈-:二-一二--飞二‘二二;ε兀飞二7川、川‘川在丁万ç-j;+~苟雪缩攒-沪引孚tr，i胞类之辛飞吼E盹i[:正赛号!度予员也苛要主成诸妇劳害符z尹f5赋值哥等手工作2- 对对:于予(已风彬字符扇，--7.··二百?程序，负电用C革者库唱的函致来完成这些征务工~ ，?k立件d证ing.ι以前为勺巾的3提供~:t这些函数Y;专云气，..吨Ý.II; .:当民民带函;整:sttcpyQ’!号主哇;雪复~J到更符j辈!!l:帘，哇用「函数‘~yc<del>0)将:</del>~穿昂贵问到~符数. ~){~~.&lt;~:二</p>
+<p>.;</p>
+<p>元1-J气组末尾:: ，: ‘.~~~<em>(:: i:-=:;三亏了了=二土士飞PT，丁.. 时’二三三二，、二三ζ;二=二: 二$三-这二仁了导了去‘二二’子二:二.‘-</em>:;-’</p>
+<p>!,"'-</p>
+<p>.:</p>
+<p>~飞‘... ~‘ <em>...亏、q、~...:;. 、...，代“气笃~‘~’.i)I;o...~，、;”‘:’-.:，.j二吨::.8 t l“Cpy‘( char笠1;i’:.clla:rÏ‘2七二J.了”.&lt;;op:{，.ch司rr2、t’ò、èh再1“”击‘总</em>..，，“工...:，;:. ;..;.’、. 533 l”:‘:二;二: :é...;~’^‘-.“ .f.:::c!r~5~}tf~ ;:~j吧?7号吼叫cön叫t’二ff-EPtrir中:char，习马飞、二三._..币-飞、、二:;:t;-”</p>
+<p>1</p>
+<p>二::.)::;.;.斗二二</p>
+<h3>第 85 页</h3>
+<p>飞-.“:‘<em> ..;;..飞a气J?--1J 一’叫‘:，”.1:“耐…-玉丸仕.，’”~ -“;” 辛~‘C“’ ::毛气认乒J 三~ιr-</em>-<em> 工:-:”...“气飞‘’:‘.-...,... ---卢=气=晶飞..飞:-• ι...:. ... 气二@F 旷?飞之E .’ 飞℃二.~μ ”, ，-;.王ξμ乓」气: :.:.: .î乒苦r二J气、兰王...二.~二曰冉t二J气</em>..‘.γ气乒:’-左二. -二--:::‘υ;芳γ丁二程F凉票清且单棋冯9’:~s创t即卢臼;♂:fc叩PγP:三」心τ二γ」二:予，.二.:.---，“二-飞飞乙~.-.-<em> ::. -: :;=:.:: . -:二主‘:.: :-~.: ”.:“，’二‘二号川~-:’.~久7:‘, </em>，. ~~’. 飞、-._--、. _今J今• 斗二、~飞、工-~写:.:...~...‘.. ”, - ;.. :..::、::，.’‘，:’在王飞飞.、式“‘-1斗Jζ‘=”U::~tr~ypel:ê如--~~ morê:. stri可cY;电55哇哇:at“res ;、:~7::.~~午:.，:.’.::.~气气.，:-:”1:..:ζ/主二三.:~:-一主...;.i..:...;...- -γ. _二?七飞=三“向问:江、豆豆品世王二飞;三-...二、.‘-~~革之三击，:三e~.:’二写卡--::;二;二~，，:”，“‘-之音号与~~~主二王二;二二;:1:二~二”-“.-’-，..:.--:曾inc:_ti.i恒、:&lt;str土呵&gt;飞Cd:二v 、.~-:11: -!Óake、5t;l.ri9，‘cìas<del>，，<em>aÌ1aÞie : </del>-~.:::~牛毛.~~:~’-‘’:‘” .&lt;~~三、二-‘飞，.，</em>.二- r川、俨’:，... .-.~- :...;气?气盯iidùè也.&lt;‘c~Eri司二ζJ_’7“”‘，τ之二11;C.二三》存hi句;’ii.b~ary‘-:号-二?句-可ζ;二号::.~...’::‘-二二-，.二; 二? 二4二二...:吹...int 阳inueL J-R?τ..，亏了三.~~.~.二〈二4玄~: :~::-:.芒_\’~.: 二.“7‘.~尹言. 乙、.飞?二三气z气兰呵叫咛L仨二:二?寸芒?兰-气~恒毛正-丁”“&gt;.:.气-’.二去. :】-”4江ζ~: ..--. 『-‘ 一-二_t~.…γ τ { 、吃三e二._-二ι-…-.二--.“ . ”\、2βsirig’‘na旧a酬:πm肥n陌Y晤肘e臼s邱påcαe'g挝t:d止，-一-，三’二导二是2:.Ø主二; éhâr c:éhar“i:‘l iloL~-:~”:“川t-.-:-::.~=三三τ.~牛二字→芋~:::~~:...平二?二J石再丰我才刀，可斗之二勺ζ</p>
+<p>char . charr2I ZO-}.马州. j aguar “ ;‘.二-云--;.” ,“-’ ~λ.俨-</p>
+<p>以sg挝tr咛}旦电亨trZ三L画:~旦~n主尘且噎萨.r“勺;牛..-</p>
+<p>JI-: assJgnment .for ~tr~ng: (沟jects甜cr: þ]l.a racter:::aU;lYSε-</p>
+<p>str l、宁str2;‘.. II. CbpÇst，á:t()o'str~ 吃户。川</p>
+<p>s t rcpy (charrl, chårr) l ;-..• II .copÿ-èharri .to chartl飞</p>
+<p>!I aPpéiid均fór..s臼占s&gt;bjeèt二哥nd-ddr二c~~r'ariay‘二电</p>
+<p>. st r l . +=. . “ P由国”;飞、二/(ad..?~. þ~.ste \:0- ehd. of‘. sú i:飞、沪.. ..,’:‘“:2”-? . -:-,,: .:.:...:::.<em>. --’ -;“”</em> ..;;<em>ζ</em>.、、ι...-.-二</p>
+<p>strcat (cliarrl_“..:j uice”l“ òf:-cf{äúi.</p>
+<p>.'._ ". .:.</p>
+<p>‘.://飞dd.-juic巳t。由d;~;‘， :-. .’ ::. -与二ι</p>
+<p>s::::::.:::.';.':':' -...:.. '""', . ':"-. ...-_-...… -=,...•=</p>
+<p>-，~ .. :...元主运-沪、--，‘尺-，町:.♂，叫『如’‘:’‘’ø叫一-号，唁...:... .~._~-~白:-:‘.. -坷-王若否__.-“-;. 7’”气-，，，<em>:一←‘;-:，</em>;;，.:~~飞二→.~</p>
+<p>IrH晶ingthe ‘~eñgth-õf ~~ sti:i'ng_ ’ Ob也且斗ñéf:-ëic ~ stylè súfng ., ~工‘，-::’ ‘’‘.’‘“~‘ }’思”-‘: .:...:<em> .:: ’</em> :int le.!ll芒毕口，更ize (,h - ..: : ~ .I 1: .obtain ..tengtli'of‘ s-t.i::J.. :.::号，:’.、二‘:“’::‘:.，~~:-二川、· 宁卢e J4:”int FF?:-m ptrl白(chan;“ l:).i.…IIφt旦n...~=--;Il♀ ;_出, 现年~arJ;l~’;‘，:..、-Jf·』川一-品『一封</p>
+<p>..<em> . </em>"</p>
+<p>:‘-’,.<em> -吃了-写川.:.:，‘-:-:~，-..:</em> . .:.:’t=;:“ 鸟.. 专.-心，___;，:<em>...『龟恼d”“C-.飞、” .</em>、ø ，-“:::，...-一..-”<em>;‘:’:号--‘;-</em>..-“气.!’..一中-&lt;.:-，.也，.咿.--:- ” i‘..-，’:.:‘ _，__:.’ .山...川汗」二了-了..‘: “ ..-;-.噜呵”<em>’ ，cout :二、“ ‘:二’丘:</em>; ，飞string.~:<em>:-:w..” ε &lt;&lt; 伊“‘strl ..”. ... 干.-:::“.-:~.’ ”. </em>.<em> 二--立--‘-’正叫(句:二</em>.‘-</p>
+<p>&lt;.&lt;::‘叮hé&lt;~-11 cO咀täiñs-...~ :: “-<em> -</em>. ’ _.. --.. .~</p>
+<p>“<em> </em>. -、飞;-. ... ‘ .-... _.气也二.-(:--. ” ...-__~: .:&lt;&lt;1号n~:<em>~&lt;. char:ac主ers，. \n~.，二气</em>“= ..:_..:.: :.’ --:-:-一-..:..,. .</p>
+<pre><code class="language-cpp">~
+cout &lt;~T5e.st ring.. &lt;&lt; cnarrl c&lt;这ncontains.&#x27; U _二-
+&#x27; . &lt;&lt;.&lt;Ien2 &lt;~._&quot; .chaiact.~ t&quot;s-. \n&quot; ;.. .\. .. _</code></pre>
+<ul>
+<li>...-. -</li>
+</ul>
+<p>returñ 0 户-</p>
+<p>‘-- -</p>
+<p>--</p>
+<p>-二_</p>
+<p>一-一_ ---一一 _.</p>
+<p>--</p>
+<p>-,. _. -...</p>
+<p>.下00‘.是该程序的输出二--</p>
+<pre><code class="language-cpp">The 5tring_ panther pas t e 、contains13 characters.
+岱le.st rihg主aguar.juicecóhtai.ns &#x27;-l~ cñaracters.</code></pre>
+<p>处理s创rtg 对象的语法通常比1更扉豆安街事函数简单:尤其是执行较为复杂的操作时.‘例如，对王芳豆二三_述操作?</p>
+<p>str3;. .,;: !骂t~l.+ str2; 2</p>
+<p>使用C二风格字符事时‘-. 需要使用的函数如下:</p>
+<pre><code class="language-cpp">. .
+strcpy(cha-ir3ιcharrtJ;</code></pre>
+<p>...:. strcat (charr3 , charr2);</p>
+<p>·另夕jt‘;- 使用字符数组时JV总是存在目标数组过小，.无法存储指定信息的危险，如下面的示例所示:</p>
+<p>char 5it~ (10).: ~ “ h∞se}‘ ;”“”</p>
+<p>strcat ‘(s.ïtè工~ “.”of.. panca:kes 叫- ; ... If memorY; þioblem .工、二、..’-..‘、，、.-</p>
+<p>函数strcatt-)试图将全部12金字符复制主IJ数组site=中，这将覆盖相邻的内存.0法可能导致程序终止，或者程序继续运行，但数据被损坏。如ng 类具有自动调整大小的功能，JJç丽能够避免这种问题发生。~Cjij生=数库晴实提供了与strcat()和strcpy()类似的函数--strnωt(-J征stmcp白，它俗]接受指也目标数组最六六γ许长度的第三个参数，因此更为安全，但使周宫的进一步增加主编写程序的复杂度.</p>
+<p>t.面是随科确定字符声中字待数的方法:</p>
+<h3>第 86 页</h3>
+<pre><code class="language-cpp">int lenl = str1.size(); /1 obtain length of strF
+int 1en2 =.s~rren( charrll; // obtain l ength 0ιcharrl</code></pre>
+<p>函数strlen( )是一个常规函数，它接受一个C-风格字街南作为参数，并返回该字符扇包含的字符数.函数size().的功能基本上与此相li'iF.但句法不同:.str萨不是被用作函数参数，而是位于函数名之前，它们之间用句点连接.与第3 擎介绍的阳再)方法相同r这种句法表明，strl是…个对象.百Õ. sizc现〉是-t类方法:芳法是一个函数，只能通过其所属类阳悔进行调用。在这里，stFl是一个stnn~对象，再虹口。是string 3烂的一个方法γ总之rC 函数使用参数来指出要使用哪个字符净，而C++ 捕归g 类对象使用对象名和句点运算符来指出要使用哪个字符E轧</p>
+<p>4.3.4 string类1/0</p>
+<p>正如您知道的，可以使用cin 和运算符《来将输入存储到s位ing 对象中，使用cout和运算符《来显示string对象，其句法与处理C-风格字符串相同.但每次读取一行而不是一个单词时，使用的句法不同，程序滔且在4.1 0说明了这一点。</p>
+<p>程序清单4.10st同ype4 .cpp</p>
+<pre><code class="language-cpp">/1 strtype4.cpp --1ine i nput
+#inc1ude &lt;iostream&gt;
+#inc1ude &lt;string&gt; // make string c1ass available
+#include &lt;cst ring&gt; 1/ C- sty1e string 1ibrary
+int main()
+using namespace std;
+char charr [20J ;
+string str;
+cout &lt;&lt; &quot;Length of string in charr before input: &quot;
+&lt;&lt; s trlen (charr) &lt;&lt; endl;
+cout &lt;&lt; &quot;Length of string in str before input : &quot;
+&lt;&lt; s tr. size (} &lt;&lt; end1;
+cout &lt;&lt; &quot;Enter a 1ine of text: \ n&quot;;
+cin.getl i ne (charr, 20}; 11 indicate maximum 1ength
+cout &lt;&lt; &quot;You entered: • &lt;&lt; charr &lt;&lt; endl;
+cout &lt;&lt; &quot;Enter another 1ine of text: \ n&quot;;
+getline{cin, str) ; 1/ cin now an argument; no length specifier
+cout &lt;&lt; &quot;You entered: • &lt;&lt; str &lt;&lt; end1;
+cout &lt;&lt;甸Lengt ho f string in charr after input: &quot;
+&lt;&lt; s trlen{charr) &lt;&lt; end1;
+cout &lt;&lt; &quot;Length of stri口9in str after input : &quot;
+&lt;&lt; s t r.size{} &lt;&lt; endl;
+return 0;</code></pre>
+<p>下面是一个运行该程序时的输出示例:</p>
+<pre><code class="language-cpp">Length of s tr1ng 1n charr before input: 27
+Length of string in str before input:。
+Enter a line of text:
+peanut butter
+You entered: peanut butter
+Enter another 1i ne of text:
+blueberry jl皿
+You entered: blueberry j am
+Length of string in charr after input: 13
+Length of string in str after input: 13</code></pre>
+<h3>第 87 页</h3>
+<p>在用户输λ之前，该程序指出教组charr中的字符帘长度为2冗这比该数绩的长度要支.这里要两点让习γ二、ζ.:.:需要说明斗&lt;首先乓为初始化的数组的内容是未定义的ι其次i函数strlcl1(‘))A数组协第...:.个7p索开始计算字.:~;，;.;...斗元。;三士;三两专制j矗搓手拉榕~{9ìí’~*~;苦也-呆居前JL1于1时均战鞠~\~!茹~胁时的数据二号;;之二-芝二、:号::飞...第f注;~字对自由现，pt.jj‘幸自机的豆因此EFj军行贯毒攻歧’二哥Pf怜我赞长厚但可能苟且不用i:2· 二飞;二了?二</p>
+<p>另外，用户输入之际，s缸中的字符串长度为0。这是因为未被初始化的string对象的长度被自动设置为0 。</p>
+<p>下面是将一行输入读取到j数组中的代西z</p>
+<pre><code class="language-cpp">cin.get1 ine (charr, &quot; 20 }真</code></pre>
+<p>这种句点表示法表明，函数getlin~()是is田am类的一个类方法(还记得吗也cm是一个比tream对象〉σ.、主如前面指出的..第一个参数是目标数组:第二个参数数组长度，gt&lt;tlJile()使用它来避免超越数组的边界.，、</p>
+<p>下面是将一行输入读取!lÍs创ng对象中的代码s</p>
+<pre><code class="language-cpp">getlíne (cin...SE.r ) j</code></pre>
+<p>主里没有使角饪母表示法，这表明这个例丽的不是类方法;êi将叩如兔参数;指出‘jJ哪里r去意找;</p>
+<p>...</p>
+<p>• ，俗三输入.另外h 也没有指出字符*长度的参数，因为附ing 对象将根据字符模的长度自动调整自己的大伊扒</p>
+<p>、</p>
+<p>‘.、那么.为何~个getl~e()是is位eam .的类方法，而另一个不是呢?在引λ~tring 类之前很久;C++就有istr凭部1 类。国此’lsù:eam 的设社考虑到丁诸如do'ublc;o和im 每基本;c.忡数据，类型j但波有表想吨in~ 类型，气::)..:..</p>
+<p>·所以istream类中，有处理double、副和其他基本类型的类方法，但没有处理自咕19 对象的类方法二</p>
+<p>由于istream 类中没有处理s创ng 对象的类方法，由此您可能会问，不述伏码为何可行呢?</p>
+<p>cin‘&gt;头str i、//飞reéld乒、~ord.i~to the str str 主ng- object</p>
+<p>像下丽这样的代码使用istream 类的一个成员函数“</p>
+<pre><code class="language-cpp">cin &#x27;.&gt;&gt; .x;&#x27; . 11 ~ead a: value into..a basic. C++ typE鸟、</code></pre>
+<p>但前面处理平咄ig 对象的代码使用.而且g类的一个友元面数。有关友元函数及这种技术为何可疗，将在第11章介绍.另外，您可以将ClIl和COlll屑于你íng 对象，而不用考虑其内部王作原理.:--.‘._, . .~t3.5 其他形式的字符串字E值.面-=.• ..“ ~ 我书前面说过，‘ 除远har 类型外，._C忡还有类型‘y”chàr_ùïl’õ, èH I-F 新增‘1类型chail6:...t和char32-::’t~:可，飞.创建这些类型的数组和这些类型的字符事字面缸，劝于革些类型的字符j辛辛丽值，二。十分~l使用前缀i.<em> ，:ß“‘-’和U表示?下面是一个如何使用这些前级的例子r二、，‘;土... :</em>:.. . ~: ,. ...</p>
+<pre><code class="language-cpp">wchar:_ t.. ti tle. tJ气，.L.. ChiefAstrogat。宫~，II.w_&quot;llar: st.ril1g
+ch~lr16&#x27;:&#x27;t name&#x27;{) -= &#x27;.l ~Felon ia Ripova&quot;; . 11 cha巳16古tr. ing
+ch画r32_tcar[J = U&quot;Humber Super Snipe&quot;; 11 char_32 string</code></pre>
+<p>c女‘:n kE支持Uni∞de 字符编码方案UTF-8..在这种方案中，根据编码的数字值，字符可能存储为1，...，4个八位组.C+:r使用前缀u8来表示这种类型的字符串字筒值.</p>
+<p>C++l_r新增的另...种类型是原始(raw)字符净。在原始字符F郭中手字符表示的就是自己，例如正序列.-飞n不表示换行符γ而表示两个常规字符二斜杠和T. il ，.因此在屏幕止显示时，将显示这两个字符卢另-二个‘ .“-例子是，列在字符串唱使用”，、那无需像程序消单4，.8中那样使用繁琐的飞飞当然，既然可在字符串字丽量~包含“二就不能再使用它来表示字符榕的开头和末尾。因此，原始字符均将”(和)“用作定界符并使用前缀y每三R来标识原始字符串ζ...</p>
+<p>cout .&lt;&lt; R‘‘(Jíin叹ing 吨叭ltt.uses、“\口”如stead. of . endL}“.白’飞n‘.;</p>
+<p>土述代码将显示如下肉容i</p>
+<p>. \n:: i nstead: of --.</p>
+<p>‘Jin飞“在ing~”Tutt白白_7end!_.气-“</p>
+<p>如果使用标准字符串字面筐，工将需编-写如下代码:</p>
+<p>Co.ut . &lt;&lt; “J主m飞~King飞”1‘1.ltt .uses \“ \\n\~‘i: n豆tead。ιendl ..” .&lt;&lt; .~ \n}; .</p>
+<p>在上述代码中，使用了叭来显示飞，因为单个飞表示转义序列的第一个字符j-</p>
+<p>"'_F ., .",.' ...</p>
+<p>F 、、、</p>
+<p>2 、</p>
+<p>、</p>
+<p>.、..., • .. :-;-. 、-、..一·• 一‘、-岳-.ζ一一“，’ ‘-’_、一-ι.. ，</p>
+<p>J .ζ' . . . ~-:， 、</p>
+<h3>第 88 页</h3>
+<p>输入原始字符串时.按回$:键不仅会移到下一行，还将在原始字符E郭中添加回车字符。</p>
+<p>如果要在原始字符串中包含)“ ，该如何办呢?编译器见到第一个)”时，会不会认为字符串到此结束?会的.但原始字符串语法允许您在袭示字符串开头的“和(之间添加其他字符，这意味着表示字符串续尾的”和)之间也必须包含这些字符.因此，使用R“+气标识原始字符净的开头时，必须使用)+.”标识原始字符E祀的结尾.因此，下面的语句:</p>
+<pre><code class="language-cpp">cout &lt;&lt; R&quot;令&#x27;(&#x27;(Whowouldn &#x27; t?) &quot;, she whispered.) +…&lt;&lt; endl;</code></pre>
+<p>将显示如下内容:</p>
+<p>“(Who wouldn ‘ t ?) ”, she whispered.</p>
+<p>总之，这使用“+气和)+*”替代了默认定界符“(和)tt (þ自定义定界符时，在默认定界符之间添加任意数量的基本字符，但空格、左括号、右括号、斜杠和控制字符〈如帘j表符和换行符〉除外.</p>
+<p>可将前缀R与其他字符串前缀结合使用，以标识wchar_t 等类型的原始字符串.可将R 放在前丽，也可将其放在后面，如Ru ，UR等.</p>
+<p>下面介绍另一种复合类型一一结构.</p>
+<h2>4.4 结构简介</h2>
+<p>假设要存储有关篮球运动员的信息，则可能需要存储他(她〉的姓名、工资、身高、体重、平均得分、命中率、助攻次数等.希望有一种数据格式可以将所有这些信息存储在一个单元中。数组不能完成这项任务，因为虽然数组可以存储多个元素，但所有元素的类型必须相同.也就是说，一个数组可以存储20个int，另一个数组可以存储10个float ，但同一个数组不能在一些元素中存储田，在另一些元素中存储float.</p>
+<p>C忡中的结构的可以满足要求(存储篮球运动员的信息).结构是一种比数组更灵活的数据格式，因为同一个结构可以有千诸多种类型的数据，这使得能够将有关篮球运动员的信息放在一个结构中，从而将数据的表示合并到一起。如果要跟踪整个球队，则可以使用结构数组.结构也是C++OOP堡垒(类〉的基石。学习有关结构的知识将使我们离C++的核心OOP更远.</p>
+<p>结构是用户定义的类型，而结构声明定义了这种类型的数据属性。定义了类型后，便可以创建这种类型的变意.因此创建结构包括两步.首先，定义结构描述-一它描述并标记了能够存储在结构中的各种数据类型。然后按描述创建结构变盘〈结构数据对象).</p>
+<p>例如，假设Bloataire公司要创建一种类型来描述其生产线上充气产品的成员。具体地说，这种类型应存储产品名称、容量〈单位为立方英尺)和售价。下面的结构描述能够满足这些要求:</p>
+<pre><code class="language-cpp">struct inflatable // structure declaration
+char name (20) ;
+f10at vOlume;
+double price;</code></pre>
+<p>关键字struct 表明，这些代码定义的是一个结构的布局。标识符inflatable是这种数据格式的名称，因此新类型的名称为inflatable.这样，便可以像创关键字标记成为新建char豆~int 类型的变量那样创建inflatable 类型struct 类型的名称</p>
+<p>r--"'l ,.-^--.</p>
+<p>的变;撞了.接下来的大括号中包含的是结构存储struct inflatable的数据类型的列衰，其中每个列表项都是一条声({</p>
+<p>左大括号和Ichar name(20);明语句.这个例子使用了一个适合用于存储字符右大括号~ 1float tι。二tvO~~i lume;净的char数组、一个float和一个double.列表I aou口leprlce;中的每一项都被称为结构成员，因此infatable结ι构有3个成员(参见图4.6).总之，结构定义指结束结构声明出了新类型〈这里是inflatable)的特征。回4.6综构描述的组成部分</p>
+<h3>第 89 页</h3>
+<p>定义结构后，便可以创建这种类型的变露了:</p>
+<pre><code class="language-cpp">inflatable hat; // hat is a structure variable of type inflatable
+inflatable woop主e_cushion;// type inflatable variable
+inflatable mainframe; // type inflatable variable</code></pre>
+<p>如果您熟悉C语言中的结构，则可能已经注意到了，C++允许在声明结构变量时省略关键字struct:</p>
+<pre><code class="language-cpp">struct inflatable goose; // keyword struct required in C
+inflatable vincent; // keyword struct not reψired in c..</code></pre>
+<p>在C++中，结构标记的用法与基本类型名相同。这种变化强调的是，结构声明定义了一种新类型.在C++中，省略struct不会出错.</p>
+<p>由于hat的类型为inflatable，因此可以使用成员运算符(.)采访问各个成员。例如，hat.volume指的是结构的volume成员，bat.price 指的是price 成员.同样.vincent. price是vincent 变量的pnce成员.总之，通过成员名能够访问结构的成员，就像通过索引能够访问数组的元素一样。由于price 成员被声明为double类型，因此hat.price和vincent.pTice 相当于是double 类型的变震，可以像使用常规double 变盘那样来使用它们.总之，hat是一个结构，而hat.price 是一个double变量.顺便说一旬，访问类成员函数(如cin.getline())的方式是从访问结构成员变量(如vincent.price )的方式衍生而来的。</p>
+<p>4.4.1 在程序中使用结构</p>
+<p>介绍结构的主要特征后，下面在一个使用结构的程序中使用这些概念。程序清单4 .11说明了有关结构的这些问题，还演示了如何初始化结构.</p>
+<p>程序清单4. 11structur.cpp</p>
+<pre><code class="language-cpp">// structur.cpp --a simple structure
+#include &lt;iostream&gt;
+struct inflatable // structure declaration
+char name(20) ;
+float volume;
+double price;
+int main()
+using namespace std;
+inflatable guest =
+{</code></pre>
+<p>咆loriousGloria“ , //旧时value</p>
+<pre><code class="language-cpp">1.88, // volume value
+29.99 // pri ce value
+}; 11 guest is a structure variable of t ype inflatabl e
+// I t&#x27;s initialized to the indicated values
+inflatable pal =
+&#x27; Audac 豆。usArthur &quot; I</code></pre>
+<p>3.12 ,</p>
+<ol>
+<li>99</li>
+</ol>
+<pre><code class="language-cpp">}; /1 pal is a second variabl e of type inflatable
+11 NOTE: some implementations require using
+/1 stati c inflatable guest =
+cout &lt;&lt; oExpand your guest l ist wi th • &lt;&lt; guest.name;</code></pre>
+<h3>第 90 页</h3>
+<pre><code class="language-cpp">cout &lt;&lt; &quot; and &quot; &lt;&lt; pal. name-&lt;&lt;川、n&quot;;=-
+1/ pal.name is the nam~memDer口f&#x27;the pal variabl e:::-
+cout &lt;&lt; &quot;You carr-have both for $&quot;;
+cout &lt;&lt; gueatτprice + pal. price &lt;&lt; &quot;!&#x27;&#x27;ïn帆，
+return 0;</code></pre>
+<p>下面是该程序的输出:</p>
+<pre><code class="language-cpp">Expand your guest liat with Glorious Gloria and Audacious Arthur !
+You can have both for $62.98!</code></pre>
+<p>程序说明</p>
+<p>结构声明的位置很重要.对于struc阳叩p 而言，有两种选择.可以将声明放在main()函数中，紧跟在开始括号的后面.另一种选择是将声明放到main( )的前面，这里采用的便是这种方式，位于函数外面的声明被称为外部声明.对于这个程序来说，两种选择之间没有实际区别。但是对于那些包含两个或更多函数的程序来说，差别很大。外部声明可以被其后面的任何函数使用，而内部声明只能被该声明所阔的函数使用.通常应使用外部声明，这样所有函数都可以使用这种类型的结构〈参见图4.7).</p>
+<p>‘inclucHI’ &lt;ioltre.a&gt;</p>
+<p>外面‘声明一可以用在us1吨睛“SPlCtstd;</p>
+<p>文件的所有耐中一一--struct parts</p>
+<p>unlÏgned 10吨间内_nuo削川</p>
+<pre><code class="language-cpp">float阳叫_coat;
+};
+vOid副il();
+int lI8in()</code></pre>
+<p>局部庐明一只能{</p>
+<p>‘‘{ ruct p.l'I&lt;.</p>
+<p>用在这个函数中</p>
+<pre><code class="language-cpp">int k.y_rtUIIb.I&quot;;
+chl俨elr(121;
+);</code></pre>
+<p>“时，类型的变囊阳叫schickltn;</p>
+<p>“口，类型的变量阳rk..,. _bl咽，</p>
+<p>VOl翩翩il()</p>
+<p>pe.rt .. 突型的变量问叫sstudeblktr;</p>
+<p>不能在此声明perts</p>
+<p>集型的变量}</p>
+<p>阁4 .7局部结构声明和外郁结构声明</p>
+<p>变量也可以在函数内部和外部定义，外部变量由所有的函数共享〈这将在第9:!在做更详细的介绍).C++不提倡使用外部变盏，但提倡使用外部结构声明.另外，在外部声明符号常量通常更合理.</p>
+<p>接下来，请注意初始化方式z</p>
+<pre><code class="language-cpp">inf latable guest ;
+&quot;Glorious Gloria&quot; , // name value
+1.88, // volume value
+29.99 // price value</code></pre>
+<p>和数组一样，使用自逗号分隔值列表，并将这些值用花括号括起.在该程序中，每个值占一行，但也</p>
+<h3>第 91 页</h3>
+<p>可以将它们全部放在同-伍中.只是应用逗号将它们分开:</p>
+<pre><code class="language-cpp">inflatable duck = ，咱aphne&quot; , 0.12, 9.9~f;</code></pre>
+<p>可以将结构的每个成员都初始化为适当类型的数据.例如，name成员是一个字符数组，因此可以将其初始化为一个字符$.</p>
+<p>可将每个结构成员看作是相应类型的变量.因此.paJ.2_rice是一个doub1e 变量，而pa1 .name是一个cbar数组.当程序使用∞ut 显示pa1.name畔，将把该成员显示为字符宿。另外，附于pa1 .name是一个字符数组，_.. E号?也.%lJ. ffl飞杨飞来tñ问其?些争l‘字符·例如二?生lame{.9!茬字符A.不洼pal[O]没奄巷J义，.. )因为pal是一马-</p>
+<p>T</p>
+<p>气:芝:“”“:‘”“ <em>二~</em>.: ::’;:4.&lt;t:? ::-.-C+叫飞结构初始~~了ι.;<em>:---士:-J二一气.:.</em>-:. =.~.~. 叮兰‘’;‘_’:;.，7-‘.. -.ζ.飞士=7~ ’~飞、-二.-.-<em>一二王与数组f二楼.-.()忡I下毡支持‘将列表初始化用于结构，且等号(:~)、是可i窑的:</em> -inflatable-’duck L.Daphne. ~ ‘ (1: 12’ ,-!L 98 }‘; / / can- om.it. the. = in Cul1-二-其乱’如架大据i~丙未包合桂甸东西，各二t成员都将被设置L为零』例如，下面的声明导致ma元白。￡me--__:-:- . :-::.. 和maYOf.price 被设置为零，且mayor.n呗正的每个字芦都被设置为零七-四-</p>
+<p>_ inp延ab岳阳Y。毛门，-r ?~ 一-</p>
+<p>e最后，不允许缩窄转换.,</p>
+<p>4.4.3 结构可以将~$tri咱类作为成员盹-.吁以将成员飞机豆前为s币tg 放市不盖字待我组局面融融市这样副主吉树吗?</p>
+<p>-晶</p>
+<p><em> llinc;l ude &lt;string‘, • </em> • .’.~<em> </em>._</p>
+<pre><code class="language-cpp">st玄uct . iriflatabl&#x27;e&#x27; 1/ stru.cture&#x27; def i卧i tion
+&#x27;. . sttt: .=s tr 1:ng name;.、
+float ,vOlume;. 、、、
+(ÌQ1Jbre气pdce.;</code></pre>
+<p>‘.’;‘.~..答案是肯定的，只要您使用的编译器荠进刻以s创ng_对象作为成员的生在构进rr.初始化.二.~;~..~: .:_. ’. :-: ...丁士、</p>
+<p>-</p>
+<p>.. .---.-_-:仨-...<em>王定要让男饲定义能带芽问名称空间叫。-为此戈古以将编译指乡?旦中14 主要j事I纺构定义之前二祖N~像飞向. -.二、前面那群.-将石油血的类型声明为叫::s由ι.-..主--</em> 气.，.;~.. -<em> </em>. --.:-~二ι‘.~ . ~ 飞rι甲乙二--三.丁乡.4.4 二某他结扫甲佐J二r丁-二-二二二-町…，川掬旦C干计「使用户定义的类主型2占与否内置类型尽可能相似L例虫如贝;~.芹弯7iE以f将续构佳佳J坷坷参3数段传递结函数.性也玉百巧E以让函.- ef:;-数返回二个结ft.J。另外，还可以使用赋值运算符(与将结构赋飞咎另王云兮吨类型的结构，这样结构中-每舍、二二-斗= -成品都将被卷在贯支另~.1巨结构电饲应战页的筐;即使成员是数组矿、二哥种~{i战称&gt;JJ成真赋值.、ë m_eÎri陪同i:筑、三1 、土?--L am阴雨Ìlù，:将在第7-1雪地吃堕数时再介绍如何传递利返回结构..-=f面由翼地介绍-二-下结算!赋佳c三程序消~二二:.::.. .;主导23Zj草与合羔桦的示胁，二气.;，.-.二、三飞飞:干了二c二三工二二二’二二三二三三飞二?丁-.二二:可.=.: ‘::---.’ -:-:-乒由清单~:1? “:~:;~吼_$卢Ep.-\;二二，;-11;泣.”“‘:, ..~二凡干叫哇哇吃;￡PP 川a玛引in，雪.~;;;-~<em>;山正~ :’..&gt;飞:t-牛、可ζ二之二伫了二--二二〉ff二气ι-::.-~:::. :-胃i'nclude.唁ios tre a，m;...</em>(4‘-十川’.，.川钝d马均与h注且兰旦主坠二ι主码二L:;二二主户ff全~.-:-:二二二二二二:兰-二二专二乓号.-. -. ..-_芒?号二</p>
+<p>-</p>
+<p>:?-:‘“丁~艺-ι. ...，-_. -.. :...;<em>气丁.chai归m阳ef由药1;-</em>. ~’---、FJ斗二--LE4 . -三=.<em>‘.</em> float. volum~;.~ __一一~二.. <em>二￥立:.:...-严-，.-出些l旦ptice;</em>-::~士4二一干’”“”7‘...:.:..二--::..-~:-:;二-dJf-Jr? -L-J -7.二二二---7一</p>
+<p>-.--:-</p>
+<p>、i nt‘.mainO’,.</p>
+<hr>
+<p>---•• -,<em>,</em></p>
+<p>=.-----</p>
+<p>•.<em> </em>“ _. ，...，..<em>一--”-‘-.-----</em>..一二~--<em>..</em>~ . ’、-<em>..-.~一. </em>;._-一二--.“一--也‘.,-</p>
+<p>一干一…</p>
+<p>--.--</p>
+<p>…- -<em>.一.</em>-一二~.‘.，--’ 飞一一;..;;. <em> -一-</em>..::1“‘”一-._=一</p>
+<p>y_‘ -一.一--“ <em> .---唰</em>..，<em>.-</em> 一’,-,” ---一一一…一.:... -~ -、<em>.‘~.’-- ..-一-一.一一.-</em> ‘--’-.<em> ... </em>-ι一一-一-<em>-..:..:一、-.-一-</em>.一-</p>
+<p>--、.-</p>
+<p>二-一、... _. . -</p>
+<p>---、牛</p>
+<h3>第 92 页</h3>
+<pre><code class="language-cpp">using namespace std;
+infl atable bouquet =
+&quot;sunflowers&quot; ,</code></pre>
+<p>0.20 ,</p>
+<p>12.49</p>
+<pre><code class="language-cpp">inflatable choice;
+cout &lt;&lt; &quot;bouquet: • &lt;&lt; bouquet . name &lt;&lt; &quot; for $&quot;;
+cout &lt;&lt; bouquet .price &lt;&lt; endl;
+choice = bouquet; // assign one structure to another
+cout &lt;&lt; &quot;choice: It &lt;&lt; choice.name &lt;&lt; &quot; for $&quot;;
+cout &lt;&lt; choice.price &lt;&lt; endl;
+return 0;</code></pre>
+<p>下面是该程序的输出:</p>
+<pre><code class="language-cpp">bouquet : sunflowers for $12.49
+choice: sunflowers for $12.49</code></pre>
+<p>从中可以看出，成员赋值是有效的，因为choice纺构的成员值与bouquet纺构中存储的值相同.</p>
+<p>可以同时完成定义结构和创建结构变蠢的工作。为此，只需将变量名放在结束括号的后面即可:</p>
+<pre><code class="language-cpp">struct perks
+{
+int key_number;
+char car [12J ;
+) mr_smith, ms_ jones; // two perks variables</code></pre>
+<p>甚至可以初始化以这种方式创建的变最:</p>
+<pre><code class="language-cpp">struct perks
+{
+oLC-kt ecz ya nul E</code></pre>
+<p>-r=</p>
+<p>口争·I ρ</p>
+<p>·仙v</p>
+<p>}{ m r hgZM-v川·‘</p>
+<p>咱-a</p>
+<p>EA、在</p>
+<pre><code class="language-cpp">7 , // value for mr_gl itz.key_number member
+&quot;Packard. // value for mr_gl itz.car member</code></pre>
+<p>然而，将结构定义和交最声明分开，可以使程序更易于阅读和理解.</p>
+<p>还可以声明没有名称的结构类型，方法是省略名称，同时定义一种结构类型和一个这种类型的变量:</p>
+<pre><code class="language-cpp">struct // no tag
+int X; // 2 members
+1nt y;
+} position; // a structure variable</code></pre>
+<p>这样将创建一个名为position的结构变量。可以使用成员运算符采访问它的成员(如position.x)，但这种类型没有名称，因此以后无法创建这种类型的变窒.本书将不使用这种形式的结构.</p>
+<p>除了C++程序可以使用结构标记作为类型名称外.C结构具有到目前为止讨论的C++结构的所有特性(C++ll特性除外).但C忡结构的特性更多.例如，与C结构不同.C++结构除了成员变量之外，还可以有成员函数。但这些高级特性通常被用于突中，而不是结构中，因此将在讨论类的时候(从第10 章开始〉</p>
+<h3>第 93 页</h3>
+<p>介绍它们。</p>
+<p>4.4.5 结构数组</p>
+<p>int1atable结构包含一个激组(namc)。也可以创建元素为结构的数组，方法和创建基本类型数级完全相同.例如，要创建一个包含100个inflatable结构的数组，可以这样做2</p>
+<pre><code class="language-cpp">inflatable gifts[ l OOl; // array of 100 inflatable structures</code></pre>
+<p>这样.gifts将是一个inflatable数组，其中的每个元素〈如gifts[O]或gi缸[99]&gt;都是inflatable对象，可以与成员运算符一起使用:</p>
+<pre><code class="language-cpp">cin &gt;&gt; gifts[O] .volume; // use volume member of first struct
+cout &lt;&lt; gifts[99) .price &lt;&lt; endl; // display p玄icemember of last struct</code></pre>
+<p>记住.gifts本身是一个数组，而不是结构，因此像gifts.price这样的表述是无效的.</p>
+<p>要初始化结构数组，可以结合使用初始化数组的规则〈用逗号分隔每个元素的值，并将这些值用花括号括起〉和初始化结构的规则〈用逗号分隔每个成员的值，并将这些值用花括号括起〉。由于数组中的每个元素都是结构，因此可以使用结构初始化的方式来提供它的值.因此.:IIi终结果为一个被括在花括号中、周逗号分踊的值列衰，其中每个值本身又是一个被括在花括号中、用逗号分踊的值列表:</p>
+<pre><code class="language-cpp">inflatable guests[2] • // initializing an array of structs
+{&#x27; Bambi&quot; , 0 .5, 21. 99 }, // first structure in array
+{帽臼dzilla&quot;，2000 , S6S.99} // next structure in array</code></pre>
+<p>可以按自己喜欢的方式来格式化它们.例如，两个初始化位于同一行，而每个结构成员的初始化各占一行。</p>
+<p>程序，消单4.13是一个使用结构数组的简短示例.由于guests是一个infJatab]e 数缀，因此guesω[0]的类型为infJatab le.可以使用它和句点运算符采访问相应infJatable结构的成员.</p>
+<p>程序清单4.13arrstruc.cpp</p>
+<pre><code class="language-cpp">// arrstruc.cPP - -an array of structures
+#include &lt;iostream&gt;
+struct inflatable
+char name[20];
+f10at volume;
+double price;
+int main{)
+using namespace std;
+inflatable guests[2] = // initializing an array of structs
+{&#x27;Bambi &#x27;, 0.5, 21.99} , // first structure in array
+{&quot;Godzilla&quot; , 2000 , 565.99} // next structure in array
+cout &lt;&lt;叮heguests &quot; &lt;&lt; guests [O] .name &lt;&lt; &quot; and &quot; &lt;&lt; guests[l] .name
+&lt;&lt; 11\时laVea combined volume of &quot;
+&lt;&lt; guests[O) .volume + guests[l] .volume &lt;&lt; • cubic feet.\n&quot;;
+return 0;</code></pre>
+<h3>第 94 页</h3>
+<p>，下丽是该程序的输出?</p>
+<p>‘子主~二三毛二二、’.~吹乞-、、，且「、... .-占甲:γ、-:- :“_.-..，气雯”‘-’__“ζ二主·‘ ”工.二咀:毛主~’t~，gu昼ts-剖而~<em>äii过G。但1号la,‘ , “:’ ‘:” , &lt;’ “”“T~~‘言;.，;:-. -•. : -: .-:</em>. ”:‘. ’ -!.::二~，号. .，.，“</p>
+<p>:--7“..斗， ..J 二言~，.:;:;::<em>:</em>:.;‘;bave a'cori1bi民旦yqEUF正;9f:20~O ,,5 ~cubi~-!品’，et;-.之二-，二...‘ :;--;-兰ζ、.卢，-二兰凹’也:-:..---;-:<em>，</em>‘<em>.~.-.</em>;-;..-二二. ~二”，二，-4.4:6结构中的位字段『</p>
+<p>与C 语言一样，C-A-也允许指定在用特定位数的综构成员，这使得创建与某个硬件设备上的窃存器对中应的数据结构非常方便二字段的类型应为整型或枚举(稍后将介绍).接下来是自号，冒雪后面是一个数字，一-τ宫指定于使用的位数.可以使周没有名称的字段来提供间姐w弩个成员都被称为位字段( bit :field 儿‘下面是一个例子:、_..一二struct, tCll'gle，“r~gister ...:.=一ι万二--…一-.--，__:t一，’_一二.</p>
+<p>unsigned í nt:.‘ SN’ , ; 4;.. r I 4‘ li’íts ‘föi:: s if vå-l.\ie~;子、-γ二‘“.. uris-igned .i rit’ ，”，法;注飞-fi4 lii i:<em>ii~ üinised --: 二吨二-二三. ...;:,...::,‘ .:,...:. ::. -..~ ...,. .~ ;~.::. </em>::句，<em>:.’~“=~-.咱，斗。二”b901 ~g∞dlït ‘ : 1 ,,</em> ’. <em> : fi v.alìd ，土nput-tl o.i tl飞~-</em>:.. ~‘:.’ ‘,: <em>..: ... -... ,:.. ~.:::ζ.:.i.，:.-:~’止~.-“‘,-.: ~ </em>:--、-，bo.o1，goopT。咱’，lè.L };..J耳阜uçcessfu1_:<em>to</em>;-91 ing二三之z 可以穰通古那点好结缸这些字亩，ι可以使用在准的结再装示法采访问-&amp;字民:-:7 .:;-~:t:~:~. ，‘.:~.-: :</p>
+<p>tOFg+<em>e,</em>:;r e.giste,r ::,tr:. :“. \ 14‘, _tr吧岳，,false:j ; ’~ .:;‘， ,’, ~.:<em>辛俨叫.二d 严- : .，...二土-骂:.位字段理常用在剧{低配彗编程~.二一般来说j可以使用擎型和阿附t录E 介绍的按位运s算草-符来可惊苦替这种方式二</em>‘’‘:.乓二产;二-与5’.\( 共;用悔‘.:，.，二、飞二二·二二-’”.ι亏汗‘:，.-F</p>
+<p>· 央周体_~~on)‘是?再数据格式，毛能够主f~看不同的数据类型，但只能回时存储某中的一种类型·施--</p>
+<p>就是说.费掉可以同lIt存储ínt，-::Iong 和double，共用体只能存储i瓜10吨或double .、-共用你的句法占3结.,<em> .-.,-: ... , 构J相似.j日含义不同.例如L请看下丽的声明:‘. -. b气。-,’.:‘ ，0--&gt;气...’ -飞-，、uni。旺。n叩a1Ì</em>:‘ - --’“ <em> , </em> <em> . </em> ~二·气</p>
+<p>，、『-</p>
+<p>int int va1; <em>.. </em> ,</p>
+<p>"': -!_òiíg ，、--</p>
+<p>。?二‘-~ ’~，: ~ l:.ong-<em>:va.1i、;...;，‘气.</em>、L，怡、“，咱-专雪啕‘.-. 、_-,’ 、</p>
+<p>…<em>9oub};e d。晚注-飞~.l;四平</em>-_</p>
+<p>z、-<em>.</em>.</p>
+<p>:-:7二矶以1吏用onC'i创l 变量J挥手1-j诸~t ~lopg~或doublé:;..条件是茸不同问时间进行z二::-，..~ .‘苦6_ “<em> --:’ </em> ~ oh.ë4~i1 pa'ii; -、”~‘“~~ ’: . ..;... . . ~._. ..::.~:”~.. ::. -</p>
+<p>P气抖_i n二_:.:va!;=‘1:5; • . ,/ ~-st&lt;::四通气ibt_二二三、:一J、.;.’ - ,-川、二=二二“”. c i:&gt;ut、气‘.pairLint ’::‘var;~;_-:. . ... &gt;_气.:“”“C,,-,: 二..三气_气二’7..:. :”，.: ，.飞--J--; 气~ paiLd“u~le~:vaL=l”;&gt;8;: -~ ./ / st~;~ a司。i.tbl:.e. .ìnt va ru.~::ig，: 10s巳二工-，‘:_’. :=，.:-.二二.-<em>气~.二~:‘cout,’&lt;&lt; ‘.p!i LdOU吗?JVal L- 二’. ~;: . ... :-/.7‘:-.;. .</em>.-_.-二::..:.:...:7:<em>气“.-二=t.~、.?ιι因此’-pmT 有盹可以革凶悍』而有时又可-以是</em> dou~~e变旱‘成员有称标识了腥的容量。且协主王-.. _ ’ ...::.:.用你每次;其能在简气个值，- 因此它必须有足够的尹用来存储最美的成员;阮以，共型，俗附眨度为其主吉夫成-丁二·乙23 的长度Z;气. ..E二ζ- pf rJ:占</p>
+<p>共且体盹用途之→是. .飞当数据项使用两种~更多称格式(但不会同时便胖〉肘，坷节省空间.牛-例如，..飞了-:碍，在管Ei二、个斗飞黄品目录了其也有主些商品1鼠ÍD 事鹦数~~:~.:远县一生量的q句子符鼠主运种情面下，.:-苟以±二tJ\-这样做:二~...z.:~ <em>-二</em>...;.<em>‘“...</em>…-飞一一’- <em>. -‘:”.:</em>:’-:‘士二.“. .-</p>
+<h3>第 95 页</h3>
+<blockquote><p>［本页文本层 OCR 严重损坏（该页扫描阴影/插图区产生了大量乱码字符），以下为原始抽取结果（未删改），内容以 PDF 第 113 页图像为准］</p></blockquote>
+<p>-:.‘3-;-’，々2、丐，:，二_-:l.~， :; <em>霄.:-亏-.:...~.‘.，-~;... - ~.: .. : ’ -::.:,,“ . .,;:-</em>;<em>~;: • : ‘-=:-:”: .~’ ... :.-，，:;..毛‘“，飞斗吨，，-.，τ，. :</em> 户、,--.二,-= - <em> ...”币;川‘二~二二r写些tkp夺t.，wi'dget; -:-’~7:::泸二:二，-二J 注=亡-二γ‘.<del>干二三·三=二’三、三、二二…、:三;.，-3二二叶飞二二二“</em>‘、之二”二=::</del>~.币、产:’I::‘f’ 叫:斗，、.:...喻。:~.:...~~元; 二气-- 二二t飞午‘“~ -:.-’三。-飞严丁-‘，.~=-:专气行-S’:.. ~.~~二三、J二_‘，，，-:，，:了、羔八</p>
+<pre><code class="language-cpp">char_ brand(20) ;
+int- typei-
+union i cL fI format depends on widget type</code></pre>
+<p>.-二:;- ~斗三-+“z、，.，，，.二二.二?古:_.-::. -:: .:..:~ . :::.~工.‘~ .、: . ~. . ’,--.”:‘ --~ “.;-’.o . ‘<em>飞干”二</em>::’-:::7-‘、、-,., 白’与</p>
+<p>Ìong id_nu由;~ ‘/ /町!pé.f I\&gt;idgets-~’ ‘ , ~毛.、-.:...伞’.:...:: .</p>
+<p>~J:la.r ~d~ch&lt;l r，[20l‘;以prher，wi句叫g ’，‘“:;飞... 二二、营、，.γ’.”</p>
+<p>}id-yakJ正‘“，~，’， , Jγ; 工~?芒二;、-二r甸h飞二二_, 气〉二.气二二;二-土芒、..‘:注主J--~d \二J兰工二-’凡三、ι~二汗甲idg侨etí?庐r i均.z eιν川J飞二毛飞-￥、二了_，、」二『二尹γ-俨，℃@-rλ飞?引、-二j--:ι47ej-丁二主，<em>飞ιζ二卒~二二.</em>‘;’气- = ”7注:叫:_-.::-: Jf‘:~ . ,__... .;. _-τ. :::,..:. ..~~...飞、’，~.‘-’,:..: -‘!__.，_亏_泣_.-. ’<em> </em>. ‘“-...-代::=:’ -.,:<em> ~--主，‘ ，-认</em>’-:.:;:‘. ;-:’‘<em>’:”, “ -..</em>~ :;...-:::--:-...,.:<em>-令‘于</em>:-<em>. -”“</em>-~二__-吨λ 士’-~~ -田‘一, 气. <em>勺”•‘ 叫-气气’ ‘’</em>、~:..:. . .<em> ~~二，、?士二吃寸士7卢士士-</em>...古-~共气斗-.‘-.、_’“…d叫←和户龟唁二斗φ二-干二二ι一之ζL二三三二ι-主丛丰泣主立ζ-二.:...:.-.:，.斗L卢乞ι二马于-二_二,if ，~晤pr川主iz号:e. ￥凹yp归e=气L且~.了.二• ‘,:” ; ._:</p>
+<p>• …‘ cin ，;;，_p严riz臼e，idιv咀a l“_id_num凹m~t l us必‘-ee画怆embe￥ nàme to indi cat'e mode 丘, _</p>
+<p>J品也‘<em>;.，7’，.. ~: ，..; e~马... ...:</em>:-.ψ气二二，..芒;.;::- __ ;:. .~ . ~~~.:二ø ... .<em>...二，、‘</em>-’ ...二飞乞_.，~‘-…~，_~.，. .~- :-…ρ二::.’ :=7‘气’ “气</p>
+<p>.. '.:-. ._'</p>
+<p>-<em> 气...刊气:;.专:--:: ‘ëin .-正&gt;丁’;::‘、þfi电 z-.e. -</em>. id_ 勺Và片三 :r.’lc(:êliàJ问_，.，..i:}~ 气二气平:... 气. -:. .;;...f.“‘..~.~… • -,. :<em>:,</em> τ.-一.--<em>.，:</em>.<em>.~品~ ，气-’:‘;</em>-’...寻_、?于‘-叽斗τ--只飞::__，-:::-‘二二c.:~一、唱’‘;’:.”. ;r-‘.-.:-:-:~:二二~:;:吨.._:.~如，，-电飞.，</p>
+<p>:匿名共用体(anonymousun阳吟波有名称，卖成员将成为位于相同地征处的变蠢ι显然，每次只在一个成员是当前的成员:</p>
+<pre><code class="language-cpp">struct widget
+char brand(20) r-
+int type;
+un10n /厂ano叩nousunion
+long id__num; / / type 1旧dgets-
+char- id_char (20); / / other widgets</code></pre>
+<p>~ <em> ,--, .widget, prizeJ气- </em>.;-:. -. -.:.~.::: .， .. ., -=-</p>
+<p><em> if [pf.~茸e;type‘:，，，~1)、二，&lt;0 品. ~:.</em>.:__ .<em>! ::. ...: -’. .::.~气，‘ , .., ’cin &gt;&gt;‘ PEiie . td:二ñum’;，二、~-二-;..:: ... ‘-二，</em>, ‘-，else吨_-.-士;二二之L一.岳飞_- <em> :.“</em>-” ’.::=二_~.;‘;--’ ，ëi吨&gt;&gt;可“!je~ id_.char{<em> ~~-:‘~二:..气二，-飞二’-二二</em>‘_工-工豆_三之;二’‘’<em>:‘’‘;’~二d白布鹏是匿名脱\因此吼叫;开i~E~岳r 疆视为‘.. P.Q昼的前忧民主fÌJì叫叫同1与~~~:~&gt; ~二、-</em>’二二要中间标?、符id.:.vIÌl-<del>，程序鳝负责确定当前哪个成1吉克活动的二::‘&lt;</del>，~~’::.~‘. _;:，，::’”- .‘.. 共用体常用_Tç但英非只能用手了节省丙存J当前;’‘’;事统面问存委主主数:q~ 甚至费埠，费像没有必要三-弓芝丁枫二.巳?3问.pj拇英器写在火具浸放王军的结遗牛对这些应月u蜜路到言说，阜辛辛~~~~第宝贵;另，外，讲用性常用圭操作飞，二二二‘:之互尊l~据结妇[?JG困货题提结彭‘...-’，..二‘ 二·七二天;二ι-’i.‘-:’-‘~:~.，丘之三飞λ三已于三:毛主4…_’也士、ι6-枚举ι-川「二二尘-二工‘-二号: 主工en;-;~~~~e二â~;;;-，: Frëd~王二二ng芒，γ~1 i~ii’;‘~ ’1位主n J乌iu~“‘t二i马let.i~dig'B ;’<del>lt豆</del>i~;i)‘;::</p>
+<p>这条诺句完成雨峡工作::</p>
+<h3>第 96 页</h3>
+<p>• 让平ectrum 成为新类型的名称;spectrum被称为枚学(enumeration) .就像struct 变量被称为结构</p>
+<p>一样.</p>
+<p>• 将red、orange 、yellow等作为符号常蠢，它们对应‘应数值。-7. 这些常窒叫作枚举盘( enumerator) 。</p>
+<p>在默认情况下，将‘些数值赋给枚举蠢，第一个枚举蠢的值为o.第二个枚举莹的值为1，依次类推。可以通过显式地指定’些数值来覆盖默认值，本主在后面将介绍如何做.</p>
+<p>可以用枚举名来声明这种类型的变ii!::</p>
+<p>spectrum band; // band a variable of type spectrum</p>
+<p>枚学变量具有一些特殊的属性，下面来看一看。</p>
+<p>在不进行强制类型转换的情况下，只能将定义枚举时使用的枚举蠢赋给这种枚举的变嚣，如下所示:</p>
+<pre><code class="language-cpp">band : blue; // valid, blue is an enumerator
+band = 2000; // invalid, 2000 not an enumerator</code></pre>
+<p>因此，s伊ctrurn变量受到J限制，只有8个可能的值.如果试图将一个非法值赋给它，则有些编译器将出现编译器错误，而另一些则发出警告.为获得最大限度的可移植性，应将把非enum 值赋绘enurn 变量视为错误.</p>
+<p>对于枚举，只定义了赋值运算符.具体地说，没有为枚必定义算术运算:</p>
+<pre><code class="language-cpp">band : orange; / / valid
+++band; // not valid, ++ discussed in Chapter 5
+band = orange + red; // not valid, but a little tricky</code></pre>
+<p>然而，有些实现并没有这种限制，这有可能导致违反类型限制.例如，如果band的值为ultraviolet (7),则忡band(如果有效的话〉将把band 增加到8，而对于S阳trum类型来说，8是无效的.另外，为获得最大限度的可移植性，应采纳较严格的限制.</p>
+<p>枚举量是‘些型，可被提升为int 类型，但int 类型不能自动转换为枚教类型:</p>
+<pre><code class="language-cpp">int color : blue; // valid, spectrum type promoted to int
+band : 3; // invalid, int not converted to spectrum
+color : 3 + red; // valid, red converted to int</code></pre>
+<p>虽然在这个例子中.3对应的枚举量是green，但将3赋给band将导致类型错误.不过将green赋给band是可以的，因为它们都是spectrum类型.同样，有些实现方法没有这种限制.表达式3+ red中的加法并非为枚举量定义，但red被转换为int类型，因此结果的类型也是int.由于在这种情况下，枚举将被转换为int，因此可以在算术表达式中同时使用枚举和常规整数，尽管并没有为枚举本身定义算术运算.</p>
+<p>前面示例:</p>
+<p>band : orange + red; // not valid, but a little tricky</p>
+<p>非法的原因有些复杂.确实没有为枚举定义运算符+，但用于算术表达式中时，枚举将被转换为整数，因此表达式orange+red 将被转换为1+0.这是一个合法的表达式，但其类型为int，不能将英赋给类型为S阱咄咄n的变量band.</p>
+<p>如果int 值是有效的，则可以通过强制类型转换，将它赋给枚举变量:</p>
+<p>band : spectrum(3); // typecast 3 to type spectrum</p>
+<p>如果试图对一个不适当的值进行强制类型转换，将出现什么情况呢?结果是不确定的，这意味着这样做不会出错，但不能依赖得到的结果:</p>
+<p>band = spectrum(40003) ; // undefined</p>
+<p>请参阅本章后面的“枚举的取值范围”一节，以了解一下哪些值合适，哪些值不合适-</p>
+<p>E如您看到的那样，枚举的规则相当严格.实际上，枚举更常被用来定义相关的符号常麓，而不是新类型.例如，可以用枚楼来定义switch语句中使用的符号常量(有关示例见第6章).如果打算只使用常量，而不创建枚举类型的变量，则可以省略枚举类型的名称，如下丽的例子所示:</p>
+<pre><code class="language-cpp">enum {red, orange, yel1ow, green, blue, violet , indigo, ultraviolet};</code></pre>
+<h3>第 97 页</h3>
+<p>4.6.1 设置枚举量的值</p>
+<p>可以使用赋值运算符来显式地设置枚学莹的值:</p>
+<pre><code class="language-cpp">enum bits{one = 1, t wo = 2, four = 4, eight = B};</code></pre>
+<p>指定的值必须是整数.也可以只显式地定义其中一些枚举量的值z</p>
+<pre><code class="language-cpp">enum bigstep{first , second = 100, third};</code></pre>
+<p>这里，first 在默认情况下为0。后面没有被初始化的枚举髦的值将比其前面的枚举兹大l。因此，third的值为101.</p>
+<p>最后，可以创建多个值相同的枚举楚:</p>
+<pre><code class="language-cpp">enum {zero, null = 0, one , numero_uno = l} ;</code></pre>
+<p>其中，zero和null都为0，one和urnero_uno都为l 。在C忡导期的版本中，Jrt能将int 值〈成徒刑为int的值〉赋给枚举囊，但这种限制取消了，因此可以使用long 甚至10nglong类型的值。</p>
+<p>4.6.2 枚举的取值范围</p>
+<p>主主初，对于枚举来说，只有声明中指出的那些值是有效的。然而，C++现在通过强制l类型转换，增加了可赋给枚举变量的合法值。每个枚举都有取值范围(rωge) ，通过强制类型转换，可以将取值范闺中的任何整数值赋给枚举变章，即使这个值不是枚举值.例如，假设bits和myflag的定义如下:</p>
+<pre><code class="language-cpp">enum bits{one = 1, two = 2, four = 4 , eight = B};
+bita myflag;</code></pre>
+<p>则下面的代码将是合法的:</p>
+<p>myflag = bitS(6); // valid, because 6 i s in bits range</p>
+<p>其中6不是枚举值，但它位于枚举定义的取值范围内.</p>
+<p>取值范固的定义如下。首先，要找出上限，需要知道枚举髦的最大值。找到大于这个最大值的、最小的2的军事，将它减去1，得到的便是取值范围的上限.例如，前面定义的bigstep的最大值枚举值是101.在2的幕中，比这个数大的最小值为128，因此取值范围的上限为127。要计算下限，Tliì要知道枚举蠢的最小值。如果宫不小子0，则取值范围的下限为0:否则，采用与寻找上限方式相同的方式，但加上负号.例如，如果最小的枚举量为-6 ，而比它小的、最大的2的事是-8(加上负号)，因此下限为习。</p>
+<p>选择用多少空间来存储枚举由编译者量决定.对于取值范围较小的枚举，使用一个字节或更少的空间;而对于包含long 类型值的枚举，则使用4个字节.</p>
+<p>。+11扩展了枚举，增加了作用域内枚溢(s∞‘Ped enumeration) ，第10擎的“类作用城”一节将筒里地介绍这种枚举α4 .7 指钝和自由存储空)ì町. . 气二·田:’:‘.-:;“、<em>: ’::‘;”.-“::”-.. ,.</em>, ..:--...:.: .:: -. -’二-<em>，.</em>，...<em>...“ .. 而... ...，... -、，</em>、，饨，咛_.钮，...气‘,..-=-. .-</p>
+<p>.'</p>
+<p>气在第3章的开头，接[f11‘):计算机程序在存储数报tl必须跟踪。自知粮基水属性.九7 方便，.-这里再次列-合二;二:士旺于这些剧i:一二-.二二、二二÷二二二.十三二一二二王二，ζ-，-.’_‘、干干」二-Jfte- a、;.::了... ，~’飞馆主王军F储在倒妥f~‘. r</p>
+<p>. --e -.在储的值为多少~-七、..二二，~.. .-ι‘-:-:二_;. f“.:.:<em>..，存储的信息是如:么类型乙-汀，、、7、Je t , TJ J?二、.二.丁.:</em>~1~岱月迹?种策略未王三至盹注目的:定义，~:简单变景兰’f后班语句指出丁气他咆朵翅5日付。毛毛祀壁，还让担子、川工序为值分配丙存.并在内部跟踪该内在耳熟~匀、. . ..，_宇. -二二二~二F.&gt;面来看一看完卅策略::它在城cB类时制重黠?这种策岳阳针为基衍L，..::时是十个变奋- 二.二_一‘ 其内的是值的地址J了市不是值础。;岳阳励之面;白I挽着二辛苦如1if.:找到常规变嚣的创ι3之时f’.:、</p>
+<p>.:-', . _. .__ -, . '<em>, ',' ‘ ~. ，7</em>、、·</p>
+<p>--<em>,:“,,”“</em>‘ <em> .宅，</em>-...、…, ‘ +--口马、川~吨.-吨..’、、，峭...，<em> .，毡...;.-、”‘..</em>“”’... ..:ψ ~ • • • •• • ••• -:‘ • ’ .:画-‘.飞飞-气~ 、ι_.γ@ ι 圳ψ田.ιn___ 、，、怕.’ 旷-二‘“嘿凯，句..._’.、、γ，川‘~.，...，..:‘”叼...-晴呼-拿~:... ..专-、，、-函，飞;二因‘哥J-... ... 」.. ...</p>
+<p>-</p>
+<p>-、-、飞</p>
+<p>-... . --:.:.:-.Þ -</p>
+<p>. ,</p>
+<p>、.二__.，.于--. -.-<em>.、.-、..、、、、..牛.、...:-‘“. ‘口、’ 一一每一4斗</em>.?气一‘’-• -一严‘{ .-:: 、、’ ..~..-. - ~. .一吧,_‘-: ---=-..~. - . .</p>
+<p>~卧-二..…‘γJ</p>
+<h3>第 98 页</h3>
+<p>变蠢应用1地址运3辛辛辛(&amp;)“就可以获後它的位置;例如，如果home 是--个变量”贝tl&amp;hoine是它的地址.程序清单4 .1 4 演示了!这个运算符的用法o</p>
+<p>程序清单4.14.address.cpp</p>
+<pre><code class="language-cpp">/1 address.cpp --using the &amp; operator to find addresses
+曾主nclude&lt;iostream&gt; -
+int main()</code></pre>
+<p>-nn -</p>
+<pre><code class="language-cpp">&quot;uid inb gdl auc mtu esp ss nVM-$5 &#x27;F·AU ,,
+sntu oe 鱼。FL。L，</code></pre>
+<p>-w.</p>
+<p>。e，·'</p>
+<p>。A·</p>
+<p>·</p>
+<pre><code class="language-cpp">C&#x27;Out. .&lt;:&lt; ~&#x27; d，onuts: .value壳11&lt;&lt; donutsi
+cout. &lt;&lt; &quot; and donuts address - . &quot;也.&lt;.&amp;donuts &lt;&lt;.endl ;
+/1 NOTE: you may need to use unsigned&#x27; t&#x27;&amp;dOrlut&#x27;s )
+11 and unsigned&quot;( &amp;cups)
+cout &lt;&lt; &quot;cups value :; 11 &lt;&lt; CUpSi
+cout &lt;&lt; &quot; and_cups. address ~ &#x27;~&lt;&lt; &amp;cups &lt;&lt; endl;
+ret urn_ 0;</code></pre>
+<p>下面是该程序在某个系统上的输出:</p>
+<pre><code class="language-cpp">donuts value ~ 6 and donuts address宅。x0 l)6 Sfd40.
+cups va1.ue ~ 4 . S and cups addres$;&quot; ~ O&#x27;xOO6.Sfd44</code></pre>
+<p>显示地址肘，- 该实现的cout 使月于十穴进制表示法，因为这是常用于描述肉存的表示法(有些实现可能佼用|十进制表示法〉。在该实现中飞don峭的存储位置比ωps 要低.既个地址的差为Ox0065fd44 -Ox0065fd4Q.._(即4).这是有意义的丁阻为donuts的类型为剧，而这种类型便胜中个字节。当然，不同系统给定的地接值可能不凡有些系统可能先存储t cups，再存储óonu岱，这将两个地址值的差将为&amp;个字节，因为- 巳ups的类型如doub险。另外，在在些系统中，可能不会将这两个变:m:存储在报邻的内存单元中飞</p>
+<p>使用常规变屋时，值霆指定的囊，而地址为派生量.1;:.部来看看指针策略，宫是C++ 内存管理编程理念的核心(参见旁注“指针与(:++基本原理”).</p>
+<p>指针与C++基本原理</p>
+<p>ti1向对象编程与传统的过程性编程的区别在于.OOP强调的是在运行阶段(而不是编译阶段)进行决策。运行阶段指的是程序正在运行时，编译阶段指的是编译器将程序组合起来时。运行阶段决策就好比度假时，选择参观哪些景点取决于天气和当时的心情;而编译阶段决策史像不管在什么条件下，都坚持预先设定的日程安排。</p>
+<p>运行阶段决策提供了灵活性，可以根据当时的情况进行调整。例如，考虑为数组分配内存的情况。传统的方法是声明一个数组。要在C++中声明数组，必须指定敛组的长度。因此，数量且长度在程序鳞译时就设定好了;这就是编译阶段决策。您可能认为，在80%的情况下，一个包含20个元素的数量且足够了，但程序有时需要处理200个元，素。为了安全是在见，使用了一个包含200个元素的放组。这样，程序在大多数情况下都浪费7内存。OOP通过将这样的决策推迟到运行阶段进行，使程序灵灵活。在程序运行后，可以这次告诉它只常委20个元素，而还可以下次告诉它需要205个元素。</p>
+<p>总之，使用OOP时，您可能在运行阶段确定数组的长度。为使用这种方法，语言必须允许在程序运行时创建数量且。稍后您看会到.C++采用的方法是，使用关键字new请求正确敛量的内存以及使用指针永跟踪新分配的内存的位立。</p>
+<p>在运行阶段做决策并非OOP独有的，但使用C++皇岛写这样的代码比使用C语言简单。</p>
+<p>处理存储数据的新策略刚好相反，将地址视为指定的量，而将值视为派生蠢.一种特殊类型的变意--:f旨针</p>
+<h3>第 99 页</h3>
+<p>用于存储值的地址。因此，指针名表示的是地址。·运算符被称为间接值( indirectvelue) 或解除引用( dereferencing)运算符，将其应用于指针，可以得到该地址处存储的值(这和乘法使用的符号相同;C-H-根据上下文来确定所指的是乘法还是解除引用).例如，假设man1y 是一个指针，贝tlman1y 表示的是一个地址，而<em>manly 表示存储在该地址处的值.</em>manJy 与常规int 变量等效。程序清单4.1 5 说明了这几点，它还演示了如何声明指针。</p>
+<p>程序清单4.15pointer.cpp</p>
+<pre><code class="language-cpp">// pointer.cpp --our first pointer variabl e
+#include &lt;iostream&gt;
+int mai n()
+using namespace std;
+i nt updates = 6; // declare a variable
+int • p_updates; // decl ar e pointer to an int
+p_updates = &amp;updates; // assi gn address of int to pointer
+// express values two ways
+cout &lt;&lt; &quot;Values: updates = &quot; &lt;&lt; updates;
+cout &lt;&lt;&quot; &#x27; p_updates;&quot;&lt;&lt; &#x27;p_updates &lt;&lt; endl;
+// express address t wo ways
+cout &lt;&lt; &quot;Addresses: &amp;updat es = &quot; &lt;&lt; &amp;updates;
+cout &lt;&lt;&quot; p_updates = &quot; &lt;&lt; p_updates &lt;&lt; endl;
+.
+,,, ,,, u s* ep PoP id na ee rs cp -nau ea ve as u+ e</code></pre>
+<p>+争、</p>
+<p>J L‘。i</p>
+<p>伽L“=-吨‘L 啕A</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;Now updates M; &quot; &lt;&lt; updates &lt;&lt; endl;
+return 0;</code></pre>
+<p>下面是该程序的输出:</p>
+<pre><code class="language-cpp">Values : updates = 6, &#x27;p_updates = 6
+Addresses: &amp;updates = Ox0065fd48 , p呻updates= Ox0065fd48
+Now updates = 7</code></pre>
+<p>从中可知，int 变量updat部和指针变黛p_updates只不过是同一枚硬币的两而.变;最updates 表示值，并使用&amp;运算符来获得地址:而变量p_updates表示地址，并使用<em>运算符来获得值(参见留4.8) .由于p_updates 指向updates ，因J1t</em>p_updates和updates 完全等价。可以像使用剧变蠢那样使用<em>p_updates.正如程序消单4.1 5表明的，甚至可以将值赋给</em>p_updates.这样做将修改指向的值，即updates .</p>
+<p>int ju础。.23 ;</p>
+<p>int t阳.&amp;j呻阳，</p>
+<p>图4.8硬币的两丽</p>
+<h3>第 100 页</h3>
+<p>I -.</p>
+<p>|</p>
+<p>~ ， -、.气.“，...<em>飞.‘ -. -1...</em> 二三飞</p>
+<p>1</p>
+<p>L -</p>
+<p>“二二:;二Eff怜L;ξfiJ内存地址姐名称:7.J-77二二之二二::~;垣:节</p>
+<p>]</p>
+<p>支三百二三二:兰| 广1800oo:~<del> 1 </del>;~t~~::~Ji1吃苦;二:三二-，二:范芳、I 1 18021之~ --· ↑birdd仰| 二三豆-三段二二气川、~川-飞《川J芬价万予f“芹窍:I I ‘呻@刷!. 望.1 --d盹毗呻kω~_..1固0古仨讪?萨卢抖‘_仨，.:.-二凡，￥旷卢气乎Jμ三扒忡ιμ亿♂~::S:~-:’:r乓巳:二;万乡兴」主</p>
+<p>I I I. .-<em> , 古::</em>:...~~只飞，，-、三产:;zε I I i ←~-. | ~份-~-F卢-叫飞‘.，’♂-句丁丸阳d三￥k叫γ::‘-.’二y二γ乡二~1;_‘~ζE严严</p>
+<p>I I I I</p>
+<p>、</p>
+<p>-.τJ之士三---::~.-~.-、二γ-子?严，!l“:，呻叩盹L飞o~.υ :‘ &lt;:，...乌气_;’伫</p>
+<p>y</p>
+<p>，让〉戈E=二立兰ι云二r二二二二_.二乒j乒τ- - -￥;ξ伫ι穹飞L川~旷-“，-_ ._ξ- ， ‘. 1阳川.刷‘”呻@川l’噩.11街_τf-立L斗主二二气二，.二三兰J二二二二二“二-二:</p>
+<pre><code class="language-cpp">I I I
+...</code></pre>
+<p>:尘尘、二‘<em>:;</em>;ι :~ -...;.乓;担‘乞J 巳J、“..:司’J1 1 呻附川1 2I七~~遭i噩噩-.1 1” 7:</p>
+<p>1 1 1</p>
+<p>;:</p>
+<p>气三~-“::. .卢斗，-\、~~&gt; :~:~ I~ ,,,% ;,:<em>::: , ,” &lt;/气‘:.:5’~，:~俨兰:.. :</em>:.<em>:;: ..λ 卢工i-:山I川i-唱国噩噩2χ石主污泞予尹::.</em>-;:.:..斗气.、:-:二〈 .T二-也王旦‘.1 I I 1, -“ι:兰毛伊气?φ‘.二”，<em> .~卢τ--入川勺Fμ4艺艺￡芒芒-今飞三乙豆三~~ .</em>--子二…-飞飞牛二七勺L匕二’，_言F-=. -.王F平?、-寸勺‘，<em>二飞、I 1川nt川d叫u叩c础阳k阳s川叫2勾;10肌t.咱01唰叫吨s ‘阳由帆础阳$钉</em>;_ Î -手-4JFj乒F严二气王二川-飞::“.’:〉、丁r二-♂宁吱气干干宁</p>
+<p>-:',":-I</p>
+<p>I 1</p>
+<p>性号.-.:，;.吾ξ---二.7:;“~号.. ~- <em>; ;:--</em>:丰工I皇五‘~7::~:’”“<em>飞</em>:~-，~7.:!:.<em>，-~，，~--.创建:ducks姐，将组12伽irdd啤础，将d时s气二，斗吨?主气、--.</em>--”“” ~二l 存铺在该变盘中的地址移铺在该受囊中i-飞寸、~~<em> .M : ~</em> 气_ ‘_ι_玲It .:_“”,“,”:i “’;-:7一可.乒-马〈</p>
+<p>自，</p>
+<p>:.，..‘图4’:9指针存储地址,‘,</p>
+<p>顺便说二旬，*运算符两边的.. ~格是可选价。传统上，‘C程序员健用这种格式:</p>
+<p>f百t:=*pIT古</p>
+<p>这强调“ptr 是一个int类型的值.而很多C++程序员使府这秤格式</p>
+<p>扫1 1; *p~;</p>
+<p>这强调的是:_int*是一种类型士一指向剧的指针.在哪里添加空格汀于编译铸来说没有任何区别，您甚至百E以这样做」</p>
+<pre><code class="language-cpp">int&#x27; ptr ;</code></pre>
+<p>但要知道的是，下丽的声明创建一个指针( pl l.和一个int 变量(p2)</p>
+<p>int&gt;-pl . p2;-</p>
+<p>对寄个指针变量翁，都需要使用一个*.</p>
+<p>注意工在ε++ 中，int.是一种1合类型，是指向int的指针。</p>
+<p>可以府同样协句法来声明指向其他类型的指针气</p>
+<pre><code class="language-cpp">doub1&#x27;e • tax_ptr ; //-tax_ptr poi nts to type double
+char食g 巳r;f/ str points to t ype char</code></pre>
+<h3>第 101 页</h3>
+<p>世l 才4已将tax_ptr 声明为一个指向double的指针，因此编译然知道. Iax_ptr 是一个double类型的值.也就:Iî!说，宅‘知道“’tax_ptr是一个以浮点格式荐储的值，这个值〈在大多激系统上〉占据8个字节.捎钊·变1.1:不仅仪ÀH旨针，而且是指向特定类型的指针。tax_p脏的类型是指l í‘Jdouble的指针〈或double*类型)，即是捕I'IJchar的指针类型(或char叫。尽管它们都是指钊，却是不同类糊的梢钊o和数组一样，指告1-都是基J: .tt他类型的。</p>
+<p>占民然t拟_ptr和5tr指向两种妖度不间的数据类型，但这两个变放木身的长度通常是相同的.也就M说，char的地址与double的地址的长度相同，这就好比101 6 可能是趟市的街边地址，而1024可以足小H庄的街道地址一样.地址的长度或值既不能指示关于变量的氏度或主题琐的任何信息，也不能指示该地址k有什么建筑物.一般来说，地址市要2个还是4个字节，取决于计算机系统〈行经系统可能需要更大的地址，系统可以针对不同的类型使用不问If:度的地处).</p>
+<p>可以在声明语句中初始化指针.在这种悄况下，被初始化的:R:r.T钟.rfTi不是它指向的值.也就)è说，下丽的讲旬将pt(而不是句。的值设置为&amp;higgens :</p>
+<pre><code class="language-cpp">int higgens = 5;
+int • pt = &amp;higgens;</code></pre>
+<p>秘J芋，消单4.16演示了如何将于行带t.初始化为一个地址。</p>
+<p>程序清单4.16init_ptr.cpp</p>
+<pre><code class="language-cpp">11 init~r.cpp --in itial 岳:zea p。去nter
+&quot;inchtde. &lt;iostream&gt;
+i nc-oain ()</code></pre>
+<p>F</p>
+<pre><code class="language-cpp">using-namespace std;
+lnt IFiggens ~5;
+ìnt • pt = &amp;higgens;
+cout &lt;&lt; &quot;Va1ue of higgens • &quot; &lt;&lt; higgens
+&lt;&lt; &quot;; Address of higgens s n &lt;&lt; &amp;higgens &lt;&lt; end1;</code></pre>
+<p>cou岳&lt;&lt;“Va1ue of ‘ p也... &lt; ι’p伽</p>
+<pre><code class="language-cpp">《川Va1ueof pt • .啊pt-&lt;&lt;end1;
+retum 0;</code></pre>
+<p>下面是该寂序的示例输出:</p>
+<pre><code class="language-cpp">V&amp;ru~ of higgens • ~; AddreS9 of higgens • 00 12PED仨
+Va~e of &#x27;pt • S 厂Va-lue--ofpt ... 001.2PED4&quot;&quot;</code></pre>
+<p>从中可知Tτ程序将pi(而亦是.pi r 初始化为higgens的地址.在您的系统上，显示的瑶址可能不向，显示将式也可能不同.</p>
+<p>4].2 指锐的危险</p>
+<p>危险货主古发生在那些使用指针不仔细胁人身J:-.极Jt重要的一点M:在C件中岱j建指针对，计算机将分配川来存储地址的内存，也不会分配用来存储指针所指向的数据的一内布.为数据提供空间是一个独立的步骤，忽略这一症无疑是良找麻烦h 如下所示z</p>
+<pre><code class="language-cpp">1009 .,-teUow; 11 create a pointe~- to-1ong_
+&#x27; fe1l ow = 223323 ; 1/ p1ace a va1ue ìn never-never l and</code></pre>
+<p>fe llow 确实是一伞指针，但它指向哪里呢?上述代码设在将地址赋给fcllow.那么2233去3 将被放在哪思呢?我制不知道。面子felrow 没有被初始化，它可能存任饵值./f‘管似是i~么，程f-ÿ.都将它解释为存储223323 (内地址。如果fèllow的值碰巧九1 200，计算杭将犯数据旋在地址1 200-~ι即使这恰巧是程序代码(~J~:I1 I:... fenow 指向的地觉很可能并不是所要存fl{“223323的地2元。这种机误可能套导班一些;骸隐ffí、i民刘t</p>
+<h3>第 102 页</h3>
+<p>以跟踪的bugõ</p>
+<p>警瓮f一定妥在对指针应用解除引用运算符(.)之就.将提针初始化天T一个确定曲弘适当的地址。这是关t使用指针的企科玉绪。</p>
+<p>4卖3指针和数字</p>
+<p>指针不f主要些型』显然计算机通常把地址迄作星在数来处主If.IÀ概念上肴，指何与整数是截然不同的类型.整数是可以执后加、诚、陈等运算的数字，而指针描述的是位置，将两个地址梅乘没有任何意义。}j(可U对，在数和指刽二执衍的操作上看，它们也是彼此石同的主因此，不能简单地将整数赋给指针:</p>
+<pre><code class="language-cpp">ìnt &#x27;- pt;
+pt = OxB8000000; // type mismatch</code></pre>
+<p>在这里，左边是指向剧的指针，因此可以把它赋给地址，但右边是一个熬数.您可能知道.OxB800∞00是老式计算机系统中视频内存的组合段偏移地址，但这条语句并没有告诉程序，这个数字就是一个地址。在C99标准发布之前.C语言允许这样赋值.但C++在类型一致方面的要求更严格，编译器将显示一条错误消息，通告类型不匹配。安将数字值作为地址来使用，应通过强制类型转换将数字转换为适当的地址类型:</p>
+<pre><code class="language-cpp">1nt • pt;
+pt = (int *) OxB8000000; // types now match</code></pre>
+<p>这样，赋值语旬的两边都是整数的地址，因此这样赋值有效.注意.pt是int值的地址并不意味着pt本身的类型是int.例如，在有些平台中.int 类型是个2字节值，而地址是个4字节值.</p>
+<p>指针还有其他一些有趣的特性，这将在合适的时候讨论。下面看看如何使用指针来管理运行阶段的内存空间分配.</p>
+<h3>4.7.4 使用new 来分配内存</h3>
+<p>对指针的工作方式有一定了解后，来看看它如何实现在程序运行时分配内存.前面我们都将指针初始化为变量的地址:变量是在编译时分配的有名称的内存，而指针只是为可以通过名称直接访问的内存提供了一个别名.指针真正的用武之地在子，在运行阶段分配未命名的内存以存储值。在这种情况下，只能通过指针采访问内存.在C语言中，可以用库函数maLloc()来分配内存:在C←+中仍然可以这样做，但C++还有更好的方法一--new运算符。</p>
+<p>下面来试试这种新技术，在运行阶段为一个M值分配米命名的内存，并使用指针‘来访问这个值.这里的关键所在是C忡的n巳w 运算符。程序员要告诉new.需要为哪种数据类型分配内存:new 将找到一个长度正确的内存块，并返回该内存块的地址.程序员的责任是将该地址赋给一个指针。下面是一个这样的示例:</p>
+<pre><code class="language-cpp">int * pn = new int;</code></pre>
+<p>new int告诉程序，需要适合存储川的内存.new 运算符根据类型来确定需要多少字节的内存。然后，它找到这样的内存，并返回其地址.接下来，将地址赋给pn.pn是被声明为指向川的指针。现在.pn:是地址，而.pn是存储在那里的值.将这种方法与将变髦的地址赋给指针进行比较:</p>
+<p>••••nn -z···· huhz ogp qut e nz s</p>
+<p>、</p>
+<p>• ‘.，hu oqd n3 e n s .,,</p>
+<p>‘但，唱&amp;</p>
+<p>品</p>
+<p>在这两种情况( pn和pt )下，都是将一个时变量的地址赋给了指针。在第二种精况下，可以通过名称higgens采访问该int.在第一种情况下，则只能通过该指针进行访问。这引出了一个问题:pn指向的内存没有名称，如何称呼它l呢?我们说pn 指向一个数据对象，这里的“对象”不是“面向对象编程”中的对象，而是一样“东西飞术语”数据对象“比”变壶“更通用，它指的是为数据项分配的内存块。因此，变量也是敛据对象，但pn指向的内存不是变蠢。乍一肴，处理数据对象的指针方法可能不太好用，但它使程序在管理内存方面有更大的控制权.</p>
+<p>为一个数据对象〈可以是结构，也可以是基本类型〉获得并指定分配内存的通用格式如下:</p>
+<h3>第 103 页</h3>
+<pre><code class="language-cpp">rypeName * poínter_nan暗=new typeName;</code></pre>
+<p>需要在两个地万指定数据类型s用来指定需要付么样的内存和用来声明合适的指针。当然，如果已经声明了相应类型的指针，则可以使用该指针，而不用再声明一个新的指例。程序消单4.17演示了如何将new用于两种不同的类型。</p>
+<p>程序清单4. 17use_new.cp p</p>
+<pre><code class="language-cpp">,uc slm eua nen el co ps pt --,‘ n n e w nv r a , ..
+Jf&#x27;dz U.• hu as atv -L</code></pre>
+<p>“-w‘’nt Wr e a m &gt;”唱、内du‘也。。</p>
+<p>立〈唱o</p>
+<p>ol 飞&amp;</p>
+<p>n，</p>
+<pre><code class="language-cpp">using namespace std;
+int nights = 1001;
+int * pt = new int; // allocat e space for an int
+&#x27; pt = 1001 ; // store a value there
+cout &lt;&lt; &quot;nights value = &quot;;
+cout &lt;&lt; n i ghts &lt;&lt; &quot;: location &quot; &lt;&lt; &amp;nights &lt;&lt; endl;
+cout &lt;&lt; 11 i nt ..;
+cout &lt;&lt; &quot;value =: 11 &lt;&lt; &quot;pt &lt;&lt; &quot;: l ocation: &quot; &lt;&lt; pt &lt;&lt; endl;
+double • pd = new double; // a l locate space for a double
+&#x27;pd = 10000001.0; // store a double there
+cout &lt;&lt; &quot;double &quot;j
+cout &lt;&lt; &quot;value :;;: It &lt;&lt; .pd &lt;&lt; 1t; location:;;: &quot; &lt;&lt; pd &lt;&lt; endl;
+cout &lt;&lt; &quot;l ocation of pointer pd: • &lt;&lt; &amp;pd &lt;&lt; endl;
+cout &lt;&lt; &quot;size of pt = &quot; &lt;&lt; sizeof {pt);
+cout &lt;&lt; &quot;: size of &#x27;pt = n &lt;&lt; sizeof(*pt) &lt;&lt; endl;
+cout &lt;&lt; &quot;size of pd = &quot; &lt;&lt; sizeof pd;
+cout &lt;&lt; &quot;: size of &#x27;pd = &quot; &lt;&lt; sizeof(&#x27;pd) &lt;&lt; endl;
+return 0;</code></pre>
+<p>下面是该程序的输出:</p>
+<pre><code class="language-cpp">nights value = 1001: l ocation 0028P7P8
+int value = 1001 : location 5 00033A98
+double value = 1e+007: l ocation 5 00033998
+location of pointer pd : 0028P7FC
+size Of pt = 4: s i ze of .pt =‘
+s ize of pd = 4 : s i ze of *pd = 8</code></pre>
+<p>当然，内存位茧的准确值随系统而荠.</p>
+<p>程序说明</p>
+<p>该程序使用new-分别办int 类型和&lt;foub1e.类型的孩强对象分配府存.这是在.程序运行[Ilfj挂行的.指针pt和po指向这两个数据对象，如果没有它伯7将无法访问这些内存单元。有了这两45指针，就可以像使用资蠢那样使用.pt和.pd了.将值赋给怡和.pd.从而将这些值赋给新的数据对象.同样，阵以通过打耻、t和.pd来显示这些值飞</p>
+<p>该程席还指H立了必须声明指针所指向的类型的原医比一。地址本身只指出了对象存储地址的咒始.ffiï_没有指出其类型(使用的字节数ì~从这两介值的地址可以知道，立们都只是数字，并没有提供类型或长度信息.另外，指向int的指纣的.长度与指向do山le的指针棉盹.它们都是地址，但由于use:_new叩p 声明了指针的类型，因此程序知道.þd 是8个字节的double值..pt是4 个字节的时值oUSe...)lew.cpp 打印.pd盹值肘.COut知道变读取多少字节以及如何解释它们←</p>
+<h3>第 104 页</h3>
+<p>对于指针，需要指出的另一点是. new 分配的内存块通常与常规变章;声明分配的内存块不同.变意:nigh岱和pd的值都存储在被称为核(stack)的内存区域中，而new 从被称为维( heap )或自由存储区( free store )的内存区域分配内存。第9 章将更详细地讨论这一点。</p>
+<p>内存被耗尽?</p>
+<p>计算机可能会由于没有足够的内存而无法满足new的请求。在这种情况下.new通常会引发异常一一一种将在第15拿讨论的错误处理技术;而在较老的实现中.new将返回0。在C++ 中，值为0的指针被称沟空指针(nu协pointer).C++确保空指针不会指向有效的数据，因此它华被用毛表示运算符或函数失肢~‘Í(ø忍戒.1}J•它们将返回一个有冽的指传)。将在是豆主讨论的应该句可’辛苦苟延处t .m!l!有两主意E范百奇百亏，忿只需-茹TJ号，是C忡提供了检浏并虫E双内存分配失败:价工具』一</p>
+<p>4.7.5使用derete 释放内存</p>
+<p>当需要呐存时，可以使用ne.w来请求，这只是C幸干内存管理数提包中有悠力的一个方丽。另一个方丽是áe!ete运算符，官使得在使用完内存后寡能够将其归还给丙存池?这是通向最有效地使用两手割的英键一步。归还或释放( free)的内蒋可供程胖的其他部分使用。使用àelete时，后面要1Jct上指向内存块的指钝〈这些内存块最析是用new分配的):</p>
+<pre><code class="language-cpp">int禽ps= new i nt;-刀alloca t ememory witlγne1i.ι
+刀usethe memory
+dëlete ps-; (，产freem田nory&#x27;witft.delete when done</code></pre>
+<p>这将释脏ps指向的的存r但~会删除指针p本身。例如，可以将ps茎就指耐劳一个新分配的肉存块.…定要配对地使甩new军nderete号否则将发笠内在泄漏C-memorytea时，也就是说飞，被分配的内在夜也无沽使用了〉如柴件存泄漏严重，则程序将由苦不既寻找妥多内存而终止。</p>
+<p>不要尝试释放已经释放的内存块.C-t:升标准指缸r这样做的街果将是;ijS确定的丁这意味着什么精况都可能发生。:另外，不能使用delete-来稳放声明变量庇获得的内在:</p>
+<pre><code class="language-cpp">int • ps • new int;. /-/ ok
+delete ps-;-L/ ok
+de-lete ps-;其/no1: ek R。咽
+int jugs-= 5; / / ok
+int • pi = &amp;jugs; Ilok
+delete pi;其rnotaHowe&lt;t; memo J;Y noc- al10cat ed by new</code></pre>
+<p>雀告:J可能用delele来缝旋侠M..ne阶ffft己作内存飞，轧码，对立指钝使用dètete.是安全件。</p>
+<p>注意，使府deIëte 的关键在子，将它胜于new分配的内存.这并不怠味着要使悔版于new 的报告惧而是用于new的地址:</p>
+<pre><code class="language-cpp">int-. ps • new inl:&quot;;-H allocate memory
+int • pq-= ps; IL-set second poìnter- to same bl∞k
+de}ete pq 广/f del ete wi th second. pointer</code></pre>
+<p>一般来说，不要创建两千搜曲同一个内存块‘的指针如因为这将增加错误地删除同一个内存琪商沃的可能性ι但革服您会看到，对苦返回指针的函数，使用另L个指针确实甜脱.</p>
+<h3>4.7.6 使用new 来创建动态数主坠</h3>
+<p>如果程序只需要一个值，则可能金声明一个简单变髦，_因为对毛管理L个小型数据对象来说τ法样做</p>
+<p>· 比使甩new和指针更饭单，尽管给人留下的印象不那么深刻.通棍，黑白丰大型数据~(如数组』字符E辑和结</p>
+<p>物‘)F“应使月’J，.new，这.iE;!iEne\o\L--(f够‘ij武之蜡。例如，假设要编写-个程序，它是否简要数组再见决于运行时月于户带供的信息。如黠跑过声唤来创建数组，则在程序被编译眈将-为’也分配内存空间。不管‘程序撮终是否使用数组，数组都在那!f!.r它占用了内在』在编译时续数组分配「内存被称为静态联编( static阮nding)，意</p>
+<h3>第 105 页</h3>
+<p>味着数组是在编译时加入到程序中的.但使用new时，如果在运行阶段需要数组，则创建官:如果不需要，则不创建.还可以在程序运行时选择数组的长度.这被称为动态联编( dynamicbinding) ，意味着数组是在程序运行时创建的。这种数组叫作动态数组( dynamicarray).使用静态联编肘，必须在编写程序时指定数组的长度:使用动态联编时，程序将在运行时确定数组的长度。</p>
+<p>下面来看一下关于动态数组的两个基本问题:如何使用C忡的new 运算符创建数组以及如何使用指针访问数组元素.</p>
+<p>l使用new创建动态数纽</p>
+<p>在C忡中，创建动态数组很容易:只要将数组的元素类型和元素数目告诉newftll可e必须在类型名后加上方括号，其中包含元素数目。例如，要创建--个包含1.0 个int 元素的数组，可以这样做z</p>
+<p>int • psome = new int (10) ; 11 g'et a bl ock of 10 ints</p>
+<p>new 运算符返回第一个元素的地址.在这个例子中，该地址被赋给指针psome .</p>
+<p>当程序使用完new分配的内存块时，应使用delete 释放它们。然而，对于使用new 创建的数组，应使用另一种格式的delete来释放:</p>
+<p>delete [) psomei // free a d归amicarray</p>
+<p>方括号告诉程序，应释放整个数组，而不仅仅是指针指向的元素。请注意delete 和指针之间的方括号。如果使用new时，不带方括号，则使用delete肘，也不应带方括号。如果使用new时带方括号，则使用delete时也应带方括号.C++的早期版本无法识别方括号表示法。然而，对于ANSlIlSO标准来说，new 与delete的格式不匹配导致的后果是不确定的，这意味着程序，员不能依赖于某种特定的行为。下面是一个例子:</p>
+<pre><code class="language-cpp">int * pt = new int;
+short • pS = new short (500);
+delete [) pt; // effect 18 undefined, don&#x27;t do it
+delete pS; // effect 18 undefined, don&#x27;t do it</code></pre>
+<p>总之，使用new和de1ete时，应遵守以下规则.</p>
+<p>• 不要使用delete 来释放不是new分配的内存.</p>
+<p>• 不要使用de1ete 释放同一个内存块两次.</p>
+<p>• 如果使用new[]为数组分配内存，则应使用delete[]来释放.</p>
+<p>• 如果使用new[]为一个实体分配内存，则应使用delete(没有方括号〉来释放.</p>
+<p>• 对空指针应用de1ete是安全的。</p>
+<p>现在我们回过头来讨论动态数组。psome是指向一个int(数组第一个元素〉的指针。您的责任是跟踪内存块中的元素个数。也就是说，由于编译器不能对psome是指向10个整数中的第1个这种情况进行跟踪，因此编写程序时，必须让程序跟踪元素的数目。</p>
+<p>实际上，程序确实iR踪了分配前内存量，以便以后使用de!ete[ ]运算符时能够正确地释放这些内存.但这种信息不是公用的，例如，不能使用sizeof 运算符来确定动态分配的数组包含的字节数.</p>
+<p>为数组分配内存的通用格式如下:</p>
+<pre><code class="language-cpp">. type_喻name &#x27; -* pointer_name = new type_name [ nu吨_elementsl;</code></pre>
+<p>使用new运算符可以确保内存块足以存储nUID-_e1ements 个类型为type~nám面的元素;而pointei_name将指向第1个元素.下面将会看到，可以以使用放组名的方式来使用pointer_name .</p>
+<p>.2.使用动态数组</p>
+<p>创建动态数组后，如何使用它呢?首先，从概念上考虑这个问题.下面的语句创建指针psome.官指向包含10个int 值的内存块中的第】个元素:</p>
+<p>int贷psorne= new int (10); // get a bl ock of 10 ints</p>
+<p>可以将它看作是一根指向该元素的手指。假设int占4 个字节，则将手指沿正确的方向移动4 个字节，手指将指向第2个元素。总共有10 个元素，这就是手指的移动范围.因此.new 语句提供了识别内存块中每个元素所衔的全部信息.</p>
+<h3>第 106 页</h3>
+<p>现在从实际角度考虑这个问题。如何访问其中的元素呢?第一个元素不成问题.由于psome 指向数组的第1个元素，因此.psome是第l个元素的值.这样，还有9个元素。如果没有使用过C语言，下面这种最简单的方法可能会令您大吃一惊:只要把指针当作数组名使用即可。也就是说，对于第l个元素，可以使用psome[O].而不是.psome;对于第2个元素，可以使用psome[ I ].依此类推。这样，使用指针来访问动态数组就非常简单了，虽然还不知道为何这种方法管用.可以这样做的原因是.C和C++内部都使用指针来处理数组。数组和指针基本等价是C和C++的优点之一〈这在有时候也是个问题，但这是另一码事〉。稍后将更详细地介绍这种等同性.首先，程序清单4 .18演示了如何使用new来创建动态数级以及使用数组表示法采访问元素:它还指出了指针和真正的数组名之间的根本差别.</p>
+<p>程序清单4 . 1 8arraynew.cpp</p>
+<pre><code class="language-cpp">// arra归ew.cpp--using the new operator for arrays
+#include &lt;iostream&gt;
+int main()
+using namespace std;
+double * p3 = new double [3); // space for 3 doubles
+p3[OJ = 0.2 ; // treat p3 like an array name
+p3 [lJ • 0.5;</code></pre>
+<p>p3 [2J = 0.8;</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;p3 [lJ is &quot; &lt;&lt; p3 [1) &lt;&lt; &quot;. \n&quot;;
+p3 = p3 + 1; // increment the pointer
+cout &lt;&lt; &quot;Now p3[01 is &quot; &lt;&lt; p3 [0) &lt;&lt; &quot; and &quot;;
+cout &lt;&lt; .p3 [1) 1s &quot; &lt;&lt; p3 [1) &lt;&lt; &quot;. \n&quot; ;
+p3 = p3 -1; // point back to beginning
+delete [J p3; // free the memory
+return 0;</code></pre>
+<p>下面是该程序的输出:</p>
+<pre><code class="language-cpp">p3 [1 ) is 0.5 .
+Now p3[0 ) i90.5四dp3[1) is 0.8</code></pre>
+<p>从中可知.arraynew叩.p将指针p3当作数组名来使用.p3[O]为第1个元素，依次类推。下面的代码行指出了数组名和指针之间的根本差别:</p>
+<p>p3 = p3 + 1; /1 okay for pointers, wrong for array names</p>
+<p>不能修改数级名的值.但指针是变蠢，因此可以修改它的值。请注意将p3加1的效果.表达式p3 [O]现在指的是数组的第2个值.因此，将p3加1导致官指向第2 个元素而不是第l个.将它减l后，指针将指向原来的值，这样程序便可以给delete[1提供正确的地址。</p>
+<p>栩邻的int 地址通常相差2 个字节或4 个字节，而将p3加1后，它将指向下一个元素的地址，这表明指针算术有一些特别的地方。情况确实如此。</p>
+<h2>4.8 指针、数组和括军十算术</h2>
+<p>指针和数组基本等价的原因在于指针算术(pointer arithmetic)和C++内部处理数组的方式.首先，我们来看一看算术.将整数变量加l后，其值将增加1;但将指针变量加l后，增加的量等于它指向的类型的字节数.将指向double的指针，ÍIIlI后，如果系统对double 使用8个字节存储，则数值将增加8 ;将指向short的指针加1后，如果系统对short使用2个字节存储，则指针值将增加2 0程序消单4.19演示了这种令人吃惊的现象，它还说明了另一点:C++将数组名解释为地址.</p>
+<h3>第 107 页</h3>
+<p>，今E‘</p>
+<p>程序清单4.四addpnt陈~cpp‘一二一</p>
+<p>r/ addpntrs.cpp --poiner addi tion-</p>
+<p>•</p>
+<p>t;</p>
+<pre><code class="language-cpp">.&#x27;#inciud&lt;iostream&gt;
+. irit main () &#x27; .~</code></pre>
+<p>...<em>.</em> •.. ...using namespace- s J;d; _</p>
+<p>...二二二号切二斗吨号lew旧ag伊es[吟王F=飞μ{ i川0ωOQω0，0飞，<em>‘</em>..~• 一一一• <em>.. “;‘ ~ c. ...-::毛..</em>.</p>
+<p>.. .. _ 、.'</p>
+<p>、s趴h。倪rt: s剖ta剖c阳ks[口3)，仨= =.{归3 .，• 2，.--寸1}七.‘~---争-‘ J 、...--.τ一1一一.-. ... :.-’龟</p>
+<p>/{ Here .are. twe:-，w~y飞归飞毛t?pe- -ddre巧. pf an array ___“品、”.~</p>
+<p>'.' .'. .-'</p>
+<p>U一-一一‘，:d。飞ble...Pw.寡wages;. /1 .‘näÍ1!e :o~ . ap贺ray-，，，.addre66. “ .. ..二-庐一_._.. -吨.J:’ ••</p>
+<p>.o.</p>
+<p>.. ~.~ • ••• ... . ',</p>
+<p>-、u 二，，‘.<em> shoξt去一ps..~:&amp;s'tacks.’!O) ;. /l</em> r . use .‘addr电5S ’ operatòr. 二2 、</p>
+<p>/ I with ar玄ayel ement</p>
+<p>CQut . ~&lt; “_.p~ = • &lt;.&lt; pw叭..”p~:.=“扫雷pw白哩n.d1;... ”‘:“~:..…. -.. . pw ’= .pw +、一‘-..1:;、‘-、‘, .- c()uL&lt;&lt; ~.iidð:.f ’to the.þ~ poin.ter:\叹气钮，二.、·之.-吧.</p>
+<pre><code class="language-cpp">c.out &lt;&lt; . pw :;; .. &lt;&lt; pw &lt;&lt;&quot; .pw = &quot; &lt;;&lt; . pw.一.&lt;&lt;&quot;\ n\n&quot; i
+cout &lt;.&lt;&#x27; Nps-=&#x27; ，&quot;时. ps&lt;&lt; I1‘.ps = &#x27;&#x27;-&lt;&lt;_ *ps- &lt;&lt; e&#x27;nâl;
+pS = ps-+ 1;
+couE&#x27;&quot;&lt;&lt; &quot;aäd 1 to the ps pointer: \n&quot;ι
+cout. &lt;&lt; &quot;ps~ = &quot; &lt;&lt;- ps &lt;&lt;&#x27;1 . ps::.r- &lt;&lt;=t QP &lt;&lt;叫n飞nllt_
+∞ut &lt;&lt; &quot;access two el ements. wì th array notation&#x27;;n&#x27;;
+cout&quot;&quot;轩&quot;stacks [OF = &quot; &lt;&lt; slacks (0)
+&lt;&lt; &quot;, s.tacks (1) = &quot; &lt;&lt; S.t.aCKS [11-&lt;&lt; endl;
+cout-&lt;&lt; Ila∞eS9 two element s- with::: pointer-notat如叭n&quot;;</code></pre>
+<p>cou~&lt;&lt; 11会stacks=伽〈乐‘stacks_</p>
+<pre><code class="language-cpp">&lt;&lt;_-If，叫s tacks←1)~ .. &lt;&lt; &quot;fstacksφ1) &lt;&lt; encÞl;
+cout &lt;C sizeof(wa~es 如&lt; &lt;&quot; • siz&#x27;e, of wageS&#x27; array\n&quot;;
+∞ut&quot;&quot;&lt;&lt;&quot; s izeof (pw) &lt;&lt; ... D_ s ize of pw pomt&quot;er飞n&quot;;_
+retun￥- 0;</code></pre>
+<p>￥</p>
+<p>下面是该程序的输出:</p>
+<pre><code class="language-cpp">pw = Ox28ccfO , .~ = 10000
+add 1 to the pw pointer:
+P协=Ox28ccf8,‘pw = 20000
+ps-= Ox28ccea, *ps. = 3--
+add 1 to the ps pointer:</code></pre>
+<p>τ.一平S-• Ox28ccec:;‘’‘*ps • ’2</p>
+<pre><code class="language-cpp">açc&#x27;ess._t wo elements ~ith_~rray noqll:.ion . .
+&#x27;scåcks(O] = 3; s&#x27;tacks:il~= &#x27;2
+access-two elements ~ith pointer-not atìon</code></pre>
+<p>二. ‘stacks’ 引3，: ‘:*(sta'cks..::’+ ‘ 1) = i .. ...、一ι一</p>
+<p>~.<em> """.."</em>' ‘a</p>
+<p>, . -</p>
+<p>24 “ = ”sizeof wage岳‘array-.，二，…户...圃、.“:-可...’~”“一-.• ... ..鸟」</p>
+<p>_.. ,:,.φ-φ.</p>
+<pre><code class="language-cpp">4二sizeof p忡pö&#x27;inte&#x27;i--. -• , d • , _.</code></pre>
+<p>4奇8. 1程序说明</p>
+<p>在多数慌况下.C++将数组名解释为数组第1个元素的地址。因此，下面的语句雄p吭声明为指向double-</p>
+<h3>第 108 页</h3>
+<p>类型的f酷t，然后将它初始化为wagcγ--wages数组中第F个元素的地址:</p>
+<p>double • pw = wages;.-...二...和所有挥霍γ推三wages ‘，tË}存在.:r酶的续至~:…二-三、--~‘二..<em> .. ~:f..:... W~均e.sii= &amp;wage豆(Ó)-~ - ac:idies~: ot’ firs.t7~ïé;“érit of ariay ‘. :.’ --;~ =- =. ~，=二·二</em>-飞为黎明情况确实如此J亥革重序在表达式&amp;stacks[O]中显式地使用地址运算符来将ps; f昆针初始化为~çJ町~数组的第1介，ffí;泵，….:‘<em>;-;.,...’!ø.: ::.;.:</em>-= <em>~ . </em>~ .:.. : ‘.:牛。乙: 二接示朱:程序查看-丙和pw_的值了前若是地址，’后者是存储奄i墓地址中的也-咀于卢布向主l个元.. -二_--乙二二素: ;”-:‘因此;op\l1.显示剖值为重’i‘个元素的值，--:-即11 0000 ~接茬~垣F棚内加f~正如艳丽指由的;;这样数字、卢.“~ . ! .地址值将糟加它使这i变得PW:J的费为第2在元素的地主E因此;_ ”p:w_却在的睐，?。即’.，.7第，2 伺萃的值-~τ~ ~ ~-，(参见回~.10; &gt;1J!.使改酷更为消晰，对其帘的地址笆做士调整).二!“.. ‘ ’. ... :.‘.-:-乒乓工~-:.::寸-飞、二，.~ ., . ”注.. .“二二-</p>
+<p>…;</p>
+<p>a蛐10.崎“13~‘{1_ ，t，四_.t ，_.t};</p>
+<p>= {3, 2, 1};</p>
+<p>..</p>
+<p>...叫.tack.131</p>
+<p>t组出呻1‘-，.:~</p>
+<p>I ‘1蜘rt• pl. &amp;ltlckl“);欧</p>
+<p>、三z 二Jl1固|u…·飞~…哇.，iil : i i i i i ; i i-E1·甲:二</p>
+<p>31::</p>
+<p>I ~‘ 酒’也i!:.1∞108 116 124 126 128 黠~</p>
+<p>••••I</p>
+<p>卜.~-por(porφ1) P‘ (P“1) ~1;回圄’‘’.，，-飞气</p>
+<p>I J1 阴阳灿I幽.，.指向阳咽，因此I~ o I命. ...:...:::~ 飞月二川平川</p>
+<p>;1</p>
+<p>,,,::Z</p>
+<p>工-.<em>予回『斗ζ:. ,;“, :.::,,10因此对pojlllt配合让对”细1会让它的值精细l‘., </em> ’.. 二、;.:尘.~.:;‘-~“’:‘”4王宅、1 ðJ 它的... 个字节.2个字节-l ’ :沪‘ .~-’.‘ -:.“ ’:‘;-~ 二、气ι队j飞1;WTF阴伊叶飞~...-V~~，、呼忡忡~Ä.嗨，..<em>...前哺”\!i“，，”’~忖咿刊~“”::..:‘,’ ‘:’.‘ </em> “:.’二‘-.:--_: ...::;7”:-.:.~.r!.-:~ .~ .~:’.~.:~ :&lt;~-=-:严_立…··-·』?业;eWL</p>
+<p>-_.</p>
+<p>.,,::': :-: f</p>
+<p>~，‘ -’ .‘’;‘ ~ - ’-.‘二~ ~:~ ;:1~~’ 派在加法土-717‘三乙二‘. . ... ~. . . -’:总ζ_..，._卢e工司..: ~‘、;“...兰主也... .’ ~...二~f二二二比晨二程序时‘的相同的探吃忌阿拉拉向前点!!6ii失班时句古自ii~~~;.-:~it.-~.~:’~ 二号:二立即b.~ ‘;-~.~-拉将啦?争如-约时呼号t-!~~.t~夹才二:二- .~;:::’二. .:.~.; ...:;.~.~‘二二:; 二-气，也fdJ丁法3Eef--将. .m纣交量加?Fi后.些增加约L位喜庆刮旨句的类型古局的字节然LJr乙:.. J;- r 飞句:1:- γ-4:-J N:二三...乙:站在来看-着敖组表达茸归CkS~I]~.~ë4~局埠器将该表达吴文看作主Ef(叫&amp;5亏。:这意味着先计算数~.’二·…-j曰: 二二组第叨个元素的地量14 然后我到存健在那叠的佳7- 最后的报便是证ksm的位工顶蜘优先辑要求倭...-、二-.:-二二;目周喳攒衰，~判姆白吗吗果束; 艺寻功理启植肘号f号k将2叭飞乎兽4亏豆馅叫咐刮如t瓦怦:吁-哩雪享;毕毕7妇延剿约乎问塑J 告良仨~三:二~.. .:‘”二_J二亏\λ~γ:::;: .-:产飞~二从该程序的输出出;可知;..+(s~恤a部.cJës’+:1川7、和主Stacks[口[!J是是~等价的叭同样~:-.. 怠，C句s肌J(~:+:7贝) .‘和s侃tå句ç.k岭事I阳2勾]也是等，乞二气气..::-:._-」之.~二咒盹冉JiiJi\ :句远句句宽宽予:J{4岛用瞅年年:缉综综乡F::皂手如手拮法白凡~--C白-吨行叶?呵固附甲军胁碌际￥￥拎. ’τ二亡:二二;亏:::二二仁二巳:二二二:;〕二2::@二吧:工;二:7之:二二;二.. ~二二二产♂~~:‘:aj:臼ra归E抽阳时6副[川i川仆)\毛、:~ b挝面民èo俑f宿-百亩g 叫a缸r'r’å归滔油H丽叹e眨Jλf豆tγ￥旷‘:’:号. .:..~，川f ~“‘;::::~-凡’乌::‘:’‘’‘亏马=斗斗马二二-_川，户一芝.丁:;’1户户尹叫千旷斗?如果使用、的是t搅旨牵钳f‘占仨二而习示飞是是@数缝担茬苔亏三.. 呗唰员则u比cμ1也包将执才括±陌样军剧的转换.~.’二‘ ~::’.沪;仨℃L沁二戍丘干，主二ζ仨飞ζ二:f主三飞丰工P9μ仰i均P吱主?芒f咛t南争阳〔吃飞乓乓b芝f吱白民甲牛&amp;盯:(良i吧nte的白-町町m而l~ιζFι、~+习}7; : 、，干乞-可二”-. 芒之二三;:.;二乓-二芒、了二~“‘~~</p>
+<p>因此，在很多愤况下字‘ 可-以相同的方式使用指针名和数组名ζ对于它们j可以倭用数组方括旁’表示法，气，小:~.τ~可纵使用解除引用运算惯性λ在多数表总式中二它们都表示地址.军~J之一是，可以修改指钝的筐，</p>
+<p>.</p>
+<p>...</p>
+<p>‘:“’-”.‘:. 骂、市丰3级有是常是~i-~;.7:’-:‘:’:“ ~~:~”~:“，: <em>; ‘:0</em>~ γ气:三ν仆古穴川.:;,午飞穴可汇二士: .. ι二;二士二二T丁1二二:二二二二&lt;;气T二二--二1二-二二二:二二...:..’P号~.in~哩marne... ..pointeξnarne . ‘:” ~; .f.t :yalid .’~:-: ~:~-;.;. :二士、ar归于导主rne号“ ã;r:‘h归ame .:.+.ø lj 、二!!: nõ飞，画1日w.ëd之三、...’…- 寸.:... ~~.:: :~ . ~. ‘ . -~，: :. . ~~ :: .. :. ~:..&gt;-. ’.: ~..;. :,.:j: .飞~.~~.‘.~:.:.:;:~. .;: -.::巧户~”~.:~~ ~:“; ’:~: . ~:: <em>‘ i:’, ~ ，~;:</em>: .:.~:.:，::~~~ ‘:i .&gt;:~</p>
+<p>~唁电?气⑤飞-τ. -~气--‘~:~.-:--’:‘:~.-.’~~:“:一.., .‘”~-“.. --’--=工-”.---飞.<em>;</em>...ô..:-:-子二..、丰-、气...<em>“ ---- . --.‘, .-钮’一一-.、-.-‘”~-一“-…~ …~”. </em> . .•<em>.一...“ 龟一--…毒…-,-</em>…- -… 一..”.“”</p>
+<h3>第 109 页</h3>
+<p>另一个区别是，对数组应用sizeof 运算符得到的是数组的长度，而对指针应用sizωf 得到的是指针的长度.即使指针指向的是一个数组。例如，在程序清单4.19中.pw和wages指的是同一个数组，但对它们应用sizeof运算符得到的结果如下:</p>
+<pre><code class="language-cpp">24 = size of wages array &lt;&lt; displ叩ng si:zeof wages
+4 = size of pw pointer &lt;&lt; displaying si:zeof pw</code></pre>
+<p>这种情况下.C++不会将数组名解释为地址.</p>
+<p>放组的地址</p>
+<p>对数纽取地，址时，数纽名也不会被解释为其地泣。等等，很组名难道不被解释为数组的地放吗?不完全如此:数纽名被解释为其第一个元素的地址，而对数主且名应用地址运算符时，得到的是整个数组的地址:</p>
+<pre><code class="language-cpp">short tell[lO); 1/ tell an array of 20 bytes
+cout &lt;&lt; tell &lt;&lt;endl; 1/ displays &amp;tell [OI
+cout &lt;&lt; &amp;tel l &lt;&lt; endl; 1/ displays address of whole array</code></pre>
+<p>从数字上说，这两个地址相同;但从概念上说.&amp;telJ[O] (lIp telJ )是一个2字节内存块的地址，而&amp;te1J是一个20字节内存块的地，扯。因此，表达式telJ +H夺地，泣位加2.而表达式&amp;telJ+ 2 将地拉加20。换句话说.tell是一个仿制指针(.sho时，而&amp;te且是一个这样的指针，即指向包含20个元余的short 数组(仿制(η[20])。</p>
+<p>您可能会闷，前面有关&amp;tell的类型描述是如何来的呢?首先，您可以这样声明和初始化这种指针:</p>
+<p>short C*pasl (20) = &amp;tell; // pas point5 to array of 20 short5</p>
+<p>如果省略括号，优先级规则将使得pas先与[20]结合，导致阳s 是一个sho民指针欲主且，它包含20个元，索，因此括号是必不可少的。其次.如果要描述交量的类型，可将声明中的变量名删除。因此，归S的类型为short(η[20]。另外.由于pas 被设置为&amp;tell.因此，.pas 与tell等价，所以(.pas)[0]为tell数组的第一个元素。</p>
+<p>总之，使用new 来创建数组以及使用指针采访问不同的元素很简单。只要把指针当作数组名对待即可。然而，要理解为何可以这样做，将是一种挑战.要想真正了解数组和指针，应认真复习它们的相互关系。</p>
+<p>4.8.2 指针IJ、结</p>
+<p>刚才已经介绍了大量指针的知识，下面对指针和数组做一总结.</p>
+<p>l声明指针</p>
+<p>要声明指向特定类型的指针，请使用下面的格式:</p>
+<pre><code class="language-cpp">typeName * poìnterName;</code></pre>
+<p>下面是一些示例:</p>
+<pre><code class="language-cpp">doubl e • pn; // pn can point to a double value
+char • pc; // pc can point to a char value</code></pre>
+<p>其中.pn.和pc 都是指针，而double·和char·是指向double的指针和指向char的指针-</p>
+<p>2.给指针赋位</p>
+<p>应将内存地址赋给指针。可以对变量名应用&amp;运算符，来获得被命名的内存的地址.new运算符返回来命名的内存的地址.</p>
+<p>下面是一些示例:</p>
+<pre><code class="language-cpp">d。飞lble• pn; // pn can point to a d。飞lbleval ue
+double • pa; // 50 can pa
+char • pC; // pC can point to a char value
+double bubble = 3.2;
+pn = &amp;bubble; // assign address of bubble to pn
+pc = new char; // assign addre5S of newly all ocated char rnem口ryto pc
+pa = new double [30]; // assign address of 1st element of array of 30 double to pa</code></pre>
+<h3>第 110 页</h3>
+<p>3.对指针解除引用</p>
+<p>对指针解除引用意味着获得指针指向的值.对指针应用解除引用!i1G间接值运算符(叫来解除引用.因此，如果像上面的例子中那样.pn是指向bubble的指针，则.pn是指向的值，即3.2.</p>
+<p>下面是一些示例:</p>
+<pre><code class="language-cpp">cout &lt;&lt; &#x27; pn; // print the val ue of bubble
+舍pc= &#x27;S &#x27;; // pl ace &#x27;S&#x27; 1nto the memory location whose address is pc</code></pre>
+<p>另一种对指针解除引用的方法是使用数组表示法，例如.pn[O)与.pn是一样的。决不要对未被初始化为适当地址的指针解除寻|用.</p>
+<p>4 .区分指针和指针所指向的位</p>
+<p>如果pt 是指向田的指针，则.pt 不是指向剧的指针，而是完全等同于一个mt 类型的变量.pt 才是指针。</p>
+<p>下面是一些示例:</p>
+<pre><code class="language-cpp">int * pt = new int; // assigns an address to the pointer pt
+&#x27;pt = 5; // stores the value 5 at that address</code></pre>
+<p>5目数纽名</p>
+<p>在多数情况下.C忡将数组名视为数组的第一个元素的地址。</p>
+<p>下面是一个示例:</p>
+<p>int tacos [10] ; // now tacos is the same as &amp;tacos[O]</p>
+<p>一种例外情况是，将sizeof运算符用于数组名用时，此时将返回整个数组的长度(单位为字节).</p>
+<p>6.指针算术</p>
+<p>C++允许将指针和整数相加.加1的结果等于原来的地址值加上指向的对象占用的总字节数.还可以将一个指针减去另一个指针，获得两个指针的差。后一种运算将得到一个整数，仅当两个指针指向同一个数组〈也可以指向超出结尾的一个位置〉时.这种运算才有意义:这将得到两个元素的间隔.</p>
+<p>下面是一些示例:</p>
+<pre><code class="language-cpp">int tacos[lO] • {5，2，8，4，l ，2，2，毡，6，8 ) ;
+int • pt = tacos; // suppose pf and tacos are the address 3000
+pt = pt + 1; // now pt is 3004 if a int is 4 bytes
+int &#x27;pe = &amp;tac09 [9]; // pe is 3036 if an int i s 4 bytes
+pe = pe -1; // now pe is 3032 , the addres9 of tacos[8]
+1nt diff = pe -pt; // diff 19 7, the separat10n between
+// tacos[8] and tacos[1]</code></pre>
+<ol>
+<li>4t组的动态联编和铮态联编</li>
+</ol>
+<p>使用数组声明来创建数组时，将采用静态联编，即数组的长度在编译时设置:</p>
+<p>int tacos[lO]; // statlc binding, size fixed at compile time</p>
+<p>使用new[)运算符创建数组时，将采用动态联编〈动态数组).即将在运行时为数组分配空间，其长度也将在运行时设置.使用完这种数组后，应使用de]ete门释放其占用的内存:</p>
+<pre><code class="language-cpp">int size ;
+cin &gt;&gt; size;
+int • pz = new int [size]; // dynamic bind1ng , s1ze set at run time
+del ete [] pz; // free memory when fin1shed</code></pre>
+<p>8.数纽表示法和指针表示法</p>
+<p>使用方括号数组表示法等问于对指针解除引用z</p>
+<h3>第 111 页</h3>
+<pre><code class="language-cpp">t acos fOL means&gt;吨aeÐsmeans the va,l ue a七addresstacos
+tacos[ 圣.J.means.-叫tacos-.3) . means the val ua at adäress tacos-. 3</code></pre>
+<p>数经E名和指针变量都定如此，因此对于银针和数组名扣既E汪阶使用指针表牙守法爱也可以使用数组表示法.二二〉子尸飞‘“.:::.二-←田.二予:~- -苇K睛丽走兰些示例二ντ1工1-」二二毛d习弓.-.:::...;...;=二?= Jτ三-工二气斗士丁二士-二_.</p>
+<p>~ . ‘ -<em> -:- -.</em> ---伽一.<em> ...</em> 刁ι-…-】:.:.:. ,<em>.. “ </em>’ •• : --户. ‘_可., ..</p>
+<p>L"</p>
+<p>'. -'</p>
+<p>一J---J」{ι:. -. i立m川n川t‘ P胖仨=二号z盹惚w.‘i川川n川tI川1刊OJ/斤于pμt -归趴i.r戊百吭时E时§臼:bl。∞d正仨问舌均6优i刊i’0‘ iñts ... -..~ ’‘:’ … 穹.<em>~ --~.</em> ..:..:--= 工γ:.:~..: -，‘ 、.二三-公’p t宁王5;;工云j:_~‘ :: 二曦:’<em>二.c.:1l号=-~, . e~酬en夏nu呻e云均卡6γ，，‘工-...~.~-=.~:声“.~ .: -.::’ . .--: .‘~: </em>--~中=三.<em>去--=-’-- 号召P毛印w气!:;.==‘”:~’.~‘~’ “. :</em>::.-三-.::L‘二~:esetel电ment .n叩b目0，;~?产，<em>-，</em>，←- 一_-_..飞-::’;::;..:~.-::二，.. 飞F 二:三; ptJJ三.-gt问=?”仁;;;.=---::-二.\- 丁.‘’J/~舍:t“‘叫t正ete_me市{手ienienc坪辩之’~)<em>:</em> t.-? ;4，~工~:.::.‘~:-:-”-:~“.:二王F曰. ~: <del> </del>~~---; ..,<em>... \，~”..int 玉。at.s:[白1;二，二二“M-.’斗二二寸</em>‘<em> .’.‘:”..; ;</em>:c..τ 仆-<em>: .~. - 飞.~‘二..</em>...-士，’_ ... ..:.;、.. . ~ ~:.;之- ‘二、、’:: -..~一--一__ .，<em>;;一</em>“-‘-φ♂h川，ρ.二二-→一~-一，-τf叫’( eoãt臼S+ ‘” 舍k注汪:’12去=号伊.刀[/臼seε俨-c∞。￡武its ‘(μH汇:-tol&amp;岳士一←.-二-一二ι..-←-γ_-，ζι_ ...2::::.<em>’‘’-‘’:‘ ’~‘!:’“注ι』jq.$ 卢宜，布芽待在-，--二;二-二千;;~.. ‘</em> . ...二-二’--;‘::二.气三〈二f豆二; 吩飞气二.:~-~接御指酣针的附知探除夹系刹亏攻阳1以以峙1垂圣7厦阳阳支润迦到到-豆岳叫-讯风阳将阱孚吵吵与η’凡:飞引o0‘Wii谐省畸岩坑飞荫面昨阳代吗:三三r七之乞-二二，::二.:.ë仿hä:必f-fi’例ow吝玩r(1份()k营吃。së矗.勺、、‘子二气_:-… 』←矿-τ f气φ.一... 、’--旷二_- --ζ卢=~co~ t~气-.f.!~。可Et〈T?fEE-t飞出巴巳?flLL:- f丁\L t T毛:Ei牛二: 1堂正组运是第二二企元素的地址γ 面此cout语句中Ji&lt;t fl‘~e;:是包含草和行的chli(元素阔地面b::cõút ~至多(lk汇’--，~: ”:::-二... ...为chà1~的地址是字符串的地址，因此它扛印该地址处的字符f然后继续打印后面的字符，一直到遇到空字符-川，。二，俨二二了=T飞号言飞币t\0ρ〉为ιι，良，二卢如蝴果黝给ω叫山吨边、哥.二:~~~::.. 斗ι5.. ，.丁毡这垦的夹-徨哇不舌宇饲吨Q币W'er-豆数组r而孟1斗F ιJ言是二升采4杭(~lζE瓦沁E币町岳ar:自町lq俑面画ι缸Ji::ξr虫‘这草意舔i舔品福可以;栩陈附f指旨刷1丽句宁E叫h陆L马f晶~句- 气伫←勺二二--一指变|哇量作为cour 的笔数F因为宝但是ch缸的j也且哇当你，该报价指向事符净的开萃，稍庭将核实这丁点。三二二『r川、:-:~ ... -子二二前面的-cout语句中最后气部分时语况如倪呢γ如果floWe( 是字符$第一个字丰苍的地.能则表达式~s :a.re,__:::.c:豆4二zζ::二;:=，.在C忡巾，二周引号括起的事符审像数组名之样，也是第，~ ，个元索阳’也址。王述伐码不会将整个字符@发送.… 二告:…r而来是发送该手符净的地址。这意味着元景教皇刊的学伊F丁用引导括起的字符电常量以及指针、丁z所描述的字符尉，生处理的方式是一样的，‘，都将传递官们的地址O’与逐个传递字符ijI中的所有字符相弛‘.这、.’.‘ .样做的工作量确实要少。</p>
+<p>注意:在ωut 和多数C+字表达式牢，ch缸要更主屉名、cnar指针以及JtH I号括起两字符串常量都被解稀为字草草夺第一个毛符的地址。-</p>
+<p>程序消毒f!.- 4.2伽锁示了如倒使甩不阿形共的字役串。它债用了民介宅符串库中的函数.函就S往len()我非就i能用也它返回宅符净的长度.函数stTCpy()将字衍串从一个位置复制到另一个位且这阪个函数盹原型都位于失文件ωtripg(在不末我~p号型特为.stri，:\g.~)中。该J程序连通过注释指!l，I.‘T配原是避宠的华-...:.，.;,.’全飞二误使用指针的为我.二..立.γ户.~ ‘-:~..’斗争‘，:<em>-’:‘~ .. /斗..&gt;.飞:〉·’-zf二τ-飞::.. ...-. ‘:’.三F 〉·丁、，. 三~{.:~. :~~ :‘二:. .~ . ;’二:F.~;二三;与气卢.. ~ </em>.二:二二λ.气气</p>
+<p>程序清单4罚;前由句Þ ，ν ... . “.~飞·、</p>
+<p>-.1./‘ ptrs~~.，_&lt;::pp】-:.~Il_i口贸· 庐山ters.to宅.s~ rings气;</p>
+<p>ι、，.ι、</p>
+<p>IlincÞude乏“&lt; i osecτeam&gt;f ιJ忖二”三，t.:.-“，::.ζλιμμ，.二ν豆、山二H...‘O，’二豆豆ι:二二二二ι;泣立才古更吧协F圳贝由龄é .二主纣4唱争州垣怜垃1兰2二二吵J二t</p>
+<p>nlt 阳阳垂í ii(￥</p>
+<p>f.'</p>
+<p>、us ingnamespace std;,... …..-... ::.:..，二“5&lt;挝变兰时时..:! 2~L7. ;b号r” :1/antm牛l‘ hold子问a1;-宙J二‘, _.吁.’，二. -.‘’.. -... .‘“毛二:-一::’ :.斗二二…‘:-.:-: ëønst七、缸，__ : ，b i:rd..: ，;，. ...w_r马tt”’i;.í‘;-:ì&gt;l，rd :liøi槌飞袍r运5’of ‘s t:r inç(:?’:二.- ‘二_.，.~: ,.’ - “‘.’.<em>-2士士、:古:气兰t兰仨=勺厅寸斗‘.’.-‘飞?气’.-‘T币a、ν... .;.;</em>-..=, . ... ’- .. ...均..俨户.-‘.’--‘.’ ... :;.-… .-,/, . ι‘” 丈二、，...))...响·儿?、ψγ-，.-町</p>
+<pre><code class="language-cpp">cout &lt;&lt; animal &lt;&lt; • and&quot;; // display bear
+cout &lt;&lt; b主rd&lt;&lt;叫n &quot;;// d isplay wren</code></pre>
+<p>、.•</p>
+<p>-庐，</p>
+<p>-...</p>
+<p>-_. . -.</p>
+<p>-..<em> ..…‘ </em>. . ..--. . “-命-F</p>
+<p>-<em>. ---</em> -.--.</p>
+<p>----♂'-... _.、---.-' mh</p>
+<p>雹飞--“-.-.. . -- ,. • 一_. <em>.. ---，.ι… ~ ·丰品:-:. . ~ • -‘:.;.’ r-‘” </em>. <em> F -</em>，’且，一-.，、<em>. . 一、一一. M.</em> __ -<em>.，坠..-.</em>、~-二_.__._ 一-. ‘，-钊’~ 『</p>
+<h3>第 112 页</h3>
+<pre><code class="language-cpp">// cout &lt;&lt; ps &lt;&lt; &#x27;\n&quot;; //may display garbage, may cause a crash
+cout &lt;&lt; &quot;Enter a kind of animal: &quot;;
+cin &gt;&gt; animal; // ok if input &lt; 20 chars
+// cin &gt;&gt; pS; Too horrible a blunder to try; ps doesn&#x27;t
+// poi nt to allocated space
+ps ~ animal; // set ps to point to string
+cout &lt;&lt; ps &lt;&lt; &quot;!\n&quot;; //忧，same as using anímal
+cout &lt;&lt; &quot;Before using strcpy {) : \n&quot; ;
+cout &lt;&lt; animal &lt;&lt; &quot; at 11 &lt;&lt; (int * ) animal &lt;&lt; endl;
+cout &lt;&lt; ps &lt;&lt; &quot; at &quot; &lt;&lt; (int &#x27;) ps &lt;&lt; endl;
+ps ~ new char [st r len(animal} + 1); // get new storage
+strcpy(ps , animal); // copy string to new storage
+cout &lt;&lt; &quot;After using strcpy (}: \n&quot; ;
+cout &lt;&lt;: animal &lt;&lt; .. at IJ &lt;&lt;: (int .) animal &lt;&lt; endl;
+cout &lt;&lt; ps &lt;&lt; &quot; at &quot; &lt;&lt; {int . } ps &lt;&lt; endl ;
+del et e [) ps;
+return 0;</code></pre>
+<p>下面是该程序的运行情况:</p>
+<pre><code class="language-cpp">bear and wren
+Enter a kind of animal: f ox
+fox!
+Before using strcpy{}:
+fox at Ox0065fd30
+fox at Ox0065fd30
+After using strcpy ():
+fox at Ox0065fd30
+fox at Ox004301c8</code></pre>
+<p>程序说明</p>
+<p>程序清单4.20中的程序创建了一个char数组(animal)和两个指向char的指针变晨(bird和ps).该程序首先将拍imal数组初始化为字符串“be缸”，就像初始化数组一样.然后，程序执行了一些新的操作，将ch缸指针初始化为指向一个字符申:</p>
+<p>const char • bird ~ ‘wren’; // bi rd holds address of string</p>
+<p>记住，“wren”实际表示的是字符串的地址，因此这条语句将“wren”的地址赋给了bird指针.(一般来说，编译器在内存留出一些空间，以存储程序源代码中所有用寻|号括起的字符净，并将每个被存储的字符事与其地址关联起来J这意味着可以像使用字符E和tl wren“那样使用指针bird.如下面的示例所示2</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;A concerned &quot; &lt;&lt; bird &lt;&lt; &quot; speaks\n&quot;;</code></pre>
+<p>字符南字面值是常量，这就是为什么代码在声明中使用关键字ωn5t的原因。以这种方式使用const意味着可以用bird采访问字符串，但不能修改它.第7章将详细介绍const指针。报后，指针ps未被初始化，因此不指向任何字符串(正如您知道的，这通常是个坏主意，这里也不例外〉。</p>
+<p>接下来，程序说明了这样一点，Il.p对于cout来说，使用数组名animal和指针bird是一样的。毕竟，它们都是字符净的地址.cout 将显示存储在这两个地址上的两个字符净(“ bear”和“ wren”) .如果激活错误地显示“的代码，则将可能显示一个空行、一堆乱码，或者程序将崩溃.包IJ~米初始化的指针有点像签发空头支票g无法控制它将被如何使用。</p>
+<p>对于输入，情况有点不同。只要输入比较短，能够被存储在数组中，则使用数组animal 进行输入将是</p>
+<h3>第 113 页</h3>
+<p>安全的.然而，使用bird 来进行输入并不合适:</p>
+<p>• 有些编译器将字符串字面值视为只读常jfi:，如果试图修改它们，将导致运行阶段错误.在C++中，</p>
+<p>字符串字面值都将被规为常嚣，但并不是所有的编译器都对以前的行为做了这样的修改。</p>
+<p>• 有些编译器只使用字符扇字币值的一个自1J本来表示程序中所有的该字面值。</p>
+<p>下面讨论一下第二点。C++不能保证字符串字面值被唯一地存储。也就是说，如果在程序中多次使用了字符串字面值“啊en”，则编译器将可能存储该字符串的多个剧本，也可能只存储一个剧本。如果是后丽一种情况，则将bird设宽为指向一个“ wren ”，将使它只是指向该字符净的唯一一个副本。将值读入一个字符南可能会影响被认为是独立的、位于其他地方的字符净。无论如何，由于bird 指针被声明为const，因此编译者曾将禁止改变bird指向的位置中的内容。</p>
+<p>试图将信息读入ps指向的位霄，将更糟。由于ps没有制β始化，因此并不知边信息将被存储在哪里，这甚至可能改写内斗字申的信息。卒运的是，要避组主种问题很容易一一只要使用足够大的char 数组来接技输入即可J育;干4要使用字符*常最或未被初始化的指针来接收输入。为避免这些问题，也可以使用时.仿ing 对象，而不是数缀。</p>
+<p>警告是z在将宰符帘读二、在序时，应徒刑已分配叮内存地址。该地址吁以是数量E名，也，吁以是使用new初始化过的指针0-二晶Z样叫声问再接下来?请注意下述代码完成的主作→了二二?干二.-气气二...牛产千二_.♂曰冉冉时ZJEZ时~-</p>
+<pre><code class="language-cpp">ps ~animal; 11 set ps to point... to-string-
+-
+èòut :&#x27;&lt;&lt;::anim:aì &lt;&lt;: &quot; &#x27;a~&#x27;&quot; &lt;&lt; .&#x27; (in.t.:&quot; ) :animill&lt; &#x27;&lt;&lt; &#x27;,2nd};&#x27; ...;... &#x27;;,.&#x27;. .:... _,. &#x27;&quot;</code></pre>
+<p>c。气《民飞飞t乓:&lt;&lt; .(川! !-EL HE?dl!--J .·-t--·它·将生成毛洒的输出，γ-工二一_.三二...-“ <em>”.耳?二乞.-‘~ ’.~~ -.. ... 一.-4、工飞，、FEox dEYxooeFfqz且- L-九·叩τ</em>;.- 芝二二二.，.<em>二二、二</em>-:.-<em> :</em>.二d一</p>
+<p>{ox at“:”Ox006S-fd30一工人.，-二二二展开t说，，·.如果给ω山提供一:个指针，-:古将打邱.iiÞ.址。J但如果指锐的类型为c阳王•.9!lj &lt;;‘Ol1t将’1[示拍:、二二、-:7· 二….‘.向的字蒋串...如某安显示的是字符串的地址，如j必须将这种指仕强制转换方另二革中柑针’类型二如int牛&lt;J::二二~-...二.“.‘二面的~码就是这样做ir瓦因此，-p~显示为=字符串- 765盯，而drit<em>、.~:ps 显示为该-字报单附垫扯。注意，. 将L卜.. :.，:.<em>.-:...:”.可啦啦忡不笔划吱申7;而只-复制地址唱: 这样.明缚住事指向阳的内向:7t~彗茎;二-斗斗“要获得字符峭的剧本，还需要做其他工作士革先，.需要分配问存来在储该字征阜，.-这，可以通过吉普日‘现另-二.. --二二</em>，_” .“ μI个数组或使用-rïew来完成.后一种好法使得能够根据字符榻的</em>’度来指定理帘的空陀气二二.一、;二，.</p>
+<p>ps ~时wchadstrlen (animal) +去1;/广g'etne恃storage</p>
+<p>字乎在市“fox”不能填满整个创而马l数组J因此这样做浪费宁空fiï~上述伐码使j导strlen0)来确定字很串的长度，并将它为町L来获得面育空字待时该字符净的长度.随后，程序使}非néw来处配刚好足够存储该字符净的空I也--钮‘甲飞-</p>
+<p>钱下来也需妥将aniri1id数组帘的字符感复制到新分配的空阵中←将àhiinal赋给ps是不可仔的，阻为这样只能修改存储在ps中的地址;lA而失去程序访问新分配内存的唯-途径。需要使用库函数str.cpyü:</p>
+<p>strcPy(ps‘,:...ãn-i.íilai); .= <em>.. </em>. /j. copy,.string-.to new-storage .一_.: -....:. s位cpy(:)函数接受2分参数。第一个是『目标地址，第二千是要复制的字符串的地址.您应确定，分配Tγ目标空闲，.并有定够的空间来存储副本v在这里，才我们用strlçn()来确定所布朗空[吵，并使用new获得可-用的内存_.</p>
+<p>.、，</p>
+<p>池边使用strcpyf.用‘ new，将获得“fox’‘-的阵个独立副主仨:</p>
+<pre><code class="language-cpp">fox at OxO.065.fd30 &#x27; .一
+fox at Ox004301cS</code></pre>
+<p>男外，.new. .:tÊ离~anifuar数怨d很远的地方找到了际需的内存空阅.</p>
+<p>经常需要将字符:t\被3iìJ数络中-初娘也数缉时，诱使月王F运算符;否则应使用sticpy( )或strncpxf).strcpyO在前班已经先好菇，其工作原理如下飞,‘. :.<em>.“, -..’ . ~.;:...:.. .‘.. ..</em>.. ... : J... -:_.:::-,• 一.:. :.-. ...-”，.--“’.句‘!”’: -‘白.-，<em>气- 0. - ...‘’‘;’. ‘</em>:’ ...</p>
+<p>w -. : ...,<em> </em> ,... ' ..-</p>
+<p>飞.‘ 之~.-’;~“-..:‘~” ~，一’_.:，，: ...:.:ζ，.二-主J二、二-之“__ t--令.‘-.. ”<em> -.“:,. -. .. . ..~ -. ”:-:::‘’::‘“飞</em>.~’-‘. 工:...----’<em> ‘ - ,.. ”</em>’ . ..“:‘.:... __:’_;.- ” .• -...亨..:.=</p>
+<p>.::-=‘ -:.?’ ... ...;::. :“:‘ . -. __ -_’ -. -”“‘-”~’ . .;- “‘，--’.气.__.- <em>. .~ ~-...,: .--.:..:... . .</em>::. ” ...;=，~</p>
+<p>,,<em> ":. ,':. ,:‘. .z. :... .,..,..</em> ':" -'.: ': ---_ : -:..- -,</p>
+<p>_</p>
+<p>-‘:.“’:ι，..‘ ~<em>-: 气已…’ .-‘.~ -二..~仁</em>.</p>
+<p><em>. </em>--.. "'-,</p>
+<p>-ι_ψ -、了-一笔-._. =--、.‘. ~. .ø. . ø</p>
+<p>.…-… ι</p>
+<h3>第 114 页</h3>
+<pre><code class="language-cpp">char foodl20] = .carrots&quot;; 11 initial ization
+strcpy (f ood, &quot;flan. ) ; 11 otherwise</code></pre>
+<p>注意，类似下面这样的代码可能导致问题，因为food数组比字符串小:</p>
+<pre><code class="language-cpp">strcpy (food , &quot;a picnic basket filled with many goodies&quot;);</code></pre>
+<p>在这种情况下，函数将字符审中剩余的部分复制到数组后面的内存字节中，这可能会覆盖程序正在使用的其他内存.要避免这种问题，请使用stmcpy( )。该函数还接受第3个参数一一要复制的最大字符数.然而，要注意的是，如果该函数在J!J达字符串结尾之前，目标内存已经用完，则它将不会添加空字符.因此，应该这样使用该函数:</p>
+<pre><code class="language-cpp">strncpy(food, &quot;a picnic basket filled with many 9∞dies&quot;， 19) ;</code></pre>
+<p>food (19) =气。‘1</p>
+<p>这样最多将19个字符复制到数组中，然后将最后一个元索设置成空字符。如果该字符$少于19 个字符，则stmcpy()将在复制完该字符南之后加上空字符，以标记该字符净的结尾.</p>
+<p>警告:应使用白cpy()或strncpy()，而不是赋佳运算符来将字符串赋给数量且。</p>
+<p>您对使用c-风格字符串和cstring 库的一些方面有了了解后，便可以理解为何使用c++s仕ing 类型更为简单了2您不用担心字符蹋会导致数组越界，并可以使用赋值运算符而不是函数strcpy()和stmcpy( ).</p>
+<p>4.8.4 使用new 创建动态结构</p>
+<p>在运行时创建数组优于在编译时创建数组，对于结构也是如此。需要在程序运行时为结构分配所帘的空间，这也可以使用new运算符来完成.通过使用new ，可以创建动态结构.同样，‘‘动态“意味着内存是在运行时，而不是编译时分配的。由于类与结构非常相似，因此本节介绍的有关结构的技术也适用于类.</p>
+<p>将new 用于结构由两步组成:创建结构和访问其成员.要创建结构，需要同时使用结构类型和new .例如，要创建一个未命名的inflatab1e类型，并将其地址赋给一个指针，可以这样做:</p>
+<pre><code class="language-cpp">inflatable • ps = new inflatable;</code></pre>
+<p>这将把足以存储inflatab1e结构的一块可用内存的地址赋给ps .这种句法和C++的内置类型完全相同.</p>
+<p>比较棘手的一步是访问成员.创建动态结构时，不能将成员运算符句点用于结构名，因为这种结构没有名称，只是知道它的地址。c++专门为这种情况提供了一个运算符·箭头成员运算符(-&gt;).该运算符囱连字符和大于号组成，可用专指向结构的指针，就像点运算怨再用于结构名一样。例如瘦如果pst!i陆=个inflatafi1e-结狗，贝吐ps-&gt;pl‘Ïce 走被指向的结构前E百e~员〈参见图4. 11，).</p>
+<pre><code class="language-cpp">struct t hinfj S-
+in~ good;
+int&quot; bad γ~
+grubnose-</code></pre>
+<p>悬一个结构</p>
+<p>~、-</p>
+<pre><code class="language-cpp">thing&#x27;s 9_!&#x27;ubnose = {3, 4531; _ _
+t hings • pt = &amp;gpu阳、ose;</code></pre>
+<p>」俨J</p>
+<p>L一甲…一一__ptt能向统构</p>
+<pre><code class="language-cpp">gr ubAose structure</code></pre>
+<p>__.,k____ _</p>
+<p>r ...</p>
+<p>将运算符I___~</p>
+<p>~ -, or-<em>ubnose . good ..</em>-_ . 11#-.--grub响。se.bac;t----</p>
+<p>. 1: .'.</p>
+<p>用于结构名.~. ~</p>
+<p>J号，I.~，‘~ ,’-</p>
+<p>e结构grubnose.-.---.1 I I ‘.</p>
+<p>--,3 453</p>
+<p>L .</p>
+<p>•</p>
+<p>可矶山‘J ::…~.,-</p>
+<p>、将运算符4 用于‘l..-’. -‘. 气“</p>
+<p>P.•.g</p>
+<p>A</p>
+<p>指向结构的制f…二、tooél ‘ ptbad’</p>
+<p>、</p>
+<p>阁4.1 1=标识结构成房一‘ 4 -，、一-. .. ... ..</p>
+<p>, 、、.~..</p>
+<p>‘.-</p>
+<p>,...<em>.</em>"</p>
+<h3>第 115 页</h3>
+<p>提示:有时.c++新手在指定结构成员时，搞不清楚何时应使用句点运Jt:符，何时应使用箭头运算符。规则非常简单。如采结构标识符是结构名，则使用句点运算符;如果标tp、符是指向结构的指针，则使用箭头运算符。</p>
+<p>另一种访问结构成员的方法是，如果ps是指向结构的指针，贝tl*ps就是被指向的值一一结构本身。由于.ps是一个结构，因此仆ps).price是该纺构的priω成员。C忡的运算符优先规则要求使用括号。</p>
+<p>程序清单4 .2 1使用new 创建一个来命名的结构，并演示了两种访问结构成员的指针表示法。</p>
+<p>程序清且在4.21newstrct叩P</p>
+<pre><code class="language-cpp">// newstrct.cpp --using new wi th a structure
+#i nclude &lt;iostream&gt;
+struct inf latable // structure defini tion
+char name[20 ! ;
+float volume;
+doubl e price;
+int mai n ()
+usi ng namespace std;
+inflatable • ps = new infl atable; // allot memory for structure
+cout &lt;&lt; &quot;Enter name of i nf lat abl e item: &quot;;
+cin.get (ps -&gt;name , 20); // method 1 for member access
+cout &lt;&lt; &quot;Enter volume in cubic feet: *&#x27;;
+cin &gt;&gt; (&#x27;ps) .vol ume; // method 2 for member access
+cout &lt;&lt; &quot;Enter price: $- ;
+c ln &gt;&gt; ps-&gt;prlce;
+cout &lt;&lt; &quot;Name: &quot; &lt;&lt; (*ps) .name &lt;&lt; endl; // method 2
+cout &lt;&lt; &quot;Vol ume: &quot; &lt;&lt; ps-&gt;volume &lt;&lt; • cubic feet\n&quot;; / / method 1
+cout &lt;&lt; &quot;price : $&quot; &lt;&lt; ps -&gt;price &lt;&lt; endl; // method 1
+delet e ps; // free memory used by struct ure
+return 0;</code></pre>
+<p>下面是该程序的运行情况:</p>
+<pre><code class="language-cpp">Enter name of inf l atabl e item: Fabulou8 Frod。
+Enter volume in cubic f eet : 1.4
+Enter price: $27.99
+Name: Fabulous Frod。
+Volume : 1.4 cubic feet
+Price: $27.99</code></pre>
+<p>l 一个使用new和de1ete的示例</p>
+<p>下面介绍一个使用new 和de1ete 来存储通过键鱼输入的字符净的示~J .程序清单4.22定义了一个函数getnameO.该函数返回一个指向输入字符串的指针。该函数将输入读入到一个大型的临时数级中，然后使用new[]创建一个刚好能够存储该输入字符串的内存块，并返回一个指向该内存块的指针。对于读取大量字符串的程序，这种方法可以节省大量内存(实际编写程序时，使用string类将更容易，因为这样可以使用内宜的new 和de1ete) 。</p>
+<p>假设程序要读取100个字符串，其中最大的字符南包含79个字符，而大多数字符串都短得多.如果用char数组来存储这些字符串，则需要1000个数组，其中每个数组的长度为80个字符.这总共部要80000个字节，而其中的很多内存没有被使用。另一种方法是，创建一个数组，它包含1000个指向cbar的指针，</p>
+<h3>第 116 页</h3>
+<p>. ...，...ι“‘-”“入、..，..”.、...、..，，-;然屁使用new 根据每个字符串的需要分配相应数量的内存二这将节省儿万个字节.是根据输入来分配内存，而不是为每个字符1$使用一个大型数组。另外，还可以便辟new-根据能耍的指针数蠢来分配空间.就目前而言，这存条不切实际，即便是使用1 000 个指牡的数组恒是这样，不过程序，清单4.22还是演示了一些技巧.另外，为演~deletc是如何工你的，该程序还牌:自来释放内存以便能够重新使用.</p>
+<p>程序清单4.22delete .cpp</p>
+<pre><code class="language-cpp">// del ete .cpp --usin~ t he delete-operåtor
+#include &lt;iostream&gt;
+曾incloude&lt;cscrïng&#x27;&gt;. /.1 or scring-. h
+using namespace std;
+char • getnam~ void); /./ function prototype
+int main()</code></pre>
+<p>L</p>
+<p>char • name; // create point er but no storage</p>
+<p>.雪、</p>
+<p>-.吉τ~‘.τ. •</p>
+<pre><code class="language-cpp">name ~ getname t-l-; .. /1 a臼ign- addre臼，- of string &#x27;to name
+cout &lt;&lt; name &lt;&lt; n a t.仲&lt;&lt;(J.nt . ) oame &lt;&lt;-&quot;\n&quot; i
+delete- f I name; -k/ memory f reed一
+name -getname ~).; LI reuse f r eed memory
+cout &lt;&lt; name &lt;&lt; &quot; a:t .I-&lt;&lt;:...fi nt ‘) name &lt;&lt; &quot;飞血It;
+delete [ 七name 二Ltmemoryfreed again
+return-O;</code></pre>
+<p>E</p>
+<pre><code class="language-cpp">char俨getnamel-l-/ I returrrpointel:.. to new string--
+char temp [801 ; // temporary storage
+cout &lt;&lt; &quot;Enter last name: &#x27;;
+cin &gt;&gt; temp;
+char • pn = new char (strlen(t emp) + 11;
+strcpy(pn, temp); // copy string into srnaller space
+return pn; // ternp lost when function ends</code></pre>
+<p>下面是该程序的运行情况:</p>
+<pre><code class="language-cpp">Enter last narne: Fredeldumpkin
+Fredeldumpkin at Ox004326b8
+Enter last name: Pook
+pook at Ox004301c8</code></pre>
+<p>2.程序说明</p>
+<p>来看一下程序清单4.22中的函数getnameO. 它使用cin 将输入的单词放到temp数组中，然后使用new分配新内存，以存储该单词。程序需要由le(temp) + 1个字符〈包括空字符〉来存储该字符净，因此将这个值提供给new .获得空间后，getname()使用标准库函数strcpy()将temp中的字符扇复制到新的内存块中.该函数并不检查内存块是否能够容纳字符净，但getname( )通过使用new请求合适的字节数来完成了这样的工作.最后，函数返回归，这是字符串副本的地址.</p>
+<p>在main( )中，返回值〈地址〉被赋给指针name .该指针‘是在main()中定义的，但它指向getname()函数中分配的内存块。然后，程序打印该字符息及其地址.</p>
+<p>接下来，在释肢name指向的内存块后，m础的再次调甩getnarrre().C忡不保证新释放的内存就是下</p>
+<h3>第 117 页</h3>
+<p>一次使厚hew时选择的内存，从程序运行结果可知，确实不是.-</p>
+<p>在这~例子卒，ge1name夺)公配内存，而main( )释放内存τ将new和dclete 放在不同的函数串通常并不是个好办法，因为这样很容易忘记使用delete.不过这少例子确实把:new和delete分开放登了，只是为了说明这样做也是可以的.</p>
+<p>为了解该程序的一些更为微妙的方面，键要辈[1 1草一些在关c++是如仍处理由布的知识这下面介绍一些这桦的知识，-这些知识将在第9章做全面介绍「</p>
+<p>4.8.5-自动存储、静态存储和访态存饨</p>
+<p>根据用于分配内存的方法，C++有3种管理数据内存的万式于自动存储怡青争~存储和动态存储〈有时也口*-f字~Å王存储空间或维〉飞在存在时间的-长短齐面，以这3 种方式分配的数据对象各不相同ι下面简要地介绍每种类型(C忡H新堆丁第四种类型一一线程在筋，这将在第9j在简娶她讨论).</p>
+<p>F 命动存储</p>
+<p>在函数内部定义的和规变量使用自动存储空fiï_f，被称为自动变量(automatîcvariablc)，这意味着它们在所属的函数被调用时自动产生L在该函数结束时浪亡.例如，程序滔单4.22中自‘l..temp数组仅生ge1name()函数活动时存在.当程序控制l校回到. main()时，temp使用的内存将自动被释放e如果getname()返ê1 temp-的地址ι则main( )中的name-指针指向的内存将很快得到重新使用.这就是在getnameω中使用new的原国之~-o-</p>
+<p>实际上，自动变量是一个局部交量3其你用域为包含它的代码块.代码块应被包含在花括军中的一展代码。到目前为庄，我们使用的所有代码块都定整个函数，然而，在下一章将会着剑，函数由也可以有代码块.如果在英中的某个代码块定义丁一个变量7则该变震仅在程序执衍该代码块虫的优码时存在.</p>
+<p>自动变窒通常存储在校中.这意味惹执行代码块时，其中的变竟将依次加入到j校中，rrõ.;在离开代西块晖:将按相反的顺应释敖这些变囊，这被称为辰进先出(ll，lFσ).因此，在程序执往过程申:钱将不脐地增大和缩小。</p>
+<p>2 _静态存储</p>
+<p>吉普态存储是整个程序执行期间都存在的存储方去.使变量成为静态的穷式有两种F一种是在函数纯而定义‘8;另一种是在声明:变盘时使用关键字static:</p>
+<pre><code class="language-cpp">st.atic double fee =56.50;</code></pre>
+<p>在K&amp;RC中，只能初始化静态数组和稳态结构忏ii'ii. C++ ReJease 2.0 (及后续版本〉和ANSIC吗~，也可以初始化自动数组和自动结构。然而，一些您可能已经发现飞有些C++实现还石支持类情动数组和自动结构的初始化.</p>
+<p>第但意将详细介绍静态存储。自动存储和静态存储的关键在圣:这些方法严格地限制了变量的寿命。变室主可能存在于程序的整全生命周期￡静态变晕头-也B能只是在特定函数被执行的存在(自动变量ì.‘</p>
+<p>3宁动态存储</p>
+<p>new 和dele能运算符提供了一种~t 臼动变量和常态变盘更灵活的方法i‘ι们管理7-个内存池，这在C++中被称为自由存储空间忧民蜘re-r-或维(hea抖。该内存池同用于静态变量刑，自动变髦的内存是分亮的.草里月i消t在4.22表明，new和delete让您能够在一个函数中分配内存，而在另一个函数中释成它。因此，数据的主E命周期不完全受程序或函数的生存时间控制.与使用常规变囊相比，使用new 和derete让程序员对程序如饵使甩内存有更大的控制眠。然而，内存管理也更复杂J: .在校中，自动曾在加利删除机制使得占用的内有，总是连续的7但new 和dele忧的柑互影响可能导致占用的自由存储区不连续，这使得跟踪新分配内存的位置更困难.</p>
+<p>械、堆积内存泄漏</p>
+<p>步来4吏芹子new运算符在自由存储空间(夜难)土创定交量后，ì吏有调用，dele怡，将发生什么-情况呢?如果没有调用de怆饨，则即使色舍指针的内存由专作用我规则和对象生命周期由营房、因而被样放，在~由存</p>
+<h3>第 118 页</h3>
+<p>储空Ji海J:.访态分画己的交量或结构也将练续存在。实际上，将毛元浅访问自-由存储空间中饨结构.阶为指向这些内存的指针无效。这将导绞肉存泄漏。被泄漏曲也由存将在程序竹签个生命周期由都不可使用;这也什存被分配出去，但无法收回。极端情况(不过不常见)足，内4号t世涌到:能会非常严重~，以致于应用:程序-可用的民『存放耗尽zr出现内存耗尽错淀，字兹在序崩溃。Jí=外.这种泄渴还会给一些操你系统式在相同的内存在暗中运行的应用程序带来负面圾响，占去量生它们崩司峰。，</p>
+<p>即使是最好的程序英和软件公司，也可能导致内存泄汤。要避兔内在泄漏，最好是养成革样一种习惯弘即同时使用new 和dclete运算符L在白面存体空间上动态分配内存.随后使籍放它。C-a-智能指针有助王自动完成这种任务，...i率将在第16章介绍。</p>
+<p>注蠢:指针是功能最强大的C忡工具之一，但也最危险，因约它伺允许执行对计算机不友好的操作，如使用:未经初始化的指牵t采访肌肉存或者试因释放-阿一个内存决两次。另和才指旨针概念之前扣才指旨针是容易号引纣l‘宠起迷怠的。由圭指针是C如编程的重妥组成部分，本书层面将更:详细地讨论乞。本书多次对指针进行工讨论，就是希望您能够越来越-熟悉它。</p>
+<h2>4.9 类型组合</h2>
+<p>本章介绍了数组、结构和指针.可以各种方式组合它们，下面介绍其中的一些，从结构开始:</p>
+<pre><code class="language-cpp">5truct antarctica_year5_end
+{
+int year;
+/ 舍sornereally interesting data, etc . */</code></pre>
+<p>可以创建这种类型的变景:</p>
+<pre><code class="language-cpp">antarctica_years_end S01, s02, 503; // 501, 502, 503 are structures</code></pre>
+<p>然后使用成员运算符访问其成员:</p>
+<pre><code class="language-cpp">sOl.year : 1998;</code></pre>
+<p>可创建指向这种结构的指针:</p>
+<pre><code class="language-cpp">antarctica_years_end • pa : &amp;s02;</code></pre>
+<p>将该指针设置为有效地址后，就可使用间接成员运算符采访问成员:</p>
+<pre><code class="language-cpp">pa-&gt;year = 1999;</code></pre>
+<p>可创建结构数组z</p>
+<pre><code class="language-cpp">antarctica_years_end trio(3); // array of 3 structures</code></pre>
+<p>然后，可以使用成员运算符访问元素的成员:</p>
+<p>trio(OJ , year = 2003; // trio[O) i5 a 5tructure</p>
+<p>其中创o是一个数组，创0[0]是一个结构，而trio[O].year 是该结构的一个成员.由于数组名是一个指针，因此也可使用间接成员运算符:</p>
+<pre><code class="language-cpp">(trio+1)-&gt;year = 2004; // 5arne a5 trio [l] , year = 2004;</code></pre>
+<p>可创建指针数组:</p>
+<pre><code class="language-cpp">const ant arctica_years_end * arp[3] : \ω01， &amp;502 , &amp;503J;</code></pre>
+<p>咋一肴，这有点复杂.如何使用该数组来访问数据呢?既然arp是一个指针数组，町[1)就是一个指针，可将间接成员运算符应用于宫，以访问成员:</p>
+<pre><code class="language-cpp">std: :cout &lt;&lt; arp[l]-&gt;year &lt;&lt; std: :endl;</code></pre>
+<p>可创建指向上述数组的指针:</p>
+<pre><code class="language-cpp">const antarctica_years_end ** ppa = arp;</code></pre>
+<h3>第 119 页</h3>
+<p>飞其中二;在苦斗数组的名称，。因此它是第二个元泵的地址.二面其第一千元素:tJ指针，因此ppa4卦指针」指向一个指向∞nstant肌tica_years_end的指针。这种声明很容易在错。例如，您可能遁赢const，...:忘记飞搞错顺序或结构类型。下面的态伊j谈呆了C廿11-根本协auto 提-供的方使。编译器知道缸p的类型，能够正确地推断也PHP的类型:</p>
+<p>auto ppb =- arp; f / C++11 automatic type deduction</p>
+<p>在以前，-编译器和j用它推断的类型来指出声明错误，而现在，您可利用它的这税推断能力.</p>
+<p>如何使用ppa 采访问数据呢L由TPR且是一个指向结构指针的指钱，因此.!pp~是一个结构指针，可将间接成员运算符应用于它r</p>
+<pre><code class="language-cpp">stà: :cout &lt;&lt; ( *即主)-&gt;year&lt;&lt; std::endl;
+std:_:cout &lt;&lt; (* (ppI5+1! )-&gt;year &lt;&lt; std: :.endl,</code></pre>
+<p>由于ppa 指向呻的第一-1-元素，因此.ppa 为第一个元素.flJl‘&amp;s0 1.所以，(..ppa)-&gt;year为sO )的year成员.在第二条语句中.ppõ+)指向下-~元素arp[l]，即&amp;502.其中的括号必不可少，这样左能正确地一一一一一结合.例如，“’ppa-&gt;~ear 试图将运算符·应用于gpa-&gt;year，这将导致错误，因为成员year 不霆指针。</p>
+<p>上面所有的说法部对吗?程序消单牛23-将这些语句放到了一个简短的程序中‘</p>
+<p>程序清单4.2~mi刘ypes.cpp</p>
+<p>，1/ 旦旦types.cpp-守sometype-co巾inatí“ons一lIi nclude &lt;iostream&gt;. -丐二了丁structιahtarctica_yeats_eñd.‘</p>
+<p>. , . {</p>
+<pre><code class="language-cpp">.int year;. ...:._
+/*. some really interesting data , etc. */
+主ntmainO , &quot;;</code></pre>
+<p>...1' .._~</p>
+<pre><code class="language-cpp">: antarct 主ca~ears~end801，二β02，.803;~&#x27;.
+901.year = 1998;
+antarctica=years_end禽pa= &amp;902;...
+I?a- &gt;year = 1 995问
+antarctica_years_end trìo (3 );_ / 乒arrayof 3 structures
+trio fO] .year = 2003;
+9td: :cout &lt;&lt; trie- &gt;year &lt;&lt; std&quot;endli</code></pre>
+<p>c。阳tantarctic气years_end.* arp[3-] = 1&amp;901 ，阔l02，&amp;ω3 ~;</p>
+<pre><code class="language-cpp">std: :cout &lt;&lt; arp(1)-&gt;year &lt;&lt; std: :endl;
+const antarctica_years_end • • ppa = arp;
+auto ppb = arp; // C++11 automatic type deduction
+// or else use const antarctica_years_end舍.ppb = arp;
+std: :cout &lt;&lt; { 会ppa)-&gt;year&lt;&lt; std: :endl;
+std::cout &lt;&lt; (*(ppb+1))-&gt;year &lt;&lt; std: :endl;
+return 0;</code></pre>
+<p>该程序的输出如下:</p>
+<p>2003</p>
+<p>1999</p>
+<p>1998</p>
+<p>1999</p>
+<p>该程序通过了编译，并向前面介绍的那样运行。</p>
+<h3>第 120 页</h3>
+<h2>4.10 数组的替代品</h2>
+<p>本章前面说过，筷板类vector和array是数组的替代品.下丽简娶她介绍它们的用法以及使用官们带来的一些好处。</p>
+<h3>4.10.1 模报类vector</h3>
+<p>筷板类vector类似于string类，也是一种动态数组.您可以在运行阶段设置rtvector 对象的长度，可在末尾附加新数据，还可在中间插入新数据.基本上，它是使用new创建动态数组的替代品.实际上，vector类确实使用new 和delete来管理内存，但这种工作是自动完成的.</p>
+<p>这里不深入探讨模板类意味着什么，而只介绍一些基本的实用知识.首先，要使用vecωr 对象，必须包含头文件vector .其次，vector包含在名称空间std中，因此您可使用using编译指令、using声明或sω::vector.第三，模板使用不同的语法来指出它存储的数据类型.第四，vector类使用不同的语法来指定元素数.下面是一些示例:</p>
+<pre><code class="language-cpp">#include &lt;vector&gt;
+using namespace std;
+vector&lt;int&gt; vi; // create a zero-size array of int
+int n;
+Cln &gt;&gt; n;
+vector&lt;double&gt; vd(n); // create an array of n doubles</code></pre>
+<p>其中，vj是一个vector&lt;ml&gt;对象，vd是一个vector&lt;double&gt;对象.由于vector对象在您插入或添加值时自动调整长度，因此可以将vi的初始长度设置为零.但要调整长度，需要使用vecωr 包中的各种方法.</p>
+<p>一般而言，下丽的声明创建一个名为vt的vector 对象.它可存储n_elem个类型为typeName的元素:</p>
+<pre><code class="language-cpp">vector&lt;typeName&gt; vt(n_elem);</code></pre>
+<p>其中参数n_el巳m可以是‘应型绍’盘，也可以是整型变量.</p>
+<p>4 . 10 .2模板类arrayC C忡11 )</p>
+<p>vector类的功能比数组强大，但付出的代价是效率稍低.如果您需要的是长度固定的数组，使用数组是更佳的选择，但代价是不那么方便和安全.有鉴于此，C++IJ 新增了筷板类array，它也位于名称空间std中.与数纽一样，町ay对象的长度也是固定的，也使用梭(静态内存分配)，而不是自由存储区，因此其效率与数组相同，但更方便，更安全。要创建町ay对象，需要包含头文件array .array 对象的创建语法与vector 稍有不同:</p>
+<pre><code class="language-cpp">#include &lt;array&gt;
+using namespace std;
+array&lt;int , 5&gt; ai; // create array object of 5 ints
+array&lt;double, 4&gt; ad ; {1. 2, 2. 1, 3.43. 4.3);</code></pre>
+<p>推而广之，下面的声明创建一个名为町的array对象，它包含n_elem 个类型为typename的元素:</p>
+<pre><code class="language-cpp">array&lt;typeName, n_elem&gt; arr;</code></pre>
+<p>与创建vector 对象不同的是，n_elem不能是变蠢。</p>
+<p>在C忡II中，可将列表初始化用于vector 和array 对象，但在C忡98中，不能对vector 对象这样做.</p>
+<h3>4.10.3 比较敷组、vector 对象和array对象</h3>
+<p>娶了解数组、vector 对象和array 对象的相似和不同之处，最简单的方式可能是着一个使用它们的简单</p>
+<h3>第 121 页</h3>
+<blockquote><p>［本页文本层 OCR 严重损坏（该页扫描阴影/插图区产生了大量乱码字符），以下为原始抽取结果（未删改），内容以 PDF 第 139 页图像为准］</p></blockquote>
+<p>主二?理;三1号l河县-4.气怀主;二;三气兰兰二‘干了子--三72主二、丁?去土气}二-----~.飞程序清单424ctlOids冲diJ二-二L三. ，C;;;;;二三二，.:.:.:~ =:: :..:.,;... <em>-..;...二7-JJE云三兰兰→-一二一二’二二一一</em>/ I ,cþo-ices _cpp .:二二array <em>v;ï ri.atiõns-</em>…-工…“四”州:的.-帆二二三二一.--_.-二二晶一</p>
+<p>#.incl ude. &lt;iostream,; “.c</p>
+<p>...--.._ . … …</p>
+<p>寸iñëlude 飞有:ctor了γ/飞1“Lc:.:t9r-一一_...，<em>.，.，一‘气川一【-、、#includecarray&gt; ‘只f/..C:++I1旷;<del>{’ </del>lJlO .习主、三公.</em>.τ 、二。公ζ. .;;;.;!,;</p>
+<p>仨</p>
+<pre><code class="language-cpp">using-namespace std;.
+// G, or 主gina L C++
+doubLe a1( 4)王J!. .2，.2.4, 3.ι ，今_s};</code></pre>
+<p>1/ E:午+98.STL</p>
+<pre><code class="language-cpp">vector&lt;double.&#x27; a2 (&#x27;4í; ./ / create&#x27; vector. with 4&quot; , e l ements _ . _-一一--
+11 0 0- simPl.e way Eõ inftializ.e in C98</code></pre>
+<p>a2[OÞ ~ 1. 0/3. 0;</p>
+<p>a2[T ):. ~ 1.O; S，Qι</p>
+<p>~ a2(2)..~ 1.0/7.0;一:..::~. :-.‘<del>-::- .L:;气::.rå“2-:f3 F-</del> -;léo/9，: 0’，-，、… 中宁?一... :.:...:-.~: -.. :，_;.<em>二·主-飞~.</em>、_.卢3号二三乙::”号，乒丰台二二</p>
+<p>:.__::.,... ‘.-回气，、…T飞“气~-.~ ~~严严:;;”-’-，“ <em>..</em>.-ι~乍------~... 二字·</p>
+<p>1-1 C村11“‘λèi台te_andinit_1真让王ι&lt;D:X主y;ob) ~ct，.::-::--::一弓士.工Y三~τ-ζ手，..=..，:.=:二;...J”二卢__. ...:..--一</p>
+<pre><code class="language-cpp">arraycdouble, {&gt; a3 = {3,14, 2. 于2_1.62二1.4 17 ;
+arra~double， 4&gt;-a4;</code></pre>
+<p>一气二_ a4-‘:a3; tf.二_va圣id，forarray ob iecte平。fsame s ize</p>
+<p>e-</p>
+<p>.,</p>
+<p>-,. 71 ‘us arraY’.notilt-fun. --‘. _</p>
+<pre><code class="language-cpp">∞ut &lt;&lt;. &quot; a-r(2r:-τ;.&lt;&lt; a1.{2J.,-&quot;&lt;&lt; ,; &#x27;at. ，~二，&amp;a U2J:;._&#x27;&lt;&lt; &#x27;endl;</code></pre>
+<p>cout &lt;&lt; “a2( 到二..&lt;&lt; a2(2t.cc. ~ a仨”&lt;&lt; &amp;a2:(2)三&lt;&lt;endl;</p>
+<pre><code class="language-cpp">cout. &lt;&lt; ~ ã3( 2&quot;1:.&#x27;:&#x27;&lt;&lt; a3(2) &lt;&lt;&quot; .at.:&quot;&quot;&quot;&quot;&lt;.ι&amp;a3-f全1&#x27;-&lt;&lt; .endl;</code></pre>
+<p>cout &lt;&lt; ~ a4( 2 1 羊11&lt;&lt; a4 [2) &lt;&lt;. U at fI飞&lt;.&amp;84←[ 2 ~&lt;&lt;endl元</p>
+<pre><code class="language-cpp">II&#x27;mïsdeed
+al •2J • 2-0 ,2;</code></pre>
+<p>二ι二co\生t...~&lt;‘呈l: (-:~J::‘ ... 5&lt;=- a L(’-<em>21 &lt;&lt; ‘’::.at ‘ ~</em>“”“ &amp; ... 1.[:-2) ’&lt;~ e早dl-;<em>&gt;: </em>-... ..，v-.、~<em> -.芒~，寺--.~:.:</em>.:.::.;..‘:”“’!‘记 .. ... o_. u飞. ..;;;-<em>. .~&lt;去. ..’:-</em>. ~3..{2).: :t.-~.:，&lt;王，;in. (2), <em>&lt;&lt; </em>”..<em>at ‘“ &lt;&lt;崎3[2:E;.&lt;&lt;”en公证:-;..</em>.&lt;&lt;;“，~f”:&gt;;;.，.;.;tr 昂吃间吗苞俨’~~-:7..，:，:咕咕~. .:-;.句哩，￥e--::‘且</p>
+<p>'-. ':: . :-:." .;.<em>-'... .. •• </em></p>
+<p>、0;-.;...:.cout J{&lt; ..f/l a4 阴_:-.._ .n“&lt;&lt; _a 412) 、、，工俐，&lt;&lt;.‘.，-，，’:‘7，-:-，”革’E::ζ?飞“‘、，::.~，φ&lt; &lt;:，，‘&amp;å’~.4.，..‘ 川、.:...&lt; ._7_三~ ’é..:.:.:描li~-丁、~士丁衅~:.t-...，..., .. :.:. :;.”...:.-~ 注，..‘~~~.“.~--.;” ,:,“_.</p>
+<pre><code class="language-cpp">r e.tt\rn 0;</code></pre>
+<p>k</p>
+<p>下晴是该程序的输出示例t</p>
+<pre><code class="language-cpp">a1T2F:. 3: 6&#x27; aL Ox28cce8 .-
+.面2[21飞，0..14&gt;28 s...a t.&quot;oxcaoS28</code></pre>
+<p>-二一‘ 14f2 Tcim622tgx2民cC8 ‘二二，田、’:-.工γJ 士-与i~12已。问云:址0Q;~运淄吁:丁二元;二JET二二芒二;.r，-;，:r::“.:~~子-三二=fZ‘气二二ZE士主TCttξ·合气.~..~ a 1 t毛主J，，20. .~ åi::: Ox28ccω <em> </em>...豆-_..气’-‘--二.~..， ~:.. ...: :.;工. .::-:... ... .‘兰”:..--手.’ ‘::’--, ... ~-‘.. ’.~ ~二二:-‘:;.-:’:.;-..-..~;二.，..--二‘’‘’，i‘-i~ã:;“E2J二f(ï -a-~，:Õ.~2r~出乎-沪、乙二.二。..:-<em>丁-二----.~ ’a4 但): ~T日”a t:ÒX28c~a8 ‘--’-:</em>;: ~C ， ::“.-<em>二二二二二之二二程序i且fz-二二斗.:..</em> .-;~~~~~..平-二古，，<em>二、，-.二:.;: .:,:‘ .二二三-- 二丁jz-二二二二:‘飞毛气-气二坠”. ξ</em>~:..’“ ‘.首先:王注意到J芜谁是数组、~ector对象;还是3IT5IY 对象y都可使用a标准数组表示法采访间各千元萦i其-~:;.’<em> .”::::--:::，~，.::~;以地址可知;.:‘ariay对象和数缎蒋锁在相同的内斗字区域(11[1i槐〉中f而fÝector 对象存储在另J个品区域飞坠‘- </em>. 由存储区或燃且中。第三，注意到J吁以将.“... ’个时ay对象赋给另:1::arráy对象;.币对于数缸，峦须还元素-</p>
+<p>· 复制j数据。-…-“ - ‘ -_ ..、</p>
+<p>接丁正来，下iiï:一行代码需要传别注意:</p>
+<p>a l( -2 t= 20.2; ----_, __..-..<em>一...-; :...</em>...，-、..-、... -司‘电气‘</p>
+<p>“由、</p>
+<p>-兀, -亏-</p>
+<h3>第 122 页</h3>
+<p>索引-2是什么意思呢?本章前面说过，这将被转换为如下代码:</p>
+<p>• (al-2) = 20.2;</p>
+<p>其含义如下:找到a1指向的地方，向前移两个doub1e元素，并将20.2存储到目的地.也就是说，将信息存储到数组的外面.与C语言一样.C++也不检查这种超界错误.在这个示例中，这个位置位于aπay 对象“中。其他编译者§可能将20.2放在”中，甚至做出更糟粮的选择。这表明数组的行为是不安全的.</p>
+<p>vector 和町ay对象能够禁止这种行为吗?如果您让它们然止，它们就能禁止。也就是说，您仍可编写不安全的代码，如下所示:</p>
+<p>a2[-2) = .5; // still allowed</p>
+<p>a3 (200 ) = 1. 4;</p>
+<p>然而，您还有其他选择.一种选择是使用成员函数al0 .就像可以使用cin对象的成员函数get1ineO一样，您也可以使用vector 和array 对象的成员函数atO:</p>
+<p>a2.at (l } = 2.3; // assign 2.3 to a2 (1]</p>
+<p>中括号表示法和成员函数atO的差别在子，使用atO时，将在运行期间捕获非法索引，而程序默认将中断.这种额外检查的代价是运行时间更长，这就是C++让允许您使用任何一种表示法的原因所在.另外，这些类还让您能够降低意外超界错误的概率。例如，它们包含成员函数beginO和eodO.让您能够确定边界，以兔无意间超界，这将在第16章讨论.</p>
+<h2>4.11 '总结</h2>
+<p>数组、结构和指针是C++的3种复合类型。数组可以在一个数据对象中存储多个同种类型的值.通过使用索寻|或下标，可以访问数组中各个元素.</p>
+<p>结构可以将多个不同类型的值存储在向一个数据对象中，可以使用成员关系运算符(.)采访问其中的成员.使用结构的第一步是创建结构模板，它定义结构存储了哪些成员.模板的名称将成为新类型的标识符，然后就可以声明这种类型的结构变量.</p>
+<p>共用体可以存储一个值，但是这个值可以是不同的类型，成员名指出了使用的模式.</p>
+<p>指针是被设计用来存储地址的变量。我们说，指针指向它存储的地址.指针声明指出了指针指向的对象的类型.对指针应用解除引用运算符，将得到指针指向的位置中的值。</p>
+<p>字符串是以空字符为结尾的一系列字符。字符E但可用引号括起的字符串常查表示，其中隐式包含了结尾的空字符.可以将字符串存储在ch缸数组中，可以用被初始化为指向字符净的char1旨针表示字符净。函数strlcn()返回字符串的长度，其中不包括空字符.函数strcpy()将字符市从一个位置复制到另一个位爱.在使用这些函数时，应当包含头文件cstring或string.h .</p>
+<p>头文件string支持的C忡string 类提供了另一种对用户更友好的字符串处理方法.具体地说.string 对象将根据要存储的字符串自动调整其大小，用户可以使用赋值运算符来复制字符串。</p>
+<p>new运算符允许在程序运行时为数据对象请求内存。该运算符返回获得内存的地址，可以将这个地址赋给一个指针，程序将只能使用该指针来访问这块内存。如果数据对象是简单交量，则可以使用解除引用运算符〈叫来获得其值:如果数据对象是数组，则可以像使用数组名那样使用指针采访问元索:如果数据对象是结构，则可以用指针解除引用运算符(-&gt;)采访问其成员.</p>
+<p>指针和数组紧密相关.如果缸是数组名，则表达式ar[iJ被解释为*( ar+i).其中数组名被解释为数组第一个元素的地址.这样，数组名的作用和指针相同.反过来，可以使用数组表示法，通过指针名来访问new 分配的数组中的元索.</p>
+<p>运算符new 和de1ete允许显式控制何时给数据对象分配内存，何时将内存归还给内存池.自动变量是在函数中声明的变量，而静态变量是在函数外部或者使用关键字static声明的变景，这两种变量都不太灵</p>
+<h3>第 123 页</h3>
+<p>活.自~J变量在程序执行到其所属的代码块〈通常是函数定义〉时产生，在离开该代码块时终止.静态变放在较个程序周期内部存在.</p>
+<p>C++98新榕的标准摸板序(STL)提供了槟扳类vector.它是动态数组的替代品.C++II提供了战饭炎array ，毡‘是定长数组的替代品’1·</p>
+<h2>4.12 复习题</h2>
+<p>1.如何声明下述数据?</p>
+<ol>
+<li>actor是由30个char 组成的敏组.</li>
+</ol>
+<p>b. betsie是由100 个short组成的敛组.</p>
+<p>c. chuck 是由13个110at组成的数组.</p>
+<p>d. d ipsea是由64个longdouble组成的数组.</p>
+<p>2.使用筷板类缸T3y而不是数组宋元成问题l。</p>
+<p>3.声明一个包含5个元素的int放组，并将它初始化为前5个正í“J‘数。</p>
+<p>4 .编写一条语句，将问题3中数组第一个元素和Ji后一个元浓的和赋给变量even 。</p>
+<p>5.编写一条语句，显示110at数组ideas中的第2个元素的值.</p>
+<p>6.声明一个char的数组，并将3其t初始化为字符E串担“巳伪heωes衍ebur咯-gcr俨”</p>
+<p>7.声明一个string 对象，并将其初始化为字符串“ WaJdorfS创adn•</p>
+<p>8.设计一个描述鱼的结构严明.结构中应当包括品种、重镇{ 移.数，单位为盎司〉和长度(英寸，包指小数).</p>
+<p>9.严明一个问题8中定义的结构的变蠢，并对官进行初始化.</p>
+<p>1 0.用enum定义一个名为Response的类型，官包含Yes 、No 和Maybe等枚举量，其中Yes的值为1.No为0 ，Maybe为2 .</p>
+<p>11.假设ted是一个double变111:.i自声明一个指向ted的指针.并使用该指针来显示t甜的也1 .</p>
+<p>1 2.假设treacle是一个包含1 0个元索的110at数组，消声明-个附向trcacle的第一个元索的指针.:Jt使用该指针来显示数级的第一个元素和最后一个元素.</p>
+<p>1 3.编写一段代码，要求用户输入一个正整数，然后创建一个动态的时数组，其中包含的元素敛肉等于用户输入的值.首先使用new来完成这项任务，再使用veclor 对象来完成这项任务.</p>
+<p>14.下丽的代码是否有效?如3挺有效，它将打印出什么结果?</p>
+<pre><code class="language-cpp">cout &lt;&lt; (int 斗&#x27;Ho肥ofthe jolly bytes.;</code></pre>
+<p>15.编写一段代码，给问题S中描述的结构动态分配内存，再读取该结构的成员的值.</p>
+<p>16.程序清单4.6指出了混合输入数字和一行字符碎1 时存储的问题.如果将下面的代码:</p>
+<pre><code class="language-cpp">cin.getline(address , 80);</code></pre>
+<p>精换为:</p>
+<pre><code class="language-cpp">cin &gt;&gt; address;</code></pre>
+<p>将对程序的运行带来什么影响?</p>
+<p>门.芦明一个vector对象和一个array 对象，它们都包含10个slnng 对象.指出所需的头文件，但不要使用using.使用co回来指定要包含的string 对象数.</p>
+<h2>4.13 主扁丰呈主东习</h2>
+<p>1.编写一个C忡程序，如下边i输什i 示例所示的那样请求并显示们息:</p>
+<h3>第 124 页</h3>
+<pre><code class="language-cpp">What is your firs t name ? Betty $ue
+What is your last name? Yewe
+What lecter grade do you deserve? B
+What í s your age? 22
+Name: Yewe , Betty Sue
+Grade=&lt;.-&quot;
+Age: n</code></pre>
+<p>注意J亥程序应该接受的名if包，企多个单词.另外，程序将向下调整成绩，即向上调一伞字母。假设“ :.乞用户请求A...:.B-或C ，‘所以不必担心5和F之间的空挡。~ :一…一&lt;..:- =τ…-一…川军;2. :，毛修改稼序清单4 .4 ;:::’，使用-C++string类而不是char 如且‘.”ι’_“.→土飞. ‘-: .~一ι-~</p>
+<p>J .编写一个程序二它要求用户首先输入其名，然辰输入其姓:然后程序使用.，个逗号和空格将姓和L_各组合起来，并在储和显示组飞去结果。且使膳char数组和头文件cstring帘的函数y下面是该程序运行时子芦-ζ斗1辛运茶安二斗初丽币雨运形三古j二二，‘V咆:了气气?τ仨...毛:导兵异i;=二J7工二飞二气:二刁刁专丐-芒二，，二“令- 芒二γ:仁.二J一飞二，，-士:士_”.:..:...:.:&lt;.- ξ气;咛二污于λ千J写乓Z弓写芸芸哇主远孟t古运=运二~ .:页言页际豆蒜’f“fυ沁弘f‘♂写古:古罚i古写na石足二孟豆:沮量;P~;叫l认均lii与P二ζζ7:二主号号二:吉±主-i芝7芝〈三ζ字:言是二号马去:王-二乞;可山岳辛苦乓</p>
+<p>丁亏了←唱气写:It.J::<em>‘~... ，:~’.-;.:. .. ..“ 一-:.‘.~←→气(气?，~卢响巳’:</em>~，.”‘.’;:r‘、、~’，‘ ..咀.-. ~ . . ,“. . ~ λ : ... : .. :”:~.:.“’”百E…且二...气.~~‘ :“孕可nterγ。可last’ name‘:,i 1”1饲ing’,,‘;“<em>’ ，，”‘::’了.\-J-f、“吃E寸-亨丁? ;:::-手芒?二，</em>:-”三寸-fTf;，引主二t;! ; ‘s，J丰产?且’fcit:m~叫n主\1äi币lU已在:FHm飞主g‘~ 豆豆豆三兰二士:之二-...，._..哇..，云兰ε二:-, 4::-- 编写.-个程序，-它要求用户首先输^其名;4If.输入其姓;然后程序使用一t逗号，和空格将姓和名“组合起来，并在储和显示组合结果~请使用string对象和头文件string吨的函数q飞面是该程序运行时气的情形…一，，三~’宅一:~;二二，~、二·→‘-二、、’ Enteryour Íir's.1: n~me: l”lip“ -一Enter‘ l'our:..last’ name: l!l副主}!g一-二z z一___!!erè二!3ç,h,e illformati on‘ irí .a sing_le s ttìng, Fl 田ning-，~!JP-’” _, ‘ ，，;，，，⑤ZZTf: 才←::1主结构’ç与ri~y.~íii主2.含，三个成早-3千个成员存储Z糖块庐品牌c.第二千战员存锁粉乐的重豆{~!!.k‘;’~ =.: ，:~-t~::--‘:-“-::: ... :有乎数};、第三个成员吞精τ糖块坦:建路里~i量2虫草数〉。班编~~丁程序i声明这个结树二-创建云?名大?斗主二气工:-...~ ~，..叫正的’CäiJrliB击-变量，并将其成3是否异而始i{t”%吃喝。副主M币èh‘~~42:3挝350:’剖始itm在声明shack:~:二二汇“如母在云如二程序显示n‘ãcl波莹的时. ?.、-二-士三土气，、γf茫主芒F</p>
+<p>6瓦L纺构￠豆副nd芷庐B缸包含‘~’3个成员，如虫如吕编帮程-练习b所示铲J二访诫呈辑画i呈宫=二「程序丁k面剖Ij屉建-气:个包飞含呈呈仨执J马了丛) ，芥芬元辈素t的åij ~:二-云:.;.:-飞~‘，’Candy帅B豆岳r古敬改军，ν二-二并将3豆Z引f响们f门n衫初J始化为所池择的值，‘，然y后舌ff主污表号每f全全全T结结构的内容~’斗-‘，二?-J -二ζ牛二74:卢，~1.:叩iiliam ’~ing~e顺应附分析胁.处于每ft披盹E他都需妥记录明信:字.. -，-.“”..二:之二...二~三丰『:\7f f.-二披芭饼佳河的~称丁可以苍多个单词组成。、￥.飞7→=二二-二.，;.-. <em>二二‘.二千二F二、τ二三’. 披萨饼的副主。二，马，二三)tE二三÷γ乙二与二;ι~</em>~-.:.‘~-:~7. .<em>::’.:&gt;甘二;二-~.~?-.~.:..:.主三~R二，于一-~::.. 披萨饼的重量。干三二二二斤二.</em>~.0Tõ二二，气JZLL二;二----~τ~-..‘<em>.二三.</em>..町-工_’r“”“<em>‘ 叶，~一二</em> .<em> -.’:”‘“’-:.三请协一个面~存储这些制的结构二墩是与品运有远敝蠢的程序士程同时时片面;士~:‘ : ’.~.气..!..”:“述信息』然后显示注些信息.请使用cÏJÍ‘c或毡’的方法〉和cóul.一飞民工·吨:万二</em>,-”,_; c.~-， ~8~‘完成编程练月7’~~但使用he帕米为结构分配内荐，.‘._而;f}呈阳i，明二7个绪如变量←另外，让磊序在消求:-</p>
+<p>.":"-~</p>
+<p>-:‘ ~-;- -Y--揄入比萨饼公司名革京之前输入比萨饼、的喧径;--’<em>...:~:::二二、…:~:.. </em> “‘~二γ，1·,t-IT 巳。伊二IJppr 究成拼笠王时飞伴ffln叫动态分配mp而强相干企包含3飞扣在白色dyB二7数当王二二.. ... ...;<em>三丁ι- ’ .‘ 1 0:编写二个程序，二让用户输λ三次而南跑的成绩℃如果您愿意:也可.正用户输入40- 米跑的成绩7，J-J?士”:.. </em>’~ .之非要示反辈子1主附成绩〈请壁甩予个户ay坟象来存储数据，钢琴缠主建于主持主ay 朵，万年用数理):十\二Tt〉-7:rJJ吃...-:-‘.=:.-于二号二字二万二二?-~ . ._7.:.-:~::. 二三i. .~;;:~~~~f~兰芳字豆豆二二三飞二，.二?二飞</p>
+<p>-气7_: ..:三、f·.h;二;“”;~;二。二二二;‘~.“’:~--;;::‘”-:-~-::-扫了二, ~-气-吃-主占气古~:: ..~. .-.;-:.:-, ..~ -=’‘’‘’:‘’:: ‘;:巧言f兰气-土: 4·-三..:..--:-:只丁J仁宇二--=-二’<em>;</em>...- ... -:.亏了毛主·四号e气.;.::.~. ~ ;:二、-= -毛与~ ‘l-.;二二人飞.=;-~.:: ~气，二:...--:~-~. ’ ,<em>-=-~-. -?-=三.7. …，.“‘</em> ... ._主..一:-~~<del>.’:.. </del>.~~ .-:__‘于...=苦寻飞t:77- 二主立’:...;‘_.’.--工;二- JF eL2t J三--，吨r二--d -于..::..，_T二;:.--..:- -::::-~”，，-~ 于气-‘;:’.-:二弘生二~::<em>i; ~-=- .~ :-:. .:</em>‘，，:~… 飞-.一’“ 酌斗=γ”:‘ ---“ _: :-&gt;:-. :-~’.:三.工_S-; ...~::-.<em>..”.. -</em>,<em>,.;;:‘:了7;.-:...-.:’凡..-.:-..-..“ 一-JL- 6 ·e主垣~‘::’~--.</em>:‘”.-’::‘-’. -‘-~’~可-卢~.气P;; ~‘. ;.:ζ .~飞、~ .~ -’::~.二Vι-~伫二-<em>卢‘--~ <del>. </em>“ ，<em>巧巧.. </em>-- .:’_E‘ 二寸r,__;:<em>::;”’:‘</em>: ---</del>牛叫可-二二二:“&amp;-;~..f .-~:-.:.--- . -: - ..;.;..士二::--”，.干5号亏ζ:飞-~~-.’毛-咀.~... ...---:=气‘7.一=-?-:.~:; ~:;.-宁气. -... .</p>
+<p>唁』</p>
+<hr>
+<p>本章对应原书小节结构见文件开头。</p>
+  <footer class="lesson-footer">
+    StudyMate · 第 4 章 复合类型 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

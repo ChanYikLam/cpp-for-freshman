@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C++ Primer Plus（第 6 版）中文版 · 第 7 章 函数——C++的编程模块 · C++ 零基础入门（计算机专业大一）</title>
+<link rel="stylesheet" href="../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回科目</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">参考文档</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>C++ Primer Plus（第 6 版）中文版 · 第 7 章 函数——C++的编程模块</h1>
+<blockquote><p>抽取方式：页面图像 → tesseract 5.5.2 <code>-l chi_sim+eng --psm 3</code>，450 dpi。<br>PDF 页范围 220–270（书页 202–252）。<br>这是<strong>重抽稿</strong>，用于替代原 PDF 文本层里质量很差的第 4/7 章；引用前仍以 PDF 原页图像为准。</p></blockquote>
+<hr>
+<h3>第 202 页（PDF p220）</h3>
+<p>第7了章 ”函数一 C++的编程模块</p>
+<p>本章内容包括:</p>
+<p>@ ”函数基本知识。</p>
+<p>@ HAE BASH,</p>
+<p>蚊“设计处理数组的函数。<br>e@ “使用 const 指针参数二    -=一志<br>图”设计处理文本字符串的函数-</p>
+<p>@ ”设计处理结枸的函数。<br>人<br>@ 调用 自 身的函数 Lae de</p>
+<p>o FEAL E TE H.</p>
+<p>了 Slee FRR AMIR; -读者将在 rues ent Fs ema SIE te ANSI fee</p>
+<p>人 但真正的编程乐趣在于编写自己的范数; 区=-方面;要提高编种效率 可更深入地学习STEE<br>AEBOOST C++提供的功能。 本章和第 8 章介绍如何定义函数 给邓闪传递信息以及从函数那里获得信息。 木章 “，</p>
+<p>ee ee 最后介绍递归和函数指 -</p>
+<p>，如果读者熟悉 CH, ARATE AIRE. ITT: 人 -产生错误认识。 itis —*</p>
+<p>as 提供原型， 1<br>里”调用函数-</p>
+<p>aon CHEE C 语言 I 的基础 E新增了- Saas 这将在第8章 介绍。     + ERE 基础知识上</p>
+<p>|   8k)   下介细过的有关国数的知识  人用 Co,  DRS FT ifs     sieges greatest o, « meemeye: HM ce I</p>
+<p>“库 RE OA de ri RE INR: 二 Poti eee ee  aes wir aia</p>
+<p>ry oe  A PATTER AL ZU OM  “Bilt 标准 CEPR strlen( ) pA Me, 可用来确定字</p>
+<p>_符趾的长度。相关的标准闫文件 cstring 包含了 strlen()和其他- BEET IR. JERR ie we</p>
+<p>ze 作使程序员能够在程序中随意使用 stlen( pa.</p>
+<p>时， UAE HAR 3 ii   HEM “提供原型和调时， rg TBE</p>
+<p>beer RMA categ OPP a. Ob ee Pai ee TE RL ae 1<br>f/ calling.cpp -   - defining,  ‘prototyping,  and calling a. function :    ey         :<br>和 Hinctude.. &lt;iostream&gt;.    eG      =   ee      和 ARNE Be</p>
+<h3>第 203 页（PDF p221）</h3>
+<p>void simple ();    // €unetion prototype</p>
+<p>int main()<br>using namespace std;<br>cout &lt;&lt; "main{) will call the simple() function:\n";</p>
+<p>simple () ;     /f f£unetion call</p>
+<p>cout &lt;&lt; "main() is finished with the simple() function, \n";<br>// cin.get();<br>return 0;</p>
+<p>//f €unetion definition<br>void simple |)</p>
+<p>using Namespace std;<br>cout &lt;&lt; "I'm but a simple function. \n";</p>
+<p>main() will call the simple{) function:</p>
+<p>I'm but a simple function,<br>main{) is finished with the simple() function.</p>
+<p>HUT PAL simpleO时，将暂停执行 main( )中的代码; ee simple0执行完毕后，继续执行 main0中的<br>代码。在每个函数定义中，都使用了一条 using 编译指令，因为每个函数都使用了 cout。另一种方法是，<br>在国数定义之前放置一条 using 编译指令或在函数中使用 std::cout.</p>
+<p>下面详细介绍这 3 个步骤。<br>7.1.1 定兴函数</p>
+<p>可以将图数分成两类: 没有返回值的函数和有返回值的函数。没有返回值的函数被称为 void 函数，其<br>通用格式如下:<br>void functionName|parameterList)</p>
+<p>statement fs)<br>return;          // optional</p>
+<p>其中，parameterList 指定了传递给函数的参数类型和数量，本章后面将更详细地介绍该列表。可选的<br>返回语句标记了函数的结尾; 否则, 函数将在右花括号处结束。void 函数相当于 Pascal 中的过程.FORTRAN<br>中的子程序和现代 BASIC 中的子程序过程。 通常，可以用 void 函数来执行某种操作。例如，将 Cheers!打<br>印指定次数 n) 的函数如下:</p>
+<p>void cheers(int n)}           // no return value</p>
+<p>std::cout &lt;&lt; "Cheers! ";<br>std::cout &lt;&lt; std::endl;<br>参数列表 int n 意味着调用函数 cheers( )时，应将一个 int 值作为参数传递给它。<br>有返回值的函数将生成一个值, 并将它返回给调用函数。换句话来说, 如果函数返回 9.0 的平方根 (sqrt<br>(9.0))，则该函数调用的值为 3.0。这种函数的类型被声明为返回值的类型，其通用格式如下:</p>
+<h3>第 204 页（PDF p222）</h3>
+<p>typeName functionName(parameterList)</p>
+<p>statements<br>return value;   // walue is type cast to type typeName</p>
+<p>对于有返回值的函数，必须使用返回语句，以便将值返回给调用函数。值本身可以是常量、变量，也<br>可以是表达式，只是其结果的类型必须为 typeName 类型或可以被转换为 typeName《例如，如果声明的返<br>回类型为 double，而函数返回一个 int 表达式，则该 int 值将被强制转换为 double 类型)。然后，函数将最<br>终的值返回给调用函数。C++对于返回值的类型有一定的限制: 不能是数组, 但可以是其他任何类型一一整<br>数、浮点数、指针，甚至可以是结构和对象! CIE, BR C++函数不能直接返回数组，但可以将数<br>组作为结构或对象组成部分来返回。)</p>
+<p>作为一名程序员，并不需要知道函数是如何返回值的，但是对这个问题有所了解将有助于澄清概念。(男<br>外，还有助于与朋友和家人交换意见。) 通常，函数通过将返回值复制到指定的 CPU 寄存器或内存单元中来<br>将其返回。随后，调用程序将查看该内存单元。返回函数和调用函数必须就该内存单元中存储的数据的类型<br>达成一致。函数原型将返回值类型告知调用程序，而函数定义命令被调用函数应返回什么类型的数据〈参见<br>图 7.1)。在原型中提供与定义中相同的信息似乎有些多余，但这样做确实有道理。要让信差从办公室的办全<br>桌上取走一些物品，则向信差和办公室中的同事交代自己的意图，将提高信差顺利完成这项工作的概率。</p>
+<p>double cubetdouble x); 1 function prototype</p>
+<p>int main()<br>double q = cube(1.2}; // function eal] ———</p>
+<p>double cube(double x) // function ¢</p>
+<p>H— returns" * Hy</p>
+<p>| cubeO计算返回值<br>“| 将它冒于此处-函数<br>“本 头告诉cube()要使用</p>
+<p>= ae    7 :</p>
+<p>图7.1 典型的返回值机制</p>
+<p>函数在执行返回语句后结束。如果函数包含多条返回语句〔例如，它们位于不同的证else 选项中)，则<br>函数在执行遇到的第一条返回语句后结束。例如，在下面的例子中，else 并不是必需的，但可帮助马虎的<br>读者理解程序员的意图:</p>
+<p>int bigger({int a, int b)</p>
+<p>if (a&gt; b)<br>return a; // if a &gt; b, function terminates here<br>else<br>return b; // otherwise, function terminates here</p>
+<p>如果函数包含多条返回语句，通常认为它会令人迷惑，有些编译器将针对这一点发出警告。然而，这<br>里的代码很简单，很容易理解。</p>
+<h3>第 205 页（PDF p223）</h3>
+<p>第7章 函数一一C++的编程模块</p>
+<p>有返回值的函数与 Pascal. FORTRAN # BASIC 中的函数相似，它们同调用程序返回一个值，然后调<br>用程序可以将其赋给变量、显示或将其用于别的用途. 下面是一个简单的例子, 函数返回 double 值的立方;</p>
+<p>double cube({double x)    // x times x times x</p>
+<p>return x <em> x </em> x; // a type double value</p>
+<p>例如，函数调用 cube(1, 2)4HR1] 1.728。请注意，上述返回语句使用了一个表达式，函数将计算该表</p>
+<p>达式的值 (这里为 1.728)，并将其返回。<br>7.1.2 函数原型和函数调用</p>
+<p>至此，读者已熟悉了函数调用，但对函数原型可能不太熟悉，因为它经常隐藏在 include 文件中。 程序</p>
+<p>清单 7.2 在一个程序中使用了函数 cheer( )和 cubel )。请留意其中的函数原型</p>
+<p>程序清单 7.2 protos.cpp</p>
+<p>// protos.cpp -- using prototypes and function calls</p>
+<p>#include &lt;iostream&gt;</p>
+<p>void cheers (int);       // prototype: no return value<br>double cube(double x); // prototype: returns a double<br>int main()</p>
+<p>using namespace std;</p>
+<p>cheers (5);          // £unction call</p>
+<p>cout &lt;&lt; "Give me a number: ";</p>
+<p>double side;</p>
+<p>double volume = cube(side} ;    // funetion call</p>
+<p>cout &lt;&lt; "A" &lt;&lt; side &lt;&lt;"-foot cube has a volume of ";<br>cout &lt;&lt; volume &lt;&lt; " cubic feet.\n";</p>
+<p>cheers (cube(2));    // prototype protection at work<br>return 0;</p>
+<p>void cheers(int n)</p>
+<p>using namespace std;<br>cout &lt;&lt; "Cheers! ";<br>cout &lt;&lt; endl;</p>
+<p>double cube(double x)</p>
+<p>return x <em> = </em> =;</p>
+<p>在程序清单 7.2 的程序中，只需要使用名称空间 std 中成员的函数中使用了编译指令 using。下面是该</p>
+<p>程序的运行情况，<br>Cheers! Cheers! Cheers! Cheers! Cheers!<br>Give me a mumber: 5<br>A 5-foot cube has a volume of 125 cubic feet.<br>Cheers! Cheers! Cheers! Cheers! Cheers! Cheers! Cheers! Cheers!</p>
+<h3>第 206 页（PDF p224）</h3>
+<p>main( )使用函数名和参数〈后面跟一个分号) 来调用 void 类型的函数: cheers (5);，这是一个函数调<br>用语句。但由于 cube( )有返回值，因此 main( )可以将其用在赋值语句中:</p>
+<p>double volume = cube(side);</p>
+<p>但正如前面指出的，读者应将重点放在原型上。那么，应了解有关原型的哪些内容呢? 首先，需要知<br>道 C++要求提供原型的原因。其次，由于 C++要求提供原型，因此还应知道正确的语法。最后，应当感谢<br>原型所做的一切。 下面依次介绍这几点，将程序清单 7.2 作为讨论的基础。</p>
+<p>1为什笃需要原型</p>
+<p>原型描述了函数到编译器的接口，也就是说，它将函数返回值的类型〈(如果有的话) 以及参数的类型<br>和数量告诉编译器。例如，请看原型将如何影响程序清单 7.2 中下述函数调用:</p>
+<p>double volume = cube(side} :;</p>
+<p>首先，厚型告诉编译器，cube( )有一个 double 参数。如果程序设有提供这样的参数，原型将让编译器<br>能够捕获这种错误。其次，cube( )函数完成计算后, AEE I AE ae i    可能是 CPU 2 47-45.<br>也可能是内存中。然后调用函数【这里为 main( )) 将从这个位置取得返回值。由于原型指出了 cube( )的类<br>型为 double，因此编译器知道应检索多少个字节以及如何解释它们。如果疫有这些信息，编译器将只能进<br>行狂测，而编译器是不会这样恢的。</p>
+<p>读者可能还会问，为何编译器需要原型，难道它就不能在文件中进一步查找，以了解函数是如何定义<br>的吗? 这种方法的一个问题是效率不高。编译器在搜索文件的剩余部分时将必须停止对 main( )的编译。一<br>个更严重的问题是，函数甚至可能并不在文件中。C++允许将一个程序放在多个文件中，单独编译这些文<br>件，然后再将它们组侣起来。 在这种情况下，编译器在编译 main( I, AYRE ICAU fel PARAS. WR ee<br>位于库中，情况也将如此。避免使用函数原型的唯一方法是，在首次使用函数之前定义它，但这并不总是<br>可行的。另外，C++的编程风格是将 main( )放在最前面，因为它通常提供了程序的整体结构。</p>
+<p>2，原型的语法<br>并添加分号。对于 cube( )，程序清单 7.2 中的程序正是这样做的:</p>
+<p>double cube{double =); // add ; to header to get prototype</p>
+<p>然而，函数原型不要求提供变量各，有类型列表就足够了。对于 cheer )的原型，该程序只提供了参数<br>类型:</p>
+<p>void cheers(int); // okay to drop variable names in prototype</p>
+<p>通常，在原型的参数列表中，可以包括变量名，也可以不包括。原型中的变量名相当于占位符，因此<br>不必与函数定义中的变量名相同。</p>
+<p>C++原型与 ANSI 原型</p>
+<p>ANSIC HET C++中的原型，但这两种语言还是有区别的。其中最重要的区别是，为与基本 C 菲容，<br>ANSIC 中的原型是可选的，但在 C++中，原型是必不可少的。 例如，请看下面的函数声明:</p>
+<p>void say hi{);</p>
+<p>ECHYP, TASH AGS PRMARFT void 是等效的一 意味着函数没有和参数。在 ANSIC 中，<br>括号为空意味着不指出参数一一这意味着将在后面定勾和囊列表。在 C++中，不指定参数列表时应使用省</p>
+<p>void say_bye(...);   // C++ abdication of responsibility</p>
+<p>通常，仅当与接受可变参数的C 函数(如 printft ) ) 交互时才需要这样做。</p>
+<p>3，原型的荔能<br>正如您看到的，原型可以帮助编译器完成许多工作; 但它对程序员有什么帮助昵? 它们可以极大地降</p>
+<h3>第 207 页（PDF p225）</h3>
+<p>第7章 函装一一C++的绢程模块              207</p>
+<p>低程序出错的几率。具体来说，原型确保以下几点:</p>
+<p>@ 编译器正确处理函数返回值;</p>
+<p>e 网译器检查使用的参数数目是否正确;</p>
+<p>© 编译器检查使用的参数类型是否正确。如果不正确，则转换为正确的类型“如果可能的话)</p>
+<p>前面已经讨论了如何正确处理返回值。下面来看一看参数数目不对时将发生的情况。例如，假设进行<br>了如下调用:</p>
+<p>double z = cube();</p>
+<p>WRIA PAR, Bee CIP Ei. “SPR AHI, “ERE ERE cube( )调用存放值的位置，并<br>使用这里的值。这正是ANSIC 从C++借鉴原型之前，C 语言的工作方式。由于对于 ANSIC ili, bat<br>可选的，因此有些C 语言程序正是这样工作的。但在 C++中，原型不是可选的，因此可以确保和不会发生这<br>类错误。</p>
+<p>EPR. HRT TSR, HARRIE. CHAT, DHMH. Hin, WR<br>数需要一个 int 值 5假设占 16 位)，而程序员传递了一个 double 值〈《假设占 64 位)，则函数将只检查 64 位<br>中的前 16 位，并试图将它们解释为一个 int 值。但 C++目动将传递的值转换为原型中指定的类型，条件是<br>两者都是算术类型。例如，程序清单 7.2 将能驶应付下述语句中两次出现的类型不匹配的情况，</p>
+<p>cheers (cube(2));</p>
+<p>首先，程序将 int 的值 2 传递给 eube( )，而后者期望的是 double 类型。编译器注意到，cubet )原型指<br>定了一个 double 类型参数,因此将 2 转换为 2.0一一一个double 值.接下来,cube( )返回一个 double {/i( 8.0),<br>这个值被用作 cheer( )的参数。编译器将再一次检查原型，并发现 cheerl( )要求一个 int 参数，因此它将返回<br>值转换为整数8。通常，原型自动将被传递的参数强制转换为期望的类型.(但第 8 章将介绍的函数重载可<br>能导致二义性，因此不允许某些自动强制类型转换。)</p>
+<p>月动类型转换并不能避免所有可能的错误。例如，如果将 8.33E27 传递给期望一个int 值的函数，则这<br>样大的值将不能被正确转换为 int 值。当较大的类型被自动转换为较小的类型时，有些编译器将发出警告，<br>指出这可能会竺失数据。</p>
+<p>仅当有意义时，原型化才会导致类型转换。例如，原型不会将整数转换为结构或指针。</p>
+<p>在编译阶段进行的原型化被称为静态类型检查〈static type checking)。可以看出,静态类型检查可捕获<br>许多在运行阶段非常难以捕获的错误。</p>
+<p>7.2 GRAB FRIAR</p>
+<p>下面详细介绍一下函数参数。C++通常按值传递参数，这意味着将数值参数传递给函数，而后者将其<br>赋给一个新的变量。例如，程序清单 7.2 包含下面的函数调用，</p>
+<p>double volume = cube(side);</p>
+<p>其中，side 是一个变量，在前面的程序运行中，其值为 $。cube( )的函数头如下:</p>
+<p>double cube(double x)</p>
+<p>被调用时，该函数将创建一个新的名为 x WY double Bit, JPME 5. KEE, cube( )执行的操<br>作将不会影响 main( )中的数据，因为 cube( )使用的是 side 的副本，而不是原来的数据。稍后将介绍一个实<br>现这种保护的例子。用于接收传递值的变量被称为形参。传递给函数的值被称为实参。出于简化的目的，<br>C++标准使用参数 (argument) 来表示实参，使用参量 (parameter) 来表示形参，因此参数传递将参量赋<br>给参数【参见图 7.2)。</p>
+<p>在函数中声明的变量(包括参数) 是该函数私有的。在函数被调用时，计算机将为这些变量分配内存，<br>在函数结束时,计算机将释放这些变量使用的内存 (有些 C++文献将分配和有释放内存称为创建和毁坏变量，<br>这样似乎更激动人心)。这样的变量被称为局部变量，因为它们被限制在函数中。 前面提到过,这样做有助</p>
+<h3>第 208 页（PDF p226）</h3>
+<p>ores Ps “( 4 oi. ria</p>
+<p>ie    手 i tet. 这还意味着， “Wade ain PET = Ra x HSE :博时在另二个高数中也声</p>
+<p>aoe  Th AR WES ALDH EAS EAE AS TA). EE SFA IEE, 1S Fe NTA Albany 与纽     2</p>
+<p>YEG Albany 是两个完全不同的地方是: 样的道理《参见图7.3)。 -这样的变量也被称为自动变最， tame ai =</p>
+<p>double side = 5;</p>
+<p>fz            double cube(double x)</p>
+<p>void .cheers{ int ny;<br>int main{)</p>
+<p>int n= 20;<br>int i= 1000;<br>are y= ay<br>cheers (yh</p>
+<p>void cheers{int n})</p>
+<p>|             ee ae<br>for (int i= 0; i &lt;n; ite}<br>cout += "Cheers!"<br>scout: &lt;&lt; "hn";</p>
+<h3>第 209 页（PDF p227）</h3>
+<p>第7章 ”函数一一C++的编程模块              209</p>
+<p>n_chars('R', 25);</p>
+<p>上述函数调用将两个参数传递给函数 n_chars( )，我们将稍后定义该函数。</p>
+<p>同样，在定义函数时，也在函数头中使用由逗号分隔的参数声明列表:</p>
+<p>void n_chars(char c, int n) // two arguments</p>
+<p>PBL, BMC n char )接受一个 char 参数和一个 int 参数。传递给函数的值被赋给参数c Al n.<br>如果函数的两个参数的类型相同，则必须分别指定每个参数的类型，而不能像声明常规变量那样，将声明<br>组侣在一起:</p>
+<p>void f£ifi(float a, float b) // declare each variable separately</p>
+<p>void fufu(float a, b)        // NOT acceptable</p>
+<p>和其他函数一样，只需添加分号就可以得到该函数的原型，</p>
+<p>void n_chars(char c, int n); // prototype, style 1</p>
+<p>和一个参数的情况一样，原型中的变量名不必与定义中的变量名相同，而且可以省略:</p>
+<p>void n_chars(char, int);     // prototype, style 2<br>然而，提供变量名将使原型更容易理解，尤其是两个参数的类型相同时。这样，变量名可以提醒参量<br>和参数间的对应关系，</p>
+<p>double melcn aqernsityiadouble weight, double volume) ;<br>程序清单 7.3 演示了一个接受两个参数的函数，它还表明，在函数中修改形参的值不会影响调用程序<br>中的数据。</p>
+<p>程序清单 7.3 twoarg.cpp</p>
+<p>// twoarg.cpp -- a function with 2 arguments</p>
+<p>#include &lt;iostream&gt;</p>
+<p>using namespace std;</p>
+<p>void n_chars(char, int);</p>
+<p>int main()</p>
+<p>int times;<br>char ch;</p>
+<p>cout &lt;&lt; "Enter a character: "<br>cout &lt;&lt; "Enter an integer: ";<br>cin &gt;&gt; times;<br>n_chars(ch, times); // function with two arguments<br>cout &lt;&lt; "\nEnter another character or press the"<br>" q-key to quit: ";<br>cout &lt;&lt; "The value of times is " &lt;&lt; times &lt;&lt; ".\n";<br>cout &lt;&lt; "Bye\n";<br>return 0;</p>
+<p>void n_chars(char c, int n) // displays c n times</p>
+<p>while ({n-- &gt; 0)         // continue until n reaches 0</p>
+<h3>第 210 页（PDF p228）</h3>
+<p>he Boasts an “integer:.  “50-:  ae</p>
+<p>ee = 122 BR 个接受两个参数的生数 ea 三 ae a5 ee ae</p>
+<p>2前; .美国许多州都采用某种纸幅游戏的形式来改行彩票 Tee = a<br>phi Bk St A EF PSI 6 CBRL RE A EL I 6 OC MRE FARROW DR 6 NI</p>
+<p>os SHAT, AALS PR BAR RE ILE CEN Lee AMR SO</p>
+<p>7  Ree 73 WEE, SIE wing deme LT Rei. Fane |<br>Ce ee ee ee</p>
+<p>oe | Enter a- ‘gharacter:  We,    : on ere ee = = ee =e pee = a   ee — as</p>
+<p>= a ee :  es ae<br>Si ee ea Ce 它<br>使用cin&gt;&gt;eh,， Re oa Gn) ch = cing RMI EY A AR IL ATE at</p>
+<p>fuer WAL NIDA SE Eni LSSAnes eer yeaa ;</p>
+<p>Spans = sae aK HERE ear it ne BRO  RR MSO</p>
+<p>一</p>
+<p>sens Mee uaa te EMEA AERA RWH) oe</p>
+<p>=o     5X4x3x2X   fe hes a</p>
+<p>= i: seit AI “whibise 个数中选取 picks 4%  ey</p>
+<p>3   oe. Long double, result =   LO;            Johcbisnge! vie east      eee ee       Se ee<br>-. 5.) = for, fh = numbers. p - “picks; Boe On Bes Pos) oe SE tee ae ee<br>、   ae c=  ‘Kesult. = result * n /: os:  pare   Co os Tere ae ee ee    ae<br>=      _策环不证首先将所有的分子项相洪，而是首范将【0 与第二不分了项相生 RRR hae. 二<br>然后下-  -轮循环乘以第二  -个分子项-并除以第二  -个分母项: 这样得到的乘积将比先进行乘法运算得到的小:  Ss=e  =<br>pte,  对于(10 <em>9)/(2 </em> 和(107 2)<em>(9 上， 前者将计算 90/2, 得到 45i::后者将计算为.5</em>9; -得到.45。 这两一<br>二但前者的中 间值 (90) 大于后 痢=  RTRs 一中间值的差别就越大。  _当数字非常一</p>
+<h3>第 211 页（PDF p229）</h3>
+<p>第7章 函数一一C++的编程模块                               211</p>
+<p>大时，这种交替进行乘除运算的策略可以防止中间结果超出最大的译点数。</p>
+<p>程序清单 7.4 在 probability( )函数中使用了这个公式。由于选择的数目和总数目都为正，因此该程<br>序将这些变量声明为 unsigned .int 类型〔(简称 unsigned)。将若干整数相乘可以得到相当大的结果，因<br>此 lotto.cpp 将该函数的返回值声明为 Iong double 类型。另外，如果使用整型，则像 49/6 这样的运算<br>将出现舍入误差。</p>
+<p>SER: 有些 C++实现不支持 long double 类型 ，如果所用的 C++实现是这样的，请使用 double 类型。<br>程序清单 7.4 lotto.cpp</p>
+<p>// lotto.epp -- probability of winning</p>
+<p>#include &lt;iostream&gt;</p>
+<p>// Note: some implementations require double instead of long double<br>long double probability(unsigned numbers, unsigned picks);</p>
+<p>int main({)</p>
+<p>using namespace std;<br>double total, choices;<br>cout &lt;&lt; "Enter the total number of choices on the game card and\n"<br>"the number of picks allowed:\n";<br>while ((cin &gt;&gt; total »=&gt; choices) &amp;&amp; choices &lt;= total)<br>cout &lt;&lt; "You have one chance in ";<br>cout &lt;&lt; probability([total, choices) ;      // compute the odds<br>cout &lt;&lt; " of winning.\n";<br>cout &lt;&lt; "Next two numbers (q to quit): ";<br>cout &lt;&lt; "bye\n";<br>return 0;</p>
+<p>// the following function calculates the probability of picking picks<br>// tumbers correctly from numbers choices<br>long double probability(unsigned numbers, unsigned picks)<br>long double result = 1.0; // here come some local variables<br>long double n;<br>unsigned p;</p>
+<p>for (n = numbers, p = picks; p &gt;» 0; n--, p--)<br>result = result * n/p ;<br>return result;</p>
+<p>下面是该程序的运行情况;</p>
+<p>Enter the total number of choices on the game card and<br>the number of picks allowed:</p>
+<p>49 6</p>
+<p>You have one chance in 1.39838e+007 of winning.</p>
+<p>Next two numbers (q to quit): 51 6</p>
+<p>You have one chance in 1.80095e+007 of winning.</p>
+<p>Next two numbers {q to quit): 38 6</p>
+<p>You have one chance in 2.76068e+006 of winning.</p>
+<p>Next two numbers (q to quit): q</p>
+<p>bye</p>
+<h3>第 212 页（PDF p230）</h3>
+<p>请注意，增加游戏卡中可供选择的数字数目，获奖的可能性将急剧降低，</p>
+<p>程序说明</p>
+<p>程序清单 7.4 中的 probability( )函数演示了可以在函数中使用的两种局部变量。首先是形参 (number<br>和 picks)，这是在左括号前面的函数头中声明的;其次是其他局部变量 (result、na Alp), 它们是在将函数<br>定义插起的括号内声明的。形参与其他局部变量的主要区别是，形参从调用 probability( )的函数那里获得<br>自己的值，而其他变量是从函数中获得自己的值。</p>
+<p>7.3 画数和数组</p>
+<p>到目前为正，本书的函数示例都很简单，参数和返回值的类型都是基本类型。但是，函数是处理更复<br>厅的类型【如数组和续构) 的关键。下面来如何将数组和冰数绪全在一起。</p>
+<p>假设使用一个数组来记录家庭野餐中每人吃了多少个研饼〈每个数组索引都对应一个人，无素值对应<br>于这个人所吃的甜饼数量)。 现在想知道总数。这很容易，只需使用循环将所有数组元素累积起来即可。将<br>数组元素累加是一项非常营见的任务，因此设计一个完成这项工作的函数很有意义。这样就不必在每次计<br>算数组总和时者编写新的循环了，</p>
+<p>考虑函数接口所涉及的内容。由于函数计算总数，因此应返回答案。如果不分吃甜饼，则可以让函数<br>的返回类型为 nt。另外，函数需要知道要对哪个数组进行累计，因此需要将数组名作为参数传递给它。为<br>使二数通用，而不限于特定长度的数组，还需要传递数组长度。这里唯一的新内容是，需要将一个形参声<br>明为数组名。下面来看一看函数头及其其他部分:</p>
+<p>int sum arr(int arr[], int n) // arr = array name, n= size</p>
+<p>这看起来似乎合理。方括号指出 arr 是一个数组，而方括号为空则表明，可以将任何长度的数组传递<br>给该函数。但实际情况并非如此，arr 实际上并不是数组，而是一个指针! 好消息是，在编写函数的其余部<br>分时，可以将 arr 看作是数组。首先，通过一个示例验证这种方法可行，然后看看它为什么可行。</p>
+<p>程序清单 7.5 演示如同使用数组名那样使用指针的情况.程序将数组初始化为某些值,并使用sum_arr( )<br>上因数计算总数。注意到 sum_arr( PARE arr 时，束像是使用数组名一样。</p>
+<p>程序清单 7.5 arrfun1.cpp</p>
+<p>// arrfunl.cpp -- functions with an array argument</p>
+<p>#include &lt;iostream&gt;<br>const int ArSize = 日<br>int sum_arr(int arr[], int n);        // prototype</p>
+<p>using Namespace std;</p>
+<p>int cookies (ArSize] = {1,2,4,8,16,32,64,128};<br>// some systems require preceding int with static to<br>/f enable array initialization</p>
+<p>int sum = sum_arr(cookies, ArSize) ;<br>eout &lt;&lt; "Total cookies eaten: " &lt;&lt; sum &lt;&lt; "\n";</p>
+<p>Feturn Oy;</p>
+<p>// veturn the sum of an integer array<br>int sum arr{int arr[], int n)</p>
+<p>int total = 0;</p>
+<h3>第 213 页（PDF p231）</h3>
+<p>total = total + arr[il;<br>return total;</p>
+<p>Total ceokies eaten: 255<br>从中可知，该程序管用。下面讨论为何该程序管用。<br>7.3.1 范数如何使用指针来处理数组</p>
+<p>在大多数情况下，C++和 C 语言一样，也将数组名视为指针。第 4 章介绍过，C++将数组名解释为其<br>第一个元素的地址;</p>
+<p>cookies == &amp;cookies[0] // array name is address of first element</p>
+<p>该规则有一些例外。首先，数组声明使用数组名来标记存储位置，其次，对数组名使用 sizeof 将得到<br>整个数组的长度〈以字节为单位); 第三，正如第 4 章指出的，将地址运算符信用于数组名时，将返回整个<br>数组的地址，例如&amp;&amp;cookies 将返回一个 32 字节内存块的地址《如果 int 长 4 字节)。</p>
+<p>程序清单 7.5 执行下面的函数调用</p>
+<p>int sum = sum_arr(cookies, ArSize)j;</p>
+<p>He, cookies 是数组名，而根据 C++ ALM, cookies AHA —P ICR HHHE, Pte Bere A EME<br>由于数组的元素的类型为 nt，因此 cookies 的类型必须是 int 指针，即 int* 。这表明，正确的函数法应该是</p>
+<p>int sum_arr(int * arr, int n) // arr = array name, m = size</p>
+<p>其中用 int * arr HR S intarr[]. 这证明这两个函数头都是正确的，因为在 C++中，当【且仅当)<br>用于函数头或函数原型中，int *arr Al int arr []的含义才是相同的。它们都意味着 arr 是一个 int 指针。<br>然而，数组表示法 Cint arr[ ]) 提醒用户，arr 不仅指向 int，还指向 int 数组的第一个 int。当指针指向<br>数组的第一个元素时，本书使用数组表示法，而当指针指向一个独立的值时，使用指针表示法。别二<br>了，在其他的上下文中，int* arr 和 int ar []的含义并不相同。例如，不能在函数体中使用 int tip[ PK<br>声明指针 。</p>
+<p>鉴于变量 arr 实际上就是一个指针，函数的其余部分是合理的。第 4 章在介绍动态数组时指出过，<br>同数组名或指针一样，也可以用方插号数组表示法来访问数组元素。无论 arr 是指针还是数组名，玫<br>达式 arr [3]都指的是数组的第 4个元素。就目前而言，提请读者记住下面两个恒等式，将不会有任何<br>坏处:</p>
+<p>arr[i] == *(ar + i)    // values in two notations</p>
+<p>&amp;arr[i] == ar + i      // addresses in two notations</p>
+<p>记住，将指针【包括数组名) 加 1，实际上是加上了一个与指针指向的娄型的长度【以字节为单位)<br>相等的值。对于唤历数组而言，使用指针加法和数组下标时等效的。</p>
+<p>7.3.2 将数组作为参数意味着什么</p>
+<p>我们来看一看程序清单 7.5 暗示了什么。函数调用 sum_arrfcoolies，ArSize)将 cookies 数组第一个元素<br>的地址和数组中的元素数目传递给 sum_arr( )函数。sum_arr( PR BCH cookies 的地址赋给指针变量 arr，将<br>ArSize 赋给 int 变量nm。这意味着，程序清单 7.5 实际上并没有将数组内容传递给函数，而是将数组的位置<br>(Hott). GAM CHA (RN) 以及元素数目 人n 变量) 提交给函数〈参见图 7.4)。有了这些信息后，<br>函数便可以使用原来的数组。传递常规变量时，函数将使用该变量的拷贝，但传递数组时，函数将使用原<br>来的数组。实际上，这种区别并不违反 C++按值传递的方法，sum_arr( )函数仍传递了一个值，这个值被赋<br>给一个新变量，但这个值是一个地址，而不是数组的内容。</p>
+<h3>第 214 页（PDF p232）</h3>
+<p>ae a ee ot</p>
+<p>-一   - - 图7.4 告知函数有关数给的信息</p>
+<p>数组名与指针对应是好事吗? 确实是一件好事: 将数组拒址作为参数可以节省复制整个数组所需的蛙:<br>间和内存。如果数组很大，则使用排贝的系统开销将非常大,程序不仅需要更多的计算机内在，还需要花<br>费时间来复制天块的数据。另一方面，使用原始数据增加了破坏数据的风险 在经典的C语言中，这确实<br>是一个问题*但 ANSIC 和C++中的const-限定符提供子解决这种问题的办法, 稍后将介绍一企这样的示例，<br>但先来修改程序清单 7.5，以演示数组函数是如何运作的: 程序清单7.6 AAG. cookies 和Earr的值相同。它-</p>
+<p>还演示了指针概念如何使 sum_arr 函数比以前更通腓。 该程序使用限定逢std::而不是编译指令 using 来提供-</p>
+<p>// arrfun2.cpp -- fiinctions with an array argument</p>
+<p>#include &lt;iostream&gt;</p>
+<p>coneat—int ArSize = 8;</p>
+<p>int. sum_arr(int.arr[], int n);<br>//-use std:: instead of using directive                 ;</p>
+<p>int cookies [ArSize] =—{h-274,6,16,32,64,128};<br>// some systems require preceding int with static to<br>// enable array initiaFization</p>
+<p>std::cout &lt;&lt; cookies &lt;&lt; " = array address; ";<br>// some systems require a type cast: unsigned (cookies)</p>
+<p>stdrscout &lt;&lt; sizeof cookies &lt;&lt; " = sizeof cookies\n";<br>int sum = sum-arr{cookies, ArSize);          :<br>std::cout &lt;&lt; "Total cookies eaten: " &lt;&lt; sum-&lt;&lt; std::endl;</p>
+<p>Bum = sum_arr(cookies, 3);        // a lie<br>std::cout &lt;&lt; “First three eaters.ate "&lt;&lt; sum &lt;&lt;" cookies. \n";<br>sum = sumiarr(cookies + 4,'4); __// another lie</p>
+<p>std::cout &lt;&lt; "Last four eaters ate " &lt;&lt; sum=&lt;&lt; " cookies. \n";— -&lt;--—</p>
+<h3>第 215 页（PDF p233）</h3>
+<p>61% GH CHAMBER         ee</p>
+<p>/*. return the sum of an-integer array. .<br>_ int sum_arr(int arrf], int ne       :<br>int. totaF= 0;°      ,<br>= peti. cry, Stdircout &lt;&lt; arr &lt;e "= arr, "7</p>
+<p>/7 SDme . _eygtems require EYRE cast:  - unsigned hae</p>
+<p>for “(lint i Pas Oj i Sg i++)  i  加  Ailey     a ee       fT  Lee net</p>
+<p>s     和<br>二 return total;   TE an fh eR ESAT aereemacres wean ee Sait = ciety ete) See Slletan pein     see<br>foie es Si aes TE eee  eg<br>Saas  oe   003EF9FCG : =, atray “Baareas  33 = = 时 cookies = su see = ae fee =   seh  Sie   isin oe<br>03BF9FCG = arr, 4 = ‘sizeof, i eee ae a BS gto Gao Seatei Ne ACN IR TSS pane ar eee<br>”TotaE cookies eaten:  255     aa :    =   a. yee Be eR       ae   本<br>See ae “OO3EFSFC : 三 Sarr,  Aes. sizeof “arr a 一 RE   a eas ie Ee ents es ee ee<br>ty ee  - First. three eaters ate 7 cookies.  samen nes 2   . -: JE Soe rie - Ree e       省</p>
+<p>03EFROC = arr, 4s “sizeof arr - ae: 5     Bourse</p>
+<p>face — ae Last-four’ eaters ‘ate 346 ‘cookies. -  cE Se SO Ma eer Ae aN ate ae ee</p>
+<p>“HER LHL ERO KERR SETTIE TH ‘tec ear MoMA,</p>
+<p>:     HAMEL FR Ss,  Ait EHH Ons     (aaa ie ene<br>ge EI MRM TO ee ie ee ee ee</p>
+<p>oe    ~ BFP 716 WO F MEER BL — PALA NOTE YH 4Es cookies A art 8 FHP aot eokies 二，<br>1    的值为 32， 而:sizeof arr 为:4.-这是由于-sizeof cookies:是整个数组的长度--而 sizeof am 只是指针变量的长-=.<br>Oe Cem aR -个使用生字节地址的系统中获得的= 顺便说=名， EO SO   ae<br>© ERA im. ita :指针本身并没有指出数组的长度二-二3    ae<br>LAS AFP summa) 2 eal La Ne RRL Fi RM ATO “RO</p>
+<p>eee oe RATE</p>
+<p>| age -一-um sum aricookiee7 aie  se ane oe &lt; ae ae = 二 es<br>ae ee ee   Dee EE Ree<br>Bt 5 free: = ‘sum: rare (cogkies. +4,  ay; a a purer ce  a ri ead                     hast</p>
+<p>Peet  由于 cookies 是第一 一个元素的地赴，因此 cookies «410% 5 个元素的地址， -这条语各将计关数组第5、<br>7个元素的总和。 “请注意输出中第三次函数调用选择将不同于前两个调用的地址贼给 ae 的 是的，<br>ore        “可以将各cookies[4]，  -而不是 cookies士4 作为参数:   :它们的含义是相同 同的。  ae oe ae   os Sy ee a</p>
+<p>oS eae AERA AA fo ME SH MOAT qatmexnwsnauaco ~~<br>rie Ses void... fillarray(int at个， int: Bize}; —/ ih: prototype. Teed Se aes eee  pee ae aa a<br>ne ee eee<br>Pen ee pe er Cnk 2 arr isize) })          off: HOT- bad prototyoe: sd Be</p>
+<p>PEMA Ob RELL BIE RMERR,. MENEMRICL DEANE RATAN.    :<br>an 这里讲的好处指的是程序的可靠性更高、修改和调试更为方便)。 另外, 构思程序时将存储属性与操作结</p>
+<p>a= fee 便是前 GOP Raa T aE. 羽后交这明这是很有好处的*   oo es eS:</p>
+<h3>第 216 页（PDF p234）</h3>
+<p>来看一个简单的案例。假设要使用一个数组来记录房地产的价值《假设拥有房地产)。在这种情况下，<br>程序员必须确定要使用哪种类型。当然，double 的取值范围比 int 和 long 大，并且提供了足够多的有将位<br>数来精确地表示这些值。接下来必须决定数组元素的数目。(对于使用 new 创建的动态数组来说，可以稍<br>后再决定，但我们希望使事情简单一点)。如果房地产数目不超过 5 个，则可以使用一个包含 5 个元素的<br>double 数组。</p>
+<p>现在,考虑要对房地产数组执行的操作。郴个基本的操作分别是，将值读入到数组中和显示数组内容，<br>我们再添加另一个操作: 重新评估每种房地产的值。为简单起见，假设所有房地产都以相同的比率增加或<br>者减少。(别忘了，这是一本关于 C++的书，而不是关于房地产管理的书。) 接下来，为每项操作编写一个<br>函数，然后编写相应的代码。下面首先介绍这些步骤，然后将其用于一个完整的示例中</p>
+<p>1，填充数组</p>
+<p>由寺接受数组名参数的函数访问的是原始数组，而不是其副本，因此可以通过调用该函数将值赋给<br>数组元素。该函数的一个参数是要填充的数组的名称. 通常，程序可以管理多个人的投资，因此需要<br>多个数组，因此不能在函数中设壮数组长度，而要将数组长度作为第二个参数传递，就像前一个示例那<br>样。另外，用户也可能希望在数组被十满之前停止读取数据，因此需要在函数中建立这种特性。由于<br>用户输入的元素数目可能少于数组的长度，因此函数应返回实际输入的匹素数目。因此，该函数的原<br>型如下:</p>
+<p>int fill _array{double ar[], int limit) ;</p>
+<p>PARES SR, NA, iE TI ACR; 该函数返回实际读取的元<br>素煞。例如，如果使用该函数来处理一个包售 5个元素的数组，则将 作为第二个参数。如果只输入3个<br>什，则该图数将返回 3。<br>可以使用循环连续地将值读入到数组中，但如何提早结束循环呢? 一种方法是，使用一个特殊值来指<br>出输入结束。由于所有的属性都不为负，因此可以使用负数来指出输入结束。另外，该函数应对错误输入<br>作出反应，如停止输入等。这样，该函数的代码如下所示;<br>int fill] array(double ar[], int limit}<br>using namespace std;<br>double temp;<br>inte:<br>if (lein)    {/ bad input<br>cin.clear();<br>while (ciniget[{) != '"\n'"}<br>continue;</p>
+<p>cout &lt;&lt; "Bad input; input process terminated. \n";<br>break;</p>
+<p>else if (temp &lt; 0)     // signal to terminate<br>break;</p>
+<p>ar[i] = temp;</p>
+<p>return i;</p>
+<p>Hm, NSPHAa MHP Ma. MRAP MADER, Wk MERA a, BG<br>结束。 如果用户输入的都是有效值，则循环将在读取最大数目的值后结束。循环完成的最后一项工作是</p>
+<h3>第 217 页（PDF p235）</h3>
+<p>第7章 ”函数一一C++的编程模块              217</p>
+<p>将i加 1，因此循环结束后，i 将比最后一个数组索引大 1，即等于填充的元素数目。然后，函数返回这<br>个值。</p>
+<p>2，显示数组及用 ceonst 保护数组</p>
+<p>创建显示数组内容的函数很简单。只需将数组名和填充的元素数目传递给函数，然后该函数使用循环<br>来显示每个元素，然而，还有另一个问题一一确保显示函数不修改原始数组。除非函数的目的就是修改传<br>递给它的数据，否则应避免发生这种情况。使用普通参数时，这种保护将自动实现，这是由于 C++按值传<br>递数据，而且函数使用数据的副本。然而，接受数组名的函数将使用原始数据，这正是 fill_array( )函数能<br>够完成其工作的原因。为防止函数无意中修改数组的内容, 可在声明形参时使用关键字 const(参见第 3 Bt):</p>
+<p>vold show_array(const double ar[], int n);</p>
+<p>该声明表明，指针 ar 指向的是常量数据。这意味着不能使用 ar 修改该数据，也就是说，可以使用像<br>ar[0]这样的值，但不能修改。注意，这并不是意味着原始数组必须是常量，而只是意味着不能在 show_array( )<br>函数中使用 ar 来修改这些数据。因此，show_array( )将数组视为只读数据。假设无意间在 show_array( )PA<br>数中执行了下面的操作，从而违反了这种限制</p>
+<p>ar[0)] += 10;</p>
+<p>编译器将禁止这样做。例如，Borland C++将给出一条错误消息，如下所示《〈稍作了编辑):</p>
+<p>Cannot modify a const object in function<br>show _array(const double *, int)</p>
+<p>其他编译器可能用其他措词表示其不满。<br>这条消息提醒用户，C++将声明 const double ar [ ]解释为 const double *ar。因此，该声明实际上是说，<br>ar 指癌的是一个常量值。结束这个例子后，我们将详细讨论这个问题。下面是 show_array( )函数的代码:</p>
+<p>void show_array(const double ar[], int n)</p>
+<p>using namespace std;</p>
+<p>cout &lt;&lt; ar[i] &lt;&lt; endl;</p>
+<ol>
+<li>修改数组</li>
+</ol>
+<p>在这个例子中，对数组进行的第三项操作是将每个元素与同一个重新评估因子相乘。需要给函数传递<br>3 个参数: 因子、数组和元素数目。该函数不需要返回值，因此其代码如下;</p>
+<p>void revalue(double r, double ar[], int n)<br>for {int i = 0; i &lt; my; i+4)</p>
+<p>由于这个函数将修改数组的值，因此在声明 ar 时，不能使用 const.</p>
+<ol>
+<li>HERE RGASR AR</li>
+</ol>
+<p>至此，您根据数据的存储方式〈数组) Ak (3 个函数) 定义了数据的类型，因此可以将它<br>们组合成一个程序。 由于已经建立了所有的数组处理工具，因此 main( )的编程工作非常简单。该程序检<br>查用户输入的是否是数字，如果不是，则要求用户这样做。余下的大部分编程工作只是让 main( )调用前<br>面开发的函数。程序清单 7.7 列出了最终的代码，它将编译指令 using 放在那些需要 iostream 工具的函<br>数中。</p>
+<h3>第 218 页（PDF p236）</h3>
+<p>程序清单 7.7 arrfun3.cpp</p>
+<p>// arrfun3.cpp -- array functions and const</p>
+<p>#include &lt;iostream&gt;</p>
+<p>const int Max = 5;</p>
+<p>// Eunction prototypes</p>
+<p>int £ill_array(double ar[], int limit);</p>
+<p>void show_array(const double ar[], int n); // don't change data<br>void revalue(double r, double ar[], int nj);</p>
+<p>int main()</p>
+<p>using namespace std;<br>double properties [Max] ;</p>
+<p>int size = fill_array(properties, Max) ;<br>show_array(properties, size);<br>if (size &gt; 0D)<br>cout &lt;&lt; "Enter revaluation factor: ";<br>double factor;<br>while (!(cin &gt;&gt; factor) )    // bad input<br>cin.,clear();<br>while {cin.get() != '\n")<br>continue;<br>cout &lt;&lt; "Bad input; Please enter a number: ";<br>revaluel(factor, properties, size);<br>show _array(properties, size);<br>cout &lt;&lt; "Done.\n";<br>cin.get();<br>cin.get();<br>return 0;</p>
+<p>int fill_array(double ar[], int limit}</p>
+<p>using namespace std;<br>double temp;<br>Bf i A<br>if (!cin)    // bad input<br>ein.clear();<br>while (cin.get(} != '\n"}</p>
+<p>eontinue;<br>cout &lt;&lt; "Bad input; input process terminated. \n";<br>break;</p>
+<h3>第 219 页（PDF p237）</h3>
+<p>第7章 BR CHHRERR</p>
+<p>else if (temp &lt; 0)     // signal to terminate<br>break;<br>ar[i] = temp;</p>
+<p>return i;</p>
+<p>// the following function can use, but not alter,<br>// the array whose address is ar<br>void show_array(const double ar[], int n)<br>using namespace std;<br>cout &lt;&lt; ar[i] &lt;&lt; endl:</p>
+<p>/f multiplies each element of ar[] by r<br>vold revalue(double r, double ar[], int n)</p>
+<p>下面两次运行该程序时的输出:<br>Enter value #1: 100000</p>
+<p>Enter value #2: 80000</p>
+<p>Enter value #3: 222000</p>
+<p>Enter value #4: 240000</p>
+<p>Enter value #5: 118000<br>Property #1: $100000<br>Property #2: $80000<br>Property #3: $222000<br>Property #4: $240000<br>Property #5: $118000</p>
+<p>Enter revaluation factor: 0.8<br>Property #1: $8o000</p>
+<p>Property #2: $64000<br>Property #3: $177600<br>Property #4: $192000<br>Property #5: $94400</p>
+<p>Done.<br>Enter value #1: 200000</p>
+<p>Enter value #2: 84000<br>Enter value #3: 160000<br>Enter value #4: -2<br>Property #1: $200000<br>Property #2: $84000<br>Property #3; $160000<br>Enter reevaluation factor: 1.20<br>Property #1: 5240000<br>Property #2: $100800<br>Property #3: 5192000<br>Done.</p>
+<h3>第 220 页（PDF p238）</h3>
+<p>ee eee   Cau. Pike FR C6 EC —</p>
+<p>[S -MAL all aryOHh: MAPA SE te    将结来答入。 第二 -次运行演示了输入5项<br>房地产信的情况，第一次运行演示了输入殴值的情况:</p>
+<p>5:   RPT</p>
+<p>前面已经讨论了 与该示例相关的重要编程细节， 因此这里回顾-- AME. 我们首先考虑的是通过<br>数据类型和设计适当的函数来处理数据，然后将这些函数组合成一个程序。有时也称为自下面上的程序设 =<br>it 《bottom-up_programming)，因为设计过程从组件到整体进行。这种方法非常适合于 OOP一一它首先强<br>调的是数据表示和操纵。而传统的过程性编程倾向于从上而下的程序设计 《top-down programming)，首先<br>指定模块化设计方案，  然后再研究细节。  这两种方法都很有用，  最终的产品都是模块化程序。     四</p>
+<ol>
+<li>Peverr Cray tere        =</li>
+</ol>
+<p>假设要编写一 TEM double ACA FLINT: 如果该函数要修改数组， 其原型可能类似于下面这样</p>
+<p>=        如果函数不修改数组，  -其原型可能类似于下面这样:-              -        =</p>
+<ul>
+<li>= 当然，在函数原型中可以省略变量名，  也可将返回类型指定为类型。  这里的要点是，ar 实际上是一个</li>
+</ul>
+<p>_    指针，指向传入的数组的第一个元素; 另外，  二手通过参数传递了元素数， 这两个函数都可使用任何长度</p>
+<ul>
+<li>的数组，只要数组的类型为 double:      ee   il  5  az</li>
+</ul>
+<p>double faults [50] ; :<br>€ Gcatey meabeaa:! 1000) ;<br>oe   AME Ne CRURIMALL EAM BIR, EMG ADIN, mM Ok &gt;— Hea Xe<br>Se 数组的知识; 例如，它不能使用 sizeof 来获悉原始数组的长度， 而必须依赖于程序员传入正确的元素数。</p>
+<ul>
+<li>734 ”使用数组区间的函数    ss           _</li>
+</ul>
+<p>-=正如您看到的，对于处理数组的:C++函数，必须将数组中的数据种类、 数组的起始位置和数组中元素<br>数量提交给它; 传统的 C/C++方法是，将指向数组起始处的指针作为一个参数， 将数组长度作为第二个参<br>数〈指针指出数组的位置和数据类型)，这样便给函数提供了找到所有数据所需的信息。</p>
+<p>还有尺一种给函数提供所需信息的方法，即指定元素区间 〈range), .这可以通直传递两企指鲁来完成: 一<br>一个指针标识数组的开头,-另一个指针标识数组的尾部。例如， C++标准模板库 (SEL, HECER 16-章介绍)<br>将区间方法广义化了。STL 方法使用“超尾”概念来指定区间。世就是说，对于数组而言， 标识数组结尾<br>的参数将是指向最后一个元素后面的指针。 例如， 假设存这样的声明</p>
+<p>_ WARE elboud 和 elboud + 20 定义了区间。 首先，数组名 elboub 指向第一个元素。 FEAR elboud + 19<br>4   指向最后一个元素(即 elboud[19]), 因此，elboud + 20 指向数组结尾后面的一个位置。将区间传递给函数<br>将告诉函数应处理哪些元素。 程序清单 7.8 对程序清单 7.6 做了修改，使用两个指针来指定区问。                二</p>
+<p>程序清单了8 arrfun4.cpp</p>
+<p>// arrfun4.cpp --— functions with an array range<br>Hinclude &lt;iostream&gt;</p>
+<p>const int ArSize = 日;</p>
+<p>int sum arr(const int <em> begin, const int </em> end) ;<br>int main()</p>
+<p>using namespace std;</p>
+<h3>第 221 页（PDF p239）</h3>
+<p>61 ee CEM a</p>
+<p>— “int ‘cookies {ArSizel -   =, 2,4, 8, 16, 32; 64, yeh:      oe a Thi Se    Eve<br>f= some “systems “require preceding int: with static to eis sites ENO We ee ar</p>
+<p>mS)  enable array initialization: *.-t. 22°: Til: 75 pe ye ae ee</p>
+<p>cout &lt;¢ "Total cookies eaten: "&lt;e sum &lt;&lt;  endl ;<br>“sgumr= sum_arr(ecookies, cookies=+ 3+; ~    // first 3 elements<br>cout. &lt;&lt; "First three eaters ate “ &lt;&lt; Sums&lt;&lt; " cookies. \n";<br>_ gum = sum_arrtcookies + 4i2.cookiés-+ 8);     // last 4 eFements<br>Sout _s&lt; “Last—four ez eaters ate | " &lt; BUT &lt; " cookies. An";     =      Teen tee</p>
+<p>“// return the sum of- an integer array<br>int sum_arr(const int <em> begin, const int </em> end</p>
+<p>const int * pt;<br>int total =-0;<br>pills return’ ‘total:  : =     seat       a MEANS ees    i ae<br>Pa ae a :          =</p>
+<p>Total cookies eater: 255<br>First three eaters ate 7 cookies.<br>Last four eaters ate 240 cookies.</p>
+<p>程序说明</p>
+<p>请注意程序清单 7.8 中 sum_array( )函数中的 for 循环，</p>
+<p>for (pt = begin; pt f= end; pt++)}</p>
+<p>total = total + *pt;</p>
+<p>它将 pt 设置为指向要处理的第一个元素 (begin-指向的元素) MET. FARE pt COC EL DEA Bi total<br>中。然后，循环通过递增操作来更新 pt，使之指向下一个无素。上内要 pt 不等手 end，这一过程就将继续下<br>去。当pt 等于 end时，它将指向区间中最后一个元素后面的一个位置，此时循环将结束</p>
+<p>其次，请注意不同的函数调用是如何指定数组中不同的区间的:</p>
+<p>int sum-= sum arr{cookies,cookies + ArSize} ;<br>sum = sum_arr(cookies, cookies + 3) ;-      // first 3 elements</p>
+<p>sum = sum_arr(cookies + 4, cookies + 4);   // last 4 elements</p>
+<p>指针 cookies + ArSize 指向最后一个元素后面的一个位置〈数组有 ArSize 个元素，因此 cookies[ArSize — 1]<br>是最后一个元素，其地址为 cookies + ArSize - 1)。因此，区间[cookies，cookies + ArSize]指定的是整个数<br>组。同样，cookies，cookies + 3 指定了前 3 个元素，依此类推。</p>
+<p>请注意，根据指针减法规则，在 sum_amf )中，表达式 end —begin 是一个整数值，等于数组的元素数目。</p>
+<p>另外，必须按正确的顺序传递指针，因为这里的代码假定 begin 在前面，end 在后面。</p>
+<p>7.3.5 指针和 const</p>
+<p>将 const 用于指针有一些很微妙的地方〈指针看起来总是很微妙)，我们来详细探讨一下。可以用两种不<br>同的方式将 const 关键字用于指针。第一种方法是让指针指向一个常量对象，这样可以防止使用该指针来修</p>
+<h3>第 222 页（PDF p240）</h3>
+<p>CTR, AARP ASR PAR, ROP DER aie. ERR aa</p>
+<p>首先，声明一全指际常量的指针-pt:</p>
+<p>int age = 39;</p>
+<p>const int * pt = &amp;age;</p>
+<p>该声明指出;-pt 指向一个 constint (ie HL 3995 ABE AS RE (EA pt RHESUR MA. RAKES *pt 的<br>值为 const，不能被修改:</p>
+<p>*pt. += 1;        // INVALID because pt points—to a const_int-</p>
+<p>gin &gt;&gt; *pt;        // INVALID for the same reason</p>
+<p>LCE “i Me Spe BRB EAS eR ATT ES Bis EE, Te RAE RY pt<br>而言，这个值是常量。例如，pt 指向age，而 age 42 const. A) LEA Heit age 变量来修改 age (HA. 18<br>不能使用 pt 指针来修改它:</p>
+<p>a * pt = 20;        // INVALID because pt points to a const int<br>age = 20;        // VALID because age is not declared-to be const</p>
+<p>LA Hi BRAT AS AS EB A A ER Ss EL. Tk AL A eB A SS a I const 的指针。因此还<br>有两种可能，将 const 变量的地址赋给指向 const 的指针、将 const 的十址赋纵常规指针。这两种操作都可<br>行吗? 第一种可行，但第二种不可征:</p>
+<p>const float g earth = 9.80; .- -ts-   =      aaa</p>
+<p>const Eloat g moon =二:6主;<br>float * pm = &amp;G moon; ~ _   ff INVALID .</p>
+<p>对于第一种情况来说，既不能使用 g_earth 来修改值 9. 80，也不 \能使用 pe 来修改。C+T禁上正第二种情<br>况的原因很简单-一-如果将Emoon .的地址赋给 pm，则可以使用 pm 来修改 g moon Mf, 这使得 g_ moon<br>的,const 状态很荒证，因此 C++禁止将 const 的地址赋给非 const 指针。如果读者非要这样做，可以使用强<br>制类型转换来突破这种限制，详情请参阅第 14 章中对运算符 const_cast 的讨论。</p>
+<p>如果将指针指向指针，则情况将更复杂。 前硬i过，假如涉及的是一级间接其系，则将非 const 指针<br>赋给 const 指针是可以的:</p>
+<p>int age =-39;        // age++ is we valid operation<br>int <em> pd= kage;      /f_</em>pd = 41 is a valid operation<br>const_int.<em> pt = pd;   f/f </em>pt-= 42 is an invalid operation</p>
+<p>然而; 进入两级间接关系时, 与一级间接关系一样将 ceonsf MISE const (AA HIRE A RAAB ES.<br>如果多许这样做，则可以编写这样的代码，</p>
+<p>const int **pp2;</p>
+<p>int. *pl;</p>
+<p>const int n= 13;</p>
+<p>pp2 = &amp;pl-// not aliowed, but suppose it were:</p>
+<p>*pp2 = én; // valid, both const, but sets pl-to point at n</p>
+<p>pi se 10; // valid, but changes const n</p>
+<p>上述代码将非 const HHHE C&amp;epl) BRAS T const 指针 (pp2).— 因此可以使用pl 来修改 const数据:z 因此，<br>仅当只有一层间接关系 (如指针指向基本数据类型) 时y ACB CREE const 地址或指针赋给 const 指针。</p>
+<p>注意，如果教据类型本身并址是指针，则可以将 const 数据或非 const 数据的地址赋给指向 const 的指<br>针，但只能将非 const 数据的地址赋给非 const 指针。</p>
+<p>假设有一个贞const 数据组成的数组:</p>
+<p>const int months[12] = {31,28,31,30,35F,30, 31, 31,30,31,30,31};</p>
+<p>TUARS EOS ES ER AE eB ET REA TER © (ESR EERE SA Me</p>
+<h3>第 223 页（PDF p241）</h3>
+<p>a 一 Toe a Ee    “aa a  6c mma Ss Cae<br>.  2 int RE 让  ive = Wf Should have. been conat: int’ arr [hk          pay            a ‘<br>7      |: LED o const cial (months) 由给非 const Hatt (ar), Ine.<br>=   he       = RATHER cimet   re La foe eee en rene Sen ae ata<br>CHORE ENS AE PRN RR RARE.<br>@ 30 FP PPG HT A IR CAH tn FA AE AA<br>@ 4 Ff const £47 Hak He 4b 2 const 和非 const KH, FM AFR H+ LAE const ams ee<br>TRE AI,   i) 4S 4b IG BR POA A 45H const 的指针。<br>为说明另一个微妙之处， 请看下面的声明天<br>int age = 39;<br>“第二个声明中的 const AB pe aa 《这里为3 39), mT pt 的值。  emi,</p>
+<ul>
+<li>pt = &amp;sage; // -okay—to ae to 二 location</li>
+</ul>
+<p>(AVATAR peRe EHR CLEA 800.<br>AE const rE A ERE He:<br>=        int sloth =<br>const int * ps = &amp;sloth;     万 a pointer to const int<br>int * const finger = &amp;sloth; // a const pointer to int<br>TET AA, RES const 的位置与以前不同。  这种声明格式使得 finger russes sloth, {ft<br>许使用 finger 来修改 sloth WO. “PIMA See eps 来修改-slGth 的值，但允许将 ps 指向另一个位_<br>i. fait, finger 和?ps都是 const，而*finger Al ps AE CBSE 7.595<br>eet aoe ee       : int gore = i |-}<br>:  : “gonst int * psaach = 和 dies:<br>指向的值      :   另一个变量<br>可 ant.*  ER me ake 2  or</p>
+<h3>第 224 页（PDF p242）</h3>
+<p>Se eS ee eens CE Primer Pus-( #6 88) 中文版</p>
+<p>STUER cont 0 cons Sapetensirincieces</p>
+<p>加    -- const ， double ， * const’ stick .= -&amp;trouble; ES eat Se     aan      Bae       ~    Sees tee<br>i            sep,  “stick 只能指向 trouble,      而 stick K不能用类修改 trouble © Ht.   A ia   ae, stick Aitsick 名-</p>
+<p>os       - 通常,:-  将指针 ie aR HRIEEN,  arpa const tein MORO. 6 is aR 1. 3 oF</p>
+<p>2 <em>yoid show</em> array (const: double: ar {T;  ak aie                   =</p>
+<p>i ROTELLA 9 REISER ACA meen 8名指向指针的指针， Ae  a<br>EE const    ae ee Pe eet tees  ee se   Se ee</p>
+<p>证 7a 丁数和二维类级  人</p>
+<p>aos ie ACMOT SRI: 29, Ha ARRON HE, MCAT ERE, ee<br>JB — eMC — PP ECR AL Je TE HA. lt fr Fm  aie se OES</p>
+<p>ieee   Wy sum PREF PARE? mC TITRE CG) 作为参数: cert aoe Ce   oi</p>
+<p>eae         Data 3A, AES: MTC BATRA EN SE. 全 int 值给成。 =因此， data” sete</p>
+<p>a sun int 2 _(tar2). Bore Ant t Size) ¢</p>
+<p>SP Sa A</p>
+<p>pam in aI aR IER     es ee<br>SE   =还有另外-- -种格式二 =这种格式与: Eis HIB A 全相同; “Lara ak     |<br>0     下述两不原型部挤晶，  ar2 证指针而不是数给。 -还谊注意的是  指针美列指让  它指向由 4 int 组成<br>tes tia  因此， 指针类型指定了列数，  这就是没有将列数作为独立的函数参数进行传递的原因。       agate —<br>.由于指针类型指定了列数: 因此 sum( RCRA ET 4 列组成的数组 Asem TAT, BE 5s<br>. nae sum) EL EAT BBB FB fil       ee  =the  =] Seis Se es see =<br>ley ane “biel tay     fare Php = .  cone i 加 S 1 er uae S — ae eee . s = ee ;  Ss a ee</p>
+<p>sa Mowe,   rina a  100) 3    WE sum ‘alt oe ae</p>
+<p>{7 95 “dnt-toetal3 &lt;:sum(a, 10); &lt;= //*sum first- Ai eave see 2 eerh on Seth Ger      i.</p>
+<p>¢ te ye int total4’=. ‘sum (a+10,-  20});° f/f sum next 20 rows Of ae: jet fee le el Sa a po Re<br>ae        te 由于参数 ah 是指向数组的指针  A RA HIE NEN emer 最条间的方法将 ar2 2 ate       |</p>
+<p>ee ee ee ee<br>SE ge ee pid el ee</p>
+<h3>第 225 页（PDF p243）</h3>
+<p>第7章 函数一 C++的编程模块                           225</p>
+<p>total += ar2(r]j [ec];<br>return total;</p>
+<p>同样，行数被传递给 size 参数，但无论是参数 ar2 的声明或是内部 for 循环中，列数都是固定的一一4 列，</p>
+<p>可以使用数组表示法的原因如下。由于 枯2 指向数组〈它的元素是由4个int组成的数组) 的第一个元素<br>元素0)，因此表达式 ar2 +r 指向编号为r 的元素。因此 ar2加是编号为r的元素。由于该元素木身就是一个<br>由4个int组成的数组，因此 ar是由4个int组成的数组的名称。将下标用于数组名将得到一个数组元素，因<br>此ar2frl[c]是由4个int 组成的数组中的一个元素，是一个int 值。必须对指针 ar2 执行两次解除引用，才能得到<br>数据。最简单的方法是使用方括号两次: ar2[rl[cl]。然而，如果不考虑难看的话，也可以使用运管符*两次;</p>
+<p>为理解这一点，读者可以从内向外解析各个子表达式的售义，</p>
+<p>ar2              // pointer to first row of an array of 4 int</p>
+<p>ar2 + 工          // pointer to row r (an array of 4 int)</p>
+<p>t(arZ 4x)       // row r (an array of 4 int, hence the name of an array,</p>
+<p>// thus a pointer to the first int in the row, i.e., ar2[r]</p>
+<p>*(ar2 +r) +c    // pointer int number c in row r, i.e., ar2[xr] + ¢<br><em>(</em>(ar2 +r) + c // value of int number c in row r, i.e. ar2{(r] [c]</p>
+<p>sum( )的代码在声明参数 ar2 时，没有使用 const，因为这种技术只能用于指向基本类型的指针，而 ar2<br>是指向指针的指针。</p>
+<p>7.5 ”本数和 C-风格字符串</p>
+<p>C-风格字符串由一系列字符组成，以空值字符结尾。前面介绍的大部分有关设计数组函数的知识也适<br>用于字符串函数。</p>
+<p>例如，将字符串作为参数时意味着传递的是地址，但可以使用 const 来禁止对字符串参数进行修改。<br>然而，下面首先介绍一些有关字符串的特殊知识。</p>
+<p>7.5.1 将 C-风格字符串作为参数的函数 --  - =   和 S</p>
+<p>二假设要将字符昌作为参数传递给函数，则表示字符惠的方式有三种:…<br>char S41; -<br>@ ”用引号括起的: 字符让常量 《也称字符品字面值              _<br>(1 ER 3 种选择的类型都是hiF 指针(准确地说是share)， Wa BL DLS Se a<br>char ghost [15] = "galloping";<br>3... Char_* str =."galumphing"; _       a 83 Sees    ere<br>-= . int nl *-strlen{ghost);~. ~~" -// ghost is ghost [0]</p>
+<p>int m2 = strlen{str);            // pointer to char<br>int nd = strlen("gamboling"};    // address of string</p>
+<p>可以说是将字符串作为参数来传递，但实际传递的是字符串第一个字符的地址。这意味着字符串函数<br>原型应将其表示字符串的形参声明为 char*#类型。</p>
+<p>C-风格字符串与常规 char 数组之间的一个重要区别是，字符串有内置的结束字符《前面讲过，包含<br>字符，但不以空值字符绪尾的 char 数组只是数组，而不是字符串)。这意味着不必将宇符串长度作为参<br>数传递给函数，而函数可以使用循环依次检查字符串中的每个字符，直到过到结尾的空值字符为止。程序<br>清单 7.9 演示了这种方法，使用一个函数来计算特定的字符在字符串中出现的次数。由于该程序不需要处</p>
+<h3>第 226 页（PDF p244）</h3>
+<p>理负数，因此它将计数变量的类型声明为 unsigned int.<br>程序清单 7.9”strgfun.cpp</p>
+<p>// strafun.cpp--- funmetions with a string argument</p>
+<p>#include &lt;iostream&gt;</p>
+<p>unsigned int c_in_str(const char * str, char ch);<br>int main (}</p>
+<p>using namespace std;</p>
+<p>char mmm[15} = "minimum";    // atring in an array<br>// some systems- require preceding char with static to<br>// enable array imitfalization</p>
+<p>char *wail = "vlulate";    // wail points to string</p>
+<p>unsigned int ms = c in str(mmm, 'm'};<br>unsigned int us = c in str(wail, ‘u'};<br>cout &lt;&lt; ms &lt;&lt; "<br>COUT &lt;&lt; Yea-&lt;&lt; 下<br>return 0;</p>
+<p>characters in " &lt;&lt; mmm &lt;&lt; endl;</p>
+<p>characters in " &lt;&lt; wail &lt;&lt; endl;</p>
+<p>// this- function counts the number of ch characters<br>// in the string str<br>unsigned int c_in_ str(const char * str, char chr</p>
+<p>unsigned int count = 0;</p>
+<p>while (<em>str)        f/ quit when </em>str is '\o'<br>if {(*str == ch)<br>count+t+:<br>str++;        // move-pointer to next char</p>
+<p>return-count;</p>
+<p>PB PRE FEF SH:</p>
+<p>3 m characters in minimum<br>2 u characters_in ululate</p>
+<p>程序说明</p>
+<p>由于程序清单 7.9 电的 cint str函数在应修改原始字符奈，因此它在声明形参:s6 时使用于限定符<br>const。这样，如有果错误地扯函数修改了字符串的内容，凡译器将捕获这种错误。当然，可屋在函数淆中使<br>用数组表示法，而求声明 str:</p>
+<p>unsigned int c_in_str({const char Str[] ，char ch? // also okay</p>
+<p>然而，使用指针表示法提醒读者注意，参数不一定必须是数组名，也可以是其他形式的指针。</p>
+<p>该国数本身演示了处理字符串中字符的标准方式:</p>
+<p>while (*str)</p>
+<p>statements<br>号七工十十，</p>
+<h3>第 227 页（PDF p245）</h3>
+<p>bei    ieee   ira 全 一</p>
+<ul>
+<li>ste: RUA AEH NER: ert ers 例如， 第一 RM</li>
+</ul>
+<p>二 工的箱将为 mr二- “minimum” 的第-  -个字符=  <em>只要字符不为空值字符 (0)- </em>str 就为非零值，  因此循环将</p>
+<p>-继续* 在每轮循环的结尾处， -表达式 strt+将指针增加一个宝节， 使之指向字符时中的下一个字符。 SA,</p>
+<p>人 Ab beste</p>
+<p>ee      75.2 -返回 c -风格字符的函数      人 See ea fie<br>a    ~ de ieee HEM nem eee ee eget siunieenne<br>-一- -这样做的效率更高。 fiat: : 程序清单7.16 定义了一个名为buildstrC)的函数， 该函数返回三个指针， iK-- aoe<br>=  ARES BASAL. :三个字符和一个数字。= AEF new 创建一个长度 与数字参数相等的字符囊， 然后将</p>
+<p>| PERMIT. whi. -返回指向新字符种的指针 Os<br>程认清单7.10  stgback cpp<br>阿 etrgback. cpp — 县 function: ‘that returns a pointer to char<br>in char * ‘buikdstr (char c,  int er     a preketne yt<br>~ int times;—""_     ;<br>cout. ee “enter a character: a<br>‘ein 33 ch;            ;<br>cout ¢&lt; "Enter an. anteger: ";</p>
+<p>| char “ps = : ui ldete ted times) j<br>‘cout &lt;&lt; pes &lt;&lt; endl;<br>‘+ delete []--pays5            // free memory.<br>ps.= ‘bui Fister (*+ ©, ZOE;        te reuse pointer<br>~* gout: &lt;&lt;_ps &lt;&lt;. a ~DONE~ Wee ps &lt;&lt; endl;<br>’ return 0;<br>_#/ builds string made of nc characters<br>he    char, * petro = new charfin.+ 1); .<br>ee      pstr (n}  So8NO'; pe ee   Mt teritinate string.   nee   coh tanh Ae eee  ns a SED<br>nash Or        “petr {nd SF &lt;a  ewe iar 6 0 和      ee peas<br>Seas ee ae reEuin -二 au  i 75 See en eet a     ey Se  4: are By    a   Ee  id</p>
+<ul>
+<li>ait wwwvwvwvvwwuvgwrvvimrvwvvwvvvwvvwvvwwrwvrvaFruv</li>
+</ul>
+<p>a       at    PEREE REE RE Rept DONE- tHe PEPE b EERE tte EE<br>_ 5 AME HRN. RENEE TH elwpded Bit, a</p>
+<h3>第 228 页（PDF p246）</h3>
+<p>-228   Ae   )  os rene eS Ce</p>
+<p>清单 7.10 中的通数请求分本 n+ ANH ALLE CERO,  并将最后一个字节设置为空值字符，  处后从<br>-=后向前对数组进往填充。在程序清单 7.10 中,= 下面的循环将循环= YR, 直到nm减少到0,，这将填充nm 个元素:</p>
+<p>while (n-- &gt; 0)<br>“_pstr inl” er;   pee</p>
+<p>二和最请= eT eT eee as eis SEM, Ba while HER =<br>二三 测试条件将对1 和0 BET ECR, RLM BO true, HAASE. WRG. PROS n WY 0. 因此 pstr[0]是最后 = 三<br>-一个被设置为c 的元素。 之所以从后向前《而不是从前向后) SEE AER i cated alg</p>
+<p>一“二 从前向后填充的代码将与下面类似， Be eee   eee   |   faunas</p>
+<p>pet ilies} = Cy                  Geese   :    eee ee et ea eee A Se etm a Be<br>= 注意，变量 pstr 的作用域为 binildstr 函数内;-  - RE Bee MAIR pte 《而不是字答哩) 使用的内存将 二</p>
+<p>被释放。但由于函数返回了 pstr 的值，因此程序仍证以通过 main(]中的指针 ps 来访问新建的字符串。</p>
+<p>。 当该字符串不再需要时,程序清单 7.10 中的程序使用 delete 杰放该字符串占用的内存。然后将. ps<br>-指向为下一个字符串分配的内存块，然后释放它们。 这种设计《让函数返回一个指针，该指针指向new 分--<br>ROMA) 的缺点是,程序员必须记住使用-deietie。在第 12 章中，读者将知道 C++类如何使用构造函数和<br>: 拆构函煞负责为您处理这些纲节， ag UP eee alert Be oe Bald Steer ee Sane se</p>
+<p>-现在将注意力从数组转到结构: i am HL a RS CT cree TT es<br>(= SRE, BT CEPR TL CCE GB RMT 结构变量的行为更接近于基本的单值变量; 也就是说，<br>5数组不同，结构将其数据组从成单不实体或数据对象，该实体被视为二不整体。前面讲过，订以将一个<br>-= 结构赋给另外一个结构。同样，也可以按信传递结构;就像普通变量那样。 SEMEL, EER<br>pe REIS. 另外，函数也可以返回结构。与数组名就是数组第一个元素的地址不同的是,结构名只是 -<br>”- - “结构的名称，要获得结构的地址，必须使用地址运算符&amp;。在 C 语言和-C++中， 都使用符号&amp;来表示地址<br>-运算符* ASP, CHR REE APPR RARER, BORER 8 章讨论。<br>使用结构编程时,，最直接的方式是像处理基本类型那样来处理结构; 也就是说, 将结构作为参数传递，<br>” 并在需要时将结构用作返回值使用。然而，按值传递结构有一个后点。如果结构非常大，则复制结构将增<br>加内存要求，降低系统运行的速度。出于这些原因《同时直于最初-C 语言不允许按值传递结构)， 许多 C<br>程序员倾向于传递结构的地址，然后使用指针来访问结构的内容。C++提供了第三种选择一一按引用传递<br>(将在第 8 章介绍)。下面介绍其他两种传递方式，首先介绍传递和返回整个结构。</p>
+<p>7.6.1 传递和返回结构:</p>
+<p>当结构比较小时，按值传递结构最合理，下面来看两个使用这种技术的示例。第一个例子处理行程时</p>
+<p>间。有些地图指出，从 Thunder Falls 到:Bingo 城需要 3 小时 50-分钟，而从 Bingo 城到Gotesquo 需要1 小</p>
+<p>时 25 分钟。对于这种时间，焉以使用结构来表示一一一个成抽表示小时值，另一个成员表示分钟值。将两<br>个时间加起来需要一些技巧，因为可能需要将分钟值转换为小时。例如，前面列出的两个时间的总和为4<br>-水时75 分钟，应将它转换为 5 小时 15 分钟。 下面开发用王表示时间值的结构， 然后再开发一个函数，它<br>Rg Sa eee ay    a eee a<br>“定义结构的工作很简单:  eee me     ti    vee  hire</p>
+<p>io eae ees Geaieies ene Gy ot eo ee ce aoa 0 2 Re eee ir</p>
+<h3>第 229 页（PDF p247）</h3>
+<p>第7章 ”函数一一C++的编程模块</p>
+<p>接下来，看一下返回两个这种结构的总和的 sum( )函数的原型。返回值的类型应为 travel_time，两个</p>
+<p>参数也应为这种类型。因此，原型应如下所示，</p>
+<p>bravel 七ime sum(travel_time tl, travel_time t2);</p>
+<p>要将两个时间相加，应首先将分钟成员相加。然后通过整数除法〈除数为 60) 得到小时值，通过求模<br>运算符 〈%) 得到剩余的分钟数。程序清单 7.11 在 sum( )函数中使用了这种计算方式，并使用 show_time( )</p>
+<p>函数显示 travel_time 结构的内容。<br>程序清单 7.11 travel.cpp</p>
+<p>// travel.cpp -- using structures with functions</p>
+<p>#include &lt;iostream&gt;<br>struct travel_time</p>
+<p>int hours;</p>
+<p>int mins;</p>
+<p>const int Mins per hr = 60;</p>
+<p>travel time sum(travel time tl, travel _time 七2) ;<br>void show_time(travel_time t);</p>
+<p>int main()</p>
+<p>using namespace std;</p>
+<p>travel time dayl = {5, 45};    // 5 hrs, 45 min<br>travel time day2 = {4, 55};    // 4 hrs, 55 min</p>
+<p>travel time trip = sum(dayl, day2);<br>cout &lt;&lt; "Two-day total: ";<br>show _time(trip) ;</p>
+<p>travel time day3= {4, 32};<br>cout &lt;&lt; "Three-day total: ";<br>show_time(sum(trip, day3));</p>
+<p>return 0;</p>
+<p>travel_time sum(travel_time tl, travel_time t2)</p>
+<p>travel time total;</p>
+<p>total.mins = (tl.mins + t2.mins) % Mins per hr;</p>
+<p>total. hours = tl-hours + t2.hours +</p>
+<p>{tl.mins + t2.mins) / Mins_per_hr;</p>
+<p>return total;</p>
+<p>void show_time(travel_ time 七)<br>using namespace std;<br>cout &lt;&lt; t.hours &lt;&lt; " hours, "<br>&lt;&lt; t.ming &lt;&lt; " minutes\n";</p>
+<h3>第 230 页（PDF p248）</h3>
+<p>其中,-travel_time 就像是一个标准的类型名，可被用来声明变量、范数的返回类型和国数的参数类型 ，<br>由于 total Al tl 变量是 travel time 结构，因此可以对它们使用句点成员运算符。 由于 sum(J函数返回<br>travel_time 结构，因此可以将其用作 show_time( )函数的参数。 由于在默认情况下，C3#+图数按值传递参数，<br>因此函数调用 show_time(sum(trip, day3))# PUsLe SEH] suml(trip，day3)，引获得其返回值。然后，<br>show_time( )调用将 sum( )的返回值《而不是函数自身三传递给 show_time( )e 下面是该程序的输出;</p>
+<p>Two-day total: 工作 hours, 40 minutes</p>
+<p>Three-day total: 15 hours, 12 minutes</p>
+<p>7.6.2”另一个处理结构的函数示例</p>
+<p>方面介绍的有关函数和 C++结构的大部分知识都可用于 C++类中，国此有必要介绍另一个示例。这次<br>要处理的是空间，而不是时间。有具体地说，这个例子将定义两个结构;用于表示两种不同的描述位置的方<br>法，然后开发-个函数，将一种格式转换为另一种格式，并显示结果。这个例子用到的数学知识比前一个<br>要多，但并不需要像学习数党那样学习 CH.<br>的水平偏移量和垂直偏移重。 传统上, 数学家使用x 表示水平偏移量, 使用y 表示垂直偏移量(参见图7.6和5<br>x Al y 一起构成了直和角坐标_(rectangular coordinates)。可以定艾由两个坐标组成的结构来表示位置;</p>
+<p>Micromips相对于Byteville的直角坐标</p>
+<p>图 7.6 直角坐标<br>struct rect<br>double x;          // horizontal distance frem origin<br>double y;         // vertical distance from origin</p>
+<p>另一种描述点的位置的方法是，指出它偏离原点的距离和方向〈例如，东偏北 40 度)。传统上，数学<br>家从正水平轴开始按道时针方向度量角度(参见图 7.7)。 距离和角度一起构成了极坐标 (polar coordinates ) .<br>可以定义另一个结构来表示这种位置:</p>
+<p>struct polar</p>
+<p>double distance; // distance from origin<br>double angle;      // direction from origin</p>
+<h3>第 231 页（PDF p249）</h3>
+<p>第7章 函数一一(C++的编程模块                               231</p>
+<p>图77 极坐标</p>
+<p>下面来创建一个显示 polar 结构的内容的函数。C++库 CM C 语言借鉴而来) 中的数学函数假设角度的-</p>
+<p>单位为台度-因此应以统度为单位来测量和角度。但为了便于显示，我们将弧度值转换为角度值。这意味着=</p>
+<p>需要将听麻值磁以 180/mc 一一约为 57.29$77951+。该 国数的代码如下:</p>
+<p>// show polar. coordinates, converting angle to degrees<br>一 _VeciG enhow polar {polar 人</p>
+<p>全</p>
+<p>using namespace std;<br>const double Rad to deg = 57.29577951;</p>
+<p>cout &lt;&lt; "distance = " ee dapos.distance;<br>cout &lt;&lt; ", angle =—™&lt;&lt;- dapos. angle * Rad_to 3<br>cout &lt;&lt; " degrees\n";<br>请注意，形参的类型为 polars 将一个 polar 结构传递给该函数时，该结构的内容将被复制到 dapos 结<br>构中-函数随后将使用该拷贝完成工作。由于 dapos 是一个结构，因此该函数使用成员运算符句点〈参贴-<br>第 4 章) 来标识结枸成员。<br>接下来，让我们试着再前进一步，编写一个将- PEs be By A  该函数接受一个 rect S<br>数，并返回一个 polar 结构。这需要使用数学库中的函数-因此程序必须包含头文件 cmath《〈在较旧的系统<br>中为 math.h). 54h, 在有些系统中，  还必须命令编译器载入数学库 (参见第 1 章)。可以根据毕达哥拉斯</p>
+<p>定理，使用水平和垂直坐标来计 #5<br>distance = sqrt x * x+ y =¥)<br>”数学库中的 atan2( )函数可根据二和y 的值计算角度:<br>还有一个 atan( pa, (AE AER a 180-度之内和之外的角雇。在数学函数下，这种不确定性与在生<br>他手册中一样不受人欢迎。                                   -<br>// convert rectangular to-polar coordinates</p>
+<p>polar rect_to-polar(rect xypos)   // type polar</p>
+<h3>第 232 页（PDF p250）</h3>
+<p>polar answer;</p>
+<p>answer.distance =</p>
+<p>sqrt{ xypos.x <em> xypos.x + xypos.y </em> xypos.y);<br>answer.angle = atan2(xypos.y, xypos.x);<br>return answer;      // returns a polar structure</p>
+<p>编写好函数后，程序的其他部分编写起来就非常简单了。程序清单 7.12 列出了程序的代码。</p>
+<p>程序清单 7.12 atrctfun.cpp</p>
+<p>// stretfun.cpp -- functions with a structure argument</p>
+<p>#include &lt;iostream&gt;</p>
+<p>#include &lt;emath&gt;</p>
+<p>// structure declarations<br>struct polar<br>double distance;      // distance from origin<br>double angle;         // direction from origin<br>struct: rect</p>
+<p>double x;             // horizontal distance from origin<br>double y;             // wertical distance from origin</p>
+<p>// prototypes<br>polar rect_to polar(rect xypos) ;<br>void show polar(polar dapos);</p>
+<p>int main()</p>
+<p>using namespace std;<br>rect rplace;<br>polar pplace;</p>
+<p>cout «&lt; "Enter the x and y values: ";<br>while (cin &gt;&gt; rplace.x =&gt; rplace.y} // slick use of cin</p>
+<p>pplace = rect_to polar(rplace) ;</p>
+<p>show _polar|pplace) ;</p>
+<p>cout &lt;&lt; "Next two numbers (q te quit}: ";</p>
+<p>cout &lt;&lt; "Done.\n";<br>return 0;</p>
+<p>// convert rectangular to polar coordinates<br>polar rect_to polar(rect xypos)</p>
+<p>using namespace std;<br>polar answer;</p>
+<p>answer.distance =<br>sqrt | xypos.x <em> xypos.x + xypos.y </em> xypos.y);</p>
+<h3>第 233 页（PDF p251）</h3>
+<p>第7章 函数一一C++的编程模块              233</p>
+<p>answer.angle = atan2(xypos.y, xypos.x);<br>return answer;      // returns a polar structure</p>
+<p>// show polar coordinates, converting angle to degrees<br>void show polar (polar dapos)</p>
+<p>using namespace std;<br>const double Rad_to_deg = 57.29577951;</p>
+<p>cout &lt;&lt; "distance = " &lt;&lt; dapos.distance;<br>cout &lt;&lt; ", angle = " &lt;&lt; dapos.angle * Rad to deq;<br>cout &lt;&lt; " degrees\n";</p>
+<p>ER: 有些编译器仅当被明确指示后，才会搜索数学库。例如，较早的 gH+版本使用下面这样的命</p>
+<p>g++ structfun.c -1lm</p>
+<p>下面是该程序的运行情况:</p>
+<p>Enter the x and y values: 30 40</p>
+<p>distance = 50, angle = 53.1301 degrees</p>
+<p>Next two numbers (q te quit): -100 100</p>
+<p>distance = 141.421, angle = 135 degrees</p>
+<p>Next two numbers {q to quit): q</p>
+<p>程序说明</p>
+<p>程序清单 7.12 中的两个函数已经在前面讨论了，因此下面复习一下该程序如何使用 cin 来控制 while</p>
+<p>while (cin &gt;&gt; rplace.x &gt;&gt; rplace.y)</p>
+<p>前面讲过, cin 是 istream 类的一个对象。抽取运算符(&gt;&gt;])被设计成使得 cin&gt;&gt;rplace.x 也是一个 jstream<br>对象。正如第 11 章将介绍的，类运算符是使用函数实现的。使用 cin&gt;&gt;rplace.x 时，程序将调用一个函数，<br>该函数返回一个 istream 值。将抽取运算符用于 cin&gt;&gt;rplace.x Xf CHAR cin&gt;&gt;rplace.x&gt;&gt;rplace.y 这样)，也<br>将获得一个 istream 对象。因此，整个 while 循环的测试表达式的最终结果为 cin，而 cin 被用于测试表达式<br>中时，将根据输入是否成功，被转换为 bool 值 tue 或 包lse。例如，在程序清单 7.12 中的循环中，cin 期户<br>用户输入两个数字，如果用户输入了 q (前面的输出示例就是这样做的)，cin&gt;&gt;将知道 q 不是数字，从而<br>将q留在输入队列中，并返回一个将被转换为 fasle 的值，导致循环结束。</p>
+<p>请将这种读取数字的方法与下面更为简单的方法进行比较:</p>
+<p>for (int i = 0; i &lt; limit; i++)</p>
+<p>人</p>
+<p>if (temp &lt; 0)<br>break;<br>arti] = temp;</p>
+<p>要提早结束该循环，可以输入一个负值。 这将输入限制为非负值。这种限制符合某些程序的需要，但通<br>常需要一种不会将某些数值排除在外的、终止循环的方式。将 cin&gt;&gt;用作测试条件消除了这种限制，因为它<br>接受任何有效的数字和输入。在需要使用循环来输入数字时，别忘了考虑使用这种方式。另外请记住，非数字<br>和输入将设置一个错误条件，禁止进一步读取输入。如果程序在输入循环后还需要进行输入，则必须使用<br>cin.clear( )重置输入，然后还可能需要通过读取不合法的输入来丢弃它们。程序清单 7.7 演示了这些技术。</p>
+<h3>第 234 页（PDF p252）</h3>
+<p>7.6.3 ”传递结构的地址</p>
+<p>假设要传递结构的地址而不是整个结构以节省时间和空间，则需要重新编写前面的函数，使用指向结<br>构的指针。首先来看一看如何重新编写 show_polar( )函数。需要修改三个地方;</p>
+<p>曙。”调用函数时，将结构的地址〈总pplace) 而不是结构本身 (pplace) 传递给它;</p>
+<p>e HSAs polar KEE, EN polar *类型。由于函数不应该修改结构, 因此使用了 const 修饰符;</p>
+<p>和”由于形参是指针而不是结构，因此应间接成员运算符〔〈-&gt; )，而不是成员运算符〔句点)。</p>
+<p>完成上述修改后，该函数如下所示，</p>
+<p>// show polar coordinates, converting angle to degrees<br>void show _polar (const polar * pda)</p>
+<p>using namespace std;<br>const double Rad_to_deg = 57.29577951;</p>
+<p>cout &lt;&lt; "distance = " &lt;&lt; pda-&gt;distance;<br>cout &lt;&lt; ", angle = " &lt;&lt; pda-&gt;angle * Rad_to_deq;<br>cout &lt;&lt; " degrees\n";</p>
+<p>接下来对 rect_to_polar 进行修改。由于厚来的 rect_to_polar 函数返回一个结构，因此修改工作更复杂<br>些。为了充分利用指针的效率，应使用指针，而不是返回值。为此，和需要将两个指针传递给该函数。第一<br>个指针指向要转换的结构，第二个指针指向存储转换结果的结构。函数不返回一个新的结构，而是修改调<br>用函数中已有的结构。因此，虽然第一个参数是 const 指针，但第二个参数却不是。也可以像修改函数<br>show_polar( ) 修改这个函数。程序清单 7.13 列出了修改后的程序。</p>
+<p>程序清单 7.13 strctptr.cpp</p>
+<p>// stretptr.cpp -- functions with pointer to structure arguments</p>
+<p>#include &lt;iostream&gt;</p>
+<p>#include &lt;cmaths&gt;</p>
+<p>// structure templates<br>struct polar<br>double distance;      // distance from origin<br>double angle;         // direction from origin<br>struct rect<br>double x;             // horizontal distance from origin<br>double y;             // vertical distance from origin</p>
+<p>// prototypes<br>void rect_to polar(const rect <em> pxy, polar </em> pda);<br>void show_polar (const polar * pda);</p>
+<p>int main(}</p>
+<p>using Namespace std;<br>rect rplace;<br>polar pplace;</p>
+<h3>第 235 页（PDF p253）</h3>
+<p>第7章 ”函数一一C++的编程模块                            235</p>
+<p>gout &lt;&lt; "Enter the x and y values: ";</p>
+<p>while (cin &gt;&gt; rplace.x &gt;&gt; rplace.y)</p>
+<p>rect to polar(&amp;rplace, &amp;pplace);    // pass addresses<br>show polar (&amp;pplace) ;        // pass address<br>cout &lt;&lt; "Next two numbers ({q to quit): "</p>
+<p>cout &lt;&lt; "Done. \n";</p>
+<p>return 0;</p>
+<p>// show polar coordinates, converting angle to degrees<br>void show_polar (const polar * pda)</p>
+<p>using namespace std;</p>
+<p>const double Rad_to_deg = 57.29577951;</p>
+<p>cout &lt;&lt; "distance = " &lt;&lt; pda-sdistance;<br>cout &lt;&lt; ", angle = " &lt;&lt; pda-&gt;angle * Rad_to deg;</p>
+<p>cout &lt;&lt; " degrees\n";</p>
+<p>// convert rectangular to polar coordinates<br>void rect_to_polar(const rect <em> pxy, polar </em> pda)</p>
+<p>using namespace std;<br>sqrt (pxy-&gt;x <em> pxy-&gt;x + pxy-&gt;y </em> pxy-&gt;y);<br>pda-&gt;angle = atan2(pxy-&gt;y, pxy-&gt;x);</p>
+<p>注意，有些编译器需要明确指示，才会搜索数学库。例如，较早的 g++版本司用下面这样的命令行:<br>g++ structfun.c -lm</p>
+<p>从用户的角度来说,程序清单 7.13 的行为与程序清音 7.12 相同。它们之间的差别在于，程序清单 7.12<br>使用的是结构副本，而程序清单 7.13 使用的是指针，让函数能够对原始结构进行操作。</p>
+<p>7.7 RF string BR</p>
+<p>虽然 C-风格字符串和 string WRAL A lal, (8-45 Se EL, string WR SAM PA. Pn,<br>AY RK — HRS AS, HET LEP RR POR BY ORE TE Se MS ES<br>函数，也可以将对象作为完整的实体进行传递。如果需要多个字符串，可以声明一 Bika, iad a<br>=     - 程序清单 7.14 提供了二 -不下型示例， emmy fang Perry ace Te<br>AHA.</p>
+<p>oes : OL “程序清单7. 14°  _topfive. cpp   See Se i ca es Bie 这 本 Coy ee</p>
+<p>f/ topfive.cpp '-~ handling an array ‘of string objects ee ee al:     一</p>
+<p>#include. &lt;string&gt;’.     SB fiat!<br>using. namespace ase ae =  ss ea      ie ee</p>
+<h3>第 236 页（PDF p254）</h3>
+<p>‘const int SIZE = r?<br>oy void display (const-string eat” int a);</p>
+<p>_ string list [SIZE] ;      // amarray-holding 5 string object<br>: cout ee. "Enter “your "ee SIZE &lt;&lt;.-" favorite astronomical: sights: MEE igen<br>_ for’ (an i= -0;-i &lt; SIZE;  oad  ze mee,<br>; ‘cout &lt;&lt; 4-4 lec": -*<br>getline(cin,list [i]);</p>
+<p>I 3 =  nestle ese     a  二 SS</p>
+<p>“cout ec "Your. fists \n";<br>2 和  SIZE) ;</p>
+<p>return 0;</p>
+<p>上</p>
+<p>_ wotd-display(const string SRE ni</p>
+<p>-下面是 该程序的运行情况: :</p>
+<p>Enter: -your 5 favorite astronomical sights; vo<br>1: Orion Nebula—<br>2: M13<br>3: Saturn<br>4: Jupiter &gt;<br>25: Moon -<br>“1: Orion Nebula<br>2 一M13<br>3;—Saturn<br>i Jupiter .<br>5:Moon</p>
+<p>对手该示例，和需要指出的一点是，除函数 getline( Yt. ARPA A BAY Cal int) 一样对待 string<br>对象。如果和需要-string 数组; 只需使用通常的数组声明格式即可:</p>
+<p>string list [SIZE] ;     /f/-an array holding. 5 string object</p>
+<p>这样，数组 list 的每个元素都是一个 string HR. WOR PRA:</p>
+<p>getline(cin,list[i]);</p>
+<p>同样，形参 sa 是一个指向 string MRM, Att sa[订是一个 string WR, ALR FEE:</p>
+<p>7.8 ”本数与 array PR</p>
+<p>在 C++中，类对象是基于结构的，因此结构编程方面的有些考虑因素也适用于类。例如，可按值将对<br>象传递给函数，在这种情况下，函数处理的是原始对象的副本。恤外，也可传递指向对象的指针，这让函<br>数能够操作原始对象。 下面来看一个使用 C++11 模板类 array 的例子。</p>
+<h3>第 237 页（PDF p255）</h3>
+<p>“假设您要使用一个array 对象来存储一 =年四个季度的开支,，     fee</p>
+<p>本 yaa  ied  BR Crim</p>
+<p>sit std;  jarray&lt;double, 4&gt; expenses ;,</p>
+<p>ASTGITBELL,.  要使用 array. 2.   需要包含头文件 arya array. UF AE std 1s   EE -</p>
+<p>" show (expenses); ee</p>
+<p>Oe ewe exes expenses, 由需将该对象的地址传递给函数 CF: eNO 种方法一使</p>
+<p>用引用):</p>
+<p>— ab expenses WAR, IBM sipeenets a  -    poeta —</p>
+<p>ets  Salhi eed  : Ba ag</p>
+<p>全于和可全          -      加<br>-这 与程序清单 ce  13  eB GMa 使用 的方法相 rt.</p>
+<p>void sho</p>
+<p>wtetidi  ‘aerayedibie, do dak . ff da_an object</p>
+<p>void fill(std::array&lt;double, 4&gt; * pa); // pa-a pointer te an object</p>
+<p>这些考虑因素是这们示例程序的核心。 该程序还包含其他一些功能。首先，</p>
+<p>const in</p>
+<p>t Seasons = 4:</p>
+<p>Aisi 如何声明这两个函 HE? expenses 的类型为 a 4&gt;， | baad mM bane OS</p>
+<p>它用符号常量蔡换了了4:</p>
+<p>其次，它使用了一个 constarray HR, AMIR 4 + string WHR. AP RARILPBEE:</p>
+<p>const std::arrayestd::string, Seasons&gt; Snames-=</p>
+<p>ring", "Summer", "FaFl"; "Winter"}&gt;—</p>
+<p>请注意，模板 array FIER REAP SEAR BRR. CIEE ARERR.  程序清音 TAS 列出了该程序的</p>
+<p>程序清单7.15 arrobj.cpp</p>
+<p>/ farrobj</p>
+<p>#include</p>
+<p>#include</p>
+<p>#include</p>
+<p>.Cpp -- functions with array objects {C+411)</p>
+<p>ant data</p>
+<p>const int Seasons = 4;</p>
+<p>conse st</p>
+<p>d::arrayestd::string, Seasons&gt; Snames =</p>
+<p>{"Spring", "Summer", "Fall", "Winter"};</p>
+<p>// Eunction to modify array object</p>
+<p>void fil</p>
+<p>l(std::array&lt;double, Seasons&gt; * pa);<br>ion that uses array object without modifying it</p>
+<p>void show(std::array&lt;double, Seasons&gt; da);</p>
+<p>int main()</p>
+<p>std:<br>fill</p>
+<p>tarray&lt;double, Seasons&gt; expenses;<br>(fexpenses) ;</p>
+<p>show (expenses) ;</p>
+<p>return 0;</p>
+<p>void fill(std::array&lt;double, Seasona&gt; * pa)</p>
+<p>using namespace std;</p>
+<p>for</p>
+<p>{int 1 = GO; i &lt;« Seasons; i++)</p>
+<p>cout &lt;&lt; "Enter " &lt;&lt; Snames[i] &lt;&lt; " expenses: ";<br>cin &gt;&gt; (*pa) [i];</p>
+<h3>第 238 页（PDF p256）</h3>
+<p>void show(std::array&lt;double, Seasons&gt; da)</p>
+<p>using namespace std;</p>
+<p>double total = 0.0;</p>
+<p>cout &lt;&lt; "\nEXPENSES\n";</p>
+<p>for {int i = 0; i &lt; Seasons; i++)</p>
+<p>total += da[i];</p>
+<p>cout &lt;&lt; "Total Expenses: $" &lt;&lt; total &lt;&lt; endl;</p>
+<p>下面是该程序的运行情况:</p>
+<p>Enter Spring expenses: 212</p>
+<p>Enter Summer expenses: 256</p>
+<p>Enter Fall expenses: 208</p>
+<p>Enter Winter expenses: 244</p>
+<p>EXPENSES</p>
+<p>Spring: $212</p>
+<p>Summer: $256</p>
+<p>Fall: 5208</p>
+<p>Winter: $244</p>
+<p>Total: $920</p>
+<p>程序说明</p>
+<p>由于 const array 对象 Snames 是在所有函数之前声明的，因此可后面的任何函数定义中使用它。与<br>const Seasons 一样，Snames 也有整个源代码文件共享。这个程序没有使用编译指令 using，因此必须使<br>用 std::限定 array 和 string。为简化程序，并将重点放在函数可如何使用对银上，函数 OMAR A</p>
+<p>函数 fl0和 showO都有缺点。函数 show0存在的问题是，expenses 存储了四个 double 值，而创建一个<br>新对象并将 expenses 的值复制到其中的效率太低。如果修改访程序，使其处理每月甚至每日的开支，这种<br>问题将更严重。</p>
+<p>函数 fllO使用指针来直接处理原始对象, 这避免了上述效率低下的问题, 但代价是代码看起来更复杂:</p>
+<p>fill(&amp;expenses);    // don't forget the &amp;</p>
+<p>ein =&gt; (*pa) [il;</p>
+<p>在最后一条语句中，pa 是一个指向 array&lt;double, 4-7 RNR, Alle<em>pa 为这种对象，而(</em>pal) [是该<br>对象的一个无束。由于运算符优先级的影响，其中的括号必不可少。这里的逻辑很简单，但增加了犯错的<br>机会。</p>
+<p>使用第 8 章将讨论的引用可解决效率和表示法两方面的问题。</p>
+<p>7.9 i?#VA</p>
+<p>下面介绍一些完全不同的内容。C++函数有一种有趣的特点一一可以调用自己《然而，与 C 语言不同<br>的是，C++不允许 main( )调用自己)，这种功能被称为递归。尽管递归在特定的编程《例如人工智能) 中是<br>一种重要的工具，但这里只简单地介绍一下它是如何工作的。</p>
+<h3>第 239 页（PDF p257）</h3>
+<p>第7章 ”函数一一C++的编程模块              239</p>
+<p>7.9.1 包含一个递归调用的递归</p>
+<p>如果递归函数调用自己，则被调用的函数也将调用自己，这将无限循环下去，除非代码中包含终止调<br>用链的内容。 通常的方法将递归调用放在 证语句中。例如，void 类型的递归函数 recurs( )的代码如下:</p>
+<p>void recurs(argumentlist)</p>
+<p>人</p>
+<p>statements1<br>if (test)</p>
+<p>recurs (arguments)<br>statements2</p>
+<p>test 最终将为 但lse，调用链将断开。</p>
+<p>递归调用将导致一系列有趣的事件。只要 评语句为 tue，每个 recursf )调用都将执行 statements 1，然<br>后再调用 recurs( )，而不会执行 statements 2。当 if ANA false 时，当前调用将执行 statements2。当前调用<br>结束后，程序控制权将返回给调用它的 recurs(), 1% recurs( )将执行其 stataments2 部分，然后结束，并将<br>控制权返回给前一个调用，依此类推。因此，如果 recurs( )进行了 5 次递归调用，则第一个 statements! 部<br>分将接函数调用的顺序执行5 次，然后 statements2 部分将以与函数调用相反的顺序执行5次。进入5$层递</p>
+<p>后，程序将沿进入的路径返回。程序清单 7.16 演示了这种行为。</p>
+<p>程序清单 7.16 recur.cpp</p>
+<p>// recur.cpp -- using recursion</p>
+<p>#include &lt;iostream&gt;<br>void countdown(int n);</p>
+<p>int main()</p>
+<p>countdown (4);           // call the recursive function<br>return 0;</p>
+<p>void countdownl{int n)</p>
+<p>using namespace std;</p>
+<p>cout &lt;&lt; "Counting down ... " &lt;&lt; n &lt;&lt; endl;<br>countdown (n-1);     // function calls itself</p>
+<p>下面是该程序的输出;</p>
+<p>Counting down     4    «level 1; adding levels of recursion<br>Counting down ... 3    «level 2</p>
+<p>Counting down ... 2    slevel 3</p>
+<p>Counting down ... 1    &lt;level 4</p>
+<p>Counting down ... 0    slevel 5; final recursive call<br>0: Kaboom!             ¢level 5; beginning to back out</p>
+<p>4: Kaboom!             clevel 1</p>
+<p>注意，每个递归调用都创建自己的一套变量，因此当程序到达第 5 次调用时，将有 5 个独立的n 变量，</p>
+<h3>第 240 页（PDF p258）</h3>
+<p>Beret t  为验证这  se 读者可以修改程序清单了16; -使之显示下的地十和值，</p>
+<p>i 耳</p>
+<p>Counting down ... 4 (n at OO}T2FEOC}</p>
+<p>Counting down ... 3_(n at 0012FD34)</p>
+<p>Counting dewn ....2-(m at QO12FCcsCc}</p>
+<p>Count fig down ...1 (mn at 0012FB84)</p>
+<p>Counting down ...-0 (nm at-0012FAAC)        “ire<br>0: Kaboom! 三-一:    fn at 0012FAAC)       ee<br>Ll: Kaboom!         (n at 0012FR84)</p>
+<p>2: Kaboom!       (mat O012FCSC) _</p>
+<p>3: Kaboom!         (rat 0012FD34}</p>
+<p>注意，在一个内存单元《内存地址为001H2FE0OC)一存储的mn 值为4= CES AA ee OA Pet<br>0012FD34,. fF itn (4 33 等等，另外，注意到在 Counting down 阶段和Kaboom 阶段的相同层级，nm 的<br>地址相同:</p>
+<p>79.2 和包含多个递归调用的递归-</p>
+<p>在希要将一项工作不断分为两项较小的~ 类似的工作时，递归非常有有用。例如65 请考虑使用这种谨法<br>来绘制标尺的情况.。 PP, EAP ASE eR. 然后将同样的操作用于标尺的下半部分和种半部分<br>如果要进一步细分，可特同样的操作用于当前的每一部分。 递归方法有时被称为分而治这策略<br>(divide-and-conquer strategy)。程序清单-7.17 (87H eB eR BY subdivide( )壮示工这种方法，该函数使用一个<br>字符囊，该字符串除两端为上字符外-其他全部为空格。 mair函数使用循环调用 supdivide(])函数6 次，得<br>次将递归层编号加 1，并打印得到的字符串。这样，每行输出表示一层递时。该程序使用限定符 std::而不<br>是编译指令 using，以提醒读者还可以采取这种方式。</p>
+<p>程序清单 7.17 ruler.cpp</p>
+<p>// culer.cpp -- using recursion to subdivide a ruler<br>flinclude &lt;iostream&gt;</p>
+<p>const int Len = 66;</p>
+<p>const int Divs = 6;</p>
+<p>void subdivide(char ar[], int low, int high, int level);<br>int main()</p>
+<p>char ruler[Len];</p>
+<p>int 2}</p>
+<p>fuler fi} =! %y</p>
+<p>ruler[Len - 1] = '"\o';</p>
+<p>int max = Len - 2;</p>
+<p>int min = 0;</p>
+<p>ruler [min]l = ruler[max] = '|';</p>
+<p>std::cout &lt;&lt; ruler &lt;&lt; std::endl:</p>
+<p>subdivide(ruler,min,max, i);<br>std::cout &lt;&lt; ruler &lt;&lt; std::endl;</p>
+<h3>第 241 页（PDF p259）</h3>
+<p>第7章 函数一 C++的编程模坪              241</p>
+<p>ruler[j) = 1 '; // reset to blank ruler</p>
+<p>return 0;</p>
+<p>void subdivide(char ar[{], int low, int high, int level)</p>
+<p>LE (level == 0)</p>
+<p>return;</p>
+<p>int mid = {high + low) / 2;</p>
+<p>ar[mid] = '|';</p>
+<p>subdivide({ar, low, mid, level - 1);</p>
+<p>gubdivide(ar, mid, high, level - 1);</p>
+<p>下面是程序清单 7.17 Pa:</p>
+<p>LIT</p>
+<p>程序说明</p>
+<p>在程序清单 7.17 中，subdividet )函数使用变量 level 来控制递归层。函数调用自身时，将把 level 减 1，<br>当level 为 0 时，该函数将不再调用自己。注意，subdivide( )调用自己两次，一次针对堪半部分，另一次针<br>对右半部分。量初的中点被用作一次调用的右端点和另一次调用的堪端点。请注意，调用次数将呈几何级<br>数增长。也就是说，调用一次导致两个调用，然后导致 4 个调用，再导致 8 个调用，依此类推。这就是6<br>层调用能够填充 64 个元素的原因【26=-64)。这将不断导致丽数调用数〔《以及存储的变量数) 翻倍，因此如<br>果要求的递归层次很多，这种递归方式将是一种糟糕的选择，然而，如果递娄层次较少，这将是一种精致<br>而简单的选择。</p>
+<p>7.10 WRisttr</p>
+<p>如果未提到函数指针，则对 C 或 C++函数的讨论将是不完整的。我们将大致介绍一下这个主题，将完<br>整的介绍留给更高级的图书。</p>
+<p>与数据项相似，函数也有地址。于数的地址是存储其机器语言代码的内存的开始地址。通常，这些地<br>址对用户而言，既不重要，也没有什么用处，但对程序而言，却很有用。例如，可以编写将另一个函数的<br>地址作为参数的函数，这样第一个函数将能够找到第二个函数，并运行它。与直接调用另一个函数相比，<br>这种方法很佛拙，但它允许在不同的时间传递不同函数的地址，这意味者可以在不同的时间使用不同的<br>函数。</p>
+<p>7.10.1 函数指针的基础知识</p>
+<p>首先通过一个例子来阐释这一过程。 假设要设计一个名为 estimate( )的函数，佑算编写指定行数的代码<br>所需的时间，并且希望不同的程序员都将使用该函数。对于所有的用户来说，estimate( )中一部分代码都是<br>相同的，但该函数允许每个程序员提供自己的算法来估算时间。为实现这种目标，采用的机制是，将程序</p>
+<h3>第 242 页（PDF p260）</h3>
+<p>员要使用的算法函数的地址传递给 estimate( )。为此，必须能够完成下面的工作:<br>@ 获取函数的地址;<br>e ”声明一个函数指针;<br>@ 使用函数指针来调用函数。</p>
+<ol>
+<li>FRR BAK A Hebe</li>
+</ol>
+<p>获取函数的地址很简单: 只要使用函数名《〈后面不跟参数) 即可。也就是说，如果 think( )是一个函数，<br>则 think 就是该函数的地址。要将函数作为参数进行传递，必须传递函数名。一定要区分传递的是函数的<br>地址还是函数的返回值;</p>
+<p>process (think) ;    // passes address of think[) to process ({}</p>
+<p>thought (think()); // passes return value of think() to thought ()</p>
+<p>process( )调用使得 process( )pA SURE 4 FLA BURA] think( )函数。thought( )调用首先调用 think( ) 3,<br>然后将 think( )的返回值传递给 thought( )函数。</p>
+<ol>
+<li>上声明函数指针</li>
+</ol>
+<p>声明指向某种数据类型的指针时，必须指定指针指向的类型。同样，声明指向函数的指针时，也必须<br>指定指针指向的函数类型。这意味着声明应指定函数的返回类型以及函数的特征标(和参数列表)。也就是说，<br>声明应像函数原型那样指出有关函数的信息。例如，假设 Pam leCoder 编写了一个估算时间的函数，其原<br>型如下:</p>
+<p>double pam(int); // prototype</p>
+<p>UTES Fa EP SS FSB OT</p>
+<p>double (*pf){int); // pf points to a function that takes<br>// one int argument and that<br>// returns type double</p>
+<p>这与 pamt )声明类似，这是将 pam 替换为了《〈<em>pf)。由于 pam 是函数，因此《〈</em>pf) 也是函数。而如果<br>(*pf) 是函数，则 pf 就是函数指针。</p>
+<p>提示: 通常，要声明指向特定类型的函教的指针，可以首先编写这种函数的原型，然后用 (*pf) ee<br>BIZ, AF pf HAAR HAHAH,</p>
+<p>为提供正确的运算符优先级，必须在声明中使用括号将<em>pf 括起。括号的优先级比</em>运算符高，因此*pf<br>Cint) 意味着 pf )是一个返回指针的函数，而〈*pf) (int) 意味着 pf 是一个指向函数的指针:</p>
+<p>double (*PE) (int); // pf points to a function that returns double<br>double *pf({int);  // pf() a function that returns a pointer-to-double</p>
+<p>正确地声明bf后，便可以将相应函数的地址研给它;</p>
+<p>double pam(int);</p>
+<p>double (*p£) (int);</p>
+<p>pf = pam;           // pf now points to the pam{) function</p>
+<p>TER. pam( MAEM ADE AR aS pe 相同。如果不相同，编译器将拒绝这种赋值<br>double ned(double) ;</p>
+<p>int ted{int);</p>
+<p>double {*pf) {int) ;</p>
+<p>pi = ned;         // invalid -- mismatched signature</p>
+<p>pi = ted;         // invalid -- mismatched return types</p>
+<p>现在回过头来看一下前面提到的 estimate( )函数。假设要将将要编写的代码行数和估算算法(如 paml )<br>pai) 的地址传递给它，则其原型将如下:</p>
+<p>void estimate(int lines, double (*pf} (int)};</p>
+<h3>第 243 页（PDF p261）</h3>
+<p>a = j mena es      7 ae  Biker aie     per a waed ae pee ae</p>
+<p>ak 述志 muti,   第一个参数是 &lt; 数指针，  “emia 过个 int SMe   并加   a double fits</p>
+<p>am We “estimate (50,”  - pam); // fuhctien carl telling pt use pant = = teas :  全 repay ma</p>
+<p>a  AGP ue  HAE EH  TE MH LE A        re  .<br>a  Tie Rian aa  a 2 ae     | sees wats see       Te eesti oe - pes  pace Daa atte z</p>
+<p>oe  “Bide NE,  a dae Sw a I. iemknmtt ea. mt, Cp rts</p>
+<p>-二 角色与函数名相同,因此使用 pf): Rh, FR CA MAT, Fo</p>
+<p>a  ae  doubie’ “pant Eat la:   ey ee 22 Hist EEE  “Se ghee mean ee a = Bs ne cee r - Bo va Alas   a</p>
+<p>|  ne ae pam; a 7    vy, bE s ‘now. points ta the pam (e function |  - ‘(rl     .    aie<br>as dees ant Boe Call: “pam Q)&gt; “using “the” ‘function name = ey Snape ey Nat re Taos: it fs wes ie   :</p>
+<p>i: jE eoubie y=: epee 3)  的 “yping.. the: Pointer Be   = coer a ey es</p>
+<p>区 ea =, pe (SI ie    otk. also call pant using | tbe pointer: “PEE woes oe ee = oo See</p>
+<p>aeeee es 为何 pt (ph) “Sire? ae,  aT pride, wtp Dba, =<br>因此应将 (pf) OREN. 另一种学派认为,由于函数名是指向该函教的指狂，措向冰数的指针的-、</p>
+<p>“二 ARS BRS A, BLL pil) Pe AA eA CH+进行了拆圳-一 这 2 Ay AE EA, 或-</p>
+<p>和 rk hi. BRENALALA EH RH: BTA HAAS HS BANA, SEM</p>
+<p>法自轩其说的观点正是人类思维活动的特点。    ee</p>
+<p>7.102, 函数据针示全 ree as Feat aves ao aes ee “lie i :</p>
+<p>-一</p>
+<p>Ri is a ECFA estima 通数2   一次传递 betsy( RMT pe :<br>ARE pam PR AAMT Sine HA ant AONB: 在第三种情</p>
+<p>-的算法时; .将不需要重新编写 ca人- HUB He reaper ip BML. onic beast</p>
+<p>“和返回类型正确即可。 当然,重新编写 estimatet BI ASAE — 件非常困难的工作，但同样的原则也适用于更<br>”复杂的代码。 ah REE RA sap HEA ese we BARTS -estimate( ve os</p>
+<p>WE finiper:&lt; cpp RE to, » Funct ions Fee a ee a ee me</p>
+<p>和 本 double. betsy(inthi</p>
+<p>oe double ineitae hy     : 3 ne Donan eons</p>
+<p>"See / ‘A ‘second, argament is” “pointer, to a ‘type double function, chat °<br>f/ takes a type int argument</p>
+<p>ope void estimate (int. lines,  double. (pf) vane) rf gees es Be sy pee aap</p>
+<p>int maint</p>
+<p>using namespace std;<br>int code;</p>
+<h3>第 244 页（PDF p262）</h3>
+<p>cout &lt;&lt; "How many lines of code do you need? ";<br>cin »&gt; code;</p>
+<p>eout &lt;&lt; "Here's Betsy's estimate: \n";<br>estimate(code, betsy);</p>
+<p>cout &lt;&lt; "Here's Pam's estimate: \n";<br>estimate(code, pam) ;</p>
+<p>return 0;</p>
+<p>double betsylint Ins)</p>
+<p>return 0.05 * Ins;</p>
+<p>double pam(int ins)<br>return 0.03 <em> lns + 0.0004 </em> Ins * Ines;</p>
+<p>void estimate(int lines, double (*pf) {int} )<br>using namespace std;<br>eout &lt;&lt; lines &lt;&lt; " lines will take ";</p>
+<p>下面是运行该程序的情况:</p>
+<p>How many lines of code do you need? 30<br>Here's Betsy's estimate:</p>
+<p>30 lines will take 1.5 hour(s)</p>
+<p>Here's Pam's estimate:</p>
+<p>30 lines will take 1.26 hour(s}</p>
+<p>下面是再次运行该程序的情况，</p>
+<p>How many lines of code do you need? 100<br>Here's Betsy's estimate:</p>
+<p>100 lines will take 5 hour(s)</p>
+<p>Here's Pam's estimate:<br>160 lines will take 7 hourts)</p>
+<p>7.10.3 深入探讨函数指针</p>
+<p>函数指针的表示可能非常恐怖。下面通过一个示例演示使用函数指针时面临的一些挑战。首先，下面<br>-些函数的原型，它们的特征标和返回类型相同，</p>
+<p>const double * £l{(const double ar[], int n)};<br>const double * f2{(const double [], int);<br>const double <em> £3(const double </em>, int);</p>
+<p>这些函数的特征标看似不同，但实际上相同。首先，前面说过，在函数原型中，参数列表 const double<br>ar[]与 const double * ar 的含义完全相同。其次，在函数原型中，可以省覆标识符。因此，const double ar [ ]<br>可简化为 const double [ ]，而 const double <em> ar 可篇化为 const double </em>。因此，上述所有函数特征标的含义<br>都相同。另一方面，函数定义必须提供标识符，因此需要使用 const double ar [ ]或 const double * ar.</p>
+<p>接下来,假设要声明一个指针，它可指向这三个函数之一。假定该指针名为 pa，则只需将目标函数原</p>
+<p>型中的函数名奉换为(*pal:</p>
+<h3>第 245 页（PDF p263）</h3>
+<p>a nearer       ee ee ee<br>-<em> Usonst: double “</em> -(*pl):(const° -Acuble - et Neey Sei eae SEER Cec riay oe, ae On ee ee<br>a | ae a 自动类型推断功能时&gt; 代码要简单得多::<br>eh aes auto: P2 a      al Cer ‘automat ic type deduction” = — Pg! — 2 geige eg es hee - 过 a<br>ROR THN.    fe nee Ce bee Be<br>“根据前面介绍的知识可逢，(*p1) (av-3)和 p2(av, 3都调用指认的函数(这里为f f1QAE 120). IPH av 和 fa. |<br>Sh Bie. Balke “ED 7 JE 7 HALA. -返回值的类型为:const double * (即-dauble 值的地下)</p>
+<p>二因此在每条 cout 语句中; 前半部分量示的都是一全dobbie值的士址。 OBO AT ES SESE ROT SIM</p>
+<p>-=需要将运算符<em>应用于这些地址， 如表达式</em>(<em>p1)(av3)和</em>p2(av3)所示，</p>
+<p>鉴于需要使用三个函数，如果有一 Aon HCALRS LS A, RES OTA for MORIA</p>
+<p>eee ee Ce ree ee ee ae eae<br>: AED DAA Me 2 A Ra. RE CHT 2 E.# PLE CaS 、-、，</p>
+<p>AR REHOME. EAT SEIMEI EES RIELEZ: AFAR const double win °° 22<br>= 二 即将 const double <em>Alint 作为参数，:并返回二个 const double</em>,. 2, —       sens</p>
+<p>ae mn eR Te 2 Se et eee</p>
+<p>“+ -Genst double: “(<em>pa[3])}-(const double.“</em>; int} = (£1.62: £3];</p>
+<p>2g fH [TIARA HAT 2 pa SE = LS Re RL + SE 7 RE OP BEA a3]<br>ONE RR RT RU 运算符上的优先级高手#，因此*pal3]表明pa 是二个</p>
+<p>-二 汪汪回类型为 const double yea ee. TARE  pa是二个包含:= 三全指针的数组;: eu ali age a oo</p>
+<p>二 BCAA AMO auto We? ASHE. :目动类型礁断具能用于单值初冶化 ee hit  “eutinae</p>
+<p>‘autozpb:= pay 2 tm     Pe i aap tN as ea      -       eect a</p>
+<p>pee MUZE ATT ieee mam</p>
+<p>2 conbt “double: bed "py (Ct pb) (ay; 33   oS need var</p>
+<p>, double ve F(epp il avi 3) }      a</p>
+<p>nnd 3— PAPE OREN RCH ACHE HHA Z pa ee Ct  因此指疝娄组的-</p>
+<p>“Lt gaan. RUA AE RR Af FT TS</p>
+<p>-因此可使用auto;    Spite EyesSg erer<br>e    saute Pos pai!   eas: C++15 automatic. _type deduct don oe vit ae:     :        pte =e  5 ane<br>ena 大果您喜欢自己声明， 该如何办呢? 显然， 这种声明应类似于愉 的声明 :但由于增加了一层间接。<br>eae In — 个*。 具体地说- 如果这个指针名为 pt，则需要指出它是一个指针，而不是数组。<br>ARORA RACIR), FHS HSH RE Some i<br>(*pd) [3] // (a pointer to an array of 3 elements<br>to | BATA. it  -个指针，  罗汉  个包人三  -个元素的数组。 oe AME? 由 pa sie cde Ts</p>
+<p>const acupte: + ep) (cna -double + tnt) ea  de.</p>
+<h3>第 246 页（PDF p264）</h3>
+<p>要调用函数，需认识到这样一点: 既然 pd 指向数组，那么<em>pd 就是数组，而(</em>pd)[j是数组中的元素，<br>即函数指针。因此，较简单的函数调用是(<em>pd)j[iltav3)，而</em>(*pd)[il(av,3)是返回的指针指向的值。也可以<br>使用第二种使用指针调用函数的语法， 使用(<em>(</em>pdj[il)(av3)来调用函数，而<em>(</em>(*pd)[i])(av3)是指向的<br>double 值。</p>
+<p>请注意 pa(它是数组名，表示地址) 和上pa 之间的差别。正如您在本书前面看到的,在大多数情况下，<br>pa 都是数组第一个元素的地址，即有pa[0]。因此，它是单个指针的地址。但有pa 是整个数组〈即三个指针<br>块) 的地址。从数字上说，pa M&amp;pa 的值相同，但它们的类型不同。一种差别是，pa+1 为数组中下一个元<br>素的地址，而位pa+l 为数组 pa 后面一个 12 字节内存块的地址《这里假定地址为4字节)。另一个差别是，<br>要得到第一个元素的值，只需对 pa 解除一次引用，但需要对皮pa 解除两次引用:</p>
+<p><em>tEpa == </em>pa == Da[0]</p>
+<p>程序清单 7.19 使用了这里讨论的知识。出于演示的目的，函数 fi()等都非常简单。正如注释指出的，<br>这个程序演示了 auto 的 C++98 替代品。</p>
+<p>程序清单 7.19 arfupt.cpp</p>
+<p>// arfupt.cpp -- an array of function pointers</p>
+<p>#include &lt;iostream&gt;</p>
+<p>// various notations, same signatures</p>
+<p>const double * f1(const double ar[], int n);<br>const double * £2{const double [], int);</p>
+<p>const double <em> £3(const double </em>, int);</p>
+<p>int main()<br>using namespace std;<br>double av[3] = {1112.3, 1542.6, 2227.9];</p>
+<p>// pointer to a function</p>
+<p>const double <em>(</em>p1) (const double *, int) = f1;</p>
+<p>auto p2 = £2; // C++ll automatic type deduction</p>
+<p>// pre-C++1l can use the following code instead</p>
+<p>// const double <em>(</em>p2) (const double *, int) = f2;<br>cout &lt;&lt; "Using pointers to functions: \n";</p>
+<p>cout &lt;&lt; " Address Value\n";</p>
+<p>// pa an array of pointers<br>// auto doesn't work with list initialization<br>const double <em>(</em>pa[3]) (const double *, int) = {f1,f2,£3};<br>// but it does work for initializing to a single value<br>// pb a pointer to first element of pa<br>auto pb = pa;<br>// pre-C++11 can use the following code instead<br>// const double *(**pb) (const double *, int) = pa;<br>cout &lt;&lt; "\nUsing an array of pointers to functions:\n";<br>cout &lt;&lt; " Address Value\n";<br>cout &lt;&lt; "\nUsing a pointer to a pointer to a function:\n";<br>cout &lt;&lt; " Address Value\n";</p>
+<h3>第 247 页（PDF p265）</h3>
+<p>”第7章 函数二Ceh的编程模均          ye</p>
+<p>cout_&lt;&lt; pb [i] fav, 3) ec rom &lt;&lt; *pb[i] (av, 3) ec 6nd;</p>
+<p>//-what about a pointer to-an array of function pointers<br>cout_&lt;&lt;« "\nUsing pointers te an array of pointers: \n"}<br>cout-&lt;&lt;« " Address Value\n"&gt;—<br>//-easy way to declare-pe<br>auto pe-= &amp;pa-<br>//-pre-C++11 can use the following_code instead<br>// const double_<em>(</em>(<em>pe) §3]) (const double </em>, int) = &amp;pa;<br>// hard way to declare pd<br>const double <em>(</em>(<em>pd) [3]) (const double </em>, int) = kpa;<br>//-store return value in pdb<br>const double <em> pdb = (</em>pd) (lLfavini +<br>-(/ alternative notation = coe Boe SE ase                   :   吕<br>return 0;</p>
+<p>YY广some rather dull -functioris es   se         ;  a a    apes Sees</p>
+<p>ie const..double <em> El({const double.</em> ar, int n}</p>
+<p>return ar;</p>
+<p>return ar+l;</p>
+<p>const double * £3(const double-ar[], int n}<br>return ar+2;</p>
+<p>该程序的输出如EE:</p>
+<p>Using pointers to functions:<br>Address Value</p>
+<p>QOO2APSEQ; 1112.3°</p>
+<p>CO2ZAPSEG; 1542.6</p>
+<p>Using an array of pointers-to functions:</p>
+<p>Address<br>OO2AFSEO:<br>OO2AP9ER:<br>QO2ZAF9FO:</p>
+<p>ising a.pointer ‘toa</p>
+<p>Address</p>
+<p>1 OO2ZAF9EO:.<br>OO2AFSES:<br>OO2AF9FO:</p>
+<p>Using pointers te an array of pointers: ~</p>
+<p>Value<br>1112.<br>1542.6<br>2227.9</p>
+<p>pointer''to a function: . .... Sate See<br>Valuer<br>Lites</p>
+<h3>第 248 页（PDF p266）</h3>
+<p>a 8. eS ee Bs Se Se ee</p>
+<p>io = OO2AF9ES: 1542.6 - gd Me one eNOS a net Se ent AE es ae, eee ee we ae ee<br>2O02AF9RO: 2227. oi aaa Sa ee pa ip eess</p>
+<p>这个去例可能看起来比较深奥;  em mditest Bea eA “i. Aiea</p>
+<p>-一=</p>
+<p>ae    eS    =</p>
+<p>Re wee a ape ne a ieee Ze ee</p>
+<p>eee AoA LANA AA RIM REID Pitre</p>
+<p>Fee</p>
+<p>—= = const. double. “€((#pd) fal). (const, double. ee int) i= ‘spa;  he: 下98  do- tt: "yourself -    OSes Sea Le</p>
+<p>AKA A, 编译器的角色发生了改变- 在C++98 中， 编译器种用其知识帮助您现错误，<br>ACHP 编译器利用其知识帮助您进行正确的声明<br>四 存在一个潜在的缺志。 BARMAN AR REM KD Bee ra se, ee</p>
+<p>auto pe = *pa;   WE oa “Used. aoe instead oe ree</p>
+<p>bik PASM pc 的类型与印#一致，在程床清单 7.19-中，后面使用它时假定其类型与点pa tee, at<br>导致蝙译错误。</p>
+<p>7.10.4   使用typedef进行简化</p>
+<p>"BR auto SF. CH还提供了其他简化声明的工具:  您可能还记得地第 5 章说过， KE TF typedef 让您能够<br>创建类型别名:</p>
+<p>typedef double real; //-makes real another name for double</p>
+<p>这里采用的方法是，将别名当做标识符进行声明，并在开拓使用关键宁 typedef. 因此，可将 p_fun声<br>明为程序清单 7.19 使用的函数指针类型的别名:</p>
+<p>“typedef const double <em>(</em>p fun) (const 二 a  int);  // p fun now a type name  mt<br>pefun-pl = fi; // pl-points to the fii} 二</p>
+<p>然后使用这个别名来简化代码:</p>
+<p>一   p_fun Pa二= {f1;f2,£3};-// pa an array of 3 functfon pointers<br>pfun (*pd) [3] = &amp;pap    // pd points-to an array of 3 function pointers</p>
+<p>使用 typedef 可减少输入量，让您编写代码时不容易犯错，并让程序更容易理解。         区</p>
+<p>7.11 dot</p>
+<p>函数是 C++ ite. EPA, ee QA, FRU ee 函数定义是实现函数功<br>能的代码，函数原型描述了函数的接口: 传递给函数的值的数目和种类以及函数的返回类型。冰数调用使<br>得程序将参数传递给函数，并执行函数的代码。</p>
+<p>ERR Ot 下，C++函数按值传递参数。这意味着函数定义中的形参是新的变量，它们被初始化为函<br>数调用质提供的值。国此，C+E困数通过使用拷见，保护了原始数据的完整性。</p>
+<p>C++将数组名参数视为数组第一个元素的地址。丛技术上讲，这仍然是按值传递的，因为指针是原始<br>地年的持风:但函数将使用指针来访问诛始数组的内容。 当且仅当声明函数的形参时,- 下面两个声明才是<br>等价的;</p>
+<h3>第 249 页（PDF p267）</h3>
+<p>-RE [二7  ee : os ee a =a = 57 ley See 到 ne 二</p>
+<p>ea cee ane Ul OR aril) BORE SAH AB OTLB AD const 指针，来保护原始数据的完整性;</p>
+<p>eee ee ee oe 一</p>
+<p>SF iammamminmaba, -并不会传输有关数组长度的信息， rc ae a als</p>
+<p>aie aay ALITA OCA JE, ThA A FRNA aE ASE</p>
+<p>5 Ghar HEED A iar AT OER HE it eee Bue<br>: os       GT提供大 string, gi   sf aad Ip   函数 可以接受   ‘string atime be coe sete</p>
+<p>= 三 CHERULT 3 BER C- Pie FREI ean. crite tars EAN EAH char* -</p>
+<p>oe  es AER RAID mi. aOR SU mACEEAM.</p>
+<p>C++函数可以是递归的，也就是诺，函数代码中可以外括对阔数本身的调用。<br>C++函数名与函数地址的作用相同。通过将函数指针作为参数，可以传递要调用的函数的名称。</p>
+<p>7.12 82&gt;</p>
+<p>，使用函数的3 个步骤是什么?<br>.请创建与下面的描述匹配的函数原型-<br>igor()湾有参数，且设有返回值。<br>.tofu(j接受一个 int 参数，并返回一个 float。</p>
+<ul>
+<li>mpg( )接受两个 double 参数，并返回一个double。 _</li>
+</ul>
+<p>dsummation()将 long 数组名和数组长度作为参数=   并返回-   一 long {fi</p>
+<p>e. doctor( )接受一个字符串参数〈不能修改该字符串)，并返回一个 double fi.</p>
+<p>人fourse人将 boss 结构作为参数，不返回值。   —<br>gplot()将 map MMR SM, IREI—7 FH      eg At susie  =</p>
+<ol>
+<li>编写=-个接受 3 个参数的图数:- int 数组名、数组长度和一个 int 值，  并将数组的所有元素都没秆为</li>
+</ol>
+<p>该-int 值。</p>
+<ol>
+<li>编写一个接受了个参数的函数: 指自数组区间中第-一个元素的指针、指向效组区间最后:一  个元素后</li>
+</ol>
+<p>面的指针以及一个 int 值，并将数给中的每个元素都设置为该 int 值*</p>
+<p>5编写将 double 数维名和数组长度作为参数，  APPLES ER  该函数不应修改数组<br>的内容。</p>
+<p>6- 为什么不对类型为基本类型的函数参数使用 const 限定符?</p>
+<p>7._C+H+程序可使用哪 3 种 C风格字符串格式?</p>
+<p>= 编写一个函数，其原型如下，</p>
+<p>int replace(char * str, char cl, char ¢2);</p>
+<p>APR BOR SEB PLAT EK cl AERA 02, FERMI EL.</p>
+<ol>
+<li>表达式*"pizza"的含义是什么?_ "taco" [2]呢?</li>
+</ol>
+<ol>
+<li>C++克许按值传递结构，也允许传递结构的地址。如果 glitz 是一个结构变量，如何按值传递它2-</li>
+</ol>
+<p>妞何传递它的地址? 这两种方法有何利弊?</p>
+<ol>
+<li>函数 judge( )的返回类型为 nt，它将这样一个函数的地址作为参数: 将 const char 指针作为参数，</li>
+</ol>
+<p>or ePN 一</p>
+<h3>第 250 页（PDF p268）</h3>
+<p>并返回一个 int 值。请编写 judge( )函数的原型。</p>
+<ol>
+<li>假设有如下结构声明，</li>
+</ol>
+<p>struct applicant {<br>char name[30];<br>int credit_ratings [3];</p>
+<p>a. 编写一个函数，它将 application 结构作为参数，并显示该结构的内容。</p>
+<p>b，编写一个函数，它将 application 结构的地址作为参数，并显示该参数指向的结构的内容。</p>
+<ol>
+<li>假设函数人TO0和 他0O的原型如下:</li>
+</ol>
+<p>void fl{applicant * a};</p>
+<p>const char <em> f2(const applicant </em> al, const applicant * a2};</p>
+<p>请将 pl 和 p2 分别声明为指向 fi 和 亿 的指针;将 ap 声明为一个数组，它包含 5 个类型与 pl 相同的<br>指针;将 pa 声明为一个指针，它指向的数组包含 10 个类型与 p2 相同的指针。使用 typedef 来帮助完成这<br>项工作。</p>
+<p>7.13 ”编程练习</p>
+<p>1，编写一个程序，不断要求用户输入两个数，直到其中的一个为0。对于每两个数，程序将使用一个<br>函数来计算它们的调和平均数，并将结果返回给 main( )，而后者将报告结果。调和平均数指的是倒数平均<br>值的倒数，计算公式如下:</p>
+<p>调和平均数=2.0<em>xX#</em>yyCK+人内</p>
+<ol>
+<li>编写一个程序，要求用户输入最多 10 个高尔夫成绩，并将其存储在一个数组中。程序多许用户提</li>
+</ol>
+<p>早结束输入，并在一行上显示所有成绩，  然后报告  i平均成绩。请使用 3 个数组处理函数来分别进行输入、<br>显示和计算平均成绩。</p>
+<ol>
+<li>下面是一个结构声明:</li>
+</ol>
+<p>struct box</p>
+<p>char maker [40] ;<br>float height;<br>float width;<br>float length;<br>float volume;</p>
+<p>a，编写一个国数，按值传递 box 结构，并显示每个成员的值。</p>
+<p>b. Oe kee 传递 box 结构的地址，并将 volume 成员设置为其他三维长度的乘积。</p>
+<p>c，编写一个使用这两个函数的简单程序。</p>
+<ol>
+<li>RE al einen  在这些玩法中，玩家从</li>
+</ol>
+<p>一组被称为域号码 Cfield number) 的号码中选择几个。例如，可以从域号码 1一47 中选择 5 个号码; 还可<br>以从第二个区间〈如 1一27) 选择一个号码〈称为特选号码)。要赢得头奖，必须正确猜中所有的号码。中<br>头奖的几率是选中所有域号码的几率与选中特选号码几率的乘积。例如，在这个例子中，中头奖的几率是<br>从 47 个号码中正确选取 5 个号码的几率与从 27 个号码中正确选择 1 个号码的几率的乘积。请修改程序清<br>单 7.4，以计算中得这种彩票头奖的几率。</p>
+<p>5，定义一个递归函数，接受一个整数参数， ee 前面讲过，3 的阶乘写作 31, G+<br>3<em>21，依此类推， 而 0!被定义为 1= 通用的计算公式是-= MR ASS, WM nl=a</em> Cn-b) 8&amp; 在程序中对该<br>“本数进行测试， eFC ‘arene  这些值的阶乘。</p>
+<h3>第 251 页（PDF p269）</h3>
+<p>第7章 函数一 C++的编程模块                               251</p>
+<ol>
+<li>编写一个程序，它使用下列函数，</li>
+</ol>
+<p>Fill_array( )将一个 double 数组的名称和长度作为参数。它提示用户输入 double 值，并将这些值存储到<br>数组中。当数组被填满或用户输入了非数字时，输入将停止，并返回实际输入了多少个数字。</p>
+<p>Show_array( )将一个 double 数组的名称和长度作为参数，并显示该数组的内容。</p>
+<p>Reverse-array( )将一个 double 数组的名称和长度作为参数，并将存储在数组中的值的顺序反转。</p>
+<p>程序将使用这些函数来填充数组，然后显示数组; 反转数组，然后显示数组，反转数组中除第一个和<br>最后一个元素之外的所有元素，然后显示数组。</p>
+<ol>
+<li>修改程序清单 7.7 中的 3 个数组处理函数，使之使用两个指针参数来表示区间。fill_array( )函数不</li>
+</ol>
+<p>返回实际读取了才少个数字，而是返回一个指针，该指针指向最后被填充的位置， 其他的函数可以将该指<br>针作为第二个参数，以标识数据结尾。</p>
+<ol>
+<li>在不使用 array 类的情况下完成程序清单 7.15 所做的工作。编写两个这样的版本，</li>
+</ol>
+<p>a. {#1 const char *+数组存储表示季度名称的字符串，并使用 double 数组存储开支。</p>
+<p>b，使用 const char *数组存储表示季度名称的字符串，并使用一个结构，该结构只有一个成员<br>个用于存储开支的 double 数组。这种设计与使用 array 类的基本设计类似。</p>
+<ol>
+<li>这个练习让您编写处理数组和结构的函数。下面是程序的框架，请提供其中描述的函数，以完成该</li>
+</ol>
+<p>#Hinclude &lt;iostream&gt;<br>using namespace std;<br>eonst int SLEN = 30;<br>struct student [<br>char fullname ([SLEN] ;<br>char hobby [SLEN] ;<br>int ooplevel;</p>
+<p>// getinfo() has two arguments: a pointer to the first element of<br>// an array of student structures and an int representing the</p>
+<p>// number of elements of the array. The function solicits and</p>
+<p>// stores data about students. It terminates input upon filling<br>// the array or upon encountering a blank line for the student</p>
+<p>// name. The function returns the actual number of array elements</p>
+<p>int getinfo(student pal], int mn);</p>
+<p>// displayl() takes a student structure as an argument<br>// and displays its contents<br>void displaylistudent st);</p>
+<p>// display2() takes the address of student structure as an<br>// argument and displays the structure’s contents<br>void display2(const student * ps);</p>
+<p>// display3() takes the address of the first element of an array<br>// of student structures and the number of array elements as</p>
+<p>// arguments and displays the contents of the structures</p>
+<p>void display3 (const student pal], int n);</p>
+<p>int main!)<br>cout &lt;&lt; “Enter class size: *;<br>int. class size;<br>Cin &gt;&gt; Class_size;</p>
+<h3>第 252 页（PDF p270）</h3>
+<p>二一24一一CAAPrimerPlus (第6版入中文版 -    -一-一              =<br>See 二 fot: nat te 和 有</p>
+<p>student * ptr Su -= new student [class-size] ;<br>. -int-entered = getinfo(ptr stu, class_size);<br>for timti = 0; t-e«_entered; i1++L—<br>dispkayl (ptr_stu [i] };<br>display2 (aptr_stu[il] t;</p>
+<p>-display3 (ptr_stu,  entered) ;.</p>
+<p>~~ - 48 (12.9):</p>
+<p>ee  “delete Ho ptr ~ Btu;</p>
+<p>cout &lt;&lt; “Done\n";</p>
+<p>|   10. 设计一个名为 calculate )的闷数，它接受两个 double 值和一个指向函数的指针，而被指向的函数<br>-接受两个double 参数，并返回一个 double fi. calculate( )函数的类型也是 double，并返回被指向的函数使:<br>用 calculate( )的两个 double 参数计算得到的值例如，假设 add6)函数的定义如下;</p>
+<p>doupte-add faocub1Le x, double y)</p>
+<p>则下述代码中的函数调用将导致 calculate( 2.5 和 10.4 传递给 add( )函数，   ane tal eer</p>
+<p>return x-+ YF</p>
+<p>.  Subnes = i ce 5, 10.4,  :ai</p>
+<p>清编写一个程序， 它调用上还两不函数和至少另一 一个与 add()类似的函数。该程序使用循环来让用户<br>成对地输入数字。对于每对数字，程序都使用 calculate( )来调用 add( )和至少一个其他的函数。如果读者爱<br>冒险，可以尝试创建一个指针数组，其中的指针指向 add( )样式的函数，并编写一个循环，使用这些指针<br>“连续让 calculate( )调用这些函数。提示: 下而是声明这种指针数组的方式 其中包含三个指针;</p>
+<p>Er doupTe -trpf[3]j (double,  doubler; :</p>
+<p>_ IRCA GE, ee ee  oe a a</p>
+  <footer class="lesson-footer">
+    StudyMate · C++ Primer Plus（第 6 版）中文版 · 第 7 章 函数——C++的编程模块 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

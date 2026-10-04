@@ -39,29 +39,38 @@
 <h1>C++ 零基础入门 Glossary</h1>
 <p>这套课面向计算机专业大一零基础学生，从「第一次写出 Hello World」讲到「指针与数组配合操作数据」。<br>全课约 18–20 章，产出一个用数组与指针管理学生成绩的小系统。</p>
 <p><strong>用词纪律</strong>：本文件上下两节都是这门课的规范用词——课件正文、配图、代码注释里的术语一律以本表为准。<br>学生真的会用某个词之后，把它从「待掌握」挪进「已掌握」；同一个概念全课只用一个说法，别名列在 <code>_Avoid_</code> 里。</p>
+<p><strong><code>_Avoid_</code> 里两种写法的含义不同，别混</strong>：</p>
+<ul>
+<li>标了括号说明的（例如 <code>二进制（专指表达形式，勿混用）</code>）＝<strong>这是另一个概念</strong>，不是禁用词。<br>这种词该用的时候照用，只是不能拿来当本术语的同义说法。课件里用到时要说清它指的是什么。</li>
+<li>没标括号的（例如 <code>操作符、算符</code>）＝<strong>同一个概念的另一种叫法，本课程不用</strong>，正文里不该出现。</li>
+<li><code>_别检查_:</code> 另起一行 = 这个词<strong>另有常用的普通含义</strong>，用词检查不该拦它。典型是「参数」：它泛指时是正常用词，而正文里恰恰要解释「为什么不能只说参数」，那是必要的对比说明。</li>
+</ul>
+<blockquote><p>加这条区分的原因：早先 <code>编译</code> 的 <code>_Avoid_</code> 里列着「运行、执行、翻译」，而这三件事在 C++ 里<br>恰恰<strong>不是</strong>编译——零基础学生最需要分清的就是它们。把不同概念写成「避免的别名」，会让学生以为<br>「编译和运行是一回事」，也会让用词检查把正确的正文判成错的。</p></blockquote>
 <h2>待掌握</h2>
 <p><strong>源文件</strong>:<br>写给人看、给编译器读的纯文本文件，C++ 的源文件习惯以 <code>.cpp</code> 结尾。<br><em>Avoid</em>: 源码文件、代码文件、脚本</p>
-<p><strong>编译</strong>:<br>把源文件这种「人看得懂、机器看不懂」的文本，翻译成机器能执行的指令的过程。<br><em>Avoid</em>: 运行、执行、翻译</p>
-<p><strong>链接</strong>:<br>把编译产生的若干目标文件，以及程序用到的标准库代码，拼装成一个完整可执行文件的过程。<br><em>Avoid</em>: 连接、组装</p>
-<p><strong>可执行文件</strong>:<br>链接完成后得到的、可以直接运行的产物；在 macOS / Linux 上习惯以 <code>a.out</code> 或无后缀命名。<br><em>Avoid</em>: 执行文件、程序文件、二进制（<code>二进制</code> 专指表达形式，勿混用）</p>
-<p><strong>标准库</strong>:<br>C++ 官方随编译器一起提供、开箱即用的一批现成代码；本课程用到输入输出、字符串函数、常用数学函数。<br><em>Avoid</em>: 官方库、系统库、内置函数</p>
-<p><strong>变量</strong>:<br>内存里一块<strong>有名字</strong>的存储空间，用来存一个会变的值。<br><em>Avoid</em>: 容器、存储单元、寄存器</p>
-<p><strong>数据类型</strong>:<br>规定一块存储空间「能存什么、占多大、怎么解释这些二进制位」的规则；常见的是 <code>int</code>、<code>double</code>、<code>char</code>、<code>bool</code>。<br><em>Avoid</em>: 类型、数据格式</p>
-<p><strong>运算符</strong>:<br>告诉计算机「对这些值做一个动作」的符号，比如 <code>+</code>、<code>=</code>、<code>==</code>、<code>%</code>。<br><em>Avoid</em>: 操作符、算符</p>
-<p><strong>表达式</strong>:<br>由变量、常量、函数调用和运算符组成、能算出一个值的一段代码；<code>a + b * 2</code> 就是一个表达式。<br><em>Avoid</em>: 式子、公式</p>
-<p><strong>语句</strong>:<br>一条完整的、以分号结尾的指令；程序就是按顺序执行的一条条语句。<br><em>Avoid</em>: 命令行、指令行</p>
-<p><strong>函数</strong>:<br>把一段完成特定任务的代码打包起来、起个名字，需要时按名字调用；打包是为了复用与分工。<br><em>Avoid</em>: 方法、子程序、过程</p>
-<p><strong>形参 / 实参</strong>:<br>函数定义里写的、用来接收数据的占位名字叫<strong>形参</strong>；调用时真正传进去的值叫<strong>实参</strong>。<br><em>Avoid</em>: 参数（单独说「参数」时含义不清，必须指明是形参还是实参）</p>
-<p><strong>返回值</strong>:<br>函数执行完交回给调用者的那个结果，用 <code>return</code> 语句交回。<br><em>Avoid</em>: 输出值、结果值、返回数据</p>
-<p><strong>值传递</strong>:<br>C++ 调用函数时的默认传参方式：函数拿到的是实参的<strong>副本</strong>，函数里改动副本不影响原来的变量。<br><em>Avoid</em>: 传值、拷贝传参</p>
-<p><strong>作用域</strong>:<br>一个名字（变量、函数）在源代码里「能被用到」的范围；<code>{}</code> 花括号是 C++ 里最基本的范围分界。<br><em>Avoid</em>: 生存期、可见范围</p>
-<p><strong>数组</strong>:<br>把<strong>同一类型的多个值</strong>排成一排连续存放、共用一个名字、用<strong>下标</strong>区分的存储方式。<br><em>Avoid</em>: 列表、集合、序列</p>
-<p><strong>下标</strong>:<br>数组元素的位置编号，C++ 里<strong>从 0 开始</strong>数。<br><em>Avoid</em>: 索引、序号、位置号</p>
-<p><strong>内存地址</strong>:<br>内存里每个字节的位置编号，相当于宿舍门牌号；变量住在某个地址上。<br><em>Avoid</em>: 地址号、指针值（指针<strong>存</strong>地址，不是地址本身）</p>
-<p><strong>指针</strong>:<br>一个<strong>专门用来存内存地址</strong>的变量；它的值是地址，不是那个地址上的数据。<br><em>Avoid</em>: 指针变量（口语可用，正式表述统一说「指针」）、地址</p>
-<p><strong>取地址运算符 <code>&amp;</code></strong>:<br>写在变量前面，得到这个变量所在的内存地址。<br><em>Avoid</em>: 引用符（C++ 的引用是另一个概念，勿混用）、and</p>
-<p><strong>解引用运算符 <code>*</code></strong>:<br>写在指针前面，表示「顺着这个地址，去访问那个地址上的数据」。<br><em>Avoid</em>: 星号、乘法（写法相同，含义要按上下文说清）、取值运算符</p>
-<p><strong>空指针</strong>:<br>值为 0（写作 <code>nullptr</code>）的指针，表示「不指向任何有效对象」；使用前判断它能避免踩内存。<br><em>Avoid</em>: 空地址、NULL 指针（<code>NULL</code> 是旧写法，本课程统一用 <code>nullptr</code>）</p>
+<p><strong>编译</strong>:<br>把源文件这种「人看得懂、机器看不懂」的文本，翻译成机器能执行的指令的过程。<br><em>Avoid</em>: （无；「编译」「编译过程」「编译器」分别是技术、动作、工具，都是本课程的规范用词，别互相替换）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 运行（跑程序，与编译是两件事）、执行（同「运行」）、翻译（描述这个动作本身，不是这门技术的名字）</p>
+<p><strong>链接</strong>:<br>把编译产生的若干目标文件，以及程序用到的标准库代码，拼装成一个完整可执行文件的过程。<br><em>Avoid</em>: 连接、组装（口语可用，正式表述统一说「链接」）</p>
+<p><strong>可执行文件</strong>:<br>链接完成后得到的、可以直接运行的产物；在 macOS / Linux 上习惯以 <code>a.out</code> 或无后缀命名。<br><em>Avoid</em>: 执行文件、程序文件<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 二进制（指表达形式，勿当同义词用）</p>
+<p><strong>标准库</strong>:<br>C++ 官方随编译器一起提供、开箱即用的一批现成代码；本课程用到输入输出、字符串函数、常用数学函数。<br><em>Avoid</em>: 官方库、系统库、内置函数（口语可用，正式表述统一说「标准库」）</p>
+<p><strong>变量</strong>:<br>内存里一块<strong>有名字</strong>的存储空间，用来存一个会变的值。<br><em>Avoid</em>: 容器、存储单元（口语可用，正式表述统一说「变量」）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 寄存器（硬件里的东西）</p>
+<p><strong>数据类型</strong>:<br>规定一块存储空间「能存什么、占多大、怎么解释这些二进制位」的规则；常见的是 <code>int</code>、<code>double</code>、<code>char</code>、<code>bool</code>。<br><em>Avoid</em>: 类型（口语可用，正式表述统一说「数据类型」）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 数据格式</p>
+<p><strong>运算符</strong>:<br>告诉计算机「对这些值做一个动作」的符号，比如 <code>+</code>、<code>=</code>、<code>==</code>、<code>%</code>。<br><em>Avoid</em>: 操作符、算符（口语可用，正式表述统一说「运算符」）</p>
+<p><strong>表达式</strong>:<br>由变量、常量、函数调用和运算符组成、能算出一个值的一段代码；<code>a + b * 2</code> 就是一个表达式。<br><em>Avoid</em>: 式子、公式（口语可用，正式表述统一说「表达式」）</p>
+<p><strong>语句</strong>:<br>一条完整的、以分号结尾的指令；程序就是按顺序执行的一条条语句。<br><em>Avoid</em>: 指令行（改用「语句」）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 命令行（指在终端里敲命令的那个界面）</p>
+<p><strong>函数</strong>:<br>把一段完成特定任务的代码打包起来、起个名字，需要时按名字调用；打包是为了复用与分工。<br><em>Avoid</em>: 方法、子程序、过程（口语可用，正式表述统一说「函数」；「方法」在 C++ 里通常指类成员函数，本课程不涉及）</p>
+<p><strong>形参 / 实参</strong>:<br>函数定义里写的、用来接收数据的占位名字叫<strong>形参</strong>；调用时真正传进去的值叫<strong>实参</strong>。<br><em>Avoid</em>: 参数（讲到具体一侧时不要用；泛指时可用）<br><em>别检查</em>: 参数（它另有常用的泛指义，正文里恰恰要解释「为什么不能只说参数」，那是必要的对比说明，不是用词错误）</p>
+<p><strong>返回值</strong>:<br>函数执行完交回给调用者的那个结果，用 <code>return</code> 语句交回。<br><em>Avoid</em>: 输出值、结果值、返回数据（口语可用，正式表述统一说「返回值」）</p>
+<p><strong>值传递</strong>:<br>C++ 调用函数时的默认传参方式：函数拿到的是实参的<strong>副本</strong>，函数里改动副本不影响原来的变量。<br><em>Avoid</em>: 传值、拷贝传参（口语可用，正式表述统一说「值传递」）</p>
+<p><strong>作用域</strong>:<br>一个名字（变量、函数）在源代码里「能被用到」的范围；<code>{}</code> 花括号是 C++ 里最基本的范围分界。<br><em>Avoid</em>: 可见范围（口语可用，正式表述统一说「作用域」）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 变量生命周期（见下一条：那是「变量什么时候存在」，与作用域不是一回事）</p>
+<p><strong>变量生命周期</strong>:<br>一个变量<strong>什么时候被创建、什么时候被销毁</strong>——局部变量在自己的定义处被创建，在它所在的那对花括号结束时被销毁。<br><em>Avoid</em>: 生存期（别的书里这么叫，本课程统一说「生命周期」）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 作用域（那是「名字在源码里能被用到」的范围，是编译期的事；生命周期是「变量在运行时存在多久」）</p>
+<p><strong>数组</strong>:<br>把<strong>同一类型的多个值</strong>排成一排连续存放、共用一个名字、用<strong>下标</strong>区分的存储方式。<br><em>Avoid</em>: 列表、集合、序列（口语可用，正式表述统一说「数组」；这几个词在别的语言里另有含义）</p>
+<p><strong>下标</strong>:<br>数组元素的位置编号，C++ 里<strong>从 0 开始</strong>数。<br><em>Avoid</em>: 索引、序号、位置号（口语可用，正式表述统一说「下标」）</p>
+<p><strong>C 风格字符串</strong>:<br>以 <code>'\0'</code>（空字符）结尾的一串字符，通常存在字符数组里；<code>cout</code> 顺着它一直打印到 <code>'\0'</code> 才停。<br><em>别检查</em>: 字符串（这个术语<strong>正是本课要建立的</strong>：正文先说「一串字符就是字符串」，再收窄到「本课程讲的是 C 风格字符串」。收窄之前用「字符串」是必要的引入过程，不是用词错误。讲定之后通篇用「C 风格字符串」）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 字符数组（字符串是「以 '\0' 结尾的字符数组」，两者说的角度不同）</p>
+<p><strong>内存地址</strong>:<br>内存里每个字节的位置编号，相当于宿舍门牌号；变量住在某个地址上。<br><em>Avoid</em>: 地址号（改用「内存地址」）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 指针值（指针里存的内容就是地址，别把两者当同一个东西）</p>
+<p><strong>指针</strong>:<br>一个<strong>专门用来存内存地址</strong>的变量；它的值是地址，不是那个地址上的数据。<br><em>Avoid</em>: 指针变量（口语可用，正式表述统一说「指针」）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 地址（指针存的是地址，但「地址」不等于「指针」，就像门牌号不等于写着门牌号的那张纸）<br><em>别检查</em>: 地址（这是日常用词，正文里说「变量的地址」是正常的；要避免的是把它当「指针」的同义词用）</p>
+<p><strong>取地址运算符 <code>&amp;</code></strong>:<br>写在变量前面，得到这个变量所在的内存地址。<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 引用符（C++ 的引用是另一回事，勿混用）、and（逻辑与运算符 <code>&amp;&amp;</code> 里的那个词，与本符号无关）</p>
+<p><strong>解引用运算符 <code>*</code></strong>:<br>写在指针前面，表示「顺着这个地址，去访问那个地址上的数据」。<br><em>Avoid</em>: 星号、乘法（写作 <code>*</code> 时同样的符号还表示乘法，含义要按上下文说清）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 取值运算符（请说「解引用」）</p>
+<p><strong>空指针</strong>:<br>值为 0（写作 <code>nullptr</code>）的指针，表示「不指向任何有效对象」；使用前判断它能避免踩内存。<br><em>Avoid</em>: NULL 指针（<code>NULL</code> 是旧写法，本课程统一写 <code>nullptr</code>）<br><em>另需分清（<strong>这是另一个概念</strong>，不是禁用词）</em>: 空地址</p>
 <h2>已掌握</h2>
   <footer class="lesson-footer">
     StudyMate · 术语表 · 本地学习工作区

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>实验三：用指针改写核心操作 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0018</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0018 · 实验三：用指针改写核心操作</span>
+    <h1>实验三：用指针改写核心操作</h1>
+    <p class="lesson-goal"><b>本节目标：</b>用指针版函数算出平均分、最高分并排好序，结果与下标版完全一致，程序不因空指针与越界而崩溃。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <div class="lesson-note">
+    <b>这一课是终点验收</b>
+    <p>最后一段路：把成绩管理系统里求平均、找最高、排序这几个核心操作，<b>全部改写成指针版本</b>，并与原来的下标版本对照结果。走完这一步，你第一次说得出指针到底好在哪。</p>
+  </div>
+
+  <h2>这次要做出什么</h2>
+
+  <p>一个程序，成绩表写在代码里（<code>{88, 76, 95, 60, 82}</code>），做四件事：</p>
+
+  <ol>
+    <li>用<b>指针遍历</b>把原成绩表打印出来；</li>
+    <li><code>averageOf(const int *p, int n)</code> 交回平均分（一位小数）；</li>
+    <li><code>highestOf(const int *p, int n)</code> 交回最高分；</li>
+    <li><code>sortDescending(int *p, int n)</code> <b>就地</b>把表按从大到小排好，再打印一遍。</li>
+  </ol>
+
+  <p>四个环节<b>全部用指针</b>：遍历写 <code>*p</code> 或 <code>p[i]</code>，函数参数是指针，排序交换的是指针<b>指着的值</b>。</p>
+
+  <p>再加一条硬要求：<b>每个函数开头都要判空与边界检查</b>，让「表不存在」和「表是空的」两种调用都不崩。</p>
+
+  <h2>交付物</h2>
+
+  <p>一份<b>你自己写的</b> <code>.cpp</code> 源文件，建议叫 <code>pointerstats.cpp</code>：</p>
+
+  <ul>
+    <li><code>g++ -std=c++17 -Wall -Wextra pointerstats.cpp -o pointerstats</code> 编译通过，<b>没有任何 warning</b>；</li>
+    <li>运行输出与下面的预期逐字一致；</li>
+    <li>代码不少于 45 行（含注释与空行）。</li>
+  </ul>
+
+  <p>留白任务在 <a href="../../lab/0018-exp-3-pointer-rewrite/">实验三任务</a>，里面有起始文件、预期输出与自查清单。</p>
+
+  <h2>怎么算过</h2>
+
+  <p>逐条核：</p>
+
+  <ol>
+    <li>编译带 <code>-Wall -Wextra</code>，没有 <code>error</code>、也没有 <code>warning</code>；</li>
+    <li>四行输出逐行对上：原成绩表 <code>88 76 95 60 82</code>、平均分 <code>80.2</code>、最高分 <code>95</code>、排好序 <code>95 88 82 76 60</code>；</li>
+    <li>自己核过：总分 401、401 ÷ 5 = 80.2；</li>
+    <li><b>再写一份下标版跑同一组数据</b>，两版的平均分、最高分、排序结果完全相同；</li>
+    <li>故意给统计函数传一个空表（长度 5）与一个空表（长度 0），程序<b>不崩</b>，而是交回你约定的那个标志；</li>
+    <li>交之前把 <code>lab/exp-3-pointer-rewrite/自查清单.md</code> 从头核一遍。</li>
+  </ol>
+
+  <p>第 4 条是这次验收的核心：<b>指针版和下标版算的是同一片内存，结果必须一致。</b> 不一致就说明有一版走错了，要用打印中间值的办法找出先分岔的那一步。</p>
+
+  <h2>自查清单</h2>
+
+  <ul>
+    <li>遍历、平均、最高、排序四个环节都用指针，没有一处退回成 <code>scores[i]</code>。</li>
+    <li>只读的函数标了 <code>const</code>，要改数据的排序函数没标。</li>
+    <li>每个函数开头都判了空与边界。</li>
+    <li>长度是<b>参数传进来</b>的，函数里没有 <code>sizeof(p)</code>。</li>
+    <li>排序交换的是元素的值，不是两个指针变量。</li>
+    <li>循环一律写 <code>p &lt; scores + n</code>，没有哪一处解引用了 <code>scores + n</code>。</li>
+    <li>平均分用了小数。</li>
+    <li>说得出指针版本的一个好处与一个代价。</li>
+  </ul>
+
+  <h2>最可能卡在哪</h2>
+
+  <div class="lesson-warn">
+    <b>交换的是指针，不是值</b>
+    <pre data-lang="cpp"><code>int *temp = a;   // 这样只换了两个指针变量
+a = b;
+b = temp;        // 数组一个元素都不会动</code></pre>
+
+    <p>要交换的是指针<b>指着的值</b>：</p>
+
+    <pre data-lang="cpp"><code>int temp = *a;
+*a = *b;
+*b = temp;</code></pre>
+  </div>
+
+  <div class="lesson-warn">
+    <b>函数里用 sizeof 求长度</b>
+    <p>函数里的 <code>p</code> 是指针，<code>sizeof(p)</code> 量出来是地址的大小（本机 8），不是整张表的大小。长度必须当成另一个参数传进来——「起点加长度」是数组传参的固定搭配。</p>
+  </div>
+
+  <div class="lesson-warn">
+    <b>排序方向反了</b>
+    <p>按从大到小排，内层比较写的是「后面那个比擂主<b>大</b>就把擂主换掉」。写成小于号，排出来是从小到大。这种错不会报错，只会把顺序弄反——拿一组心里有数的数据核一遍就能抓住。</p>
+  </div>
+
+  <div class="lesson-warn">
+    <b>循环走过了数组末尾</b>
+    <p><code>for (int *p = scores; p &lt;= scores + n; p++)</code> 的最后一轮会解引用终点线，读到的数每次运行都不一样。条件写 <code>p &lt; scores + n</code>。</p>
+  </div>
+
+  <div class="lesson-tip">
+    <b>两版结果不一致时怎么查</b>
+    <p>不要来回改代码。在两个版本里各加一句打印，把<b>每一轮的下标、指针位置、累加或交换的两个值</b>都打出来，对照着看第一步从哪儿开始不一样。分岔的那一步就是错的地方。</p>
+  </div>
+
+  <div class="lesson-note">
+    <b>指针的起点不用写 &amp;</b>
+    <pre data-lang="cpp"><code>int *p = scores;        // 数组名本身就是首元素的地址
+averageOf(scores, N);   // 传数组名进去，不用写 &amp;</code></pre>
+
+    <p>写成 <code>&amp;scores</code> 反而不对：那是「整个数组的地址」，类型与 <code>int *</code> 对不上，编译器会拦下来。</p>
+  </div>
+
+  <h2>卡壳顺序</h2>
+
+  <ol>
+    <li>读报错：文件名、行号、那一行的上一行。</li>
+    <li>看这一页的「最可能卡在哪」。</li>
+    <li>看 <a href="../../lab/0018-exp-3-pointer-rewrite/">任务目录</a> 里的 <code>自查清单.md</code>。</li>
+    <li>回看第 15、16、17 课（指针与数组、指针作函数参数、空指针与常见陷阱）。</li>
+    <li>还是卡住，才对照 <code>lab/solutions/exp-3-pointer-rewrite/pointerstats.cpp</code>。</li>
+  </ol>
+
+  <ul class="lesson-resources">
+    <li><a href="../../lab/0018-exp-3-pointer-rewrite/README.html">实验三任务（含预期输出与自查清单）</a><span class="lesson-resources__meta">本课程 · 留白任务与验收标准</span></li>
+    <li><a href="https://zh.cppreference.com/w/cpp/language/pointer">cppreference 中文版：指针</a><span class="lesson-resources__meta">官方文档 · 指针声明与指针算术的准确说法</span></li>
+    <li><a href="https://www.oreilly.com/library/view/c-primer-plus/9780132781145/">C++ Primer Plus（第六版）</a><span class="lesson-resources__meta">书 · 第 4 章与第 7 章的指针实例</span></li>
+  </ul>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0017-pointer-pitfalls.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">空指针与常见陷阱</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0018 实验三：用指针改写核心操作 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>作用域与值传递 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0009</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0009 · 作用域与值传递</span>
+    <h1>作用域与值传递</h1>
+    <p class="lesson-goal"><b>本节目标：</b>说清「在函数里改了变量、回到 <code>main</code> 却没变」的原因，并能判断一段调用之后调用方的变量会是多少。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <h2>改了没变的成绩</h2>
+
+  <p>上一章我们把求平均包成了函数，效果不错。顺着同样的想法，很自然会写出这样一个函数：把一份不及格的成绩改成满分。</p>
+
+  <p>想法很清楚：传给函数一份成绩，函数里把它改成 100。存成 <code>scope-01.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// scope-01.cpp -- 现象：在函数里改成满分，回到 main 打印还是原来的分数
+#include &lt;iostream&gt;
+using namespace std;
+
+void makeFull(int score)          // 想把这份成绩改成满分
+{
+    score = 100;
+    cout &lt;&lt; "函数里看到的成绩：" &lt;&lt; score &lt;&lt; endl;
+}
+
+int main()
+{
+    int score = 58;
+    makeFull(score);
+    cout &lt;&lt; "回到 main 看到的成绩：" &lt;&lt; score &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ scope-01.cpp -o scope-01
+$ ./scope-01
+函数里看到的成绩：100
+回到 main 看到的成绩：58</code></pre>
+
+  <p>函数里那个 <code>score</code> 明明被改成了 100，回到 <code>main</code> 一打印，还是 58。更让人不放心的是，编译器一声不响。这就是很多人写程序时遇到的第一个「玄学 bug」。</p>
+
+  <p>它一点也不玄。要解释它，需要两个词：<b>作用域</b>与<b>值传递</b>。</p>
+
+  <h2>作用域：名字的范围</h2>
+
+  <p>先看一个更容易察觉的事实：函数里写的名字，出了这个函数就不认得。<code>makeFull</code> 里的 <code>score</code>、上一章 <code>loops-03.cpp</code> 里的 <code>sum</code> 与 <code>count</code>，都只在各自的函数里有效。</p>
+
+  <p><b>作用域</b>：一个名字（变量、函数）在源代码里能被用到的范围；<code>{}</code> 花括号是 C++ 里最基本的范围分界。</p>
+
+  <p>为什么需要这个词：一份程序里的名字很多，<code>i</code>、<code>sum</code>、<code>score</code> 这种短名字会被反复使用。要说清「这个 <code>score</code> 指的是哪一块存储空间」，就得先能说出名字的有效范围。有了作用域，两个函数里可以各写一个 <code>sum</code>，它们互不干扰；同一个函数里写了两个同名的变量，编译器反而会报错。</p>
+
+  <p>作用域是<b>看代码</b>得出的范围：读到哪一行，哪些名字能用，是写代码时就定下来的。</p>
+
+  <h2>局部变量与全局变量</h2>
+
+  <p>按声明的位置，变量分两种。</p>
+
+  <p><b>局部变量</b>：在函数或花括号里面声明的变量，它的作用域就是声明它的那一段。 <b>全局变量</b>：写在所有函数外面的变量，它的作用域是从声明处往下的所有函数。</p>
+
+  <p>先看两个函数里的同名局部变量。存成 <code>scope-02.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// scope-02.cpp -- 两个函数里的同名变量，是两份互不相干的内存
+#include &lt;iostream&gt;
+using namespace std;
+
+void report();
+void adjust();
+
+int main()
+{
+    report();
+    adjust();
+    return 0;
+}
+
+void report()
+{
+    int total = 90 + 85;                    // report 自己的 total
+    cout &lt;&lt; "report 里的 total：" &lt;&lt; total &lt;&lt; endl;
+}
+
+void adjust()
+{
+    int total = 10;                         // adjust 自己的 total
+    cout &lt;&lt; "adjust 里的 total：" &lt;&lt; total &lt;&lt; endl;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ scope-02.cpp -o scope-02
+$ ./scope-02
+report 里的 total：175
+adjust 里的 total：10</code></pre>
+
+  <p>两个函数各写了一个 <code>total</code>，各用各的，谁也不影响谁。它们同名，却住在两块不同的存储空间里。</p>
+
+  <p>全局变量则可以跨函数访问。存成 <code>scope-04.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// scope-04.cpp -- 全局变量，以及同名的局部变量把它挡住
+#include &lt;iostream&gt;
+using namespace std;
+
+int fullScore = 100;            // 写在所有函数外面：全局变量
+
+void printFull()
+{
+    int fullScore = 150;        // 本函数自己的同名局部变量
+    cout &lt;&lt; "函数里看到的满分：" &lt;&lt; fullScore &lt;&lt; endl;
+}
+
+int main()
+{
+    printFull();
+    cout &lt;&lt; "main 里看到的满分：" &lt;&lt; fullScore &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ scope-04.cpp -o scope-04
+$ ./scope-04
+函数里看到的满分：150
+main 里看到的满分：100</code></pre>
+
+  <div class="lesson-warn">
+    <b>同名变量的遮挡</b>
+    <p><code>printFull</code> 里打印出来的是 150，因为函数内部的局部变量 <code>fullScore</code> 遮住了同名的全局变量：<b>在函数里面，就近的那个名字生效</b>。</p>
+
+    <p>这种遮挡很难看出问题在哪，尤其是几年后再读到这份代码。全局变量能不用就不用——它的值可能被任何一个函数改掉，出问题时无从下手。这一条也是很多团队代码规范里明确禁止全局变量的原因。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "这份程序里有两个同名的 fullScore：\n\n```cpp\nint fullScore = 100;\n\nvoid printFull()\n{\n    int fullScore = 150;\n    cout &lt;&lt; \"函数里看到的满分：\" &lt;&lt; fullScore &lt;&lt; endl;\n}\n\nint main()\n{\n    printFull();\n    cout &lt;&lt; \"main 里看到的满分：\" &lt;&lt; fullScore &lt;&lt; endl;\n    return 0;\n}\n```\n\n① 函数里打印出来的是哪个？\n② main 里打印出来的是哪个？\n③ 如果想让函数里也读到那个全局变量，最\n简单的一步改法是什么？",
+    "answer": "① 函数里就近的那个：本函数的局部变量\nfullScore，所以打出 150。\n② 全局变量 fullScore，打出 100。\n③ 把函数里那行 int fullScore = 150; 删\n掉——遮挡解除，函数里读到的就是全局变量\n100。",
+    "criteria": "三问都要答：函数里是局部变量（150），\nmain 里是全局变量（100）；说出「就近的\n名字生效」这条规则；删掉局部声明是改\n法。\n答成「全局变量被函数改成了 150」→ 不通\n过（改动从未发生）。"
+  }
+]'></div>
+
+  <h2>值传递：改的是副本</h2>
+
+  <p>回到开头那个没改动的成绩。现在可以解释它了。</p>
+
+  <p><b>值传递</b>：C++ 调用函数时的默认传参方式：函数拿到的是实参的副本，函数里改动副本不影响原来的变量。</p>
+
+  <p>为什么需要这个词：调用一个函数时，实参的值要交到函数里的形参手上。交的方式有两种可能——把原件的地址告诉它，或者复制一份给它。C++ 默认是复制一份。这件事决定了「函数里改了形参，外面会不会跟着变」，所以需要一个专门的说法把它讲明白。</p>
+
+  <p>调用 <code>makeFull(score)</code> 的那一刻，发生的是这样几件事：</p>
+
+  <ol>
+    <li><code>main</code> 里的实参 <code>score</code> 值是 58；</li>
+    <li>函数里的形参 <code>score</code> 是一块<b>新的</b>存储空间，58 被复制进去；</li>
+    <li>函数体里的 <code>score = 100;</code> 改的是这块新空间；</li>
+    <li>函数返回，这块新空间连同它的名字一起消失；</li>
+    <li><code>main</code> 里那个 <code>score</code> 从头到尾没被碰过，还是 58。</li>
+  </ol>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="main 里的 score 是 58，调用时把 58 复制给形参 score，函数里把形参改成 100，函数返回后 main 里的 score 仍是 58">
+<svg viewBox="0 0 760 340">
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="20" y="44" width="280" height="196" rx="10"/>
+    <rect x="70" y="120" width="180" height="60" rx="8"/>
+    <path d="M250 150 H505"/>
+    <rect x="460" y="44" width="280" height="196" rx="10"/>
+    <rect x="510" y="120" width="180" height="60" rx="8"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M497 146 L505 150 L497 154"/>
+  </g>
+  <g font-size="16" fill="currentColor">
+    <text x="380" y="26" text-anchor="middle">两个 score：名字相同，住的是两块存储空间</text>
+    <text x="160" y="74" text-anchor="middle">int main()</text>
+    <text x="600" y="74" text-anchor="middle">void makeFull(int score)</text>
+    <text x="160" y="146" text-anchor="middle">main 的 score</text>
+    <text x="160" y="170" text-anchor="middle">58</text>
+    <text x="600" y="146" text-anchor="middle">形参 score</text>
+    <text x="600" y="170" text-anchor="middle">改成 100</text>
+    <text x="378" y="140" text-anchor="middle">复制一份值</text>
+    <text x="380" y="300" text-anchor="middle">makeFull 返回后，main 打印 score：还是 58</text>
+  </g>
+</svg>
+    <figcaption>图 1 · 形参是调用时新建的副本，改动落在副本上</figcaption>
+  </figure>
+
+  <p>所以 <code>makeFull</code> 这个名字起得有些乐观：它把副本改成了满分，原件还在原处。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "函数里明明把 score 改成了 100，回到\nmain 打印还是 58：\n\n```cpp\nvoid makeFull(int score)\n{\n    score = 100;\n    cout &lt;&lt; \"函数里看到的成绩：\" &lt;&lt; score &lt;&lt; endl;\n}\n\nint main()\n{\n    int score = 58;\n    makeFull(score);\n    cout &lt;&lt; \"回到 main 看到的成绩：\" &lt;&lt; score &lt;&lt; endl;\n    return 0;\n}\n```\n\n① 函数里那个 score 是什么？\n② main 里那个 score 从头到尾有没有被碰\n过？\n③ 函数返回时，函数里那块存储怎么样了？",
+    "answer": "① 它是形参，是调用时新建的一块存储，58\n被复制进去以后它在函数里被改成 100。\n② 没被碰过，一直是 58。\n③ 函数返回时，那块存储连同它的名字一起\n消失；下次调用会重新开一块，值从新的初\n值开始。要让函数改到 main 里那个变量，\n得把它的地址交给函数——那是后面指针那一\n课的内容。",
+    "criteria": "说出形参是新的一块存储（副本），所以改\n动落在副本上 → 通过；\n第 ③ 问答到「函数返回后那块存储被回\n收」是加分项。\n答成「函数里的 score 和 main 里的\nscore 是同一个变量，只是作用域不同」→\n不通过（作用域是名字的范围，这里是两块\n不同的存储）。"
+  }
+]'></div>
+
+  <h2>变量的生命周期</h2>
+
+  <p>作用域说的是「名字在代码的哪一段能被用到」，还有另一件事：这块存储在程序运行的哪一段时间里存在。这件事叫<b>生命周期</b>。</p>
+
+  <p><b>生命周期</b>：一个变量从被创建出来、到被回收掉的这段时间。这个概念在别的书里也叫<b>生存期</b>，本课程统一说生命周期。</p>
+
+  <p>为什么需要这个词：局部变量不是程序一开始就全都准备好了。局部变量在<b>自己的定义处</b>被创建，在它所在的那对花括号结束时被回收；函数里的局部变量，寿命就在这一次调用之内。理解这一点，才能解释「为什么两次调用之间，局部变量的值留不下来」。</p>
+
+  <p>存成 <code>scope-05.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// scope-05.cpp -- 局部变量的寿命：每次调用都重新出生一次
+#include &lt;iostream&gt;
+using namespace std;
+
+void countCall()
+{
+    int count = 0;              // 每次进入函数都重新声明、重新赋 0
+    count++;
+    cout &lt;&lt; "这一次调用看到的 count：" &lt;&lt; count &lt;&lt; endl;
+}
+
+int main()
+{
+    countCall();
+    countCall();
+    countCall();
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ scope-05.cpp -o scope-05
+$ ./scope-05
+这一次调用看到的 count：1
+这一次调用看到的 count：1
+这一次调用看到的 count：1</code></pre>
+
+  <p>三次调用都打印 1。<code>count++</code> 明明把值加到了 1，可下一次调用走进来，<code>int count = 0;</code> 又执行了一遍：上一轮那块存储已经随函数返回被回收，这一轮拿到的是新的一块，值从 0 开始。</p>
+
+  <p>因此 <code>countCall</code> 并不具备「记录调用了几次」的能力。要让一个值跨过函数返回活下来，得换一种存储方式，这不在本课程范围内。</p>
+
+  <p>下面这张图把三次调用的时间摊开，看得更清楚：</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="三次调用 countCall 的时间轴，每次调用期间局部变量 count 从 0 变成 1，函数返回时该存储被回收">
+<svg viewBox="0 0 760 220">
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M60 130 H700"/>
+    <path d="M692 126 L700 130 L692 134"/>
+    <rect x="90" y="90" width="170" height="44" rx="6"/>
+    <rect x="320" y="90" width="170" height="44" rx="6"/>
+    <rect x="550" y="90" width="140" height="44" rx="6"/>
+  </g>
+  <g font-size="16" fill="currentColor">
+    <text x="60" y="44">局部变量 count 的生命周期（三次调用 countCall）</text>
+    <text x="175" y="80" text-anchor="middle">count 出生</text>
+    <text x="405" y="80" text-anchor="middle">count 出生</text>
+    <text x="620" y="80" text-anchor="middle">count 出生</text>
+    <text x="175" y="118" text-anchor="middle">第 1 次调用</text>
+    <text x="405" y="118" text-anchor="middle">第 2 次调用</text>
+    <text x="620" y="118" text-anchor="middle">第 3 次调用</text>
+    <text x="175" y="164" text-anchor="middle">count：0 → 1</text>
+    <text x="405" y="164" text-anchor="middle">count：0 → 1</text>
+    <text x="620" y="164" text-anchor="middle">count：0 → 1</text>
+    <text x="288" y="196" text-anchor="middle">函数返回，存储被回收</text>
+    <text x="530" y="196" text-anchor="middle">函数返回，存储被回收</text>
+  </g>
+</svg>
+    <figcaption>图 2 · 局部变量 count 在三次调用之间的出生与消失</figcaption>
+  </figure>
+
+  <h2>花括号就是范围</h2>
+
+  <p>作用域的边界就是花括号。在花括号里声明的变量，出了这对花括号就不认得。存成 <code>scope-03.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>// scope-03.cpp -- 反例：在花括号里声明的变量，出了花括号就不认识了
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    {
+        int temp = 60;          // temp 的作用域就是这个花括号
+    }
+
+    cout &lt;&lt; temp &lt;&lt; endl;       // 编译错误：这里已经看不见 temp
+    return 0;
+}</code></pre>
+
+  <div class="lesson-warn">
+    <b>出了花括号就不认得这个名字</b>
+    <p>编译这个文件，编译器会指着第 11 行报错：</p>
+
+    <pre data-lang="term"><code>$ g++ scope-03.cpp -o scope-03
+scope-03.cpp:11:13: error: use of undeclared identifier 'temp'</code></pre>
+
+    <p><code>temp</code> 声明在里面那对花括号里，那对花括号一结束，这个名字就不存在了。把 <code>int temp = 60;</code> 挪到外面那层，或者在花括号里把要用的活儿干完，都能解决。</p>
+
+    <p>编译器还会顺带提醒一句 <code>warning: unused variable 'temp'</code>，意思是这个变量声明了却没人用——在这个例子里，它正好提示了 <code>temp</code> 的作用域太窄。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "顺着这份程序往下读，判断每一行打印出来\n的值：\n\n```cpp\nvoid makeFull(int score)\n{\n    score = 100;\n    cout &lt;&lt; \"函数里看到的成绩：\" &lt;&lt; score &lt;&lt; endl;\n}\n\nint main()\n{\n    int score = 58;\n    makeFull(score);\n    cout &lt;&lt; \"回到 main 看到的成绩：\" &lt;&lt; score &lt;&lt; endl;\n    return 0;\n}\n```\n\n① 第一行打印什么？\n② 第二行打印什么？\n③ 如果把 makeFull 的形参从 int score\n改成 int s，两行输出会不会变？",
+    "answer": "① 函数里看到的成绩：100。\n② 回到 main 看到的成绩：58。\n③ 不变。改的是副本，副本叫什么名字不影\n响结果——形参的名字只是函数内部用的记\n号。",
+    "criteria": "三问逐条对上（100 / 58 / 不变）→ 通\n过；\n第 ③ 问能说出「改的是副本，名字无关」\n才算完整。\n第 ② 问答成 100 → 不通过。"
+  }
+]'></div>
+
+  <h2>要让函数真改到外面</h2>
+
+  <p>回到开头那个函数。「在函数里改，外面没变」的根源，是函数手里只有一份副本。</p>
+
+  <p>要让函数真改到调用方的变量，得先能说出这个变量住在内存的哪个位置，再让函数拿着这个位置去改原来那份。这套东西要到后面「内存地址与取地址符」那一课才讲，这里先不展开，只留一句话——<b>函数拿不到原件的时候，就只能改副本</b>。</p>
+
+  <h2>动手做：把现象跑出来</h2>
+
+  <p>这一节的知识点都是「解释现象」，动手的方式就是把现象跑出来、再动一动看结论变不变。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">四步跑出「改了没变」</span>
+    </div>
+
+      <p><b>第 1 步 · 看清现象</b>。编译运行 <code>scope-01.cpp</code>，对照两行输出：函数里是 100，<code>main</code> 里是 58。</p>
+
+      <p><b>第 2 步 · 看清执行顺序</b>。在 <code>makeFull</code> 里 <code>score = 100;</code> 之后加一行 <code>cout &lt;&lt; "改完了" &lt;&lt; endl;</code>，在 <code>main</code> 里 <code>makeFull(score);</code> 后面也加一行 <code>cout &lt;&lt; "回到 main" &lt;&lt; endl;</code>，运行，从这两行输出的先后确认「先进函数、再回 main」的顺序。</p>
+
+      <p><b>第 3 步 · 改个名字</b>。把 <code>makeFull</code> 的形参从 <code>int score</code> 改成 <code>int s</code>，函数体里相应改成 <code>s = 100;</code>，重新编译运行。输出不变——改的是副本，副本叫什么名字都一样。</p>
+
+      <p><b>第 4 步 · 删掉遮挡的那一行</b>。把 <code>scope-04.cpp</code> 里 <code>printFull</code> 的 <code>int fullScore = 150;</code> 删掉，重新编译运行。这一次函数里读到的是全局变量的 100，两次打印变成一样的值。</p>
+  </div>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0008-functions-basics.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">函数：把一段活儿打包</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0010-arrays.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">数组：一次声明一批变量</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0009 作用域与值传递 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

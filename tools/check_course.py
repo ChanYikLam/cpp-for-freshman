@@ -140,9 +140,13 @@ def main(argv):
         node = m.group(2) if m else name[:-3]
         kind = kinds.get(node, '?')
 
-        # ① 至少一处动手
+        # ① 至少一处动手（**实验课除外**）
+        #
+        # 实验说明页是任务书：它把读者送进 `lab/` 去写代码，动手部分就是那份任务本身，
+        # 正文里不该也不需要再有 `::: practice` 块。早先一律要求，把三个实验页判成了缺陷
+        # （真实误报过）。
         practices = PRACTICE_RE.findall(text)
-        if not practices:
+        if not practices and kind != '实验':
             problems.append(f'{name}: 没有任何 `::: practice` 动手块——课程承诺每章都能动手，'
                             '纯阅读的一章不符合要求')
 
@@ -193,9 +197,19 @@ def main(argv):
             infos.append(f'{name}: 引用了其它节点的示例（正常，作回指用）：' + '、'.join(cross))
 
         # ④ 覆盖度
-        if kind in ('实操', '实验') and not have:
+        #
+        # `kind: 实验` 的可跑东西在 `lab/NNNN-主题/` 里（出题评估产），**不在** examples/——
+        # 实验说明页本来就不带示例。早先一律要求 examples/，把三个实验页全判成缺陷（真实误报过）。
+        if kind == '实操' and not have:
             problems.append(f'{name}: 课型是 `{kind}`，但 examples/ 里没有本节点的示例——'
                             '实操课必须有可跑的东西')
+        if kind == '实验':
+            lab_root = os.path.join(subject, 'lab')
+            dirs = os.listdir(lab_root) if os.path.isdir(lab_root) else []
+            pref = f'{pos:04d}-' if pos else ''
+            if not any(d.startswith(pref) for d in dirs):
+                problems.append(f'{name}: 课型是 `实验`，但 lab/ 下没有 `{pref}…` 任务目录'
+                                '——实验课的验收物在 lab/ 里')
         if kind == '概念' and not have:
             infos.append(f'{name}: 概念课没有配套示例文件（本课程要求概念课也能动手，建议补）')
 

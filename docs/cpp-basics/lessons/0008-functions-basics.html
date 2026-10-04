@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>函数：把一段活儿打包 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0008</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0008 · 函数：把一段活儿打包</span>
+    <h1>函数：把一段活儿打包</h1>
+    <p class="lesson-goal"><b>本节目标：</b>把求平均的那段逻辑包成一个函数，在 <code>main</code> 里调用它并把结果打印出来。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <h2>同一段逻辑抄了三遍</h2>
+
+  <p>成绩管理系统里，「求平均」这件事会在好几个地方出现：统计的时候要打一份平均分，打印成绩单的时候要写一行平均分，排名的时候还要拿平均分做比较。</p>
+
+  <p>上一章我们把求平均写成了这样几行：</p>
+
+  <pre data-lang="text"><code>double sum = 0.0;
+for (int i = 0; i &lt; n; i++)
+    把成绩加进 sum
+double average = sum / n;</code></pre>
+
+  <p>这段逻辑要是抄三遍，麻烦就来了：哪天要求改成「去掉一个最高分再算平均」，三个地方都得改，漏掉一处，同一份数据算出来的平均分就不一样了。</p>
+
+  <p>更好的做法是给这段活儿起个名字，写一次，以后按名字用它。</p>
+
+  <h2>函数：把一段活儿打包</h2>
+
+  <p><b>函数</b>：把一段完成特定任务的代码打包起来、起个名字，需要时按名字调用。打包的目的有两个：同一段逻辑只写一次就能用很多次；一段代码只负责一件事，出了问题也知道去哪儿找。</p>
+
+  <p>「函数」这个词在数学里已经有了，含义也相近：给一批输入，按固定规则算出结果。C++ 借用了它，但多了一件数学里没有的事——函数还可以只干活、不交结果，比如在屏幕上打印一行字。</p>
+
+  <p>C++ 里用上一个函数，要做三件事：</p>
+
+  <table>
+    <thead>
+      <tr><th>要做的事</th><th>写在哪儿</th><th>少了它会怎样</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>函数定义</td><td>写在源文件里，交代这个函数叫什么、吃什么、干什么</td><td>编译器找不到这个名字，链接时失败</td></tr>
+      <tr><td>函数原型</td><td>写在调用它之前，交代它吃什么、交回什么</td><td>编译器读到调用时信息不足，报错或悄悄按默认规则处理</td></tr>
+      <tr><td>函数调用</td><td>想用它的地方，写名字加一对括号</td><td>这个函数永远不会被执行</td></tr>
+    </tbody>
+  </table>
+
+  <p>这三件事的写法，看一遍完整的程序就清楚了。</p>
+
+  <h2>定义、原型、调用</h2>
+
+  <p>存成 <code>func-01.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// func-01.cpp -- 使用一个函数的三个步骤：定义、原型、调用
+#include &lt;iostream&gt;
+using namespace std;
+
+void printLine();            // 函数原型
+int add(int a, int b);       // 函数原型
+
+int main()
+{
+    printLine();
+    int total = add(90, 85);          // 函数调用
+    cout &lt;&lt; "两个成绩相加：" &lt;&lt; total &lt;&lt; endl;
+    printLine();
+    return 0;
+}
+
+void printLine()             // 函数定义
+{
+    cout &lt;&lt; "--------------------" &lt;&lt; endl;
+}
+
+int add(int a, int b)        // 函数定义
+{
+    return a + b;                   // 返回值
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ func-01.cpp -o func-01
+$ ./func-01
+--------------------
+两个成绩相加：175
+--------------------</code></pre>
+
+  <p>程序里三样东西各自的位置和职责：</p>
+
+  <ul>
+    <li><b>函数定义</b>由两部分组成。第一行是<b>函数头</b>：最前面的 <code>int</code> 说明这个函数交回一个整数，<code>add</code> 是它的名字，括号里的 <code>int a, int b</code> 是它接收数据的两个位置。花括号里的那组语句是<b>函数体</b>，也就是这个函数真正干的活儿。</li>
+    <li><b>函数原型</b>只保留函数头的信息，末尾写一个分号。它告诉编译器：<code>add</code> 这个函数吃两个 <code>int</code>，交回一个 <code>int</code>。原型的形参名可写可不写，写成 <code>int add(int, int);</code> 一样管用；写上名字是为了读代码的人看得明白。</li>
+    <li><b>函数调用</b>就是写名字加括号，括号里给数据。<code>add(90, 85)</code> 这个调用本身就是一个表达式，它的值就是函数交回的结果，所以可以直接赋给 <code>total</code>。</li>
+  </ul>
+
+  <p>程序从 <code>main</code> 开始执行。执行到 <code>printLine();</code> 这一行时，<code>main</code> 先停在这里，转去执行 <code>printLine</code> 的函数体，函数体跑完再回到这一行的下一句继续。这也是为什么输出里那两条横线一前一后夹着中间那行字。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "这份程序里两处 add 长得几乎一样：\n\n```cpp\nvoid printLine();            // 函数原型\nint add(int a, int b);       // 函数原型\n\nint main()\n{\n    printLine();\n    int total = add(90, 85);\n    std::cout &lt;&lt; \"两个成绩相加：\" &lt;&lt; total &lt;&lt; std::endl;\n    return 0;\n}\n\nint add(int a, int b)        // 函数定义\n{\n    return a + b;\n}\n```\n\n① 哪一处是函数原型，哪一处是函数定义？\n② 原型末尾多了什么、少了什么？\n③ 少了原型，编译到 main 里的\nadd(90, 85) 时会出什么事？",
+    "answer": "① 末尾带分号的 int add(int a, int b);\n是原型；带花括号函数体的那一段是定义。\n② 原型末尾有分号、没有函数体；它只保留\n函数头的信息：吃什么、交回什么。\n③ 编译器读到调用那一行时还不知道 add\n吃几个、交回什么类型，只能靠猜或直接报\n错——所以原型要写在调用它之前。",
+    "criteria": "三问都要答：认出原型与定义；说出原型只\n留函数头加一个分号；说出缺原型时编译器\n在调用处信息不足。\n把两者的区别说成「一个在前面一个在后\n面」→ 部分通过（位置是结果，不是区\n别）。"
+  }
+]'></div>
+
+  <h2>形参、实参与数据流向</h2>
+
+  <p>上一步出现了两组名字很像的东西，需要分清楚。</p>
+
+  <p><b>形参 / 实参</b>：函数定义里写的、用来接收数据的占位名字叫<b>形参</b>；调用时真正传进去的值叫<b>实参</b>。这对词的存在，是因为「参数」两个字同时指着两个不同的东西：定义处那个名字，与调用处那个具体的值。只说「参数」，就说不清「改的到底是哪一个」。</p>
+
+  <p><b>返回值</b>：函数执行完交回给调用者的那个结果，用 <code>return</code> 语句交回。函数头最前面写的那个类型，就是这个返回值的类型。</p>
+
+  <p>规则有三条：</p>
+
+  <ul>
+    <li>实参的个数、类型、先后顺序，要与形参一一对上。<code>add(90, 85)</code> 的两个实参分别落到形参 <code>a</code> 和 <code>b</code>，第一个进 <code>a</code>，第二个进 <code>b</code>，顺序换了结果就换了。</li>
+    <li><code>return</code> 后面可以写常量、变量，也可以写一个表达式。写表达式时，先把表达式的值算出来，再交回调用处。</li>
+    <li>函数头写 <code>void</code> 表示这个函数不交回结果，此时函数体里可以写 <code>return;</code> 表示提前收工，但后面不能跟值。<code>printLine</code> 就是这样的函数。</li>
+  </ul>
+
+  <p>一次调用的完整过程，是数据先过去、结果再回来：</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="调用 average(sum, n) 时，main 里两个实参的值被交给 average 的两个形参，函数算完后用 return 把结果交回 main">
+<svg viewBox="0 0 760 360">
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="20" y="40" width="270" height="200" rx="10"/>
+    <rect x="45" y="95" width="110" height="56" rx="8"/>
+    <rect x="45" y="165" width="110" height="56" rx="8"/>
+    <rect x="470" y="40" width="270" height="200" rx="10"/>
+    <rect x="495" y="105" width="110" height="56" rx="8"/>
+    <rect x="495" y="175" width="110" height="56" rx="8"/>
+    <path d="M300 123 H460"/>
+    <path d="M300 193 H460"/>
+    <path d="M540 240 V300 H155 V252"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M452 119 L460 123 L452 127"/>
+    <path d="M452 189 L460 193 L452 197"/>
+    <path d="M151 260 L155 252 L159 260"/>
+  </g>
+  <g font-size="16" fill="currentColor">
+    <text x="155" y="70" text-anchor="middle">int main()</text>
+    <text x="605" y="66" text-anchor="middle">average 函数</text>
+    <text x="605" y="88" text-anchor="middle">double average(double, int)</text>
+    <text x="100" y="118" text-anchor="middle">实参 sum</text>
+    <text x="100" y="140" text-anchor="middle">433</text>
+    <text x="100" y="188" text-anchor="middle">实参 n</text>
+    <text x="100" y="210" text-anchor="middle">5</text>
+    <text x="550" y="128" text-anchor="middle">形参 sum</text>
+    <text x="550" y="150" text-anchor="middle">433</text>
+    <text x="550" y="198" text-anchor="middle">形参 count</text>
+    <text x="550" y="220" text-anchor="middle">5</text>
+    <text x="380" y="113" text-anchor="middle">把值交过去</text>
+    <text x="380" y="183" text-anchor="middle">把值交过去</text>
+    <text x="348" y="322" text-anchor="middle">return 交回 86.6</text>
+  </g>
+</svg>
+    <figcaption>图 1 · 一次函数调用里，实参、形参与返回值的流向</figcaption>
+  </figure>
+
+  <h2>把求平均包成函数</h2>
+
+  <p>把开头那段抄了三遍的逻辑收进一个函数：交给它总分和人数，它交回平均分。测这个函数用的输入，就是上一章 <code>loops-02.cpp</code> 里那 5 个成绩。</p>
+
+  <p>存成 <code>func-02.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// func-02.cpp -- 把求平均包成一个函数，在 main 里调用它
+#include &lt;iostream&gt;
+using namespace std;
+
+double average(double sum, int count);      // 函数原型
+
+int main()
+{
+    int n;
+    cout &lt;&lt; "请输入成绩个数：";
+    cin &gt;&gt; n;
+
+    double sum = 0.0;
+    for (int i = 0; i &lt; n; i++)
+    {
+        double score;
+        cin &gt;&gt; score;
+        sum += score;
+    }
+
+    cout &lt;&lt; "总分：" &lt;&lt; sum &lt;&lt; endl;
+    cout &lt;&lt; "平均分：" &lt;&lt; average(sum, n) &lt;&lt; endl;      // 函数调用
+    return 0;
+}
+
+double average(double sum, int count)       // 函数定义
+{
+    return sum / count;                     // 返回值
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ func-02.cpp -o func-02
+$ ./func-02
+请输入成绩个数：5
+90
+85
+78
+92
+88
+总分：433
+平均分：86.6</code></pre>
+
+  <p>读这段代码时最该注意的，是<b>哪些东西要传进去，哪个结果要带出来</b>：</p>
+
+  <ul>
+    <li><code>average</code> 需要两个信息才能干活：总分与人数。它们就是两个形参。</li>
+    <li>它交回的是平均分，所以函数头的类型写成 <code>double</code>。写成 <code>int</code> 的话，<code>433 / 5</code> 的结果 86.6 会被截成 86，函数里算得再对也没用。</li>
+    <li><code>return sum / count;</code> 里 <code>sum</code> 是 <code>double</code>，<code>count</code> 是 <code>int</code>，两个数相除得到的是小数。小数能留下来，靠的是 <code>sum</code> 的 <code>double</code> 类型。</li>
+  </ul>
+
+  <p>改用函数以后，<code>main</code> 里剩下的都是「读数据、调函数、打结果」这类一眼能看懂的动作，具体怎么算被挪进了 <code>average</code>。求平均的规则要改，只改函数体那一处。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "这段代码只能打印，交不出结果：\n\n```cpp\nvoid printScore(int score)\n{\n    std::cout &lt;&lt; \"成绩：\" &lt;&lt; score &lt;&lt; \" 分\" &lt;&lt; std::endl;\n}\n\nint main()\n{\n    printScore(86);\n    return 0;\n}\n```\n\n```text\n成绩：86 分\n```\n\n把它改成带返回值的函数：函数头写成\nint，函数体里用 return 把成绩交回，并\n说明函数头最前面那个类型是由什么决定\n的。",
+    "answer": "```cpp\nint getScore(int score)\n{\n    return score;\n}\n```\n\n函数头最前面那个类型，由「要交回给调用\n者的那个结果是什么类型」决定。想交回成\n绩本身（int）就写 int；想交回等级字符\n就写 char；想交回平均分就写 double。要\n改回「只打印、不交回」，就写 void，并\n在函数头里把返回类型固定下来。",
+    "criteria": "函数头写成 int（或与交回值一致的类\n型），函数体里有 return 交回成绩 → 通\n过。\n写成 void 却又 return 成绩 → 不通过\n（void 函数不能交回值，编译不过）。\n能说出返回类型由「要交回的结果」决定，\n而不只是抄了一个 int → 完整。"
+  }
+]'></div>
+
+  <h2>默认值与同名函数</h2>
+
+  <p>函数定好以后，还会遇到两种调整它的场合。</p>
+
+  <p><b>参数默认值</b>：在函数原型里给形参写上一个默认值，调用时可以不写这个实参，编译器用默认值补上。</p>
+
+  <p>为什么需要它：同样是打印一份成绩，多数时候是百分制，偶尔是 150 分制。两种都写成函数也行，但名字得区分开；给末尾那个形参一个默认值，调用处就能少写一个实参。</p>
+
+  <p>存成 <code>func-03.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// func-03.cpp -- 参数默认值：调用时可以不写末尾那个实参
+#include &lt;iostream&gt;
+using namespace std;
+
+void printScore(int score, int full = 100);      // 末尾的形参有默认值
+
+int main()
+{
+    printScore(86);          // 只传一个实参，full 用默认值 100
+    printScore(86, 150);     // 传两个实参，full 取 150
+    return 0;
+}
+
+void printScore(int score, int full)
+{
+    cout &lt;&lt; score &lt;&lt; " / " &lt;&lt; full &lt;&lt; endl;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ func-03.cpp -o func-03
+$ ./func-03
+86 / 100
+86 / 150</code></pre>
+
+  <p>默认值有两个要点：写在<b>原型</b>里，定义里不再重复写；默认值要从形参表的最右边开始，中间不能空。<code>void printScore(int score = 60, int full = 100);</code> 是允许的，而只给第一个形参默认值、第二个不给，是不允许的。</p>
+
+  <p><b>函数重载</b>：同一个名字下可以有多个函数定义，只要它们的形参表不同，编译器会根据实参的个数和类型挑一个来用。</p>
+
+  <p>为什么需要它：成绩有时是整数 <code>86</code>，有时是小数 <code>86.5</code>，处理方式不同，但都是「显示一份成绩」。让它们共用一个名字，调用的时候不用记住两套名字。</p>
+
+  <p>存成 <code>func-04.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// func-04.cpp -- 函数重载：同名函数，靠实参对号入座
+#include &lt;iostream&gt;
+using namespace std;
+
+void show(int score);
+void show(double score);
+void show(int score, int full);
+
+int main()
+{
+    show(86);            // 一个 int 实参，匹配 show(int)
+    show(86.5);          // 一个 double 实参，匹配 show(double)
+    show(86, 150);       // 两个 int 实参，匹配 show(int, int)
+    return 0;
+}
+
+void show(int score)
+{
+    cout &lt;&lt; "整数成绩：" &lt;&lt; score &lt;&lt; endl;
+}
+
+void show(double score)
+{
+    cout &lt;&lt; "带小数的成绩：" &lt;&lt; score &lt;&lt; endl;
+}
+
+void show(int score, int full)
+{
+    cout &lt;&lt; "成绩 " &lt;&lt; score &lt;&lt; "，满分 " &lt;&lt; full &lt;&lt; endl;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ func-04.cpp -o func-04
+$ ./func-04
+整数成绩：86
+带小数的成绩：86.5
+成绩 86，满分 150</code></pre>
+
+  <p>重载看的是<b>形参表</b>。两个函数只有返回值类型不同、形参一模一样，编译器无法从调用处分辨该用哪一个，这种不算重载，会直接报错。</p>
+
+  <h2>返回值路径要走全</h2>
+
+  <p>有返回值的函数，每一条能走到末尾的路径都必须交回一个值。漏了一条，函数返回给调用处的东西就没有意义了。</p>
+
+  <p>存成 <code>func-05.cpp</code>。这个程序编译得过，但只用来看报错，不要去运行：</p>
+
+  <pre data-lang="cpp"><code>// func-05.cpp -- 反例：分支里的 return 漏了一条路径
+#include &lt;iostream&gt;
+using namespace std;
+
+int level(int score)
+{
+    if (score &gt;= 60)
+    {
+        return 1;
+    }
+    // 成绩小于 60 时没有 return，函数直接走到末尾
+}
+
+int main()
+{
+    cout &lt;&lt; level(75) &lt;&lt; endl;
+    cout &lt;&lt; level(40) &lt;&lt; endl;      // 这里打印出来的值没有意义
+    return 0;
+}</code></pre>
+
+  <div class="lesson-warn">
+    <b>加了 -Wall 才看得见的提醒</b>
+    <p><code>-Wall</code> 是 g++ 的一个选项，意思是「把编译器能发现的疑点都提醒出来」（w 是 warning 的首字母）。它不改程序的行为，只是多打印一些提醒。用 <code>g++ -Wall func-05.cpp -o func-05</code> 编译时，编译器会明确提醒：</p>
+
+    <pre data-lang="term"><code>$ g++ -Wall func-05.cpp -o func-05
+func-05.cpp:12:1: warning: non-void function does not return a value in all control paths [-Wreturn-type]</code></pre>
+
+    <p>意思是「声明了交回值，但不是所有分支都会交回」。<code>score &gt;= 60</code> 时函数在 <code>if</code> 里就返回了；<code>score &lt; 60</code> 时，函数一路走到末尾的右花括号，交回的是一个没有意义的值。补一条 <code>return 0;</code> 或者在末尾统一返回，都能解决。</p>
+
+    <p>不带 <code>-Wall</code> 也能编译通过，这条提醒就看不见了——所以编译时把 <code>-Wall</code> 带上。</p>
+  </div>
+
+  <p>另一种错法编译器直接拦住。存成 <code>func-06.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>// func-06.cpp -- 反例：void 函数里 return 一个值
+#include &lt;iostream&gt;
+using namespace std;
+
+void printScore(int score)
+{
+    cout &lt;&lt; "成绩：" &lt;&lt; score &lt;&lt; endl;
+    return score;          // 编译错误：void 函数不能交回一个值
+}
+
+int main()
+{
+    printScore(86);
+    return 0;
+}</code></pre>
+
+  <div class="lesson-warn">
+    <b>void 函数不能交回值</b>
+    <p>编译这个文件，编译器会报错并停在 <code>return score;</code> 那一行：</p>
+
+    <pre data-lang="term"><code>$ g++ func-06.cpp -o func-06
+func-06.cpp:8:5: error: void function 'printScore' should not return a value</code></pre>
+
+    <p>函数头写着 <code>void</code>，等于向编译器承诺「这个函数不交回结果」，<code>return score;</code> 就与这个承诺冲突了。想让 <code>printScore</code> 交回成绩，就把函数头的 <code>void</code> 改成 <code>int</code>；想让它继续只打印，就把这一行删掉。</p>
+
+    <p><code>main</code> 的返回类型是 <code>int</code>，<code>return 0;</code> 表示程序正常结束，这一处在第 1 课已经见过。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "这个函数声明了交回 int，但 40 分那一次\n打印出来的值没有意义：\n\n```cpp\nint level(int score)\n{\n    if (score &gt;= 60)\n    {\n        return 1;\n    }\n}\n\nint main()\n{\n    std::cout &lt;&lt; level(75) &lt;&lt; std::endl;\n    std::cout &lt;&lt; level(40) &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n带上 -Wall 编译时，编译器给了这样一\n行：\n\n```text\nfunc-05.cpp:12:1: warning: non-void function does not return\n    a value in all control paths [-Wreturn-type]\n```\n\n① 漏在哪条路径上？\n② return 1 那一支为什么没问题？\n③ 补上漏的那条路径，再各调一次 75 与\n40。",
+    "answer": "① 成绩小于 60 那条路径——走到函数末尾的\n右花括号就结束了，没有 return。\n② score &gt;= 60 时在 if 里就 return 了，\n这条路径有交回值。\n③ 补一条：\n\n```cpp\nint level(int score)\n{\n    if (score &gt;= 60)\n    {\n        return 1;\n    }\n    return 0;\n}\n```\n\n也可以在末尾统一 return。补完之后\n-Wall 那行警告消失，level(40) 打出 0。",
+    "criteria": "指出漏的是「小于 60 走到函数末尾」那条\n路径；说出 -Wall 那行说的正是这件事；\n补法能让所有路径都有返回值 → 通过。\n把 level 的返回类型改成 void 来消警告\n→ 不通过。"
+  }
+]'></div>
+
+  <h2>动手做：改一行看变化</h2>
+
+  <p>函数的知识点不多，手感却要靠改代码来建立。下面三步都在刚才那几个文件上改，每一步都能立刻看到结果。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">改一行，看结果变在哪里</span>
+    </div>
+
+      <p><b>第 1 步 · 改返回值</b>。把 <code>func-02.cpp</code> 里 <code>average</code> 的 <code>return sum / count;</code> 改成 <code>return sum;</code>，重新编译运行，看「平均分」那一行变成了什么；再改成 <code>return count;</code> 看一次。</p>
+
+      <p><b>第 2 步 · 改函数头的类型</b>。把 <code>double average(double sum, int count)</code> 的 <code>double</code> 改成 <code>int</code>，重新编译运行。平均分后面小数没了，想一想这个小数是在哪一步丢掉的。</p>
+
+      <p><b>第 3 步 · 少传一个实参</b>。把 <code>func-03.cpp</code> 里 <code>printScore(86, 150);</code> 改成 <code>printScore(86);</code>，运行看输出；再把原型里的 <code>= 100</code> 删掉，重新编译，看编译器怎么说。</p>
+
+      <p>三步都做完，顺手回到 <code>func-05.cpp</code>，把漏掉的那条 <code>return</code> 补上，再编译一次，看那条警告是不是消失了。</p>
+  </div>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0007-loops.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">循环：把重复交给机器</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0009-scope-and-passing.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">作用域与值传递</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0008 函数：把一段活儿打包 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

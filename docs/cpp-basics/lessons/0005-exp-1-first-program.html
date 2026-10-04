@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>实验一：跑通编译运行循环 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0005</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0005 · 实验一：跑通编译运行循环</span>
+    <h1>实验一：跑通编译运行循环</h1>
+    <p class="lesson-goal"><b>本节目标：</b>自己从空白文件写到一个能跑的程序：读入数据、算出结果、打印出来，编译无警告、输出与预期一致。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <div class="lesson-note">
+    <b>这一课是验收课</b>
+    <p>前面四课你已经知道怎么写、怎么编译、怎么读报错，但还没有<b>独立</b>走完过一整条。这次不再有现成代码给你改，从一份空白文件开始。</p>
+  </div>
+
+  <h2>这次要做出什么</h2>
+
+  <p>一个小程序，<b>名字和形式都由你定</b>，只要满足三条：</p>
+
+  <ul>
+    <li>能读入数据（有提示语，说清要输入什么、什么格式）；</li>
+    <li>算出一个结果；</li>
+    <li>把结果按一位小数打印出来。</li>
+  </ul>
+
+  <p>两个题目挑一个，不要两个都做：</p>
+
+  <table>
+    <thead>
+      <tr><th>题目</th><th>输入</th><th>输出</th><th>用到了哪几课</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>A · 体温换算</td><td>一个华氏温度</td><td>对应的摄氏度，一位小数</td><td>变量与类型、算术运算、输入输出</td></tr>
+      <tr><td>B · 三门成绩算平均分</td><td>三个成绩</td><td>总分与平均分，平均分一位小数</td><td>同上，再加变量运算</td></tr>
+    </tbody>
+  </table>
+
+  <p><b>推荐题目 A</b>：它的换算公式里有除法，正好逼你把整数除法那一课用上。</p>
+
+  <p>换算公式（题目 A）：<span class="math-inline">\text{摄氏} = (\text{华氏} - 32) \times \frac{5}{9}</span></p>
+
+  <h2>交付物</h2>
+
+  <p>一份<b>你自己写的</b> <code>.cpp</code> 源文件，建议叫 <code>temp.cpp</code>（题目 B 叫 <code>average3.cpp</code> 也行）：</p>
+
+  <ul>
+    <li>编译命令是 <code>g++ -std=c++17 -Wall -Wextra 你的文件名.cpp -o 程序名</code>；</li>
+    <li><b>编译没有任何 warning</b>（所以 <code>-Wall -Wextra</code> 不能省）；</li>
+    <li>运行输出与下面逐字一致；</li>
+    <li>代码不少于 35 行（含注释与空行）——这不是凑字数，是要你把它写成一份明天还看得懂的文件。</li>
+  </ul>
+
+  <p>留白任务在 <a href="../../lab/0005-exp-1-first-program/">实验一任务</a>，里面有起始文件、输入文件、预期输出与自查清单。</p>
+
+  <h2>怎么算过</h2>
+
+  <p>逐条核，<b>每条都能自己验</b>：</p>
+
+  <ol>
+    <li>从<b>空白文件</b>开始写出来的，不是改现成的示例；</li>
+    <li><code>g++ -std=c++17 -Wall -Wextra</code> 编译通过，没有任何 <code>warning</code>；</li>
+    <li>输入 <code>98.6</code> 时打印出摄氏 <b>37.0</b>；输入 <code>104</code> 时打印出摄氏 <b>40.0</b>；</li>
+    <li>自己按计算器核过这两个数；</li>
+    <li>故意删掉一个分号、重新编译，<b>能说出</b>报错指的是哪个文件、哪一行，再把分号补回去；</li>
+    <li>交之前把 <code>lab/exp-1-first-program/自查清单.md</code> 从头核一遍。</li>
+  </ol>
+
+  <p>第 5 条容易被跳过，但它是这一课真正要验的东西：<b>编译失败不是意外，是这条循环里的正常一步。</b></p>
+
+  <h2>自查清单</h2>
+
+  <ul>
+    <li>编译带 <code>-Wall -Wextra</code>，输出里没有 <code>error</code>、也没有 <code>warning</code>。</li>
+    <li>输入提示语说清了要输入什么、什么格式。</li>
+    <li>结果是<b>一位小数</b>，不是一长串、也不是整数。</li>
+    <li>用到的量有名字（不是一串裸数字），换算系数至少有一个写成小数。</li>
+    <li>自己按计算器核过两组输入的结果。</li>
+    <li>代码不少于 35 行。</li>
+  </ul>
+
+  <h2>最可能卡在哪</h2>
+
+  <div class="lesson-warn">
+    <b>摄氏永远是 0.0</b>
+    <p><code>5 / 9</code> 先按<b>整数除法</b>算，结果是 0，再乘什么都没用。把系数写成小数常量：</p>
+
+    <pre data-lang="cpp"><code>const double kScale = 5.0 / 9.0;</code></pre>
+
+    <p>只要除号两边有一个是小数，整条表达式就走小数规则。</p>
+  </div>
+
+  <div class="lesson-warn">
+    <b>摄氏算成了 66.6</b>
+    <p><code>fahrenheit * 5.0 / 9.0</code> 忘了先减 32。括号不能省：</p>
+
+    <pre data-lang="cpp"><code>double celsius = (fahrenheit - kOffset) * kScale;</code></pre>
+  </div>
+
+  <div class="lesson-tip">
+    <b>小数位没控住</b>
+    <p>打印成一长串小数，是少了 <code>std::fixed &lt;&lt; std::setprecision(1)</code>；这两个要一起用，<code>&lt;iomanip&gt;</code> 也要 include。</p>
+
+    <pre data-lang="cpp"><code>std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(1);</code></pre>
+  </div>
+
+  <div class="lesson-warn">
+    <b>漏了头文件</b>
+    <p><code>std::cin</code> 与 <code>std::cout</code> 都要 <code>#include &lt;iostream&gt;</code>；少了它，报错会说找不到这些名字。<code>std::setprecision</code> 在另一个头文件里——那一条报错就是这个提醒。</p>
+  </div>
+
+  <div class="lesson-note">
+    <b>编译输出里有一堆 warning</b>
+    <p><code>-Wall -Wextra</code> 会把编译器能发现的疑点都提醒出来。看到 <code>unused variable</code> 这类警告先别慌，它指的是「这个变量声明了却没人用」——通常是你写了名字但还没用上，或者打错了一个字。</p>
+  </div>
+
+  <div class="lesson-note">
+    <b>想不起来某个形状了</b>
+    <p>回去翻课件，<code>0001</code> 到 <code>0004</code> 四课里都有现成的写法可以借鉴：读入的形状在 <code>0004</code>，小数与整数除法的形状在 <code>0003</code>。<b>借鉴不等于抄</b>——把它们按你这个题目的需要重新组织一遍。</p>
+  </div>
+
+  <h2>卡壳顺序</h2>
+
+  <ol>
+    <li>读报错：先看文件名与行号，再看那一行的上一行。</li>
+    <li>看这一页的「最可能卡在哪」。</li>
+    <li>看 <a href="../../lab/0005-exp-1-first-program/">任务目录</a> 里的 <code>自查清单.md</code>。</li>
+    <li>还是卡住，才对照 <code>lab/solutions/exp-1-first-program/temp.cpp</code>。</li>
+  </ol>
+
+  <ul class="lesson-resources">
+    <li><a href="../../lab/0005-exp-1-first-program/README.html">实验一任务（含预期输出与自查清单）</a><span class="lesson-resources__meta">本课程 · 留白任务、输入文件与验收标准</span></li>
+    <li><a href="https://www.oreilly.com/library/view/c-primer-plus/9780132781145/">C++ Primer Plus（第六版）</a><span class="lesson-resources__meta">书 · 第 2 章与第 3 章的完整实例</span></li>
+  </ul>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0004-input-output.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">让用户把数据敲进来</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0006-branch-if.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">分支：让程序会判断</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0005 实验一：跑通编译运行循环 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<script src="../../assets/katex/katex.min.js" defer></script>
+<script src="../../assets/lesson-math.js" defer></script>
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

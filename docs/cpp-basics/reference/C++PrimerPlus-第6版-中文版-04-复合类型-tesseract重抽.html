@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C++ Primer Plus（第 6 版）中文版 · 第 4 章 复合类型 · C++ 零基础入门（计算机专业大一）</title>
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回科目</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">参考文档</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>C++ Primer Plus（第 6 版）中文版 · 第 4 章 复合类型</h1>
+<blockquote><p>抽取方式：页面图像 → tesseract 5.5.2 <code>-l chi_sim+eng --psm 3</code>，450 dpi。<br>PDF 页范围 88–142（书页 70–124）。<br>这是<strong>重抽稿</strong>，用于替代原 PDF 文本层里质量很差的第 4/7 章；引用前仍以 PDF 原页图像为准。</p></blockquote>
+<hr>
+<h3>第 70 页（PDF p88）</h3>
+<p>本章内容包括:</p>
+<p>创建和使用数组。</p>
+<p>创建和使用C-风格字符串。<br>创建和使用 string RFA.</p>
+<p>使用方法 getline( )和 get( )读取字符串。<br>混合输入字符串和数字。<br>创建和使用结构。<br>创建和使用共用体。</p>
+<p>创建和使用枚举。<br>创建和使用指针。</p>
+<p>使用new 和 delete 管理动态内存。<br>创建动态数组。</p>
+<p>创建动态结构。</p>
+<p>自动存储、静态存储和动态存储。<br>vector 和 array 类简介。</p>
+<p>假设您开发了一个名叫 User-Hostile 的计算机游戏，玩家需要用智慧来应对一个神秘、险恶的计算机<br>界面。现在，必须编写一个程序来跟踪 5 年来话戏每月的销售量，或者希望盘点一下与黑客英雄累积的较<br>量回合。您很快发现，需要一些比 C++的简单基本类型更复好的东西，才能满足这些数据的要求，C++也<br>提供了这样的东西一一复合类型。这种类型是基于基本整型和浮点类型创建的。影响最为深远的复合类型<br>是类，它是将学习的 OOP 的堡垒。然而，C++还支持几种更普通的复合类型，它们都来自C 语言。例如，<br>数组可以存储多个同类型的值。一种特殊的数组可以存储字符串〈一系列字符)。结构可以存储多个不同类<br>型的值。而指针则是一种将数据所处位置告诉计算机的变量。本章将介绍所有这些复合类型《类除外)，还<br>将介绍 new 和 delete 及如何使用它们来管理数据。奶外，还将简要地介绍 string KR. “CHEAT APA<br>字符串的途径。</p>
+<p>4.1 数组</p>
+<p>数组 (array) 是一种数据格式，能够存储多个同类型的值。 例如，数组可以存储 60 个 int 类型的值 (这<br>We (ET fen wee 5 年来的销售量)、12 个 short fh “这些值表示每个月的天数) 或 365 个 float 值〈这些值指<br>出一年中每天在食物方面的开销)。每个值都存储在一个独立的数组元素中, 计算机在内存中依次存储数组<br>的各个元素。</p>
+<p>要创建数组，可使用声明语句。数组声明应指出以下三点:</p>
+<h3>第 71 页（PDF p89）</h3>
+<p>-全二 存和在每个元素中的值的类型;      ra<br>@. BAZ.        aa =  =<br>oO  数组中的元素数     ee LS</p>
+<p>和 MEBANE wndare GORMa eM) Rea et</p>
+<p>ghee cae oes -   oe creates array” of a2 sasiet.</p>
+<p>re  fe ee</p>
+<p>typename: ‘arrayName petvayatae)</p>
+<p>Sts 下面的声明创建一个名为 montfs 的数级，该数组有 2 NER, AP EAA ME H/F short EME.</p>
+<p>7 表达式 arraySize 指定元素数刁，  它必 AUER Hi Gi 10) 8 cet fit,  oes ees 《如 ge ao<br>1 sizeof kint)，即其中所有的值在编译时都是已知的。县体地说，arraySize 契能是变量;  SERIAL A PF |</p>
+<p>作为复合类型的数组</p>
+<p>“数组之所以被称为复合类型， 是因为它是使用其仓美型来创建的(C 语言 使用术语， .派生美型* 二但而:</p>
+<p>于 CH+对类关系使用术语“派生"，所以它必须创建一个新术语) 不能仅仅将革种东西声明为数组，它必，， : -</p>
+<p>er :须是特定类型的数组。 :没有通用的数组类型， 但存在很多特定的数组类型， 如 char 数组或 long 数组。例如，<br>Ce, WARM ES ee SS gs fae Se</p>
+<p>loans 的:类型和不是“教组" ，而是“float #20", 这强调了 loans. 数组是使用float 类型创建的。</p>
+<p>数组的很多用途都是基于这样一个事实，可以单独访问数组元素。方法是使用下标或索引来对元素进-</p>
+<p>行编号。  C3+烤组从 中开始编号 (这没有商量的余地, 必须从 0 FERS. Pascal Al BASIC 用户必须调整习惯)。</p>
+<p>-CA峡使用带索引的方括号表示法来指定数组元素* 例如,mionths[0]是 months 数组的第一个元素, months[11T …</p>
+<p>是最后一个元素。 注意，最后一个元素的索引比数组长度小工(参由图 4.1)。因此，数组声明能够使用一<br>个声明创建大量的变量然后便可以用索引来标识和访问各个元素。</p>
+<p>int ragnar[7];</p>
+<p>mel<br>《或索引)</p>
+<p>ragnar</p>
+<p>第2个元素<br>第1个元到</p>
+<p>ragnar是一个包言7个元素的歼组，每沾元素<br>者是int当型 的变量</p>
+<p>图4.1 创建数组</p>
+<h3>第 72 页（PDF p90）</h3>
+<p>有效下标值的重要性<br>编译器不会检查使用的下标是否有效。 例如,如果将一个值暴给不存在的元素 months[101]，编译器并<br>不会指出错误。但是程序运行后，这种赋值可能引发问题，它可能破坏数据或代码，也可能导致程序异常<br>终止。所以必须确保程序只使用有效的下标值。<br>程序清单 4.1 中的马铃薯分析程序说明了数组的一些属性，包括声明数组、给数组元素赋值以及初始<br>化数组。</p>
+<p>程序清单 4.1 arrayone.cpp</p>
+<p>// arrayone.cpp -- small arrays of integers</p>
+<p>#include &lt;iostream&gt;</p>
+<p>int main({)</p>
+<p>using namespace std;<br>int yams [3];    // creates array with three elements<br>yams [0] = 7;   // assign value to first element<br>yams[1l] = 8;</p>
+<p>yams [2] = 6;</p>
+<p>int yameosts[3] = {20, 30, 5}; // create, initialize array<br>// NOTE: If your C++ compiler or translator can't initialize<br>// this array, use static int yamcosts([3] instead of<br>// int yamcosts [3]</p>
+<p>cout &lt;&lt; "Total yams = ";</p>
+<p>cout &lt;&lt; yams[0] + yams[1] + yama[2] &lt;&lt; endl;</p>
+<p>cout &lt;&lt; "The package with " &lt;&lt; yams[1] &lt;&lt; " yams costs ";<br>cout &lt;&lt; yamcosts[1] &lt;&lt; " cents per yam. \n";</p>
+<p>int total = yams[0] <em> yamcosts[0) + yams[1] </em> yamcosts([1];<br>total = total + yams[2] * yameosts [2];</p>
+<p>cout &lt;&lt; "The total yam expense is " &lt;&lt; total &lt;&lt; " cents.\n";</p>
+<p>cout &lt;&lt; "\nSize of yams array = " &lt;&lt; sizeof yams;<br>cout &lt;&lt; " bytes. \n";</p>
+<p>cout &lt;&lt; "Size of one element = " &lt;&lt; sizeof yams [0];<br>cout &lt;&lt; " bytes, \n";</p>
+<p>return 0;</p>
+<p>下面是该程序的输出:</p>
+<p>Total yams = 21<br>The package with 8 yams costs 30 cents per yam.<br>The total yam expense is 410 cents,</p>
+<p>Size of yams array = 12 bytes.<br>Size of one element = 4 bytes.</p>
+<p>4.1.1 程序说明</p>
+<p>该程序首先创建一个名为 yams 的包含 3 个元素的数组。由于 yams 有 3 个元素，它们的编号为0--2，<br>因此 arrayone.cpp 使用索引 0一2 分别给这三个元素赋值。Yam 的每个元素都是 int，都有 int 类型的权力和<br>特权，因此 arrayone.cpp 能够将值赋给元素、将元素相加和相乘，并显示它们。</p>
+<h3>第 73 页（PDF p91）</h3>
+<p>程序给 yam 的元素赋值时，绕了一个大弯。C++允许在声明语句中初始化数组邢素。程序清单 4.1 使<br>用这种捷径来给 yamcosts 数组赋值</p>
+<p>int yamcosts[3] = {20, 30, 5};</p>
+<p>NRHA SE (初始化列表)，并将它们用花括号括起即可。列表中的室格是可选<br>的。如果没有初始化函数中定义的数组，则其元素值将是不确定的，送意味着元素的值为以前驻留在该内<br>存单匹中的值。</p>
+<p>接下来,程序使用数组值进行一些计算。 程序的这部分由于包含了下标和括号;所以看上去有些混乱。<br>第 5 章将介绍 for 循环，它可以提供一种功能蝇大的方法来处理数组，因而不用显式地书写每个索引。同<br>时，我们仍然坚持使用小型数组。</p>
+<p>您可能还记得,- sizeof 运算符返回类型或数据对象的长度 CRE AS). 注意，如果将-sizeof 运算符<br>用主数组名，得到的将是整个数组中的字节数。 但如果将sizeof 用于数组元素，则得到的将是元素的长度<br>【单位为字节)。这表明 yams 是一个数组，而:yams上H]具是一个 int 变量:</p>
+<p>4.1.2 数组的初始化规则</p>
+<p>e++有儿条关于初始化数组的规则 它们限制 FRI HEI, 决定了数组的元素数目与初始化器中<br>值的数证不相同时将发生的情况。我们来看看这些规则-<br>只有在定义数组时才能使用初始化，此后就不能使用了，也不能将一个数组赋给另一个数组:</p>
+<p>hand[4] = £5, 6, 7, 9};         LA not allowed</p>
+<p>MAT, HY EHF bx opal er 2 28 OB AY ee EL</p>
+<p>eGR, PEGE MEE b&gt; Bc48 eA. Blo, Fm 6) eet hotelTips 的前两个</p>
+<p>如果只对数组的一部分进行韦始化，则编译器将把其他元素设置为 0s 因此，将数组中所有的元素<br>都初始化为 0 非常简单一一只要显式地将第= -企元素初始化为0,然后让编译器将其他元素都初始化为0<br>即可:</p>
+<p>leng EDbalael500EI-= {09};</p>
+<p>Oe He 4} ASE {0}. 则第一个元素被设置为1，其他元素都被设置六0。</p>
+<p>如傈初始化数组时方所导向《日厂为空，C++编译器将计算元素个数。例如，对于下面的声明:</p>
+<p>short. things{} = {= 5, 3, 8};</p>
+<p>编译器将使things 数组包含 4个元素。<br>让编译器去做<br>通常 证编译器计算元素个数是种很槽的散法，因为其计数让能与您想象的不一样。例如，您<br>可能不小恬在列表中遗漏了一个值。然而; 这种方法对于将字符数组初始化为一个字特串来说比较<br>安全，很快您将明白这一点 如果主要关心的问题是程序，而不是自己是否知道数组的大小，则可<br>vA ik FF i -<br>short things{} = {Ff 5-3, BFF</p>
+<p>int-num elements = sizeof things / sizeof (short);</p>
+<p>ae oe akan Neiman ae<br>i Cot 数组初给化方法</p>
+<h3>第 74 页（PDF p92）</h3>
+<p>型。数组以前就可使用列表初始化，但 C++11 中的列表初始化新增了一些功能。<br>首先，初始化数组时，可省略等号〈=):</p>
+<p>double earnings[4] {1.2e4, 1.6e4, l.le4, 1.7e4}; // okay with C++11</p>
+<p>其次，可不在大括号内包含任何东西，这将把所有元素都设置为零:</p>
+<p>unsigned int counts[10] = {}; // all elements set to 0<br>float balances[100] {};        // all elements set to 0</p>
+<p>A=, WRC IERERR, WES 3 章介绍过:</p>
+<p>long plifs[] = {25, 92, 3.0};         // not allowed</p>
+<p>char slifs[4]) {'h', 'i', 1122011, '\0'}; // not allowed</p>
+<p>char tlifs[4] {'h', 'i', 112, '\o"'};   // allowed</p>
+<p>(LER, B-KRADP MU, AAFP ARRRABM eae. BN Aa<br>小数点后面为零。第二条语句也不能通过编译，因为 1122011 超出了 char 变量的取值范围《这里假设<br>char 变量的长度为8位)。第三条语句可通过编译，因为虽然 112 是一个 int 值，但它在 char 变量的取<br>值范围内。</p>
+<p>C++标准模板库〈STL) 提供了一种数组替代品    模板类 vector，而 C++11 新增了模板类 array 。<br>这些替代品比内置复合类型数组更复杂、更灵活，本章将简要地讨论它们，而第 16 章将更详细地讨论</p>
+<p>它们，</p>
+<p>42 FS</p>
+<p>字符串是存储在内存的连续字节中的一系列字符。C++处理字符串的方式有两种。第一种来自 C<br>语言，常被称为 C-风格字符串〈C-style string)。本章将首先介绍它，然后介绍另一种基于 string 类库<br>的方法。</p>
+<p>存储在连续字节中的一系列宇符意味着可以将字符串存储在 char 数组中，其中每个字符都位于自己<br>的数组元素中。 字符串提供了一种存储文本信息的便捷方式，如提供给用户的消息 忆请告诉我您的瑞<br>士银行账号”) 或来自用户的响应 (您肯定在开玩笑”")。C-风格字符串具有一种特殊的性质，以空字<br>符 (null character) 结尾，空字符被写作\0，其 ASCII 码为0，用来标记字符串的结尾。例如，请看下<br>面两个声明，</p>
+<p>char-dog[@j =-{ 'h',. "et; "a'y Sat, 'xty § ty tks, her}       // not a string!</p>
+<p>char cat(@) = {'£", ‘at, IE tet, Us) teat, fat, “Ws       // a string!</p>
+<p>这两个数组都是 char 数组, 1A BIE. EAE C-风格字符串而言至关重要。 例如，<br>C++有很多处理字符串的函数，其中包括 cout 使用的那些函数。它们都逐个地处理字符串中的字符，直到<br>到达空字符为止。如果使用 cout 显示上面的 cat 这样的字符串，则将显示前了个字符，发现室字符后停止。<br>但是，如果使用 cout 显示上面的 dog 数组〔〈它不是字符串)，cout 将打印出数组中的8 个字母，并接着将<br>内存中随后的各个字节解释为要打印的字符，直到遇到空字符为止。由于空字符〈实际上是被设置为 0 的<br>字节)》 在内存中很常见，因此这一过程将很快停止。但尽管如此，还是不应将不是字符访的字符数组当作<br>字符串来处理。</p>
+<p>在 cat 数组示例中，将数组初始化为字符串的工作看上去元长乏味一一使用大量单引号，且必须记住<br>加上空字符。 不必担心，有一种更好的、将字符数组初始化为字符串的方法一一只需使用一个用引号括起<br>的字符串即可,这种字符串被称为字符串常量 (string constant) 或字符串字面值 (string literal)，如下所示;</p>
+<p>char bird[11] = "Mr. Cheeps";     // the \0 is understood<br>char fish[] = "Bubbles";          // let the compiler count</p>
+<p>用引号括起的字符串隐式地包括结尾的空字符，因此不用显式地包括它〈参见图 4.2)。另外，各种</p>
+<h3>第 75 页（PDF p93）</h3>
+<p>C++输入工具通过键盘输入，将字符串读六到 char 数组中时，将自动加上结尾的空字符〈如果在运行程<br>序清单 4.1 中的程序时发现，必须使用关键字 static 来初始化数组，则初始化上述 char 数组时也必须使<br>用该关键字 )。</p>
+<p>当然，应确保数组足够大，能够存储字符串中所有字符一一包括空字符。使用字符串常量初始化字符<br>数组是这样的一种情况，即让编译器计算元束数目更为安全。让数组比字符串长没有什么害处，只是会浪<br>费一些空间而已。这是因为处理字符串的函数根据空字符的位置，而不是数组长度来进行处理。C++对字<br>符串长诺没有限制。</p>
+<p>警告: 在确定丰储字符串所需的最短数组时，别忘了将结尾的空字符计算在内。</p>
+<p>char boss[(8)] = "Bozo";</p>
+<p>图42 pA eh eee es</p>
+<p>注意，字符串常量【使用双引号) 不能与字符常量使用单引号) BR. PAR CU's) 是<br>字符串编码的简写表示。在 ASCH 系统上，'S'只是 83 的另一种写法，因此，下面的语句将 83 赋给<br>shirt_size:</p>
+<p>char shirt_size = 'S';          // this is fine</p>
+<p>{A"S"E SFE in, ERAT SH CEE S 和\0) 组成的字符串。更糟糕的是，"S"实际上表<br>示的是字符串所在的内存地址。因此下面的语句试图将一个内存地址赋给 shirt_size:</p>
+<p>char shirt_size = "S";         // illegal type mismatch</p>
+<p>由于地址在 C++中是一种独立的类型，因此 C++编译器不多许这种不合理的做法〈本章后面讨论指针<br>后，将回过头来讨论这个问题 )。</p>
+<p>4.2.1 拼接字符串常量</p>
+<p>有了时候，字符串很长，无法放到一行中。C++允许拼接字符串字面值，即将两个用引号括起的字符串<br>合并为一个。 事实上，任何两个由宅白〈空格、制表符和换行符) 分隔的字符串常量都将自动拼接成一个。<br>因此，下面所有的输出语句都是等效的;</p>
+<p>cout &lt;&lt; "I'd give my right arm to be" "a great violinist.\n";<br>cout &lt;¢ "I'd give my right arm to be a great violinist.\n";<br>Gout &lt;&lt; "I'd give my right ar"</p>
+<p>"m to be a great violinist.\n";</p>
+<p>注意，拼接时不会在被连接的字符串之间添加室格，第二个字符串的第一个字符将紧跟在第一个<br>字符串的最后一个字符《不考虑\0) 后面。第一个字符串中的\0 字符将被第二个字符串的第一个字符<br>取代。</p>
+<h3>第 76 页（PDF p94）</h3>
+<p>“aL. aA" inlan- array, of. 15-bytes ic) 9 4 SEs     alt ees</p>
+<p>422 在数组中使用字符串</p>
+<p>要将字符串存储到数组中，最常用的方法有两种一一将数组初始化为字符串常量、将键盘或文件<br>输六读入到数组中。 程序清单 4.2 演示了这两种方法,人筷将一个数给初始化为用引号括超的字符串，<br>并使用cin 将一个输入字符串放和到另一个数组中。该程序还使用了标准C语言库函数 strlen()求确定字</p>
+<p>符串的长度。标准头文件 string (老式实现为 string.h) 提供了该函数以及很多与字符串相关的其他函<br>数的声明。</p>
+<p>程序清单 4.2 string.cpp</p>
+<p>// strings.cpp -- storing strings in an array</p>
+<p>#include &lt;fostream=&gt;</p>
+<p>#include-&lt;cstring&gt; /j/ for the strlen{) function<br>int maint]<br>using namespace std;<br>const int Size = 15;<br>char namel [Size] ;-—<br>char name2[Size] = "C++owboy"; // initialized array<br>// NOTE: some impFementations may require the static keyword</p>
+<p>// empty array</p>
+<p>{/ to initialize the array namez</p>
+<p>cout &lt;&lt; "Howdy ! I'm " &lt;&lt; name2;<br>“cout: &lt;&lt;"! What! s your mame? \a*<br>ona bean &gt;&gt; namely |    和</p>
+<p>cout &lt;&lt; "Well,  " s namer-&lt;&lt; ao your ， name has me</p>
+<p>ed as NOs |. Sage ae  ~//-set. to_null- character.  St mane! gee “es Sey</p>
+<ul>
+<li>_-cout &lt;&lt; "Here are thé first.3 characters Of - AY manic i</li>
+</ul>
+<p>ergs = eoute &lt;8 “name? &lt;&lt; endl:  ae ae a ere eS Ts ee SER aah A a ae<br>oe wore ane cae a    oreturn. OF     Se ise aa ae ae ae  Se Toner at Piha Pes eed ie terete eee ee 7 is . ae eae 了</p>
+<p>Howdy! ‘I'm C++owboy !, What! s— “your: ‘name? - as SE ny EE ay MM oy ae ed RE ee    ;</p>
+<p>“lwelly  -Basicman,  “your” nanie: has” 8 ‘Veteeee cS is. ‘stored:     Sa tee ee Sealing eames nae pear</p>
+<p>teeters  et  SE na or  aba eins     a  ro<br>aa!       ere  mie ee See Eis gs ane mat    ces Hote</p>
+<p>Set eee 市可以学到什么服? 首先，sizeof 运算符指出整个数组的长度:-</p>
+<p>数组的长度不能短于 strlen. (cosmic). +F:</p>
+<p>_ tHE -namel Al name2 是数组， pen rerirry tree? 2 人 ware at se ne -<br>-该程序将name2D]设置为空字符- 这使得字符让在第3 个字符后即结束，</p>
+<p>”我到此组的第一个字符 另外，<br>“量然数组中还有其他的字符 (参见图 4.37。 eee</p>
+<p>= : ss = FEY GES Ht MOR A nem A mel PLE. wir Se  :</p>
+<p>these           二 二 =k</p>
+<p>a   ie       ars</p>
+<p>‘cout &lt; si array   &lt;&lt; Bizeof (namel) 59 bytess\any eae          Peterlee</p>
+<p>Se 2 直面是读程序的运行情况;             git Basan sok ne as te ae ine Pi ek. aa oat st</p>
+<p>ae ‘Here are. ‘the: first: 3 chavacter®, bE: ny name:  coca   ee A JSEe a Mat Egret Bo ee eagce ek ae = a<br>1S EH, 1 stead eden</p>
+<p>ag Pec etre ties -而不是数组本身的长度。另外，strlen( )只计算起更的字符，</p>
+<ul>
+<li>2  因此，对于了asicman,=返回的值为8，而不是9 如果 cosinic IEF Hi -  esses i,</li>
+</ul>
+<p>oS Your initial: is Br: ee re 机   edu annie fe ae    eat ete:     .     :</p>
+<h3>第 77 页（PDF p95）</h3>
+<p>第4章 复合类型                  77</p>
+<p>数组长度后，当需要修改程序以使用不同的数组长度时，工作将变得更简单一一只需在定义符号常量的地<br>方进行修改即可。</p>
+<p>const int ArSize = 15;<br>char namez[ArSize] = “G+sowboy";</p>
+<p>字符申</p>
+<p>图4.3 使用W Ae TF</p>
+<p>4.2.3 字符串输入</p>
+<p>程序 strings.cpp 有一个缺陷，这种缺陷通过精心选择输入被掩盖掉了。程序清单 4.3 揭开了它的面纱，<br>揭示了字符串输入的技巧。</p>
+<p>程序清单 4.3 instr1.cpp</p>
+<p>// instrl.cpp -- reading more than one string</p>
+<p>#include &lt;iostream&gt;</p>
+<p>using namespace std;<br>const int ArSizée = 20;<br>char name [ArSize] ;<br>char dessert [ArSize] ;</p>
+<p>cout &lt;&lt; "Enter your name:\n";</p>
+<p>eout &lt;&lt; "Enter your favorite dessert: \n";<br>cin =&gt; dessert;</p>
+<p>cout &lt;&lt; "I have some delicious " &lt;&lt; dessert;<br>return 0;</p>
+<p>该程序的意图很简单: DORA RRMA 4A SORA. oR. PEPE<br>Enter your name:</p>
+<p>Alistair Dreeb</p>
+<p>Enter your favorite dessert:</p>
+<p>I have some delicious Dreeb for you, Alistair.</p>
+<p>我们甚至还没有对“输入甜点的提示”作出反应，程序便把它显示出来了，然后立即显示最后一行。<br>cin 是如何确定已完成字符串输入呢? 由于不能通过键盘输入空字符,因此 cin 需要用别的方法来确定</p>
+<h3>第 78 页（PDF p96）</h3>
+<p>字符串的结尾位置。cin 使用空白〈空格、制表符和换行符) 来确定字符串的结束位置，这意味着 cin 在获<br>取字符数组输入时只读取一个单词。读取该单词后, cn 将该字符串放到数组中, 并自动在结尾添加空字符。</p>
+<p>这个例子的实际结果是，ein 把 Alistair 作为第一个字符串，并将它放到 name 数组中。 这把 Dreeb ff<br>在输入队列中。当 cin 在输入队列中搜索用户喜欢的甜点时，它发现了 Dreeb，因此 cin 读取 Dreeb，并将<br>它放到 dessert WAY (SU 4.4).</p>
+<p>emstaset.<br>efEname #4 Pp.</p>
+<p>Win Tes.</p>
+<p>读取第1个字符串， |         ee</p>
+<p>Kk: zk</p>
+<p>图 4.4 使用 cin EER SPT A</p>
+<p>iT BE, MATAR AT RELL A BK Ga PRA aHK). Bix —FHER cin, Hh<br>实不能防止将包含 30 个字符的字符串放到 20 个字符的数组中的情况发生，</p>
+<p>很多程序都依赖于字符串输入，因此有必要对该主题做进一步探讨。 我们必须使用 cin 的较高级特性，<br>这将在第 17 章介绍。</p>
+<p>4.2.4 每次读取一行字符串输入</p>
+<p>每次读取一个单词通常不是最好的选择。例如，假设程序要求用户输入城市和名，用户输入 New York<br>或 Sao Paulo. 您希望程序读取并存储完整的城市和名，而不仅仅是 New 或 Sao。要将整条短语而不是一个单<br>词作为字符串输入，需要采用另一种字符串读取方法。具体地说,需要采用面向行而不是面向单词的方法。<br>幸运的是，istream PMA Ci cin) 提供了一些面向行的类成员函数，getiine( )和 get( )。这两个函数都读<br>取一行输入，直到到达换行符。然而，随后 getline( )将: 丢弃换行符- 而 get( )将换行符保留在输六序列中，<br>下面详细介绍它们，首先介绍 getline( ).                                 _</p>
+<p>1 面向行的输入; getlinet )</p>
+<p>getline( )函数读取整行，它使用通过回车键输入的换行符来确定输入结尾。要调用这种方法，可以使<br>用 cin.getline( )。该函数有两个参数。第一个参数是用来存储输入行的数组的名称，第二个参数是要读取的<br>字符数。如果这个参数为 20，则函数最多读取 19 个字符，  eee<br>*£. getline( )成员函数在读取指定数目的字符或遇到换行符时停止读取。</p>
+<p>例站，假设要使用 getline( )将姓名读入到一个包含20 SICH name 数组中 。  可以使用这样的函数<br>调用，</p>
+<p>cin.getline (mame, 20) ;</p>
+<p>这将把一行读入到 name 数组中一一如果这行包含的字符不超过 19 个。(getline( )成员函数还可以接受-<br>第三个可选参数，这将在第 17 章讨论.)</p>
+<h3>第 79 页（PDF p97）</h3>
+<p>第4章 复台类型                  79</p>
+<p>程序清单 4.4 将程序清单 4.3 修改为使用 cin.getline( )，而不是简单的 cin。除此之外，该程序没有做其<br>他修改。</p>
+<p>程序清单 4.4 instr2.cpp</p>
+<p>// instr2.cpp -- reading more than one word with getline</p>
+<p>#include &lt;iostream&gt;<br>int main()</p>
+<p>using namespace std;<br>const int ArSize = 20;<br>char name [ArSize] ;<br>char dessert [ArSize] ;<br>cout &lt;&lt; "Enter your name:\n";<br>cin.getline(name, ArSize); // reads through newline<br>cout &lt;&lt; "Enter your favorite dessert: \n";<br>cin.getline(dessert, ArSize};<br>cout &lt;&lt; "I have some delicious " &lt;&lt; dessert;<br>return 0;</p>
+<p>下面是该程序的输出:</p>
+<p>Enter your name:<br>Dirk Hammernose</p>
+<p>Enter your favorite dessert:<br>Radish Torte</p>
+<p>I have some delicious Radish Torte for you, Dirk Hammernose.</p>
+<p>该程序现在可以读取完整的姓名以及用户喜欢的甜点! getline( )函数每次读取一行。它通过换行符来<br>确定行尾，但不保存换行符。相反，在存储字符串时，它用空字符来替换换行符〔参见图 4.5)。</p>
+<p>代码+<br>char name[1Q]:</p>
+<p>cout &lt;&lt; “Enter your name: “|<br>cin. getline(name, 10);</p>
+<p>用户键入Jud来作出响应。然后接下</p>
+<p>Enter your mame; Jud {ENTER</p>
+<p>cin. getlineQiM “Jud” 以及用户<br>技Enter刍而生成的换行符，并将换村<br>符悍换为空字符</p>
+<p>换行符枝替换为宝字符</p>
+<p>图 4.5 getline( )读取并替换换行符</p>
+<h3>第 80 页（PDF p98）</h3>
+<p>2，面向行的输入: get()</p>
+<p>我们来试试另一种方法。istream 类有另一个名为 get( )的成员函数，该函数有几种变体。其中一种变<br>体的工作方式与 getline( )类似，它们接受的参数相同，解释参数的方式也相同，并且都读取到行尾。但 get<br>并不再读取并丢弃换行符，而是将其留在输入队列中。假设我们连续两次调用 get( ):</p>
+<p>cin.get (name, ArSize);</p>
+<p>cin.get(dessert, Arsize); // a problem</p>
+<p>由于第一次调用后，换行符将留在输入队列中，因此第二次调用时看到的第一个字符便是换行符。因<br>此 get( )认为已到达行尾，而没有发现任何可读取的内容。如果不借助于帮助，get( )将不能跨过该换行符。<br>幸运的是,get( )有另一种变体. 使用不带任何参数的 cin.get( )调用可读取下一个字符(即使是换行符)，<br>因此可以用它来处理换行符，为读取下一行输入做好准备。也就是说，可以采用下面的调用序列;<br>cin.get(nmame, ArSize);      /f read first line</p>
+<p>cin.get(dessert, Arsize);   // read second line</p>
+<p>Fi — FEA get( )的方式是将两个类成员函数拼接起来〈合并)，如下所示，</p>
+<p>cin.get (name, ArSize).get(); // concatenate member functions</p>
+<p>之所以可以这样做，是由于 cin.get (name, ArSize) 返回一个 cin HR, BORA AKU getf )<br>Paes. 同样，下面的语句将把输入中连续的两行分别读入到数组 namel 和 name2 中，其效果与两次调用<br>cin.getline( )相辣:</p>
+<p>cin.getline(namel, ArSize).getline(name2, ArSize} ;</p>
+<p>程序清单 4.5 采用了拼接方式。第 11 章将介绍如何在类定义中使用这项特性。<br>程序清单 4.5 instr3.cpp</p>
+<p>// instr3.cpp -- reading more than one word with get() &amp; get/)</p>
+<p>#include &lt;iostream&gt;</p>
+<p>int main(}</p>
+<p>using namespace std;<br>const int ArSize = 20;<br>char name [ArSize] ;<br>char dessert [ArSize] ;</p>
+<p>cout &lt;&lt; "Enter your name: \n";</p>
+<p>ein.get (name, ArSize).get();    // read string, newline<br>cout «&lt; "Enter your favorite dessert: \n";<br>cin.get(dessert, ArSize).get();</p>
+<p>cout &lt;&lt; "I have some delicious " &lt;&lt; dessert;</p>
+<p>return 0;</p>
+<p>下面是程序清单 4.5 中程序的运行情况:</p>
+<p>Enter your name:</p>
+<p>Mai Parfait</p>
+<p>Enter your favorite dessert:</p>
+<p>Chocolate Mousse</p>
+<p>I have some delicious Chocolate Mousse for you, Mai Parfait.</p>
+<p>需要指出的一点是，C++允许函数有多个版本,条件是这些版本的参数列表不同。如果使用的是 cin.get<br>Cname，ArSize)，则编译器知道是要将一个字符串放入数组中，因而将使用适当的成员函数。如果使用的<br>是 cin.get( )，则编译器知道是要读取一个字符。第 8 章将探索这种特性一一函数重载。</p>
+<h3>第 81 页（PDF p99）</h3>
+<p>为什么要使用 get( )，而不是 getline( WE? 首先，老式实现没有 getline(). Hk, get( )使输入更仔细。<br>例如，假设用 get( )将一行读入数组中。 如何知道停止读取的原因是由于已经读取了整行,而不是由于数组<br>已填满呢? 查看下一个输入字符，如果是换行符，说明已读取了整行，否则，说明该行中还有其他输入。<br>第 17 章将介绍这种技术。总之，egetline( )使用起来简单一些，但 get( )使得检查错误更简单些。可以用其<br>中的任何一个来读取一行输入，只是应该知道，它们的行为稍有不同。</p>
+<p>3.空行和其他问题</p>
+<p>当 getline( )或 get( )读取空行时,将发生什么情况? 最初的做法是,下一条输入语句将在前一条 getlinel )<br>或 get( )结束读取的位置开始读取，但当前的做法是，当 get( )〈不是 getline( )) 读取空行后将设置失效位<br>(failbit)。这意味着接下来的输入将被阻断，但可以用下面的命令来恢复输入:</p>
+<p>cin.clear();</p>
+<p>另一个潜在的问题是，输入字符串可能比分配的空间长。如果输入行包舍的字符数比指定的雪，则<br>getline( )和 get( )将把余下的字符留在输入队列中，而 getline( )还会设置失效位，并关闭后面的输入。<br>第5、6章和第 17 章将介绍这些属性，并探讨程序如何避免这些问题。</p>
+<p>425 ”混合输入字符串和数字<br>混合输入数字和面向行的字符串会导致问题。请看程序清单 4.6 中的简单程序。<br>程序清单 4.6 numstr.cpp</p>
+<p>// numstr.cpp -- following number input with line input</p>
+<p>#include &lt;iostream&gt;<br>int main()<br>using namespace std;<br>cout &lt;&lt; "What year was your house built?\n";<br>int year;<br>cout &lt;&lt; "What ig its street address?\n";<br>char address [80];<br>cin.getlineladdress, 80);</p>
+<p>cout &lt;&lt; "Year built: " &lt;&lt; year &lt;&lt; endl;<br>eout &lt;&lt; "Address: "&lt;&lt; address &lt;&lt; endl;<br>cout &lt;&lt; "Done! \n";</p>
+<p>return 0;</p>
+<p>该程序的运行情况如下:</p>
+<p>What year was your house built?</p>
+<p>What is its street address?<br>Year built: 1966</p>
+<p>Address</p>
+<p>Done!</p>
+<p>用户根本没有输入地址的机会。问题在于，当 cin 读取年份，将回车键生成的换行符留在了输入队列<br>中。后面的 cin.getline( )看到换行符后，将认为是一个空行，并将一个空字符串赋给 address 数组。解决之<br>道是,在读取地址之前先读取并丢弃换行符。这可以通过几种方法来完成，其中包括使用没有参数的 get( )<br>和使用接受一个 char 参数的 get( )，如前面的例子所示。可以单独进行调用，</p>
+<p>cin.get ();   f/f or cin.get (ch);</p>
+<h3>第 82 页（PDF p100）</h3>
+<p>也可以利用表达式 cin&gt;&gt;year 返回 cin 对象，将调用拼接起来:<br>{cin &gt;&gt; year).get(); // or (cin &gt;&gt; year).get (ch);<br>按上述任何一种方法修改程序清单 4.6 后，它便可以正常工作:<br>What year was your house built?</p>
+<p>What is its street address?</p>
+<p>43821 Unsigned Short Street</p>
+<p>Year built: 1966</p>
+<p>Address: 43821 Unsigned Short Street</p>
+<p>Done !</p>
+<p>C++程序常使用指针《而不是数组) 来处理字符串。我们将在介绍指针后，再介绍字符串这个方面的<br>特性。下面介绍一种较新的处理字符串的方式: C++ string 类。</p>
+<p>4.3 string 类简介</p>
+<p>ISO/ANSI C++98 标准通过添加 string 类扩展了 C++库，因此现在可以 string 类型的变量〔〈使用 C++的<br>RAMS) 而不是字符数组来存储字符串。您将看到，string 类使用起来比数组简单，同时提供了将字<br>符串作为一种数据类型的表示方法。</p>
+<p>要使用 string 类，必须在程序中包含头文件 string。string 类位于名称空间 std 中, 因此您必须提供一条<br>using 编译指令，或者使用 std::string 来引用它。string 类定义隐藏了字符串的数组性质，让您能够像处理普<br>通变量那样处理字符串。程序请单 4.7 说明了 string 对银与字符数组之间的一些相同点和不同点。</p>
+<p>程序清单 4.7 strtypet.cpp</p>
+<p>// strtypel.cpp -- using the C++ string class</p>
+<p>#include &lt;iostream&gt;</p>
+<p>#include &lt;strings               // make string class available<br>ink main()</p>
+<p>using namespace std;</p>
+<p>char charrl [20];            // create an empty array</p>
+<p>char charr2(20] = "jaguar"; // create an initialized array<br>string strl;                // create an empty string object<br>string str2 = "panther";    // create an initialized string</p>
+<p>cout &lt;&lt; "Enter a kind of feline: ";</p>
+<p>cin =&gt; charrl;</p>
+<p>cout &lt;&lt; "Enter another kind of feline: "</p>
+<p>cout &lt;&lt; "Here are some felines: \n";</p>
+<p>&lt;&lt; strl &lt;&lt; " " &lt;&lt; str2 // use cout for output</p>
+<p>cout &lt;&lt; "The third letter in " &lt;&lt; charr2 &lt;&lt; "is "<br>&lt;&lt; Charr2[2] &lt;&lt; endl;</p>
+<p>cout &lt;&lt; "The third letter in " &lt;&lt; str2 &lt;&lt; "is "<br>&lt;&lt; str2[2] &lt;&lt; endl;    // use array notation</p>
+<p>return 0;</p>
+<h3>第 83 页（PDF p101）</h3>
+<p>下面是该程序的运行情况，</p>
+<p>Enter a ‘kind: of. feline:  ocelot fe ES Sze</p>
+<p>; Enter ; another kind of fekine:  “tiger</p>
+<p>Here are some felines:<br>“ogelot jaguar-tiger panther ~ -.<br>---- Phe -third- ietter.in- jaguar. is g</p>
+<p>“The third: letter in ‘panther ign:</p>
+<p>eect cr ees (2 ting E058 IE.</p>
+<p>BTL CRUE RE IAIN string Be</p>
+<p>”可以使用 cin 来将链闪输入存储到 string 对象中。 wie</p>
+<p>| @ 可以使用 cout 来显示 string TR.<br>可以使用数组表示法来访问在储在 string WR.</p>
+<p>“string. sexi;    ae LS =      a create. an. empty string object = 这 a a . — segs nk rh<br>"string. Br2    “tpanther! Pe ice create an. inttiaNzed. string   7    a</p>
+<p>:将输入读取到 st中时，将自动调整 sl KE</p>
+<p>© etme ram Cl BANAL CHAE RT ng 对: oe ee</p>
+<p>eH ERE REM abt string 的大小。  例如,strl 的声 nie 0 的 string 对象;  {0B</p>
+<p>cin &gt;&gt; str        ER   ach be str. resized, to" fit input:</p>
+<p>ae   4.3.1     orcas Pee IIe</p>
+<p>i . char’ first date] = ("be Chapon- Bodu" ee oe Ba PME ie ete</p>
+<p>ae Ae char second _date |  {"The Blegant Plate");  Beh,</p>
+<p>x string ‘third . date = {"The-Bread’ BowEY<br>string fourth - date {Hank's ‘Fine Eats" hy</p>
+<p>“492. mek, eR it Hs</p>
+<p>使用 string 类时， 某些操作比使用数组时更简单 ‘elm, “Re MER we 一个数组， 但可以将<br>一个 string WRRA IT —* string HER:</p>
+<p>char charrl1 [20上            // create an- empty array</p>
+<p>ehar charr2{20] = "jaguar"; // create an initialized array<br>string str1;                // create an_empty string object.<br>string str2 = "pantMer";   // create an initialized string<br>eharrl = charr2;          // INVALID, no array assignment<br>strlo=sstr2;                // VABID, object assignment ok</p>
+<p>string 类简化了字符串合并操作。 可以使用运算符+将两个 string 对象合并起来，还可以使用运算符+=<br>ET FE INP string 对象的末尾。继续前面的代码，您可以这样做:<br>string str3;</p>
+<p>str3 = strl + str2;       // assign str3 the joined strings<br>StrE += str2;            // add str2 to the end of stri</p>
+<p>程序清单 48 演示了这些采法。可以将 C-凤格字符审或 天 与 string 对象相加，或将它们附加<br>到 string HARARE.</p>
+<p>| 程序清单 4. a. 表明，    string 对象和字符数组之间的 主要区 别是，    可 以将 string 对象声明为简单 wt.    ite</p>
+<h3>第 84 页（PDF p102）</h3>
+<p>‘eames a8:  srypea. cpp    3    Pa oe ae : = .， = ES pape</p>
+<p>ee ee te: ‘Strtype?. cpp &lt;- assigning, Padding, and # appending = ae<br>at ne &lt;string&gt; |  四    -人 make (string, class available eRe 人 et igi ota Le</p>
+<p>“.. using namespace std;        ate   ah   Siete Sees  (Ee wedi ei att eed Ea    23.5 0 ase tae</p>
+<p>ORG Meo eae "string: ‘sh = "penguin" ae tp, ate ae Bet St ees                              7<br>aoe «eat a "You ‘can assign one string object” ts ) another 82°  -sa  ieee enna tee Ce eS<br>cout &lt;&lt; "You can assign a C- style: string to a ._ string object. Wai<br>cout &lt;&lt; "g2 =   \thugmard\"\n"7     has<br>s2°= "buzzard";<br>ny SOUE Se "You can. ‘concatenate acre  83 -S'6l:4+., 82\0%F “Ge oe            Es<br>cout &lt;&lt; hed. " «&lt;&lt; 83 ce end;<br>7         cout’ &lt;&lt; "You can append strings.\n";<br>. cout &lt;&lt;"sl += 82 yields. ‘St   =" &lt;&lt;.sl te eet<br>Sg. ee for. ‘ae day" pee    —  3    iat    ae  aeLato<br>cout &lt;&lt;"s2 += _ for ay vyielas, 82 = " ee ai an aul<br>"eo fyg a, Tey. SiF penguin; 8% penguin: =) 9.   ee<br>eer  oe can. assign-a c- aye string. to ‘a - string object.  BEN seas MLE Mi ok EM</p>
+<p>tigre Me s2isbuagard</p>
+<p>“at = 82 yields Sl   S peoguidussaya:<br>2 pee    a. “day?  “yields 82 Eb      “EE</p>
+<p>sates eo eig oh ‘string Pore  ‘Beles danke deeuece:  = Cc: ae<br>ee PRI DAIL CH ETE MR Fe BUI ME ESE SEX AF estring_C Death string: h) POET Be Mo<br>2 wm.  TSE strony Y( 将字得串复制到字符区组书| AEA stron 5 8 AF   a</p>
+<h3>第 85 页（PDF p103）</h3>
+<p>Herat          ~ #include “&lt;string&gt; -        :   OT make. stfing. class ‘available “=<br>wees   0 -&lt;catring&gt;- Senet    ii e- ‘atyle: string -library -    e         me    ss      ae<br>ee GED int, main ()” eign pera Dee Rady ste  :     ne<br>~ Ss 1, |. Using namespace ‘sta  BB ae ee ie aa Peg ah<br>string str2 = "panther";<br>Ak, assignment ， for string, objects. and’ character: arrays om                           .    .<br>ae stropy (chazri,  eaciinae hh copy ‘charr2 to charrl:<br>we. be appeiiaing tor string ‘ebjects: and “Bbaceeces: arrays. i. ae ee<br>jon   ea   =f ‘Ehiding ‘the ‘Vength of. ‘a: eee Obiede one ac: “style string”     -            Sas<br>'     ion a Ten2 . = . strlen (charnd)  th iain Sere of hare                     a<br>cout &lt;&lt;. "THe string "¢e charrl ce 0 contains "<br>The string jaguar ‘juice contains 12 characters.                          pe<br>eae       See sing ARTEL HARI. PRS REM,  万其是执行较为复杂的操作时&lt; 例如  EAS</p>
+<p>ce ey stree strl + str2;</p>
+<p>-(REFRY C= Ke FE et erie</p>
+<blockquote><p>strepy (charr3 1  ‘charrt) ;</p></blockquote>
+<p>~~ streat (charr3,  eharr2) ; -</p>
+<p>Bok eS Re aiid</p>
+<p>streat (site, "of. pancakes"); Mf memory pioblew  za</p>
+<p>函数 strate ik ABB 12 企字符复制到数组 site=中，   cP ATA AAU NE.   Ree</p>
+<p>ER AP eS RE Se TE:</p>
+<p>-无法存储指定信 arisen,   wn FMR OUTER:</p>
+<p>或者程序继续运行，但数据被损坏。string RAA ABAD ADAG, Min REE IRE ek Hp fel RAE SC PR<br>数库确实提供了与 strcat( )和 strepy( )类似的函数-一-stmcat()j和EstmcpyO，它们接受指出目标数组最大人允-<br>许长度的第三个参数，因此更为安全，但使用它们进一步增加子编写程序的复杂度。</p>
+<h3>第 86 页（PDF p104）</h3>
+<p>int lenl = strl.size(});     // obtain length of strt<br>int len2 = strlen(charri); // obtain length of charrl</p>
+<p>PASE strlen( )是一个常规函数, 它接受一个 C-风格字符串作为参数, 并返回该字符串包含的字符数。 函数 sizet)<br>的功能基本上与此相同;但句法不同; st上不是锌用作函数参数，而是位于函数名之前，它们之间用句点连接。与<br>第3章介绍的 put)方法相同,- 这种句法表明，strE是一个对象，而 size( )是一个类方法。方法是一个函数，只能通<br>过其所属类的对象进行调用。在这里，stE是一个string:对象，杯sizef( )是 string 类的一个方法= 总之 C 函数使用<br>参数来指出要使用哪个字符串，而 C++ string 类对象使用对象名和人句点运算符来指出要使用哪个字符串。</p>
+<p>4.3.4 string 类 ID</p>
+<p>正如您知道的，可以使用 cin 和运算符&lt;&lt;来将输入存储到 string WAP, (FA cout 和运算符&lt;&lt;来显示<br>string 对象，其句法与处理 C-风格字符串相同。但每次读取一行而不是一个单词时，使用的句法不同，程</p>
+<p>序清单 4.10 说明了这一点。</p>
+<p>程序清单 4.10 strtype4.cpp</p>
+<p>// strtype4.cpp -- line input</p>
+<p>#include &lt;iostream&gt;</p>
+<p>#include &lt;string&gt;               // make string class available</p>
+<p>#include &lt;cstring&gt;              // C-style string library<br>int main(}</p>
+<p>using namespace std;<br>char charr [20];<br>string str;</p>
+<p>cout &lt;&lt; "Length of string in charr before input: "<br>«&lt;&lt; strlen(charr) &lt;&lt; endl;<br>cout &lt;&lt; "Length of string in str before input: "<br>&lt;&lt; str.size() &lt;&lt; endl;<br>cout &lt;&lt; "Enter a line of text:\n";:<br>cin.getline(charr, 20);     // indicate maximum length<br>cout &lt;&lt; "You entered: " &lt;&lt; charr &lt;&lt; endl;<br>cout &lt;&lt; "Enter another line of text:\n";<br>getline(cin, str);          // cin now an argument; no length specifier<br>cout &lt;&lt; "You entered: " &lt;&lt; str &lt;&lt; endl;<br>cout &lt;&lt; "Length of string in charr after input: "<br>&lt;&lt; strlen(charr) &lt;&lt; endl;<br>cout &lt;&lt; "Length of string in str after input: "<br>&lt;&lt; str.size() &lt;&lt; endl;</p>
+<p>return 0;</p>
+<p>下面是一个运行该程序时的输出示例:</p>
+<p>Length of string in charr before input: 27<br>Length of string in str before input: 0<br>Enter a line of text:</p>
+<p>peanut butter</p>
+<p>You entered: peanut butter</p>
+<p>Enter another line of text:</p>
+<p>blueberry jam</p>
+<p>You entered: blueberry jam</p>
+<p>Length o£ string in charr after input: 13<br>Length of string in str after input: 13</p>
+<h3>第 87 页（PDF p105）</h3>
+<p>-第正章 BORD  ad se Se</p>
+<p>| er rser a 该程序指出数给 charr PHOS-FEBK AE 27, IXECPAMERO KE BEK, BSED</p>
+<p>Hi BEBE BA 6 PTE 5 AU ee A) SI PI PERE A SE Ts SEK, PRK slen( )涉数组的第: eT TG SRY IE</p>
+<p>另外，用户 WALI. HARE ARIE 0. 这是因为未被初始化的 string 对象的长度被 va<br>.下面是将一行答入读取到数组中的代码，</p>
+<p>a of Era 0 getline(charr,  “二人上</p>
+<p>这种句点表示法表明，   pe ie getline( )是 istream 类的一个类方法〈还记得吗，cin 是一个 istream aH.</p>
+<p>ee ee ee ee ee a ee   oe<br>eee eet ee ee ne Ce et</p>
+<blockquote><p>TEMA. BT SALA RB, OTS BMT EME. getline, )使用它 来避免超越数组的边界。 er</p></blockquote>
+<p>下面是将一    行输入读取到 nig ei 的代码:</p>
+<p>getline(cin, str) ;</p>
+<p>ee 这里没有使用句点表示法， BeMEh iin HRB GN ie ER, “jr sm tee<br>os lth 另外,。 也没有指出字符串长度的参数， 因为 string 对象将根据字符串的长度自动调整自己的大小。 ee</p>
+<p>那么，   为何-   一个 getline( )是 istream 的类方法，而另一个不是呢? 在引入 string 类之前很久，  CH+就有<br>-istream 类。，  因此. istream 的设计考虑到了诸如double 和.int 4    等基本 C++数据类型，   但没有考虑 string 类型，</p>
+<p>所以 istream 类中， 有处理 double、int 和其他基本类型的类方 法，但没有处理 string 对和象的类方法:   cen std</p>
+<p>由于 istream 类中没有处理 string 对象的类方法，    因此您 可能会问，    下述代码为</p>
+<p>cin &gt;&gt; str;,..// read a.word into the str string object</p>
+<p>a istream 类的一个成员函数</p>
+<p>el  cin &gt;&gt; x;   ve read a value into. a basic C++ type.</p>
+<p>得前面处理 sting AEA REMEA string 美的一个友元函数。有关友元函数及这种技术为何可行, 将</p>
+<p>la eae 另外， 您可以将 in 和 cout 用于 string 对象 而不用考虑其内部王作原理。，</p>
+<p>ee 共他形式的字符率李面值 tig oy</p>
+<p>oe Males Gee Gia a bela ce  :<br>os Raa Bik ee OF REF HL, PE era ROH Ln<br>OS ALU dea, RSE 7 8 IIE   ae ade      ll</p>
+<p>_ .wehar_t.titlef] = L"Chief Astrogator";..  Af -w ba Jabring,<br>“ charié t name{] “= U"Felonia Ripova"; . // char16 string ©<br>char32_t car[] = U"Humber Super Snipe"; // char_32 string</p>
+<p>“CHE 还支持Unicode 字符编码方案 UTF-8。在这种方案中， 根据编码的数字值，字符可能存储为1一4<br>”个作位组。C++使用前缕 ug 来表示这种类型的字符串字面值。</p>
+<p>| CHI 新增的另一种类型是原始. (raw) 字符圳。在原始字符串中;* 字符表示的就是自己， 例如; 序列</p>
+<p>2 n RRA BATE RAAT IRE LAT m, - 因此在屏幕上显示时，将显示这两个字符。另一个 a</p>
+<p>”例子是，可在字符让中使用"， 而无需像程序清单 4.8 中那样使用繁殴的%。 当然，既然可在字符串字面量。 ，<br>”包含”不能再使用它来表示字符下的开头和本尾。因此，原给字符将"(和)"用作定界符，并使用前级</p>
+<ul>
+<li>cout &lt;&lt; R"(Jim "King" Tutt -uses- sep ia of endl.) - 去&lt;  Ai i</li>
+</ul>
+<p>二述代码将显示如下内容:</p>
+<p>ea “Sim, "King"  Tutt uses \n° instead ‘of -endl.</p>
+<p>SRE? EBS   -将需编写如下代码，</p>
+<p>onE &lt;&lt; "Jim \"King\" Tutt. uses \" \\n\" instead of endl." &lt;&lt; ni —</p>
+<p>© FEIREIREM ROLTURER BDSM RHE PRIN te</p>
+<h3>第 88 页（PDF p106）</h3>
+<p>输入原始字符串时，按回车键不仅会移到下一行，还将在原始字符串中添加回车字符。</p>
+<p>如果要在原始字符串中包含)"，访如何办呢? 编译器见到第一个"时, 会不会认为字符串到此结束? 会<br>的。但原始字符串语法允许您在表示字符串开头的"和(之间添加其他字符, 这意味着表示字符串结尾的"和)<br>之间也必须包含这些字符。因此，使用 R"+#标识原始字符串的开头时，必须使用#*"标识原始字符串的<br>结尾。 因此，下面的语句，</p>
+<p>cout &lt;&lt; R"+<em>("(Who wouldn't?)", she whispered.}+</em>" &lt;&lt; endl;</p>
+<p>将显示如下内容:</p>
+<p>"(Who wouldn't?)", she whispered.</p>
+<p>BAZ, ROA + CAI RENT BRU ERA)". Ae CRAIN, ZEBRA ERE ZS ES<br>WAS, (Be. AS. SS. BLAST CORR ERS.</p>
+<p>可将前缀 R ASIP UR EA, Die wchar t 等类型的原始字符串。可将及放在前面，也<br>可将其放在后面，如 Ru、UR 等。</p>
+<p>下面介绍另一种复合类型一一结构。</p>
+<p>4.4 结构篇介</p>
+<p>假设要存储有关篮球运动员的信息，则可能需要存储他〈她) 的姓名、工资、身高、体重、平均得分、<br>命中率、助攻次数等。希望有一种数据格式可以将所有这些信息存储在一个单元中。数组不能完成这项任<br>务，因为虽然数组可以存储多个元素，但所有元素的类型必须相同。也就是说，一个数组可以存储 20 个<br>int，另一个数组可以存储 10 个 float,， 但同一个数组不能在一些元素中存储 int，在另一些元素中存储 float.</p>
+<p>C++中的结构的可以满足要求〈存储篮球运动员的信息)。结构是一种比数组更灵活的数据格式，因为<br>同一个结构可以存储多种类型的数据，这使得能够将有关篮球运动员的信息放在一个结构中，从而将数据<br>的表示合并到一起。如果要眼踪整个球队，则可以使用结构数组。结构也是 C++ OOP 堡垒(类) 的基石。<br>学习有基结构的知识将使我们离 C++的核心 OOP 更近。</p>
+<p>结构是用户定义的类型，而结构声明定义了这种类型的数据属性。定义了类型后，便可以创建这种类<br>型的变量。因此创建结构包括两步。首先，定义结构描述一一它描述并标记了能够存储在结构中的各种数<br>据类型。然后按描述创建结构变量〈结构数据对象 )。</p>
+<p>例如，假设 Bloataire 公司要创建一种类型来描述其生产线上充气产品的成员。具体地说，这种类型应<br>存储产品名称、容和量〈单位为立方英尺) 和售价。下面的结构描述能够满足这些要求，</p>
+<p>struct inflatable   // structure declaration</p>
+<p>char name [20];<br>float volume;<br>double price;</p>
+<p>关键字 struct 表明，这些代码定义的是一个结构的布局。标识符 inflatable 是这种数据格式的名称，因</p>
+<p>此新类型的名称为inflatable。这样，便可以像创            关键字 Keane</p>
+<p>的变量了。接下来的大括号中包含的是结构存储                人</p>
+<p>的数据类型的列表，其中每个列表项都是一条声      (nar as，</p>
+<p>明语句。这个例子使用了一个适合用于存储字符    coat  float volume;      上amma<br>FB ft) char 数组、一个 float 和一个 double。列表 price;</p>
+<p>中的每一项都被称为结构成员，因此 infatable 结                       忆</p>
+<p>构有 3 个成员〔参见图 4.6)。总之，结构定义指         结束结构声明</p>
+<p>出了新类型 (这里是 inflatable) 的特征。                    图 4.6 结构描述的组成部分</p>
+<h3>第 89 页（PDF p107）</h3>
+<p>第4章 复侣类型                  89</p>
+<p>定义结构后，便可以创建这种类型的变量了，</p>
+<p>inflatable hat;               // hat i8 a structure variable of type inflatable<br>inflatable woopie cushion;    // type inflatable variable</p>
+<p>inflatable mainframe;         // type inflatable variable</p>
+<p>如果您熟悉 C 语言中的结构，则可能已经注意到了，C++允许在声明结构变量时省略关键字 struct:<br>struct inflatable goose;      // keyword struct required in c</p>
+<p>inflatable vincent;           // keyword struct not required in C++</p>
+<p>在 C++中，结构标记的用法与基本类型名相同。这种变化强调的是，结构声明定义了一种新类型。在<br>C++中，省略 struct 不会出错。</p>
+<p>由于 hat 的类型为 inflatable，因此可以使用成员运算符《〈.) 来访问各个成员。例如，hatvolume 指的<br>是结构的 volume 成员，hat.price 指的是 price 成员。 同样，vincent.price 是 vincent 变量的 price 成员。总之，<br>通过成员名能够访问结构的成员，就像通过索引能够访问数组的元素一样。由于 price 成员被声明为 double<br>类型，因此 hatprice 和 vincent.price 相当于是 double 类型的变量，可以像使用常规 double 变量那样来使用<br>‘etl. SZ, hat 是一个结构, 而 hat.price 是一个 double 变量.顺便说一句, 访问类成员函数(如 cin.getline( ))<br>的方式是从访问结构成员变量 (如 vincent.price) 的方式衍生而来的。</p>
+<p>4.4.1 在程序中使用结构</p>
+<p>介绍结构的主要特征后，下面在一个使用结构的程序中使用这些概念。程序清单 4.11 说明了有关结构<br>的这些问题，还演示了如何初始化结构。</p>
+<p>程序清单 4.11 structur.cpp</p>
+<p>// structur.cpp -- a simple structure</p>
+<p>#include &lt;iostream&gt;<br>struct inflatable   // structure declaration</p>
+<p>char name[20);</p>
+<p>float volume;</p>
+<p>double price;</p>
+<p>int main()<br>using namespace std;<br>inflatable guest =<br>"Glorious Gloria", // name value<br>}; // quest is a structure variable of type inflatable<br>// It's initialized to the indicated values<br>inflatable pal =<br>"Audacious Arthur",<br>343;<br>32.95<br>}; // pal is a second variable of type inflatable<br>// NOTE: some implementations require using<br>// static inflatable guest =</p>
+<p>cout &lt;&lt; "Expand your guest list with " &lt;&lt; guest.name;</p>
+<h3>第 90 页（PDF p108）</h3>
+<p>// pal.name is the name member of the pal variable=<br>cout &lt;&lt; "You cam-have both for $";<br>cout &lt;&lt; guest.price + pal.price &lt;&lt; "#\n";<br>return 0;</p>
+<p>下面是该程序的输出:</p>
+<p>Expand your guest list with Glorious Gloria and Audacious Arthur!<br>You can have both for $62.98!</p>
+<p>程序说明</p>
+<p>结构声明的位置很重要。对于 structurcpp 而言，有两种选择。可以将声明放在 main( )函数中，紧跟在<br>开始括号的后面。另一种选择是将声明放到 main( )的前面，这里采用的便是这种方式，位于函数外面的声<br>明被称为外部声明。对于这个程序来说，两种选择之间没有实际区别。但是对于那些包含两个或更多函数<br>的程序来说，兰别很大。外部声明可以被其后面的任何函数使用，而内部声明只能被该声明所属的函数使<br>用。通常应使用外部声明，这样所有函数都可以使用这种类型的结构〈参见图 4.7)。</p>
+<p>#include &lt;iostream&gt;<br>using namespace std;<br>struct parts —</p>
+<p>unsigned long part_number;<br>float part_cost;</p>
+<p>void mail ();<br>int main()</p>
+<p>struct perks —</p>
+<ul>
+<li>parts studebaker;</li>
+</ul>
+<p>图 4.7 局部结构声明和外部结构声明</p>
+<p>变量也可以在函数内部和外部定义，外部变量由所有的函数共享 (这将在第 9 章做更详细的介绍)。<br>C++不提倡使用外部变量，但提倡使用外部结构声明。另外，在外部声明符号常量通常更合理。<br>接下来，请注意初始化方式:</p>
+<p>inflatable guest =</p>
+<p>"Glorious Gloria", // name value</p>
+<p>和数组一样，使用由逗号分隔值列表，并将这些值用花括号括起。在该程序中，每个值占一行，但也</p>
+<h3>第 91 页（PDF p109）</h3>
+<p>=o ATOM 结构初始化     gt ee = oe TEES</p>
+<ul>
+<li>与数组:- 样， CrTT志支振将列表初始化用于结 fH, ASS =) 是可选的:- a oe</li>
+</ul>
+<p>4 “inflatable” duck {"Daphne"  O.12, 9. 9B};   ff can omit the = in C+411  aan HSL eg   be<br>“其次， -如打大括号内未包含任何东西， 各个成员都将被设置为零。 例如， AH mayor 加<br>和mayorprice 被设置为零， payors ESTO ENS: |<br>最后;  TIGERS<br>es semana an  basen rey<br>a  ass #in¢lude &lt;string&gt;               egies Spey<br>Ht struct ， inflatable   dt at runt ure debiiod</p>
+<ul>
+<li>std: sstring 1 namie}.  oon) os</li>
+</ul>
+<p>set    float volume ;      a et) ae<br>a a double. ‘price;  mi =  Tig 3<br>a      答案是肖定的， 上只要您使用的编译器支持对以 sring 对象作为成员的结构进行宁央化。 ae</p>
+<p>第 4章 复台类型                  91</p>
+<p>可以将它们全部放在同一行中。上只是应用逼号将它们分开<br>inflatable duck = {"Daphne", 0.12, 3.98};</p>
+<p>可以将结构的每个成员都初始化为适当类型的数据。例如，name 成员是一个字符数组，因此可以将其</p>
+<p>初始化为一个字符串。</p>
+<p>可将每个结构成员看作是相应类型的变量. 因此, pal.price 是一个 double 变量, 而 palname 是一个 char</p>
+<p>数组。当程序使用 cout 显示 palname 时, 将把该成员显示为字符串。另外;, 由于 palname 是一个字符数组，</p>
+<p>han, wee halal poems ee 人 A his</p>
+<p>二二定要让结构定义能够访问名称空间 std。 -为此 豆以将编译指令 using 移到结  gE  ea i</p>
+<p>: Lee 2  assgn 0 ee ee a sabes<br>= eS i -assgn.-st’. 2epp =&gt; assigning. structures. Se ee a ey eo ee oo  es ee<br>~#include- &lt;iostream&gt;   ive fee ence eae  . ig  i   Sad  .  ’ : a  1  nea : ‘a . im ; Soci<br>=          _ struct “inflatable —  = 2th 2 人 Mees yo Meee cits ees Me GN “Dea &amp;  Ee sim Hee emake a eeeaa ss<br>7    =        double a price;  = eet   a oh Se  =  Ses eS<br>oink main{)-  So gsch ee ae</p>
+<p>一CH使用户 ,定久的类型王内四类型尽可能相似。 pian, ore ee  re<br>°c 个结构。另外， 还可以使用赋值运算符 .= ) 将结梅赋给另二个同类型的结构， -这样结构中每个-</p>
+<p>”成员都将被设置为另一个结构中相应成员的值，  -即使成员是数组。 这种赋值被称为成员赋值 《memberwise Sls</p>
+<p>lem 将在第了 SHE reins eae, TREN FAO, -程序清-</p>
+<h3>第 92 页（PDF p110）</h3>
+<p>using namespace std;<br>inflatable bouquet =<br>人<br>"sunflowers",<br>0.20,<br>12.49<br>请<br>inflatable choice;<br>cout &lt;&lt; "bouquet: " &lt;¢&lt; bouquet.nmame &lt;&lt; " for $";<br>cout &lt;&lt; bouquet.price &lt;&lt; endl;</p>
+<p>choice = bouquet; // assign one structure to another<br>cout &lt;&lt; "choice: " &lt;&lt; choice.name &lt;&lt; " for §";</p>
+<p>cout &lt;&lt; choice.price &lt;&lt; endl;</p>
+<p>return 0;   :</p>
+<p>下面是该程序的输出;</p>
+<p>bouquet: sunflowers for $12.49<br>choice: sunflowers for $12.49<br>从中可以看出，成员赋值是有效的，因为 choice 结构的成员值与 bouquet 结构中存储的值相同。<br>可以同时完成定义结构和创建结构变量的工作。为此，只需将变量名放在结束括号的后面即可:</p>
+<p>struct perks</p>
+<p>int key_number;<br>char car[12] ;<br>} mr_smith, ms_jones;   // two perks variables</p>
+<p>甚至可以初始化以这种方式创建的变量;<br>struct perks</p>
+<p>int key number;<br>char car([12];</p>
+<p>Pe             // value for mr_glitz.key_number member<br>"Packard"      // value for mr_glitz.car member</p>
+<p>然而，将结构定义和变量声明分开，可以使程序更易于阅读和理解，<br>还可以声明没有名称的结构类型，方法是省略名称，同时定义一种结构类型和一个这种类型的变量，</p>
+<p>struct       // no tag</p>
+<p>int x; // 2 members<br>int vy;</p>
+<p>} position; // a structure variable</p>
+<p>这样将创建一个名为 position 的结构变量。可以使用成员运算符来访问它的成员《如 position.x), {Aix<br>种类型没有名称，因此以后无法创建这种类型的变量。本书将不使用这种形式的结构。</p>
+<p>除了 C++程序可以使用结构标记作为类型名称外，fC 结构具有到目前为止讨论的 C++结构的所有特性<br>(C++ 特性除外)，和但 C++结构的特性更多。例如，与 C 结构不同，C++结构除了成员变量之外，还可以<br>有成员郴数。但这些高级特性通常被用于类中，而不是结构中，因此将在讨论类的时候〈从第 10 章开始)</p>
+<h3>第 93 页（PDF p111）</h3>
+<p>介绍它们。<br>4.4.5 ”结构数组</p>
+<p>inflatable 结构包含一个数组 (name)。也可以创建元素为结构的数组，方法和创建基本类型数组完<br>相同。例如，要创建一个包含 100 + inflatable 结构的数组，可以这样做，</p>
+<p>inflatable 9itfts[l00l， // array of 100 inflatable structures</p>
+<p>这样，gifts 将是一个 inflatable 数组，其中的每个元素“如 gifts[0]或 gifts[99]) 都是 inflatable 对象，可<br>以与成员运算符一起使用:</p>
+<p>cin &gt;&gt; gifts[0] .volume;          // use volume member of first struct</p>
+<p>cout &lt;&lt; gifts[99]).price &lt;&lt; endl; // display price member of last struct</p>
+<p>iW, gifts 本身是一个数组，而不是结构，因此像 gifts.price 这样的表述是无效的。</p>
+<p>要初始化结构数组，可以结合使用初始化数组的规则《用逗号分隔每个元素的值，并将这些值用花括<br>号括起) 和初始化结构的规则《用逗号分隔每个成员的值，并将这些值用花括号括起)。由于数组中的每个<br>元素都是结构，因此可以使用结构初始化的方式来提供它的值。因此，最终结果为一个被插在花插号中、<br>用逗号分隔的值列表，其中每个值本身又是一个被括在花括号中、用逗号分隔的值列表:</p>
+<p>inflatable guests[2] =              // initializing an array of structs</p>
+<p>{"Bambi", 0.5, 21.99),      // first structure in array<br>{"Godzilla", 2000, 565.99} // next structure in array<br>可以按自己喜欢的方式来格式化它们。例如，两个初始化位于同一行，而每个结构成员的初始化各占<br>一和森。<br>程序清单 4.13 是一个使用结构数组的简短示例。 由于 guests 是一个 inflatable 数组，因此 guests[0]的类<br>型为inflatable，可以使用它和句点运算符来访问相应 inflatable 结构的成员。</p>
+<p>程序清单 4.13 arrstruc.cpp</p>
+<p>// arrstruc.cpp -- an array of structures</p>
+<p>#include &lt;iostream&gt;</p>
+<p>struct inflatable</p>
+<p>char name [20];<br>Float volume;<br>double price;</p>
+<p>using namespace std;<br>inflatable guests[2] =          // initializing an array of structs<br>{"Bambi", 0.5, 21.99},      /f £lrst structure in array</p>
+<p>{"Godzilla", 2000, 565.99} // next structure in array</p>
+<p>cout &lt;&lt; "The guests " &lt;&lt; guests[0] .name &lt;&lt; " and " &lt;&lt; quests [1] .name<br>&lt;&lt; "\nhave a combined volume of "<br>&lt;&lt; guests([0).volume + guests[1] .volume &lt;&lt; " cubic feet.\n";<br>return 0;</p>
+<h3>第 94 页（PDF p112）</h3>
+<p>et eee ee ie oe ee es ee, ee</p>
+<p>et ioe wa “howl _goodIn ae 本 i</p>
+<p>pg” Sar Se ie Peer Plas CH COE</p>
+<p>下面是该程序的输出二<br>_ The. guests, Bambi <em>and</em> dédzinia. eee ree ee Seed og gee ie</p>
+<p>Shave a°combined volume of 2000,5° cubic poate. Ee ee eine te ee a aa Ne</p>
+<p>44.6 结构中的位字段 .</p>
+<p>”与C语言--样，Ce+也允许指定点用特定位数的结构成员，这使得创建与某个硬件设备上的寄存器对<br>应的数据结构非常方便 字段的类型应为整型或枚举 (稍后将介绍)搂下来是冒号,冒号后面是一个数字，</p>
+<p>它指定了使用的位数。可以使用没有洗称的字段来提供间距。 每个成员都被称为位字段 (bit fieldj。下面 站</p>
+<p>人 torate register eae ae = ee ey stn   aut     :        oS<br>a     unsigned int: sN aia   1/ ic Bits tor sw “valle eat    Se ee          anes +</p>
+<p>,  fs  和   “4  Bit}:          eee ey  bay Siewra necratrs SRT ee pr eee recite oa ere</p>
+<p>0 sposTorale at = ae RUCES ENT POE OR</p>
+<p>torgle | ‘register. 七工 = ee a true;  fate fi Mar ees       one             eee       二<br>pone a at (tk, Goodie ee a8 ‘statement. . Covered=in: chapes 6 aoe a z 本  Sa  oo Rete   Boe</p>
+<p>_ SPB R RNC.  — A  OBR Sg CAEN</p>
+<p>_ US HEA 个值,- PE BAF A RA HAIN AN FDL, SALI<br>:共用体的用途之一 Se, NORTE ALS SK ERROR. Gal,</p>
+<p>-福设管理一个水商品 目录   “其中有一些商品的ID 为整数，   :而另二些的 ID EAB.   在这种情况下,可     可以</p>
+<p>es ETD ERR CP   =ee es.</p>
+<p>A        .共用体- Gunion) 是一 入数据格式， 二能够丰往不周的数据关型， 得只能加时存储其中的二种类型。 也-<br>就是说，  -结构可以同时存储 int  “long 和 double，共用体只能存储 int,  ‘long 或 double--  SERINE 与结<br>HAL, Ha AN. i; WOR BS at Se cack<br>aoe “union onegall_ en     ‘jer: seca"  ' ae sae a 5 ” 区 — [ Tas  is 国   了   es<br>ieee is oe iS   “orig Long val;    ae : m F ae ass ‘ ty : Sioa Re ee ‘at zs. oe: oleae E Hehe, oo me ra aed<br>可 tame Souris vali   comme: ae 让     SR 4p Bowes Gees mG: |     二本<br>fe dan = 人 村 fours onedall SmI i int ~ long double ARPA         ae              2<br>Bil Sey * Ghegall patty   ae oF acne    =        Se   oe Pee es ae eres         ee<br>ai  ee Lae pail. int. “val_   15;    : =&gt; Te ‘store: an “int.  sae a ee en fat 2 Soe ae 7 per gain aa 5<br>:      Sout &lt;&lt; pail! ‘int IT     Ge tat len aici  oa  Suge ee 人 aia. EEN Hil aR ee Ue eee<br>Sa ae: pail .double: wal .;   “Vase;     ve store’. a , double,  “int i Bas is: Tost. ee 和 a 本 at a ss se a  ee<br>2 Aaa  Bout = o&lt;&lt; pail. double vale  etry sabe i lead a SS re ost fat aise eee   a= =  aT.  a      ae</p>
+<p>“因此， pail 有晤吉以是 int EM, OATH LTD double SE. REUTER ae</p>
+<h3>第 95 页（PDF p113）</h3>
+<p>‘ches brand [20] ;<br>int- type;<br>union id<br>Bo pe: seh opacsaeres Mas yee      sap yea WR etter cers yyusire Grama we       Ta    上     =</p>
+<p>Tong id: nut;  a   ape type 工 wiagers fief Tarabstq sen ere ae ce  BM a, ae Me 到 poate!<br><em>char ia</em> char (201;  Ls other’ widgets’.    Be   aif 54     coed            ;   a</p>
+<p>ee  wie prize?    8 = SSF Pave = : &lt; ae oe aoe ae reas — Tes Sane  em eee<br>ee ace = 5    Gf  tsrize: type == Eun eS Ba ee     ey “té- ersé statement  “(Chapter 人      Pah eR ee ee<br>‘cin yy prize.id_ Wars ia. num;    4 use member name to indicate node          Eee<br>cB Pea Be oe Sse Bare meee rae nt oe Ree eRe ee so ae  aoe Le ee pe ee eee<br>ar   See en “gin 33 -prize.id_ val: id Peano ee See eee eee  RTE, ae</p>
+<blockquote><p>匿名共用体 Canonymous union) 没有名称，  其成员将成为位于相同地址处的变量。  DR, 每次只有一 :</p></blockquote>
+<p>个成员是当前的成员，<br>struct widget<br>char brand [20] ;—<br>int type;<br>union             // amonymous union<br>long id num;     // type 1 widgets<br>char id char[20]; // other widgets<br>Fe sue  +   zs  poise set tg some up ienen at   sa  mie oe Ree<br>aes   |  ae   ats (prize. type:=    x}  i . pap iies, ene  7 2 oes =     ne    can     Boveri,      eet</p>
+<p>OS IEE ge Te “prize. ia Peniag  E  NE e ae  O iraa ee eae tag Se eg arate RSE ee ee ae</p>
+<p>pee uaa sat fe  SWRLSO Ss ee ey ofes  ye — ae  pha eee oa ee ee A ee<br>ee ae es  cin &gt;&gt; prize. id char pice ae    teen    oo = %    3     are      =   eon</p>
+<p>aoe      a id. Vabe -程序黄负责确定当前哪个成员是活动的。      oe                   下<br>eae    SRA CSE RRR) RAE: 当前， FANE EM GREEN TB. ‘inten ee<br>已 oe: 2 Wa: “租并非所有的; CHARA RIMS I CHET FRA REE “HS FRE FAS =，<br>Sees  MP3 播放器或火星漫步者的处理器。 应用可让厅册 Se ee ad RTA 2A<br>pao as ene RAR oS Se ae ee          二</p>
+<p>oe ; Bi  的 工贞所供了另一种创建答号常量的方式; 这种方式可以代替 const “ease Ra —</p>
+<p>: De lilac ti ABP cram 的句法与使用结构相似。例站; :请看下面的语有:-      eS<br>2  攻   emum ‘spectrum: fred, -orange, “yellow: “green, blue, violet, iste “gueravislet i,    *    =a =<br>二  ”这条语句完成两需工作 le    ;     a      aE</p>
+<h3>第 96 页（PDF p114）</h3>
+<p>@ ik spectrum 成为新类型的名称，spectrum 被称为枚举 (enumeration)，就像 stmct 变量被称为结构<br>一样。</p>
+<p>@ +} red. orange. yellow 等作为符号常量, 它们对应整数值 0一7。这些常量叫作枚举量(enumerator)。</p>
+<p>在默认情况下，将整数值赋给枚举量，第一个枚举量的值为0，第二个枚举量的值为 1，依次类推。可<br>以通过显式地指定整数值来缆盖默认值，本章后面将介绍如何做。</p>
+<p>可以用枚举名来声明这种类型的变量:</p>
+<p>spectrum band; // band a variable of type spectrum</p>
+<p>BOAT — NOME, FRE.</p>
+<p>FEAR TETT SR Hal SE PRT FBR OBS IN (AY BD CS aR Tk PS OE ee, OF Ta:</p>
+<p>band = blue;       // valid, blue is an enumerator<br>band = 2000;       // invalid, 2000 not an enumerator</p>
+<p>因此，spectrum 变量受到限制，只有 8 个可能的值。如果试图将一个非法值赋给它，则有些编译器将出现<br>编译器错误，而另一些则发出警告。为获得最大限度的可移植性，应将把非 enum 值赋给 enum 变量视为错误。<br>对于枚举，只定义了赋值运算符。具体地说，没有为枚举定义算术运算:</p>
+<p>band = orange;           // valid<br>++band;                  // not valid, ++ discussed in Chapter 5<br>band = orange + red;     // not valid, but a little tricky</p>
+<p>然而， 有些实现并没有这种限制, 这有可能导致违反类型限制。例如, 如果 band 的值为 ultraviolet (7),<br>则++band《〈如果有效的话) 将把 band 增加到 8，而对于 spectrum 类型来说，8 是无效的。另外，为获得最<br>大限度的可移植性，应采纳较严格的限制。</p>
+<p>枚举量是整型，可被提升为 int 类型，但 int 类型不能自动转换为枚举类型:</p>
+<p>int color = blue;        // valid, spectrum type promoted to int<br>band = 3;                // invalid, int not converted to spectrum<br>color = 3 + red;         // valid, red converted to int</p>
+<p>虽然在这个例子中，3 对应的枚举量是 green，但将 3 赋给 band 将导致类型错误。不过将 green 赋给<br>band 是可以的，因为它们都是 spectrum 类型。同样，有些实现方法没有这种限制。表达式 3 + red 中的加<br>法并非为枚举量定义，但 red 被转换为 int 类型，因此结果的类型也是 int。由于在这种情况下，枚举将被<br>转换为 int，因此可以在算术表达式中同时使用枚举和常规整数，尽管并没有为枚举本身定义算术运算。</p>
+<p>前面示例:</p>
+<p>band = orange + red;     // not valid, but a little tricky</p>
+<p>非法的原因有些复杂。确实没有为枚举定义运算符+，但用于算术表达式中时，枚举将被转换为整数，<br>因此表达式 orange + red 将被转换为 1 + 0。这是一个合法的表达式，但其类型为 int，不能将其赋给类型为</p>
+<p>spectrum 的变量 band.<br>如果 int 值是有效的，则可以通过强制类型转换，将它赋给枚举变量，<br>band = spectrum(3);         // typecast 3 to type spectrum</p>
+<p>如果试图对一个不适当的值进行强制类型转换，将出现什么情况呢? 结果是不确定的，这意味着这样<br>做不会出错，但不能依赖得到的结果，</p>
+<p>band = Spectruml40003) ;    // undefined</p>
+<p>请参阅本章后面的“枚举的取值范围”一节，以了解一下哪些值侣适，哪些值不合适。</p>
+<p>正如您看到的那样，枚举的规则相当严格。实际上，枚举更常被用来定义相关的符号常量，而不是新<br>类型。例如，可以用枚举来定义 switch 语句中使用的符号常量《有关示例见第 6 章)。如果打算只使用党<br>量，而不创建枚举类型的变量，则可以省略枚举类型的名称，如下面的例子所示;</p>
+<p>enum {red, orange, yellow, green, blue, violet, indigo, ultraviolet};</p>
+<h3>第 97 页（PDF p115）</h3>
+<p>4.6.1 设置枚举量的值<br>可以使用赋值运算符来显式地设置枚举量的值，</p>
+<p>enum bits{one = 1, two = 2, four = 4, eight = 8};</p>
+<p>FE ae AD A a So Ee, thy i th sae SS se I (EL:</p>
+<p>enum bigstep{first, second = 100, third};</p>
+<p>这里，first 在默认情况下为0。后面没有被初始化的枚举量的值将比其前面的枚举量大 1。因此，third<br>的值为 101。</p>
+<p>最后，可以创建多个值相同的术举量;</p>
+<p>enum {zero, null = 0, one, numero_uno = 1};</p>
+<p>FLA, zero 和 null 4A 0, one #1 umero_uno 都为 1。在 C++早期的版本中，只能将 int 值〈或提升为<br>int 的值) 莱给枚举量，但这种限制取消了，因此可以使用 long 甚至 long long 类型的值。</p>
+<p>46.2 MERCH</p>
+<p>最初，对于校举来说，只有声明中指出的那些值是有效的。然而，C++现在通过强制类型转换，增加了<br>可赋给校举变量的台法值。每个校举都有取值范围 〈range)，通过强制类型转换，可以将取值范围中的任<br>何整数值赋给枚举变量，即使这个值不是枚举值。例如，假设 bits 和 myflag 的定义如下，</p>
+<p>enum bits{one = 1, two = 2, four = 4, eight = 8};</p>
+<p>bite myflag;</p>
+<p>则下面的代码将是合法的:<br>myflag = bits(6);   // walid, because 6 is in bits range</p>
+<p>HH 6 AA, (Ee ease AA AN</p>
+<p>AUTOR oF. Pc, BEER EER, FEARS RA. REAP RA PRAIA. Beeb<br>的 2 Ase, Reem 1, SEIN SERA EM. fon, AUTRE A bigstep MAH RMAE 101.<br>在 2 的里中，比这个数大的最小值为 128，因此取值范围的上限为 127。要计算下限，需要知道枚举量的最<br>小值。如果它不小于0，则取值范围的下限为0; 否则，采用与寻找上限方式相同的方式，但加上和负号。例<br>如，如果最小的校举量为-6，而比它小的、最大的2 的桔是-8《【加上和负号)，因此下限为-7。</p>
+<p>选择用多少室间来存储枚举由编译器决定。对于取值范围较小的枚举，使用一个字节或更少的室间|，<br>而对于包含 long 类型值的枚举，则使用 4 个字节。</p>
+<p>C++ll Pe SRE, MT RABE (scoped enumeration)，第 10 章的“类作用域”一节将简要<br>Sh fp Ed I PPA AE</p>
+<p>4.7    Pesan 目 由 存储空   =</p>
+<p>在和 3. IE,   SIT SLE rama a3 HOARE,   HTH,   -过里再次列</p>
+<p>2 ee -相信的值为 BI. Seo ae = a eee ee He<br>= e a TERRA IEA AR : oes  ee ee oe poe<br>va NS tae  "Qk — ASME LB A:  “Ex Ra mae iam ram,  TELE.<br>—.    :下面来看一看另一种策略，- 它在开发 CHEMIE we. BOR Cin aba. RELI vere<br>io oe 其存入的是什的地引， TAA -在讨论指针之前: 我们先看一 -看如何找到党 Ree Sa</p>
+<h3>第 98 页（PDF p116）</h3>
+<p>As RU MUIR C&amp;),- “aT AR ALE, 例如， “OE home JE 则&amp;ome 是它的地址。  nee:<br>.程序清单 4.14 演示了这个运算符的用法。                            —</p>
+<p>. 程序清单 4.14 address.cpp</p>
+<p>/} address. cpp — using the «&amp; 0 to fine addresses , Be</p>
+<p>#include &lt;iostream&gt;</p>
+<p>a) STE main()<br>using namespace std;<br>.int,donuts = 6; -<br>‘double cups = 4.5;</p>
+<p>cout &lt;&lt; "donuts value = "&lt;&lt; donuts;<br>cout &lt;&lt; " and donuts address =" &lt;&lt; &amp;donuts &lt;&lt; endl;<br>// NOTE: you may need to use unsigned (&amp;donuts)’<br>// and unsigned |&amp;cups) —       7<br>cout &lt;&lt; "cups value = " &lt;&lt; cups;<br>cout &lt;&lt; " and cups address = "&lt;&lt; &amp;cups &lt;&lt; endl;<br>return. 0;</p>
+<p>下面是该程序在某个系统上的输出;</p>
+<p>donuts value = 6 and donuts address = 0x0065EG40</p>
+<p>cups value = 4.5 and cups addrese-= 0x0065fd44</p>
+<p>显示地址时,- 该实现的 cout 使用十六进制表示法，因为这是常用于描述内存的表示法〈有些实现可能<br>使用十进制表示法)。在该实现中, donuts 的存储位置比 cups 要低。.两个地址的差为 0x0065fd44 — 0x0065fd40_<br>《即 4)。这是有意义的”因为 donuts 的类型为 nt，而这种类型使用4个字节。当然，不同系统给定的地址<br>值可能不同。 有些系统可能先存储-cups，再存储 donuts，这样两个地址值的差将为 &amp; 个字节，因为.eups<br>的类型为double。另外，在有些系统中，可能不会将这两个变量存储在相邻的内存单元中</p>
+<p>使用常规变量时，值是指定的量，而地址为派生量。 F面来看看指针策略，它是 C++上内存管理编程理<br>念的核心“参见旁注“指针与 C++基本原理”)。</p>
+<p>指针与C++基本原理</p>
+<p>面向对象编程与传统的过程性编程的区别在于，DOP 强调的是在运行阶段 ( 而不是编译阶段 ) 进行决<br>策。和运行阶段指的是程序正在运行时，编译阶段指的是编译器将程序组合起来时。运行阶段决策就好比度<br>假时，选择参观哪些景点取决于天气和当时的心情; 而编译阶段决策更像不管在什么条件下，都坚持预先<br>证定的日程安排。</p>
+<p>运行阶段决策提供了灵活性，可以根据当时的情况进行调整。例如，考虑为数组分配内存的情况。<br>统的方法是声明一个数组。要在 C++中声明囊组，必须指定数组的长度。因此，数组长度在程序编译时就<br>REST; 这就是蝙译阶段决策。您可能认为，在 80%的情况下，一个和包售 20 HHA HKRALSET, (2<br>程序有时需要处理 200 个元素。为了安全起见，使用了一个包含 200 个元素的数组。这样，程序在大多数<br>情况下都浪费了内存。OOP 通过将这样的决策推迟到运行阶段进行，使程序更灵活。在程序运行后，可以<br>这关告诉它只需要20 个元素，而还可以下凑告诉它需要 205 个元素。</p>
+<p>总之，使用OOP 时,您可能在运行阶段确定数组的长度。为使用这种方法,语言必须允许在程序运行<br>时创建数组。稍后您看会到，C++采用的方法是，使用美键宇 new 请求正确数量的内育以及使用指针来趴<br>踪新分配的内存的位置。</p>
+<p>在运行阶段做决策并非 OOP 独有的，但使用 C++编写这样的代码比使用C 语言简单。</p>
+<p>处理存储数据的新策略刚好相反，将地址视为指定的量，而将值视为派生量. 一种特殊类型的变量一一指针</p>
+<h3>第 99 页（PDF p117）</h3>
+<p>用于存储值的地址. 因此, 指针名表示的是地址.*运算符被称为间接值(indirect velue)或解除引用 (dereferencing )<br>运算符，将其应用于指针，可以得到该地址处存储的值 (这和乘法使用的符号相同;C++根据上下文来确定所指<br>的是乘法还是解除引用)。例如，假设 manly 是一个指针，则 manly 表示的是一个地址，而*manly 表示存储在该<br>地址处的值。*manly 与常规 int 变量等效。程序清单 4.15 说明了这几点，它还演示了如何声明指针。</p>
+<p>程序清单 4.15 pointer.cpp</p>
+<p>// pointer.cpp -- our first pointer variable</p>
+<p>#include &lt;iostream&gt;<br>int main ()<br>using namespace std;<br>int updates = 6;        /? declare a variable<br>int * p_updates;        // declare pointer to an int<br>p_updates = &amp;updates;   // assign address of int to pointer</p>
+<p>// express values two ways<br>cout &lt;&lt; "Values: updates = " &lt;&lt; updates;<br>cout &lt;&lt; ", <em>p_updates = " &lt;&lt; </em>p_updates &lt;&lt; endl;</p>
+<p>// express address two ways<br>cout &lt;&lt; "Addresses: &amp;updates = " &lt;&lt; &amp;updates;<br>cout &lt;&lt; ", p updates = " &lt;&lt; p updates &lt;&lt; endl;</p>
+<p>// use pointer to change value<br><em>p updates = </em>p updates + 1;<br>cout &lt;&lt; "Now updates = " &lt;&lt; updates &lt;&lt; endl;<br>return 0;</p>
+<p>下面是该程序的输出:</p>
+<p>Values: updates = 6, *p_updates = 6</p>
+<p>Addresses: &amp;updates = 0x0065fd48, p updates = 0x0065fd4e</p>
+<p>Now updates = 7</p>
+<p>从中可知，int 变量 updates 和指针变量 p_updates 只不过是同一枚硬币的两面。变量 updates 表示值，<br>并使用人运算符来获得地址，而变量 p_updates 表示地址，并使用*运算符来获得值〈参见图 4.8)。由于<br>p_updates 指向 updates，因此*p_updates 和 updates 完全等价。可以像使用 int 变量那样使用旬_ updates。正<br>如程序清单 4.15 表明的，甚至可以将值赋给*p_updates。这样做将修改指向的值，即 updates.</p>
+<p>图4.8 硬币的两面</p>
+<h3>第 100 页（PDF p118）</h3>
+<p>“   ica eae<br>ae : ， 4 ate San. he int, tM  到们还说下 — READE Bn inet  :或 in  可以这样说  pdates    2S</p>
+<p>| birddog指向<br>ducks</p>
+<p>1012 |<br>1016 |.<br>创建ducks变量，将值12                创建5吉普是 Hicks |国由，<br>sins           im ese<br>Ree    a ee<br>”顺便说一名，*运算符两边的宣格是可选的。传统上，C 程序员使用这种格式</p>
+<p>iInt—* ptr;<br>_   这强调*ptr 是一个 int 类型的值。而很多 C++程序员使用这种格式<br>这强调的是，ints是-种类型一一指向 int 的指针。在哪里添加空格对于编译器来说没有任何区别，您<br>甚至让以这样做:<br>int*ptr;<br>但要知道的是，下面的声明创建-一个指针《pl) 和一个 int 变量 (p2):<br>int* pl... pe:        :<br>对每个指针变量和名，都需要使用一个*。<br>注意: 在 EH+中，int*是一种复合类型，是指向 int 的指针。<br>可以忌同样的句法来声明指向其他类型的指针:</p>
+<p>doubEIe * tax ptr; //-tamx_ptr points to type double<br>char * str;       局 str points to type char</p>
+<h3>第 101 页（PDF p119）</h3>
+<p>由于已将 tax_ptr 声明为一个指向 double 的指针，因此编译器知道*tax_ptr 是一个 double 类型的值。也<br>就是说，它知道*tax_ptr 是一个以浮点格式存储的值，这个值〈在大多数系统上) 占据 8 PEW. TREE<br>量不仅仅是指针，而且是指向特定类型的指针。tax_ptr 的类型是指向 double 的指针《或 double *类型 )，str<br>是指向 char 的指针类型(或 char *)。尽管它们都是指针，却是不同类型的指针。和数组一样，指针都是基<br>于其他类型的。</p>
+<p>有虽然tax_ptr 和str 指向两种长度不同的数据类型， 但这两个变量本身的长座通常是相同的,也就是说，<br>char 的地址与 double 的地址的长度相同，这就好比 1016 可能是超市的街道地址，而 1024 可以是小村庄的<br>街道地址一样。地址的长度或值既不能指示关于变量的长度或类型的任何信息，也不能指示该地址上有什<br>么建筑物。一般来说，地址需要2 个还是 4个字节，取决于计算机系统 〔(有些系统可能需要更大的地址，<br>系统可以针对不同的类型使用不同长诬的地址)。</p>
+<p>可以在声明语句中初始化指针。在这种情况下，被初始化的是指针，而不是它指向的值。也就是说，<br>下面的语句将 Pt而不是*pt) 的值设置为和higgens:</p>
+<p>int higgens = 5;</p>
+<p>int * pt = &amp;higgens;</p>
+<p>程序清单 4.16 演示了如何将指针初始化为一个地址。<br>程序清单4.16 init_ptr.cpp</p>
+<p>//-init_ptr.cpp -- initialize a pointer</p>
+<p>#ineFude &lt;iostream&gt;<br>int-main(}</p>
+<p>using-namespace std;<br>int higqgens =—5;<br>int * pt = &amp;higgens;</p>
+<p>cout &lt;&lt; "Value of higgens = " &lt;&lt; higqgens</p>
+<p>&lt;&lt; "; Address of higgens = " &lt;&lt; &amp;higqgens &lt;&lt; endl;<br>cou &lt;&lt; "Value of <em>pt = “&lt;&lt; </em>pt</p>
+<p>&lt;&lt; "; Value of pt = " ce pt-ce endl;<br>return 0;</p>
+<p>下面是该程序的示例输出，</p>
+<p>Value of higgens = 5; Address of higgens = 0012FED4-</p>
+<p>Value of *pt = 5; Value-of pt =—0012PEDS</p>
+<p>ASP RY Rie 程序将 pi (而在是*pi大初始化为 higgens 的地址。在您的系统上，显示的十址可能不同，<br>显示格式也可能不同。</p>
+<p>47.2 指针的危险</p>
+<p>危险更易发生在那些使用指针不仔细的人身上。极其重要的一点是，在 Cr*+中创建指针时，计算机将<br>分配用来存储地址的内存，但不会分配用来存储指针记指向的数据的内存。为数据提供空间是一个独立的<br>步骤，忽略这一步无砸是自找麻烦，如下所示:</p>
+<p>long &lt;上elTOw;         // create a pointer-to-long_</p>
+<p>*fellow = 223323;      // place a value in never-never land</p>
+<p>fellow 确实是一个指针，但它指向哪里昵? 上述代码没在将地址赋给 fllow。 那么 223323 将被放在哪<br>HME? 我们不知道。电于 fellow 没有被初始化，它可能存任何值。不管值是任么，程序都将它解释为存储<br>223323 的地址。姑果 fellow 的值碰巧为-1200，计算柄将把数据放在地址 1200-上，即使这恰巧是程序代码<br>AA HIE — fellow 指疝的地广很可能并不是所要存储223323 的地方，这种错误可能奔导致一些最隐匿、最难</p>
+<h3>第 102 页（PDF p120）</h3>
+<p>以跟踪的 bugs</p>
+<p>警告一定要在对指针应用解除引用运算符 (*# ) 之前，特指针初始化为一个确定的、适当的地址。 这<br>是关王使用指针的金科玉律。</p>
+<p>473 ”指针和数字</p>
+<p>指针不是整型,虽然计算机通常把地址当作整数来处理。从概念上看，指鲜与整数是截然不同的类型。<br>整数是可以执行加、减、除等运算的数字;而指针描述的是位置，将两个地址相乘没有任何意义。上厌研以<br>对整数和指针执行的操作上看，它们也是彼此求同的= 因此，不能简单地将整数赋给指针，</p>
+<p>int *- oes</p>
+<p>pt = een  // type mismatch</p>
+<p>在这里, 左边是指向 int 的指针, 因此可以把它赋给地址, 但右边是一个整数. 您可能知道, OxB8000000<br>是老式计算机系统中视频内存的组合段偏移地址,但这条语句并没有告诉程序,这个数字就是一个地址。<br>在 C99 标准发布之前，C 语言允许这样赋值。但 C++在类型一致方面的要求更严格，编译器将显示一条<br>错误消息，通告类型不匹配。要将数字值作为地址来使用，应通过强制类型转换将数字转换为适当的地<br>址类型，</p>
+<p>int * pt;</p>
+<p>pt = (int *) OxBg000000; // types now match</p>
+<p>这样，赋值语句的两边都是整数的地址，因此这样赋值有效。注意，pt 是 int 值的地址并不意味着 pt<br>本身的类型是nt。例如，在有些平台中，int 类型是个2 字节值，而地址是个4字节值。</p>
+<p>指针还有其他一些有趣的特性，这将在合适的时候讨论。下面看看如何使用指针来管理运行阶段的内<br>AF 23 [i] SP AC</p>
+<p>474 使用 new 来分配内存</p>
+<p>对指针的工作方式有一定了解后，来看看它如何实现在程序运行时分配内存。前面我们都将指针初始<br>化为变量的地址，变量是在编译时分配的有名称的内存，而指针只是为可以通过名称直接访问的内存提供<br>了一个别名。指针真正的用武之地在于，在运行阶段分配未命名的内存以存储值。在这种情况下，只能通<br>过指针来访问内存。 在C 语言中，可以用库函数 malloc( )来分配内存，在 C++中仍然可以这样做，但 C++<br>还有更好的方法一一new 运算符。</p>
+<p>下面来试试这种新技术，在运行阶段为一个 int 值分配未命名的内存，并使用指针来访问这个值。这里<br>的关键所在是 C++的 new 运算符。程序员要告诉 new，需要为哪种数据类型分配内存;: new 将找到一个长度<br>正确的内存块，并返回该内存块的地址，程序员的责任是将该地址赋给一个指针。下面是一个这样的示例:</p>
+<p>int * pn = new int;</p>
+<p>new int 告诉程序，需要适合存储 int HA. new 运算符根据类型来确定需要多少字节的内存。然后，<br>它找到这样的内存，并返回其地址。接下来，将地址赋给 pn. pn 是被声明为指向 int 的指针。现在，pn 是<br>地址，而*pn 是存储在那里的值。将这种方法与将变量的地址赋给指针进行比较，</p>
+<p>int higqgens;</p>
+<p>int * pt = &amp;higgens;</p>
+<p>在这两种情况《pn 和 pt) 下，都是将一个 int 变量的地址赋给了指针。在第二种情况下，可以通过名<br>称higgens 来访问该 int，在第一种情况下，则只能通过该指针进行访问。这引出了一个问题，pn 指向的内<br>存没有名称，如何称呼它呢? 我们说 pn 指向一个数据对象，这里的“对象”不是“面向对象编程”中的对<br>象，而是一样“东西"。术语“数据对象”比“变量”更通用，它指的是为数据项分配的内存块。因此，变<br>量也是数据对象， 但 pn 指向的内存不是变量。乍一看，处理数据对象的指针方法可能不太好用，但它使程<br>序在管理内存方面有更大的控制权。</p>
+<p>为一个数据对象《可以是结构，也可以是基本类型) 获得并指定分配内存的通用格式如下:</p>
+<h3>第 103 页（PDF p121）</h3>
+<p>第4章 复合类型</p>
+<p>typeName * pointer name = new typeName;</p>
+<p>需要在两个地方指定数据类型，用来指定需要什么样的内存和用来声明合适的指针。当然，如果已经<br>声明了相应类型的指针, 则可以使用该指针, 而不用再声明一个新的指针。程序清单 4.17 演示了如何将 new<br>用于两种不同的类型。</p>
+<p>程序清单 4.17 use_new.cpp</p>
+<p>// use_new.cpp -- using the new operator</p>
+<p>#include &lt;iostream&gt;<br>int main{)</p>
+<p>using namespace std;</p>
+<p>int nights = 1001;</p>
+<p>int * pt = new int;         // allocate space for an int</p>
+<p>cout &lt;&lt; "nights value = ";</p>
+<p>cout &lt;&lt; nights &lt;&lt; ": location " &lt;&lt; &amp;nights &lt;&lt; endl;</p>
+<p>cout &lt;&lt; "int ";</p>
+<p>double * pd = new double;<br>*pd = 10000001.0;</p>
+<p>// allocate space for a double<br>// store a double there</p>
+<p>cout &lt;&lt; "double ";<br>cout &lt;&lt; "location of pointer pd: " &lt;&lt; &amp;pd &lt;&lt; endl;<br>cout &lt;&lt; "size of pt = " &lt;&lt; sizeof(pt);<br>cout &lt;&lt; ": size of <em>pt = " &lt;&lt; sizeof(</em>pt} &lt;&lt; endl;<br>cout &lt;&lt; "size of pd = " ¢«e sizeof pd;<br>cout &lt;&lt; ": size of <em>pd = " &lt;&lt; sgizeof(</em>pd) &lt;&lt; endl;<br>return 0;<br>下面是该程序的输出;</p>
+<p>nights value</p>
+<p>int value = 1001:</p>
+<p>double value</p>
+<p>1001: location 0028F7F8<br>location = 00033A98<br>1e+007: location = 00033958</p>
+<p>location of pointer pd: 0028F7FC</p>
+<p>size of pt   4: size of *pt = 4</p>
+<p>size of pd   4: size of *pd = 日</p>
+<p>当然，内存位置的准确值随系统而异。</p>
+<p>程序说明</p>
+<p>该程序使用 new 分别为:int 类型和double类型的数据对象分配肉存。这是在程序运行时进行的。指针</p>
+<p>pt 和-Pd指向这两个数据对象，如果没有它们， 将无法访问这些内存单元。有了这两个指针，就可以像使<br>用变量那样使用<em>pt 和</em>pd 了。将值赋给<em>pt Al</em>pd, 从而将这些值赋给新的数据对象: 同样，可以通过打印-<br>*pt和师d 来显示这些值。</p>
+<p>该程序还指出了必须声明指针所指向的类型的原因之一。地址本身只指出了对象存储地址的开始，而.<br>没有指出其类型《使用的字节数)。从这两个值的地址可以知道，它们都只是数字，并没有提供类型或长度<br>信息。 另外，指向 int 的指针的长度与指向 double 的指针相同。它们都是地址，但由于 use-newepp 声明了<br>指针的类型，因此程序知道spd 是 8 个字节的 double ffi, *pt 是 4 个字节的 int 值。use_newcpp 打印rpd 的<br>值时，eout 知道要读取多少字节以及如何解释它们。</p>
+<h3>第 104 页（PDF p122）</h3>
+<p>对于指针, 需要指出的另一点是,new 分配的内存块通常与常规变量声明分配的内存块不同.变量 nights<br>和 pd 的值都存储在被称为栈 (stack) 的内存区域中，而 new 从被称为堆 Cheap) 或和目由存储区〈free store )<br>的内存区域分配内存。第 9 章将更详细地讨论这一点。</p>
+<p>内存被耗尽?</p>
+<p>计算机可能会由于没有足够的内存而无法满足 new 的请求。在这种情况下，new 通常会引发异常一一<br>一种将在第 15 章讨论的错误处理技术; 而在较老的实现中,new 将返回0。在 C++中，值为 0 的指针被称<br>为空指针(nultpointer )。C++确保空指针不会指向有效的数据, 因些它常被用来表示运算符或函数失败上如<br>RMA, CNRS AES). 将在第 6 章讨论的 证语身可帮助您处理这种问题: 就目前而言，<br>ERR PE: C++提供了检测并处理内存分配朱政的工具。</p>
+<p>4.7.5 使用delete 释放内存</p>
+<p>当需要内存时，可以使用 new RHR, BRE CE内存管理数据包中有魅力的一个方面。另一个方面<br>是 delete 运算符，它使得在使用完内存后，能够将其归还给振存池志这是通向最有效地使用内存的关键一<br>Je. 归还或释放 (ffee) 的内存可供程序的其他部分使用。使用 delete 时，后面要加上指向内存块的指针(这<br>ue fe BURA new SP Aceh):</p>
+<p>int * ps = new int; // allocate memory with new<br>délete ps;          //-tree memory withedelete when-done</p>
+<p>这将释放ps 78 mi Ae ASSURE) ps本身。例如, 可以将 ps eee TC AER.<br>是要配对地使用-new 和 delete: PUPAE A AEH (memory leak), thst Abit 被分配的内存再也无<br>法使用了。如果内存泄漏严重，则程序将由手不断寻找更多内存而终止。</p>
+<p>AEA ARB CAR BUN AGE, Cob. 这样做的结果将是下确定的5 这意味着什么情况都<br>可能发生。另外，不能使用 delete 来释放声明变量所获得的内在;</p>
+<p>int * ps = new int;   Ei ok</p>
+<p>delete ps;         Lf ok</p>
+<p>delete ps;          £/f not ek now</p>
+<p>int * pi = &amp;jugs;     ff ok</p>
+<p>delete pi;            /not aklowed memory not allocated by new</p>
+<p>GA: AHEM delete AAU A new FRHAAA, Bm, ASIA delete.是安们的，</p>
+<p>注意，使用 delete HET, FRO AEF new 4} RCM ASE. PARE a EPA new HIRE<br>是用于 new-的地址;</p>
+<p>int * ps = new int; f/ allocate memory<br>int-* pa-= ps;        /{- set second pointer-to same block<br>dekete pa;           //-delete with second. pointer</p>
+<p>ee ee Se ere ee<br>RYE. (HADES BE, SURES. TEAM ET a</p>
+<p>4.7.6 {A new 来创建动态数组</p>
+<p>如果程序只需要一个值，则可能 会声明一个简单变量， 因为对主管理一个小型数据对象来说; 这样做<br>-比重用 new 和指针更简单，尽管给大留下的印象不那么次刻。通常，对于大型数据(如数组、字符串和结<br>构)一应使用new，这正是 new 的几武之地。例如，假设要编写一个程序，它是否需要数组取决于运行时<br>用产提供的信息。如果通过声明来创建数组，则在程序被编译时将为它分配内存室间。不管程序最终是否<br>使用数组，数组都在那里- 它点用了和内在。在编译时给数组分配内存被称为静态联编《static Finding)，意</p>
+<h3>第 105 页（PDF p123）</h3>
+<p>第4章 复台类型                 105</p>
+<p>味着数组是在编译时加入到程序中的。但使用new 时，如果在运行阶段需要数组，则创建它， 如果不需要，<br>则和不创建。还可以在程序运行时选择数组的长度，这被称为动态联编 (dynamic binding)，意味着数组是在<br>程序运行时创建的。这种数组叫作动态数组〔dynamic array)。使用静态联编时，必须在编写程序时指定数<br>组的长度; 使用动态联编时，程序将在运行时确定数组的长度。</p>
+<p>下面来看一下基于动态数组的两个基本问题: 如何使用 C++的 new 运算符创建数组以及如何使用指针<br>访问数组元素。</p>
+<ol>
+<li>使用new 创建动态数组</li>
+</ol>
+<p>在 C++中，创建动态数组很容易，上内要将数组的元素类型和元素数目告诉 new 即可。 必须在类型名后<br>加上方括号，其中包含元素数目。例如，要创建-一个包含 10个 int 元素的数组，可以这样做;</p>
+<p>int * psome = new int [10]; // get a block of 10 ints</p>
+<p>new 运算符返回第一个元素的地址。在这个例子中，该地址被赋给指针 psome.</p>
+<p>当程序使用完 new 分配的内存块时，应使用 delete 释放它们。然而，对于使用 new 创建的数组，应使<br>用男一种格式的 delete RFK:</p>
+<p>delete [] psome;              // free a dynamic array</p>
+<p>方插号告诉程序，应释放整个数组，而不仅仅是指针指向的元素。请注意 delete 和指针之间的方括号。<br>如果使用 new IN, 不带方括号, 则使用 delete 时, 也不应带方括号。如果使用new 时带方插号, 则使用 delete<br>时也应带方括号。C++的早期版本无法识别方括号表示法。然而，对于 ANSU/ISO 标准来说，new 与 delete<br>的格式不匹配导致的后果是不确定的，这意味着程序员不能依赖于某种特定的行为。下面是一个例子，</p>
+<p>int * pt = new int;</p>
+<p>short ; ps = new short [500];</p>
+<p>delete [] pt; // effect is undefined, don't do it</p>
+<p>delete ps;    // effect is undefined, don't do it</p>
+<p>总之，使用 new 和 delete 时，应遵守以下规则.<br>不要使用 delete RRM AE new 分配的内存。<br>.不要使用 delete 释放同一个内存块两次 “-<br>如果使用 mew [ ]为数组分配内存，   则应使用 delete [ ]来释放。<br>如果使用 new [ ]为一个实体分配内存，则应使用 delete《〈没有方括号) 来释放。<br>对空指针应用 delete 是安全的。</p>
+<p>现在我们回过头来讨论动态数组。psome 是指向一个 int 数组第一个元素) 的指针。您的责任是跟踪<br>内存块中的元素个数。也就是说，由于编译器不能对 psome 是指向 10 个整数中的第 1 个这种情况进行跟<br>踪，因此编写程序时，必须让程序跟踪元素的数目。</p>
+<p>实际上，程序确实跟踪了分配的内存量，以便以后使用 delete [ ]运算符时能够正确地释放这些内存。</p>
+<p>但这种信息不是公用的，例如，不能使用 sizeof 运算符来确定动态分配的数组包含的字节数。<br>为数组分配内存的通用格式如下:</p>
+<p>“type name * pointer_ name = new type_name [num elements] ;</p>
+<p>使用new 运算符可以确保内存块足以存储 num_elements 个类型为Wpe name 的元素; 而 pointer_name<br>将指 站第 1 个元素。下面将会看到，   Rs 的方式来使用 pointer_name。</p>
+<p>创建动态数组后，如何使用它呢? 首先，  从概念上考虑这个 问题。  下面的语句创建指针 psome，它指<br>HGS 10个 int 值的内存块中的第 上1个元素:</p>
+<p>int * psome = new int [10]; // get a block of 10 ints</p>
+<p>可以将它看作是一根指向该元素的手指。假设 int 占 4 个字节，则将手指沿正确的方向移动 4 个字节，</p>
+<p>手指将指向第 2 个元素。 总共有 10 个元素，这就是手指的移动范围。因此，new 语句提供了识别内存块中<br>每个元素所需的全部信息。</p>
+<h3>第 106 页（PDF p124）</h3>
+<p>现在从实际角度考虑这个问题。如何访问其中的元素呢? 第一个元素不成问题。由于 psome 指向数组<br>的第 1 个元素，因此*psome 是第 1 个元素的值。这样，还有 9 个元素。如果没有使用过 C 语言，下面这<br>种最简单的方法可能会令您大吃一惊: 只要把指针当作数组名使用即可。也就是说，对于第 1 个元素，可<br>以使用 psome[0]，而不是*psome:， 对于第 2 个元素，可以使用 psome[1]，依此类推。这样，使用指针来访<br>问动态数组就非常简单了，虽然还不知道为何这种方法管用。可以这样做的原因是，C 和 C++内部都使用<br>指针来处理数组。数组和指针基本等价是C 和 C++的优点之一(这在有时候也是个问题, 但这是另一码事)。<br>稍后将更详细地介绍这种等同性. 首先,程序清单 4.18 演示了如何使用 new 来创建动态数组以及使用数组<br>表示法来访问元素，它还指出了指针和真正的数组名之间的根本差别。</p>
+<p>程序清单 4.18 arraynew.cpp</p>
+<p>// arraynew.cpp -- using the new operator for arrays</p>
+<p>#include &lt;iostream&gt;<br>int main()<br>using namespace std;<br>double * p3 = new double [3]; // space for 3 doubles</p>
+<p>DP3 [0] = 0.2;                  // treat p3 like an array name</p>
+<p>p3= p3.+ 1;                  // increment the pointer</p>
+<p>p32 = pa - 1;                  // point back to beginning<br>return 0;</p>
+<p>下面是该程序的输出:</p>
+<p>p3[1] is 0.5.</p>
+<p>Now p3[0] is 0.5 and p3[1] is 0.8.</p>
+<p>APR] sl, arraynew.cpp 将指针 p3 当作数组名来使用，p3[0]为第 1 个元素，依次类推。下面的代码行<br>指出了数组名和指针之间的根本差别:</p>
+<p>p3 = p3 +1; // okay for pointers, wrong for array names</p>
+<p>不能修改数组名的值。但指针是变量，因此可以修改它的值。请注意将 p3 加 1 的效果。表达式 p3[0]<br>现在指的是数组的第 2 个值。因此, 将 p3 加 1 导致它指向第 2 个元素而不是第 1 个. 将它减 1 后，指针将<br>指癌原来的值，这样程序便可以给 delete[ ]提供正确的地址。</p>
+<p>相邻的 int 地址通常相差 2 个字节或4个字节，而将 p3 加 1 后，它将指向下一个元素的地址，这表明<br>指针算术有一些特别的地方。情况确实如此。</p>
+<p>4.8 指针、数组和指针算术</p>
+<p>指针和数组基本等价的原因在于指针算术 (pointer arithmetic) 和 C++内部处理数组的方式。首先，我<br>们来看一看算术。将整数变量加 1 后，其值将增加 1，但将指针变量加 1 后，增加的量等于它指向的类型<br>的字节数，将指向 double 的指针加 1 后，如果系统对 double 使用8 个字节存储，则数值将增加 8，将指向<br>short 的指针加 1 后，如果系统对 short 使用 2 个字节存储，则指针值将增加 2。程序清单 4.19 演示了这种<br>信人吃惊的现象，它还说明了另一点: C++将数组名解释为地址。</p>
+<h3>第 107 页（PDF p125）</h3>
+<p>第4章”复合类型</p>
+<p>程序清单 4.f9 addpntrs.cpp</p>
+<p>// addpntrs.cpp -- pointer addition—<br>_. #incelude-&lt;iostream&gt;<br>int main()<br>_using namespace std;<br>_. double -wages[3]-=.{10000.0, 20000.0, 30000.0}; ----<br>short ‘stacks [3]== -{3, F =    "eee ees</p>
+<p>YA Here are-two.ways to get the. address.of an array</p>
+<p>“double * pw-= wages;     “yf ‘lame of an‘ array .= address __</p>
+<p>-short *-ps = &amp;stacks[0};.// or use address-operator<br>// with array element<br>cour 2 ad = “&lt;&lt; pwce ", "pws " ce ss e&lt;endl;</p>
+<p>pw = pw + 1;        Geum</p>
+<p>“cout &lt;&lt;  "add tte ete yw natncer Wes        Sle ee</p>
+<p>ps = ps-+ 1;<br>cout &lt;&lt; "add 1 to the ps pointer:\n":z<br>cout &lt;&lt; "ps =" ce PS &lt;&lt; side <em>ps = "ec </em>ps ec "\n\n";</p>
+<p>cout &lt;&lt; "access two elements with array notation\n";<br>cout &lt;&lt; "stacks [OF = " &lt;&lt; stacka[)</p>
+<p>cout &lt;&lt; "access two elements- With: pointer notatzon\n";<br>cout &lt;&lt; "<em>stacks = " ce </em>stacks</p>
+<p>cout &lt;&lt; sizeof (wages&lt;&lt; " = size of wages array\n";<br>cout- &lt;&lt; sizeof(pw) &lt;&lt; "= size of pw pomter\n";<br>return 0;</p>
+<p>上上</p>
+<p>下面是该程序的输出;<br>pw = Ox28cc£O, *pw = 10000</p>
+<p>add 1 to the pw pointer:</p>
+<p>pw-= Ox28ccf£8, *pw = 20000</p>
+<p>ps-= Ox28ccea, *ps = -于<br>add 1 to the ps pointer:<br>ps = 0x28ccec;'*ps = 2</p>
+<p>accesa_two elements with array notation<br>‘gstacks[0]_= 3, stacks{i}= 2<br>access-two elements with ie notation</p>
+<p>#Stacks =:3,..*(stacks&lt;+ 1).</p>
+<p>4==   “pige- of wages array<br>4 = size of pw pointer</p>
+<p>48.1 程序说明</p>
+<p>在多数情况下, C++将数组名解释为数组第 1 个元素的地址.因此,下面的语句将 pw 声明为指向 double</p>
+<h3>第 108 页（PDF p126）</h3>
+<p>.           " pointernane - =. pointernane. ; +1;  Ub salsa:   en gh yee Lote eae amas Te eae Beat cece a ate<br>ae ee.    " arraynane. = sg ， + VE allowed -   fps Et pee eee ior</p>
+<p>108      "Gee primer Plus (8 6A) HS</p>
+<p>“类弄的指针，然后将它初始化为 wages一-wages 数组中第上个元素的地址:</p>
+<p>double * pw = wages;</p>
+<p>二和所有状组=-拌一%吧及也存在下面的等式， mag ae 2</p>
+<p>wagesr= &amp;wages(0) = address of first elénenit “oe array,</p>
+<p>| HRs OA SE Mak, RETF HE AIA MS stacks[0] PSEC HIE FH Hh bi 9 PO ps 指针初始化为 stacks-</p>
+<p>_接下来，  程序查看 a eee 的入- 前者是和地。  ERROR 的值- 由于pw 指向第 1 个元</p>
+<p>eR  :-因此*pw:显示的值为第上个元素的值二即'10600。 接着，程序将 pw dn 1. EWU RETTIB AIAN GK PERE oo Se<br>= Hi ED SSRI By 这使得 pw 的值为第 2 ATE RE RA Baik, “pie SUTE MEE 20000-—98 2 在元素的值 :=<br>-参见图和10，为使改图更为清晰， 0</p>
+<p>人 wages[3) = (10000.0, 20000.8, 30000.0};<br>short stacks[3] = (3, 2, hi</p>
+<p>os -图和10- 指针加统 ae ee<br>二=。此后。程序对 ps狼行相同的操作。这一 Fp MIE er ER son AER Bb<br>RST Sea 2", HAT Hea Fe EE ane</p>
+<p>ewe et</p>
+<p>CREAR REM TE, ee eee</p>
+<p>| ER A A stacksf1] &gt;  CHR BEALE IE EY (stacks #°1),  “Rabe”<br>eee te 然后找到存储在那星的值。  MEER sacks [AX BMRA AER</p>
+<p>:用括号， 如果不使用括号- -将给*stacks 加 Fy 市不是给 stacks加Da 二</p>
+<p>，从该程序的输出 ATS 可 (stacks +: 1): Fi Sacksl HE OF a  * “(stacks + +. 2) A A sacks</p>
+<p>Sioa  “azraysane i becomes arraynahe ; + ae seine “Agee io Bema” pin, Bae aoe 0</p>
+<p>Nets ones — . ciated as fe ee ee</p>
+<p>Dil, CHEMO, TUM TRUNNG RRA TEN, SOOO,<br>i eee 它们都表示地址。区别之一 是，可以修改指钙的值，-</p>
+<h3>第 109 页（PDF p127）</h3>
+<p>另一个区别是，对数组应用 sizeof 运算符得到的是数组的长度，而对指针应用 sizeof 得到的是指针的<br>长诬，即使指针指向的是一个数组。例如，在程序清单 4.19 中，pw 和 wages 指的是同一个数组，但对它<br>们应用 sizeof 运算符得到的结果如下，</p>
+<p>24 = size of wages array &lt;&lt; displaying sizeof wages</p>
+<p>4 = size of pw pointer &lt;&lt; displaying sizeof pw</p>
+<p>这种情况下，C++不会将数组名解释为地址。<br>数组的地址</p>
+<p>对数组取地焉时，数钥名也不会被解释为其地址。等等，数组名难道不被解释为数组的地址吗? 不完<br>全如此: 数组名被解释为其第一个元素的地址,而对数组和名应用地址运算和煌时，得到的是整个数组的地址:</p>
+<p>short tell[10];       // tell an array of 20 bytes<br>cout &lt;&lt; tell &lt;&lt; endl; // displays &amp;tell[0]</p>
+<p>cout &lt;&lt; ktell &lt;&lt; endl; // displays address of whole array</p>
+<p>从教字上说，这两个地址相同; (2G LL, Ktell[O] ( Fp tell) 是一个2 FRA AIH HAE, MAtell 是<br>一个20 字节内存块的地址。因此，表达式 tell+ 1 将地址值加2，而表达式点tell+2 将地址加20。接名话说，tell<br>是一个short 指针 (<em> short )，而&amp;tell 是一个这样的指针，即指向包含 20 个元素的 short 数组 (short (</em>) [20] )。</p>
+<p>您可能会问，前面有关&amp;&amp;tell RMR ROAM RK? 首先，您可以这样声明和初始化这种指针:</p>
+<p>short (*pas)[20] = &amp;tell; // pas points to array of 20 shorts</p>
+<p>如果省略揪号, 优先级规则将悟得 pas 2520), 导致 pas 是一个 short 指针数组, CAS 20 个元素，<br>因此括号是必不可少的。其次，如果要描述变量的类型，可将声明中的变量名删除。因此，Ppas 的类型为 short<br>(<em>) [20]。另外，由于 pas 被设置为名tell，因此</em>pas 5 tell 等价，所以(*pas) [0]为 tell 数组的第一个元素。</p>
+<p>总之,使用 mew 来创建数组以及使用指针来访问不同的元素很简单。只要把指针当作数组名对待即可。<br>然而，要理解为何可以这样做，将是一种挑成。要想真正了解数组和指针，应认真复习它们的相互关系。</p>
+<p>4.8.2 ”指针小结<br>刚才已经介绍了大量指针的知识，下面对指针和数组做一总结。</p>
+<p>1声明指针<br>要声明指向特定类型的指针，请使用下面的格式:</p>
+<p>typeName * pointerName;</p>
+<p>下面是一些示例;</p>
+<p>double * pn;      // pn can point to a double value</p>
+<p>char * pc;        // pe can point to a char value</p>
+<p>其中，pn 和 pe 都是指针，而 double <em># char </em>是指向 double 的指针和指向 char 的指针。</p>
+<ol>
+<li>#49474</li>
+</ol>
+<p>应将内存地址赋给指针。可以对变量名应用有运算符，来获得被命名的内存的地址，new 运算符返回<br>未命名的内存的地址。</p>
+<p>下面是一些示例:</p>
+<p>double * pn;         // pm can point to a double value</p>
+<p>char * pc;            // pe can point to a char value</p>
+<p>double bubble = 3.2;</p>
+<p>pn = &amp;bubble;        // assign address of bubble to pn</p>
+<p>pe = new char;       // assign address of newly allocated char memory to pc</p>
+<p>pa = new double[30); // assign address of Ist element of array of 30 double to pa</p>
+<h3>第 110 页（PDF p128）</h3>
+<p>3，对指针解除引用</p>
+<p>对指针解除引用意味着获得指针指向的值。对指针应用解除引用或间接值运算符 (*) 来解除引用。因<br>此，如果像上面的例子中那样，pn 是指向 bubble 的指针，则*pn 是指向的值，即 3.2.</p>
+<p>下面是一些示例:</p>
+<p>cout &lt;&lt; *pn; // print the value of bubble</p>
+<p>Ypc = 'S';   // place 'S' into the memory location whose address is pe</p>
+<p>另一种对指针解除引用的方法是使用数组表示法，例如，pn[0]与*pn 是一样的。诀不要对未被初始化<br>为适当地址的指针解除引用。<br>4，区分指针和指针所指向的值</p>
+<p>如果 pt 是指向 int 的指针，则*pt 不是指向 int 的指针，而是完全等同于一个 int 类型的变量。pt 才是指针。<br>下面是一些示例;</p>
+<p>int * pt = new int;     // assigns an address to the pointer pt</p>
+<p>*pt = 与                // stores the value 5 at that address</p>
+<ol>
+<li>eB</li>
+</ol>
+<p>在多数情况下，C++将数组名视为数组的第一个元素的地址。</p>
+<p>下面是一个示例，</p>
+<p>int tacos[10] ;          // mow tacos is the same as &amp;tacos[0]</p>
+<p>一种例外情况是，将 sizeof 运算符用于数组名用时，此时将返回整个数组的长度【单位为字节)。</p>
+<ol>
+<li>44 RK</li>
+</ol>
+<p>C++允许将指针和整数相加。加 1 的结果等于原来的地址值加上指向的对象占用的总字节数。还可以<br>将一个指针减去另一个指针，获得两个指针的差。后一种运算将得到一个整数，仅当两个指针指向同一个<br>数组〔也可以指向超出结尾的一个位置) 时，这种运算才有意义;这将得到两个元素的间隔。</p>
+<p>下面是一些示例:</p>
+<p>int tacos[Ii0] = {5,2,8,4,1,2,2,4,6,8];</p>
+<p>int * pt = tacos;       // suppose pf and tacos are the address 3000<br>pt = pt + 1;            // now pt is 3004 if a int is 4 bytes</p>
+<p>int *pe = &amp;tacos [9];    // pe is 3036 if an int is 4 bytes</p>
+<p>pe = pe - 1;            // now pe is 3032, the address of tacos[8]<br>int diff = pe - pt;     // diff is 7, the separation between</p>
+<p>// tacos[8] and tacos[1)</p>
+<ol>
+<li>数组的动态联编和静态联编</li>
+</ol>
+<p>使用数组声明来创建数组时，将采用静态联编，即数组的长度在编译时设置:</p>
+<p>int tacosg [10] ;AASLatIC binding, size fixed at compile time</p>
+<p>使用 new[ ]运算符创建数组时，将采用动态联编 (动态数组)，即将在运行时为数组分配室间，其长度<br>也将在运行时设置。使用完这种数组后，应使用 delete [ ]释放其占用的内存:</p>
+<p>int size;</p>
+<p>int * pz = new int [size];   // dynamic binding, size set at run time</p>
+<p>delete [] pz;                // free memory when finished</p>
+<p>8，数组表示法和指针表示法<br>使用方括号数组表示法等同于对指针解除引用:</p>
+<h3>第 111 页（PDF p129）</h3>
+<p>tacos [®]_means=*tacos means the value _at address tacos<br>tacos [3] means—*(tacos-+ 3)-means the value at address tacos—+ 3</p>
+<p>MALOU SE AACE se, BGR Pa EE AUB 2. DEMME AT AeA. ET OA<br>ic  .  aa = dnt * pts  “ew “int fore ae ot-points to bledk=ef 10 inte ~—°= — A. ee    一<br>See = Ei  Bt 2S    ia SOO we cll set element ‘number 0 to Be    plotpe: (oaiedie eh comune<br>ee pt BE = ary  = oe ee  a set tenth. element MEienaEE bs oF te ae Be reas ce &lt;i ea  aes ain es</p>
+<p>saint. “coats {101 7    a ries   ane saa,  to   Tee he ee ee   523 Seo</p>
+<p>a Ss “e(eoats +4 = 1S a a aet-coate (45 te ee aoe GS   -一  ee   —=</p>
+<p>an a mI  ee ee</p>
+<p>She ah ghee Flower [ley = Nrogery 30 1. FEE oe ne gt ee  — Ak hee ae   ae oe as</p>
+<p>eo ates a cout: eer flower ee ag are xed\n"; : oe a    Pee ete mee     上</p>
+<p>ee        — y Ghat MH LP RPM MOSM, Be TENTION,  -然后继续打印后面的字符;直到遇到空字符-，<br>or -总之，如果给 cout 提供一个字符的地址，则它将从该字符开始打印,直到巡到空字符为正; nos<br>a         -这里的关键不在主 flower it 44&gt; mer flower 是一个,cfar AEE. -这意味着评以将指向 char 的</p>
+<p>-指针变量作为 cout 的参数=-因为它也是 char 的地址- 当然;该指针指向 字符串的开头，  稍后将核实这一点。 :</p>
+<p>-一人前面的gout语名中最后一部分的情况如何呢? 如果:fower是字符让第一个字符的地址;则表达式“&lt;sare 一-</p>
+<p>wea" ALAIN? 3 为了与 cout 对字符由办出的站理保持到; 这个用引号括超的学符昌但应当是-个地直</p>
+<ul>
+<li>”在C++中，用引号插起的字符电像数组名一样; 也是第一个元素的地址。 ao</li>
+</ul>
+<p>-给 cout- 而县是发送该字符嘻的地址。这意味着对于数组让的字符囊、用引号括起的字符串常量以及指针 一、</p>
+<p>-所描述的字符串， 处理的方式是一样的， “者将传道它们的地址*  SEMA PII TAAL,</p>
+<p>SOPRA ESTE Pes BEZD               nee<br>注意: 4 cout Fo $ 4k C+f表达式中，char 数组名、char 指针以及用引 号括起的字符 串常量都被解释为</p>
+<p>字待囊第一个宝竺的地址。</p>
+<p>程序清单 4.20-演示了如何使用不同形式的字符串。它使用了西个字符串库中的函数。 函数 strlen( )我</p>
+<p>从以前用过，它返回宝符串的长度。函数 strepy( )将字符串从一个位置复制到另一个位置。这两个函数的-<br>poe  mil</p>
+<p>; Af ptrstr, cpp -  oe using: ‘pointers, to. strings.<br>=p #Wineude*&lt; &lt;iostream&gt; 3 ae ‘ oe</p>
+<p>ae Shetcamimal20]= "bear"; — //. aa holds bear 一、也:   ley a SaaS a ae ee</p>
+<p>© gonst: chat, 0 wren";  LE: bird :heras address ‘of “string ©   ata</p>
+<p>_char. £ PBI. 2 i Rees ee    ae fs ‘uninitialized. 和   oe eee</p>
+<p>it oe eel  和二 METS, Se geet AE te ane</p>
+<p>cout &lt;&lt; “animal ee ' wa m;  ree display bear<br>eout &lt;&lt; bird &lt;&lt; "iu";      // display wren</p>
+<h3>第 112 页（PDF p130）</h3>
+<p>// cout &lt;&lt; ps &lt;&lt; "\n";      //may display garbage, may cause a crash</p>
+<p>cout &lt;&lt; "Enter a kind of animal: ";</p>
+<p>cin &gt;&gt; animal;              // ok if input &lt; 20 chars<br>// cin &gt;&gt; ps; Too horrible a blunder to try; ps doesn't<br>i}            point to allocated space</p>
+<p>PS = animal;                // set ps to point to string<br>gout &lt;&lt; ps &lt;&lt; "!\n";       // ok, Same as using animal<br>cout &lt;&lt; "Before using strepy():\n";</p>
+<p>cout &lt;&lt; animal &lt;&lt; " at " &lt;&lt; {int *) animal &lt;&lt; endl;</p>
+<p>ps = new char(strlen(animal) + 1]; // get new storage<br>strcpy(ps, animal) ;         // copy string to new storage<br>cout &lt;&lt; "After using strepy():\n";</p>
+<p>cout &lt;&lt; animal &lt;&lt; " at " &lt;&lt; {int *} animal &lt;&lt; endl;</p>
+<p>delete [] ps;</p>
+<p>return Q;</p>
+<p>下面是该程序的运行情况:</p>
+<p>bear and wren</p>
+<p>Enter a kind of animal: fox<br>fox!</p>
+<p>Before using strepy():</p>
+<p>fox at 0x0065fd30</p>
+<p>fox at Ox00é65fd30</p>
+<p>After using strepy():</p>
+<p>fox at O0x0065£d30</p>
+<p>fox at Ox004301c8</p>
+<p>程序说明</p>
+<p>程序清单 4.20 中的程序创建了一个 char 数组 〈animal) 和两个指向 char 的指针变量 (bird 和 ps)。该<br>程序首先将 animal 数组韧始化为字符串“bear”，就像初始化数组一样。然后，程序执行了一些新的操作，<br>将 char 指针初始化为指向一个字符串，</p>
+<p>const char * bird = "wren"; // bird holds address of string</p>
+<p>记住,“wren”实际表示的是字符串的地址，因此这条语句将“wren”的地址赋给了 bird 指针。 (—AR<br>来说，编译器在内存留出一些空间，以存储程序源代码中所有用引号括起的字符串，并将每个被存储的字<br>符串与其地址关联起来.) 这意味着可以像使用字符串“wren ”那样使用指针 bird，如下面的示例所示:</p>
+<p>cout &lt;&lt; "A concerned " &lt;&lt; bird &lt;&lt; " speaks\n";</p>
+<p>字符串字面值是常量，这就是为什么代码在声明中使用关键字 const 的原因。以这种方式使用 const 意<br>昧着可以用 bird 来访问字符串，但不能修改它。第 7 章将详细介绍 const 指针。 最后，指针 ps 未被初始化，<br>因此不指向任何字符串〈正如您知道的，这通常是个坏主意，这蜂也不例外)。</p>
+<p>接下来，程序说明了这样一点，即对于 cout 来说，使用数组名 animal 和指针 bird 是一样的。毕竟，<br>它们都是字符串的地址，cout 将显示存储在这两个地址上的两个字符串〈“bear”和“wren”)。如果激活错<br>误地显示 ps 的代码，则将可能显示一个室行、一堆乱码，或者程序将剧涡。创建未初始化的指针有点像签<br>发空头支票:无法控制它将被如何使用。</p>
+<p>对于输入，情况有点不同。只要输入比较短，能够被存储在数组中，则使用数组 animal 进行输入将是</p>
+<h3>第 113 页（PDF p131）</h3>
+<p>第4章 复台类型                 113</p>
+<p>安全的。然而，使用 bird 来进行输入并不合适:</p>
+<p>@ 有些编译器将字符串字面值视为只读常量， 如果试图修改它们，将导致运行阶段错误。在 C++中，</p>
+<p>字符串字面值都将被视为常量，但并不是所有的编译器都对以前的行为做了这样的修改。</p>
+<p>@ 有些编译器只使用字符串字面值的一个副本来表示程序中所有的该字面什。</p>
+<p>下面讨论一下第二点。C++不能保证字符串字面值被唯一地存储。也就是说，如果在程序中多次使用<br>了字符串字面值“wren”，则编译器将可能存储该字符串的多个副本，也可能只存储一个副本。如果是后面<br>一种情况，则将 bird 设置为指向一个“wren "，将使它只是指向该字符串的唯一一个副本。将值读入一个<br>字符串可能会影响被认为是独立的、位于其他地方的字符串。 无论如何，由于 bird 指针被声明为 const，因<br>此编译器将禁止改变 bird 指向的位置中的内容。</p>
+<p>试图将信息读入 ps Fn Ee. EP ps 没有被初始化，因此并不知道信息将被存储在哪里，这甚至<br>醋能改写肉存中的信息。幸运的是，要避免这种问题很容易一只要使用足够大的 char 数组来接收输入即可。请<br>不要使用字符串常量或未被初始化的指针来接收输入。为避免这些问题，也可以使用 std:sstring 对象，而不是数组。</p>
+<p>警告: 在将字符事读入程序时，应使用已分配的内存地址。 该地址可以是数组名，也下以是使用 new</p>
+<p>初始化过的指针。          mo<br>ps =-animal;             // set ps to point to=-string—</p>
+<ul>
+<li>cout gers ml ie: ioe ‘at: aaa: (int. +) ‘animal &lt;&lt; ‘endl; ee 有</li>
+</ul>
+<p>Seoeieadt [Ne peo ang Rs cout : &lt;&lt; pS. &lt;&lt; tat. ee Leas sl PS. &lt;&lt; enh     Yi lade: Perak Hee ie Cpe aS 人   Sst BRE<br>a “ee FA     Seg ee ee ee ee en<br>ee 2 Gi fom Tab oxo06S#a30 °c - a eth ae ate on ee ae ee ss Me ‘ie Neg ae<br>fox at 0x0065£d30_ = 4   7</p>
+<p>eee “OR BLY “WU RY cout 提供一个指针，  它将打印地十。 “etn meta gt NRW chiar 1 cout fe oat<br>-向的字符串-- 如果要显示的是字符串的地址， -则必须将这种指针强制转换污另一种指针类型= fu int * CE<br>=        : 面的代码就是这样做的)。因此，ps BARAT “fox”, Ti Cnt *)-ps 显示为该字符串的地址。 TERE.  He<br>a a ps 并不会复制字符串， -而只是复制地址。 这样; -这两个指针将指向相同的内存单元和字符串-:<br>secre    -要获得字符串的副本，  RES ST es  2k, RAMAN, RATTAN<br>:二个数组或使用iew 来完成。后一种方法使得能够根据字符囊的长度来指定所需的空间:=     -<br>ps = new char[strlen(animal) + 5]; // get new storage<br>PTE “fox” AHESORHES animal 数组;因此这样做浪费子空j 上述代码使用strlen()来确定字符<br>BARE BE, J CEL RRACS SERAPH. Bs, 程序使用new 来分配刚好足够存储该 -<br>BERR 需要将animal MHP WF HIS LSU PSHE animal BLA ps ROTH, Bb<br>这样只能修改存储在 ps PIHBLE, MITRE i TR AEE IA a ala ee</p>
+<p>-strepy (ps, .  animal) ;    和     “tf copy: string to new storage -一</p>
+<p>© strepy() pA MRE 2 个参数。 RE RSM. ALBEE Re: 您应确定，分配了<br>os 目标空间， 并有证够的空间来存依副本&lt; 在这里， 我们用 strlen PROSE ANTE 并使用 new ee  a</p>
+<p>通过全用 sro Pew, AREA “Tox” APRN</p>
+<p>fox at Ox0065fd30 9° ~ a<br>-fox at 0x004301cB _      ™</p>
+<p>abby new 在离大而8数组很远的地方找到了了所需的内存空间。 本    :<br>经党需要将字符串交到数组中 初始化数维时; ATE I AN sti mR etmicpye de</p>
+<p>smegy()在前已经介绍进，其工作原理如下    ES</p>
+<h3>第 114 页（PDF p132）</h3>
+<p>char food[20]) = "“carrets"; // initialization<br>strepy(food, "flan");    // otherwise</p>
+<p>注意，类似下面这样的代码可能导致问题，因为 food 数组比字符串小:</p>
+<p>strepy(food, "a picnic basket filled with many goodies");</p>
+<p>在这种情况下，函数将字符串中剩余的部分复制到数组后面的内存字节中，这可能会覆盖程序正在使<br>用的其他内存。要避免这种问题，请使用 stmcpy( )。该函数还接受第 3 个参数一一要复制的最大字符数。<br>然而，要注意的是，如果该函数在到达字符串结尾之前，目标内存已经用完，则它将不会添加空字符。因<br>此，应该这样使用该函数，</p>
+<p>strncpy(food, "a picnic basket filled with many goodies", 19);<br>food[19] = '\0';</p>
+<p>这样最多将 19 AEG ASBAP, RAG -TDRRREREE I. RATER DF 19 个字<br>符，则 stmcpy( )将在复制完该字符串之后加上空字符，以标记该字符串的结尾。</p>
+<p>警告，应使用 strecpyf )或 stmepy( )，而不是赋值运算特来将字特串赋给数组。</p>
+<p>您对使用 C-风格字符串和 cstring 库的一些方面有了了解后, 便可以理解为何使用 C++ string 类型更为<br>简单了: 您不用担心字符串会导致数组越界，并可以使用赋值运算符而不是函数 strcpy( )和 strnepy( )。</p>
+<p>4.8.4 使用new 创建动态结构</p>
+<p>在运行时创建数组优于在编译时创建数组，对于结构也是如此。需要在程序运行时为结构分配所需的<br>空间，这也可以使用 new 运算符来完成。通过使用 new，可以创建动态结构。同样, “动态”意味着内存<br>是在运行时，而不是编译时分配的。由于类与结构非常相似，因此本节介绍的有关结构的技术也适用于类。</p>
+<p>将 new 用于结构由两步组成: 创建结构和访问其成员。要创建结构，需要同时使用结构类型和 new.<br>例如，要创建一个未命名的 inflatable 类型，并将其地址赋给一个指针，可以这样做，</p>
+<p>inflatable * ps = new inflatable;</p>
+<p>这将把足以存储 inflatable 结构的一块可用内存的地址赋给 ps。这种句法和 C++的内置类型完全相同。</p>
+<p>比较棘手的一步是访问成员。创建动态结构时，不能将成员运算符句点用于结构名，因为这种结构没<br>有和名称，只是知道它的地址。C++专门为这种情况提供了一个运算符: SLM RBA (&gt;). Beh<br>连字符和大于号组成，可用于指向结构的指针，就像点运算符下用于结构名一样。例如， 如果 ps 指向一个<br>inflata5le-结构，则ps-&gt;=price 是被指门的结构的 price 成员 《参见图 4.11)。</p>
+<p>RE AE   _-, grubnose.good grubnose.bad———- =:</p>
+<p>_用于结构名         pare i</p>
+<p>结构grupmmose 一| 3 | 453 |<br>SERRE ost eee le<br>:指向结构的指针 f=. Pt 二9000 pt bad</p>
+<p>Pala. 标识结构成员_-</p>
+<h3>第 115 页（PDF p133）</h3>
+<p>第4章 和揽台类型                 115</p>
+<p>fem: BA, CHMPABREAMARAN, BRAN BRA) RH, HM RARABHA.<br>规则非常简单。如果结构标识符是结构名，则使用句点运算特; 如果标识桂是指向结构的指针，则使用葡<br>头运算符。</p>
+<p>另一种访问结构成员的方法是，如果 ps 是指向结构的指针，则*ps 就是被指向的值一一结构本身。由<br>于<em>ps 是一个结构，因此 (</em>ps) .price 是该结构的 price 成员。C++的运算符优先规则要求使用括号。</p>
+<p>程序清单 4.21 使用 new 创建一个未命名的结构，并演示了两种访问结构成员的指针表示法。</p>
+<p>程序清单 4.21 newstrct.cpp</p>
+<p>// newstret.epp -- using new with a structure</p>
+<p>#include &lt;iostream&gt;</p>
+<p>struct inflatable   // structure definition<br>char name [20] ;<br>float volume;<br>double price;<br>int maint}<br>using namespace std;<br>inflatable * ps = new inflatable; // allot memory for structure<br>eout &lt;&lt; "Enter name of inflatable item: ";<br>cin.get(ps-&gt;name, 20);            // method 1 for member access<br>cout «&lt; "Enter volume in cubic feet: ";<br>cin &gt;&gt; (*ps).volume;              // method 2 for member access<br>cout &lt;&lt; "Enter price: $";<br>cin =&gt; ps-&gt;price;</p>
+<p>cout &lt;&lt; "Volume: " &lt;&lt; ps-&gt;volume &lt;&lt; " cubic feet\n"; // method 1<br>delete ps;                      // free memory used by structure<br>return (Q;</p>
+<p>下面是该程序的运行情况，</p>
+<p>Enter name of inflatable item: Fabulous Frodo<br>Enter volume in cubic feet: 1.4</p>
+<p>Enter price: $27.99</p>
+<p>Name: Fabulous Frodo</p>
+<p>Volume: 1.4 cubic feet</p>
+<p>Price: $27.99</p>
+<p>1, —/4Mé A new 和 delete 的示例</p>
+<p>下面介绍一个使用 new 和 delete 来存储通过键盘输入的字符串的示例。 程序清单 4.22 定义了一个函数<br>getname( )，该函数返回一个指向输入字符串的指针。该函数将输入读入到一个大型的临时数组中，然后使<br>用mew[ ]创建一个刚好能够存储该输入字符串的内存块，并返回一个指向该内存块的指针。对于读取大量<br>字符串的程序，这种方法可以节省大量内存《实际编写程序时，使用 string 类将更容易，因为这样可以使<br>用内置的 new 和 delete).</p>
+<p>假设程序要读取 100 个字符串，其中最大的字符串包含 79 个字符，而大多数字符串都短得和多。如果用<br>char 数组来存储这些字符盾，则需要 1000 个数组，其中每个数组的长度为 80 个字符。这总共需要 80000<br>个字节，而其中的很多内存没有被使用。另一种方法是，创建一个数组，它包含 1000 个指向 char 的指针，</p>
+<h3>第 116 页（PDF p134）</h3>
+<p>ig mere Oem em</p>
+<p>-然后使用 new 根据每个字符串的需要分配相应数量的内存。这将节省几万个字节。是根据输入来分配内存，<br>而不是为每个字符串使用一个大型数组。另外，还可以使用new 根据需要的指针数量来分配空间。就目前<br>而言，这有点不切实际，即使是使用 1000 个指针的数组也是这样，不过程序清单 4.22 还是演示子-一些技<br>巧。另外，为演示-delete 是如何工作的，该程序还用它来酸放内存以便能够重新使用。</p>
+<p>程序清单 4.22 delete.cpp</p>
+<p>// delete.cpp -- using the delete operator      =</p>
+<p>#include &lt;lostream=</p>
+<p>#ineckude &lt;cstring&gt;      ff or string.h</p>
+<p>using namespace std;</p>
+<p>char * getname(void) ;   #/ function prototype</p>
+<p>--  @har * name;        // create pointer but no storage _.<br>name =-getname(); ~ // assign-address of string to name _<br>name = getname ();   // reuse freed memory<br>delete 【上 name;-    // memory freed again<br>return 0:</p>
+<p>char * getname (=       // returm pointer to new string</p>
+<p>char temp[80)];      // temporary storage<br>cout &lt;&lt; "Enter last name: ";<br>char * pn = new char[strien(temp) + 1);<br>strcepy(pn, temp);   // copy string inte smaller space<br>return pn;          // temp lost when function ends</p>
+<p>下面是该程序的运行情况，</p>
+<p>Enter last name: Fredeldumpkin<br>Fredeldumpkin at 0x004326b8<br>Enter last name: Pook</p>
+<p>Pook at 0x004301c8</p>
+<ol>
+<li>程序说明</li>
+</ol>
+<p>来看一下程序清单 4.22 中的函数 getname( )。它使用 cin 将输入的单词放到 temp 数组中, 然后使用 new<br>分配新内存，以存储该单词。程序需要 strle (temp) + 1 个字符〈和包括空字符) 来存储该字符串，因此将<br>这个值提供给 new。获得宝间后，getnamel )使用标准库函数 strcpy( )将 temp 中的字符串复制到新的内存块<br>中。该函数并不检查内存块是否能够容纳字符串，但 getname( )通过使用 new 请求合适的字节数来完成了<br>OPER CE. do, PARR] pm，这是字符串副本的地址。</p>
+<p>在 main( )中，返回值(地址) 被赋给指针 name。该指针是在 main( )中定义的，但它指向 getname( )<br>函数中分配的内存块。然后，程序打印该字符串及其地址。</p>
+<p>接下来二在释放-mame 指向的内存块后，main6)再次调用 getmamef )。C++不保证新释放的内存就是下</p>
+<h3>第 117 页（PDF p135）</h3>
+<p>Anew 时选择的内存，从程序运行结果可知，确实不是。<br>在这全例子让;getname人)分配内存，而 main( PERL 4s 将 new 和 delete 放在不同的函数中通常并不<br>是个好办法，因为这样很容易忘记使用 delete。不过这个例子确实把-二w 和 delete 分开放置了，只是为了<br>说明这样做也是可以的。<br>为了解该程序的一些更为微妙的方面，需要知道一些有关 C++是如何处理内存的知识。 下面介绍一些<br>这样的知识;这些知识将在第 9 章做全面介绍。</p>
+<p>4.8.5. 自动存储静态存储和动态存储.</p>
+<p>根据用于分配内存的方法，C++有 3 种管理数据内存的方式:- 自动存储、静态存储和动态存储【〈有时<br>也叫作自由存储空间或堆太 在存在时间的长短方面,以这了种方式分配的数据对象各不相同。下面简要地<br>介绍每种类型 (C++TI 新增了第四种类型一一线程存储，这将在第9 章简要地讨论)。</p>
+<p>I 自动存储</p>
+<p>在函数内部定义的常规变量使用 自动存储空间 被称为自动变量(automatic variable)，这意味着它们<br>在所属的函数被调用时自动产生, 在该函数结束时消亡。例如, 程序清单 4.22 中的temp 数组仅涯getname( )<br>函数活动时存在。当程序控制权回到main( )时，temp 使用的内存将自动被释放。如果 getname( )返回 temp<br>的地址，则 mainf )中的name-指针指向的内存将很快得到重新使用。这就是在 getnameC)中使用 new 的原<br>因之一。</p>
+<p>实际上， 自动变量是-个局部变量，其作用域为包舍它的代码块。代码块是被包含在花括号中的一艇-</p>
+<p>_ 代码。到目前为目，我们使用的所有代码块都是整个函数。然而，在下一章将会看到，函数内也可以有代</p>
+<p>码块。如果在其中的某个代码块定义了=-个变量; 则该变量仅在程序执行该代码块中的代码时存在。</p>
+<p>自动变量通常存储在栈中。这意味着执行代码块时，其中的变量将依次加入到栈中，而在离开代码块<br>时，将接相反的顺译释放这些变量，这被称为后进先出〈EIFOD。因此，在程序质行过程中;，栈将不断地<br>增大和缩小。</p>
+<ol>
+<li>SA</li>
+</ol>
+<p>PAS TF REE PEE UAT BT BR EE ET EE ROR AS ST SE<br>定义它;-另一种是在声明变量时使用关键字 static:</p>
+<p>static dowble fee = 56.50;</p>
+<p>在K&amp;R C 中，只能初始化静态数组和静态结构，而 C+ Release 2.0 (及后续版本)》 和 ANSIC 中，也<br>可以初始化自动数组和自动结构。然而，--些您可能已经发现，有些 C++实现还不支持对自动数组和自动</p>
+<p>第9章将详细介绍静态存储。目动存储和静态存储的关键在主: 这些方法严格地限制了变量的寿命。<br>变量可能存在于程序的整个生命周期《静态变量六 也晨能只是在特定函数被执行时存在〈自动变量)5</p>
+<p>3 动态存储</p>
+<p>new 和-delete 运算符提供了一种比自动变量和静态变量更灵活的方法。它们管理了一个内存池，这在 CH<br>中被称为自由存储空间 (free store》或堆 (heap)。该内存池同用于静态变量和自动变量的内存是分开的。程序<br>清单 4.22 表明，new-和 delete 让您能够在一个函数中分配内存，而在另一个函数中释放它。因此，数据的生命<br>周期不守全受程序或函数的生存时间控制。与使用常规变昌相比，使用 new 和 delete 让程序员对程序如何使用<br>内存有更大的控制权。然而，内存管理也更复杂子。在栈中，自动添加和删除机制使得占用的内存总是连续的，<br>但 new 和 delete 的相互影响可能导致占用的自由存储区不连续，这使得跟踪新分配内存的位置更困难。</p>
+<p>栈、堆和内存泄漏</p>
+<p>fo RE Anew 运算符在自由存储空间(或推) 上创建变量后，泗有调用 delele，特发生什么情况呢?<br>如果没有调用 delete，则即使包含指针的内存由于作用域规则和对象生命周期的原因而被麦放，在咎由存</p>
+<h3>第 118 页（PDF p136）</h3>
+<p>储空间-上动态分配的变量或结构也将继续存在。实际上，将会无法访问和他由存储空间中的结构，固为指向<br>这些内存的指针无效。这将导致内存泄漏。被泄漏的内存将在程序的整个生命周期内都不可使用; 这些内-<br>存被分配出去，但无法收回。极端情况 (不过不常见 ) 是，内存泄漏可能会非常严重。以致于应用程序可<br>用的内存被耗尽，出现内存耗尽错误，和导致程序崩溃。另外，这种泄漏还会给一些操作系统或在相同的内<br>存空仁中运行的应用程序带来负面影响，导致它们崩溃</p>
+<p>即使是最好的程序让和软件公司,也可能导致内存泄漏。 要避免内存泄沁,，最好是养成这样一种习惯，<br>即同时使用new 和declete ZH. AHAB MLASPRAA, MERA. CHPREHAME<br>自动完成这种任务,，这将在第 16 章介绍。</p>
+<p>EM: 指针是功能最强大的 C++工具之一，但也最危险，因为它们友许执行对计算机不友好的操作，<br>如使用未经初始化的指针来访问内看或者试图释放同一个内存块两次。别外，在通过实践习惯指针表示法<br>和指针概念之前，指针是容易引起可总的。由于指针是 CE+编程的重要组成部分，杰书后面将更详细地讨<br>论它。本书多次对指针进行子讨论，就是希望您能够越来越囊悉它。</p>
+<p>4.9 ”类型组合</p>
+<p>本章介绍了数组、结构和指针。可以各种方式组全它们，下面介绍其中的一些，从结构开始:<br>struct antarctica_years end</p>
+<p>int year;<br>/<em> some really interesting data, etc. </em>/<br>可以创建这种类型的变量;</p>
+<p>antarctica_years end 801，802，8031 // s01, 802, s03 are structures</p>
+<p>然后使用成员运算符访问其成员:</p>
+<p>s0l.year = 1998;</p>
+<p>BY a EF I) kp a PST</p>
+<p>antarctica years end * pa = ES02;</p>
+<p>将该指针设置为有效地址后，就可使用间接成员运算符来访问成员;<br>pa-&gt;year = 1999;</p>
+<p>可创建结构数组:</p>
+<p>antarctica_years_end trio([3]; // array of 3 structures</p>
+<p>然后，可以使用成员运算符访问元素的成员:</p>
+<p>trio[0]).year = 2003; // trie[0] is a structure</p>
+<p>其中 trio 是一个数组, trio[0]是一个结构, 而 trio[0].year 是该结构的一个成员。由于数组名是一个指针，</p>
+<p>因此也可使用间接成员运算符，<br>{trio+1)-syear = 2004; // same as trio[1].year = 2004;<br>可创建指针数组:<br>const antarctica_years_end * arp[3] = {&amp;s01, &amp;s02, &amp;s03};</p>
+<p>咋一看, 这有点复杂. 如何使用该数组来访问数据呢? 既然 arp 是一个指针数组，arp[H]就是一个指针，<br>可将间接成员运算符应用于它，以访问成员:</p>
+<p>std::cout &lt;&lt; arp[1]-&gt;year &lt;&lt; std::endl;</p>
+<p>可创建指向上述数组的指针3:</p>
+<p>const antarctica_years end ** ppa = arp;</p>
+<h3>第 119 页（PDF p137）</h3>
+<p>eins  发人类型 : _ 33 ee ee</p>
+<p>ea Ty ee ee a mercy een eee<br>指针，指向一个指向 const antarctica_years_end 的指针。这种声明很容易容错。例如，您可能遗漏 const,</p>
+<p>忘记所 搞错顺序或结构类型。下面的示例演示了 C++1L版本的auto 提供的方便。编译器知道 arp 的类型，<br>能够正确地推断出 ppb 的类型</p>
+<p>auto ppb =-arp; // C++11 automatic type deduction</p>
+<p>在以前，编译器利用它推断的类型来指出声明错误，而现在，您可利用它的这种推断能力。</p>
+<p>如何使用 ppa 来访问数据呢?_ 由于 ppa 是- -个指阿结构指针的指镍，    因此*pps是一个结构指针，可将<br>间接成员运算符应用于它:</p>
+<p>std::cout &lt;&lt; [*ppa)-&gt;year &lt;&lt; std::endl;<br>std::cout &lt;&lt; (“(ppb+1}))-&gt;year &lt;&lt; std::endl;</p>
+<p>里于ppa 指回 arp 的第一个元素，因此<em>ppa 4A —77eR, M&amp;sOt. PRLk, (</em>ppa)-&gt;year 为 s01 的 year<br>成员。在第三条语句中，pp5+1 指向下一企元素 arpf1]，即&amp;s02。其中的括号必不可少，这样本能正确地<br>侣。例如，<em>+ppa-&gt;year 试图将运算符</em>应用于 ppa-&gt;year，这将导致错误，因为成员 year 不是指针。<br>上面所有的说法都对吗? 程序清单 后23.将这些语句放到了一个简短的程序中。</p>
+<p>程序清单 4.23 mixtypes.cpp</p>
+<p>af  mixtypes .Cpp -- some type-combinat ions</p>
+<p>#include &lt;iostream&gt;</p>
+<p>‘Struct_antarctica_years end 一     — 二     ;      Se</p>
+<p>1              os</p>
+<p>int yearj<br>/<em> some really interesting data, etc. </em>/</p>
+<p>“int main()</p>
+<p>antarctica “years_ end s01,. 02, $03;<br>s0l.year = 1998;<br>antarctica_years end * pa = &amp;s02—<br>pa-syear = 1999;<br>antarctica_years_end trio[3};_//-array of 3 structures<br>trio[0).year = 2003;<br>std::cout &lt;&lt; trie-syear &lt;&lt; std::endl;<br>const antarctica years end * arp[3] = {&amp;801, &amp;802, &amp;s03f{;<br>std::cout &lt;&lt; arp[1]-&gt;year &lt;&lt; std::endl;<br>const antarctica years end ** ppa = arp;<br>auto ppb = arp; // C++ll automatic type deduction</p>
+<p>// or else use const antarctica_years_end ** ppb = arp;<br>std::cout &lt;&lt; (*ppa)-syear &lt;&lt; std::endl;<br>std::cout &lt;&lt; (*(ppb+1)})-syear &lt;&lt; std::endl;<br>return 0;</p>
+<p>该程序的输出如下:</p>
+<p>该程序通过了编译，并向前面介绍的那样运行。</p>
+<h3>第 120 页（PDF p138）</h3>
+<p>4.10 “数组的替代品</p>
+<p>本章前面说过，模板类 vector 和 array 是数组的替代品。下面简要地介绍它们的用法以及使用它们带<br>来的一些好处。</p>
+<p>4.10.1 模板类 vector</p>
+<p>模板类 vector 类似于 string 类，也是一种动态数组。您可以在运行阶段设置 veetor 对象的长度，可在<br>末尾附加新数据，还可在中间插入新数据。基本上，它是使用 new 创建动态数组的替代品。实际上，vector<br>类确实使用 new 和 delete 来管理内存，但这种工作是自动完成的。</p>
+<p>这里不深入探讨模板类意味着什么，而只介绍一些基本的实用知识。首先，要使用 vector 对银，必须<br>包含头文件 vector。其次，vector 包含在名称空间 std 中，因此您可使用 using 编译指令、using 声明或<br>std::vector。第三，模板使用不同的语法来指出它存储的数据类型。第四，vector 类使用不同的语法来指定<br>元素数。下面是一些示例;</p>
+<p>#inelude &lt;vector&gt;</p>
+<p>using namespace std;</p>
+<p>vectoreint&gt; vi;        // create a zero-size array of int<br>int n;</p>
+<p>vector&lt;double&gt; vd(n); // create an array of n doubles</p>
+<p>其中，vi dt—<em> vector&lt;int&gt;</em>{. vd At—~<em> vector&lt;double&gt;</em>{B. HF vector 对象在您插入或添加值<br>时自动调整长度，因此可以将vi 的初始长度设置为零。但要调整长度，需要使用 vector 包中的各种方法。<br>一般而言，下面的声明创建一个名为 vt 的 vector 对象，它可存储m_elem 个类型为 typeName 的元素，</p>
+<p>vector&lt;typeName&gt; vt (n_elem);</p>
+<p>其中参数n_elem YUM, tay eae<br>4.10.2 ”模板业 array (C++11)</p>
+<p>vector 类的功能比数组强大，但付出的代价是效率稍低。如果您需要的是长度固定的数组，使用数组<br>是更佳的选择，但代价是不那么方便和安全。有鉴于此，C++1l 新增了模板类 array，它也位于名称空间 std<br>中。与数组一样，array 对象的长度也是固定的，也使用栈〈和静态内存分配)，而不是自由存储区，因此其<br>效率与数组相同，但更方便，更安全。要创建 array 对象，需要包含头文件 array。array 对象的创建语法与<br>vector 稍有不同，</p>
+<p>#include &lt;array&gt;</p>
+<p>using namespace std;<br>array&lt;int, 5&gt; ai; // create array object of 5 ints<br>array&lt;double, 4&gt; ad = {1.2, 2.1, 3.43. 4.3};</p>
+<p>推而广之，下面的声明创建一个名为 arr 的 array TR, ‘fA n_elem 个类型为 typename 的元素:</p>
+<p>array&lt;typeName, n_elem&gt; arr;</p>
+<p>与创建 vector 对象不同的是，n_elem 不能是变量。<br>在 C++ll 中，可将列表初始化用于 vector 和 array 对象，但在 C++98 中，不能对 vector 对象这样做。</p>
+<p>4.10.3 ”比较数组、vector 对象和 array WR<br>要了解数组、vector X} RAM array 对象的相似和不同之处，最简单的方式可能是看一个使用它们的简单</p>
+<h3>第 121 页（PDF p139）</h3>
+<p>“0 Pinelude “&lt;vector&gt;   Be a ese     Pa Vaimasece ek                  pe ey       2<br>sant Main ye SARS ee pa ESE ee Ea chee ah peg oi aie vane ee</p>
+<p>using namespace std;<br>/{ €, ortginal C++</p>
+<ul>
+<li>double al([4]  penne a a</li>
+</ul>
+<p>“vector&lt;double» a2(4y3  // create vector with 4 elements. ~~. - -~«ti«w  ar)<br>// no- simple way to initialize in C96<br>‘aZ[OE = 1.0/3.0;<br>a2[I}F = 1.0/5.0;</p>
+<p>Pe ose eee ages 1 09) 0 ee eS ea ee ee ee    pa Ss<br>E          £/ C++11 == Greate and initYalize arfay- object -   (Sue ee See ee ee<br>array&lt;double, 4&gt; a3 = {3.14, 2.721.623 1.44;<br>arrayedouble, 4&gt;-a4;.<br>Spat as, =  tf vakid-tor array objects: of same size             Ed</p>
+<p>‘out &lt;&lt; "abr[2] . "ee nits yom ‘ak: Wee east ce ae<br>CO maa talon 1 &lt;¢/a3 (2). &lt; * ato &lt;&lt; &amp;a3 [2 &lt;&lt;" -eng ad cA eT<br>me   Beer) ae a na cc a4 fz) &lt;&lt;, We ae oe ee had ta ex endl;</p>
+<p>下面是该程序的输出示例，</p>
+<p>al[2F:.3:6 atox28ecep =<br>{a2[2I: 0.142857, at 0XCa0328 “2      人     an    eee teen<br>汪汪        ee ee eee<br>se     pee    1:62 at. Ox28ccad</p>
+<p>BP ABIAL © BUSTA Ougeenee os SR 6 i, eee) Crewe ees ule ie 0 ee ees<br>os aig 2] 251 /62-at 0<br>es:   .首先&gt; “Teas ieee, vecior 对象还是 aay 1%, oe eee S 有=<br>oe -从地址可知: array 对象和数给存储在相同的内存区域〔即栈) AR, 而 vector 对象存储在另二个区域 as<br>al     ge 申。  a&gt; rica lo dal array’ CE Ae See, 对象;  ET RETR -<br>BR, Fa emt,   See Se    =  pe eal  有</p>
+<h3>第 122 页（PDF p140）</h3>
+<p>索引-2 是什么意思呢? 本章前面说过，这将被转换为如下代码:<br>*(al-2) = 20.2;</p>
+<p>ERA MUTE: 找到 al 指向的地方，向前移两个 double 元素，并将 20.2 存储到目的地。也就是说，<br>将信息存储到数组的外面。与C 语言一样，C++也不检查这种超界错误。在这个示例中，这个位置位于<br>array 对象 a3 中。其他编译器可能将 20.2 放在 ad 中，甚至做出更糟糕的选择。这表明数组的行为是不安<br>全的。</p>
+<p>vector 和 array 对象能够禁止这种行为吗? 如果您让它们禁止，它们就能禁止。也就是说，您仍可编写<br>不安全的代码，如下所示:</p>
+<p>az(-2] = .5;   // still allowed</p>
+<p>a3 [200] = 1.4;</p>
+<p>然而，您还有其他选择。一种选择是使用成员函数 at0。就像可以使用 cin MRM AL ia PRK getline.) —<br>样，您也可以使用 vector 和 array 对象的成员函数 at():</p>
+<p>aZ.at(1) = 2.3; // assign 2.3 to az2[1]</p>
+<p>中括号表示法和成员函数 at0的差别在于，使用 at0时，将在运行期间捕获非法索引，而程序默认将中<br>断。这种额外检查的代价是运行时间更长，这就是 C++让允许您使用任何一种表示法的原因所在。另外，<br>这些类还让您能够降低意外超界错误的概率。例如, 它们包含成员函数 begin0和 end0, 让您能够确定边界，<br>以免无意间超界，这将在第 16 章讨论。</p>
+<p>4.11 总结</p>
+<p>数组、结构和指针是 C++的3 种复合类型。数组可以在一个数据对象中存储多个同种类型的值。通过<br>使用索引或下标，可以访问数组中各个元素。</p>
+<p>结构可以将多个不同类型的值存储在同一个数据对象中，可以使用成员关系运算符〈.) 来访问其中的<br>成员。使用结构的第一步是创建结构模板，它定义结构存储了哪些成员。模板的名称将成为新类型的标识<br>符，然后就可以声明这种类型的结构变量,</p>
+<p>共用体可以存储一个值，但是这个值可以是不同的类型，成员名指出了使用的模式。</p>
+<p>指针是被设计用来存储地址的变量。我们说，指针指向它存储的地址。指针声明指出了指针指向的对<br>象的类型。对指针应用解除引用运算符，将得到指针指向的位置中的值。</p>
+<p>字符串是以室字符为结尾的一系列字符。字符串可用引号括起的字符串常量表示，其中隐式包含了结<br>尾的空字符。 可以将字符串存储在 char 数组中，可以用被初始化为指向字符串的 char 指针表示字符串。函<br>数 strlen( )返回字符串的长度，其中不包括室字符。函数 strcpy( )将字符申从一个位置复制到另一个位置。<br>在使用这些函数时，应当包售头文件 cstring 或 string.h。</p>
+<p>头文件 string 支持的 C++ string 类提供了另一种对用户更友好的字符串处理方法。具体地说，string 对<br>象将根据要存储的字符串自动调整其大小，用户可以使用赋值运算符来复制字符串。</p>
+<p>new 运算符允许在程序运行时为数据对象请求内存。该运算符返回获得内存的地址，可以将这个地址<br>赋给一个指针，程序将只能使用该指针来访问这块内存。如果数据对象是简单变量，则可以使用解除引用<br>运算符〈* ) 来获得其值， 如果数据对象是数组，则可以像使用数组名那样使用指针来访问元素;， 如果数据<br>对和象是结构，则可以用指针解除引用运算符《〈-&gt;) 来访问其成员。</p>
+<p>指针和数组紧密相关。如果 ar 是数组名，则表达式 ar[i]被解释为* (ar+i认，其中数组名被解释为数组<br>第一个元素的地址。 这样，数组名的作用和指针相同。反过来，可以使用数组表示法，通过指针名来访问<br>new 分配的数组中的元素。</p>
+<p>运算符 new 和 delete 允许显式控制何时给数据对象分配内存，何时将内存归还给内存池。自动变量是<br>在函数中声明的变量，而静态变量是在函数外部或者使用关键字 static 声明的变量，这两种变量都不太灵</p>
+<h3>第 123 页（PDF p141）</h3>
+<p>第4章 复合类型                 123</p>
+<p>活。自动变量在程序执行到其所属的代码块〈通常是函数定义) 时产生，在离开该代码块时终止。静态变<br>量在整个程序周期内都存在。</p>
+<p>C++98 新增的标准模板库〈STL) 提供了模板类 vector，它是动态数组的替代品。C++1l1 提供了模板<br>类 array，它是定长数组的替代品。</p>
+<p>412 复习是</p>
+<p>.如何声明下述数据?<br>actor 是由30个char 组成的数组。<br>. betsie 是由 100 个 short 组成的数组。<br>chuck 是由 13个float组成的数组。<br>. dipsea 4¢ +H 64 + long double #1 AK it) WA.<br>，使用模板类 array 而不是数组来完成问题 1。<br>， 声明一个包会 5 个元素的 int 数组，并将它初始化为前5个正奇数。<br>，编写一条语句，将问题 3 中数组第一个元素和最后一个元素的和赋给变量 even.</p>
+<ul>
+<li>编写一条语句，显示 float 数组 ideas 中的第 2 个元素的值。</li>
+</ul>
+<p>. 声明一个 char 的数组，并将其初始化为字符串“cheeseburger”。<br>.声明一个 string 对银，并将其初始化为字符串“Waldorf Salad”.</p>
+<ol>
+<li>设计一个措述鱼的结构声明。结构中应当包括品种、重量 ORR, MBA) AK (EY, fa</li>
+</ol>
+<p>括小数)，</p>
+<ol>
+<li>声明一个问题 8 中定义的结构的变量，并对它进行初始化。</li>
+<li>用 enum 定义一个名为 Response 的类型，它包含 Yes. No 和 Maybe 等枚举量，其中 Yes 的值为 1，</li>
+</ol>
+<p>No 为0，Maybe 为 2。</p>
+<ol>
+<li>假设ted 是一个 double 变量，请声明一个指向 ted 的指针，并使用该指针来显示 ted 的值，</li>
+<li>假设 treacle 是一个包售 10 个元素的 loat 数组，请声明一个指向 treacle 的第一个元素的指针，并</li>
+</ol>
+<p>使用该指针来显示数组的第一个元素和最后一个元素。<br>13，编写一段代码，要求用户输入一个正整数，然后创建一个动态的 im 数组，其中包含的元素数目<br>等于用户输入的值。 首先使用 new 来完成这项任务，再使用 vector 对象来完成这项任务。</p>
+<ol>
+<li>下面的代码是否有效? 如果有效，它将打印出什么结果?</li>
+</ol>
+<p>cout &lt;&lt; (int *) “Home of the jolly bytes";<br>1S. 编写一段代码，给问题 8 中描述的结构动态分配内存，再读取该结构的成员的值。</p>
+<ol>
+<li>程序清单 4.6 指出了混合输入数字和一行字符串时存储的问题。如果将下面的代码;</li>
+</ol>
+<p>cin.gqetlineladdress,&amp;0);</p>
+<p>PRK:</p>
+<p>cin &gt;&gt; address;</p>
+<p>将对程序的运行带来什么影响?</p>
+<ol>
+<li>声明一个 vector 对象和一个 array 对象，它们都包含 10 个 string 对象。指出所需的头文件，但不</li>
+</ol>
+<p>要使用 using。使用 const 来指定要包含的 string 对象数。</p>
+<p>一</p>
+<p>4,.13 ”编程练习</p>
+<p>1编写一个 C++程序，如下述输出示例所示的那样请求并显示信息;</p>
+<h3>第 124 页（PDF p142）</h3>
+<p>What is your first name? Betty Sue<br>What is your last name? Yewe</p>
+<p>What letter-qrade do you deserve? B<br>What is your age? 22</p>
+<p>Name: Yewe, Betty Sue</p>
+<p>Grade —c—</p>
+<p>Age: 22</p>
+<p>注意 一该程序应该接受的名字包含冤个单词。另外， 程序将癌下调整成绩， EA fa}. 上调一个字母。 ne<br>三用户请求人 BRC, 所以不必担心P和下之间的空档。   -  a ee ETO See<br>了3- -编写-- -个程序， 它要求用户首先输入其名， 然后输入其姓， 然后程序使用-个  CUTER</p>
+<p>名组全起来，并在依和显示组结果请使char 数组和头文件 csiing OSM OVE BREIFSETTIS :</p>
+<p>— “Enter your last name: “Fleming -   Sete        :   a ha   =     Sere   ae<br>ae  _Here’ s-“the information | ain‘a single: string:  Fleming,  lip™   SS ey ee    eae ee   Sea :<br>4-  wi,  它要求用户 首先输入其名;  再输入其姓;  -然后程序使用  sid, Seni<br>.组合起来，  Le shige le Sh Sette string: 对象和: 关文作 string Sah:   a: 下面是该程序运 BAT IN<br>POR See     soak   3     Norge<br>—    <em> Enter: your: last-name: Fleming=</em>.= 0 2    ae   es       eo  Sie SB    ee<br>ae  = Here’s the information ina single atring:  和 ‘Flip:  中   sa   TS<br>© 5, UK CandyBiar Ai 3 ARUN. JBN BUFR OAT MRR ARMS SR eR I AE. CHE<br>AAO:  第三个成员存储了糖类的卡路里含量 (HE: RSE,  -声明这个结构  创建个名为:</p>
+<p>ae  ors CandyBar Ae 3 AMES MAS, 5 所示二请编写  三不程序   bist  二个包含 3. co ee</p>
+<p>© CandyBar BH, FHF CAHIR ERIE. Wa a RIA 一 Sak      supe “eagle Tee<br>= _= 2... William Wingate MAF LCE OTR «- -对于每个披萨饼， 他者需要记录下列信息;。 ern ee Soon<br>SO REDE MAST MRR. &gt; Soest ee ee ee ee 二</p>
+<p>ous    区 “披萨饼的直径 ee ee — ; 本 二 =) Jp</p>
+<p>et geet</p>
+<p>a ie      See te 340  Se aise.  MRR AE<br>avi  然后显示这些信息。  请使用 ‘cin 《或它的方法) 和 cout.   |      二               ee  ie<br>Sea   8. 完成编程练习了, UE, new来为结构 分配内存:  Aa —  Bh,  AR,  aS<br>He ewe DRA  \司名称之前输入比萨饼的直径一  人                          oe   aS Be a</p>
+<p>| —— Fens 1 Ie  FERAL) 65 但使用mew 来动态4 分配数组， “而不是声明二  RES 3°   不元素的 CandyBar 数组二        es<br>ee SO B= -个程序， 让用户输入三 :次 40 码跑的成绩《如果您愿意7 地可让用户输入 和 米二的成绩)，- 4</p>
+<p>Semana. 请使用一 eee REREETER ary 2 -请使用数组)。- —</p>
+  <footer class="lesson-footer">
+    StudyMate · C++ Primer Plus（第 6 版）中文版 · 第 4 章 复合类型 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

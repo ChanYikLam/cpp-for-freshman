@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>资源清单 · C++ 零基础入门（计算机专业大一）</title>
+<link rel="stylesheet" href="assets/sayo/sayo.css">
+<link rel="stylesheet" href="assets/learn-theme.css">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="index.html">← 返回科目</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">资源清单</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>C++ 零基础入门（计算机专业大一） Resources</h1>
+<blockquote><p>定位：<strong>延伸阅读 + 易变内容的核对来源</strong>，不是"知识来源清单"（模型已掌握稳定基础知识）。<br>稳定知识节点可以不在这里留条目；易变/版本相关内容必须在这里有核对过的官方来源。</p><p>范围锚点：到<strong>指针</strong>为止（基础语法、变量与类型、运算符与表达式、分支、循环、函数、数组、C 风格字符串、指针），<br>不含结构体、动态内存 <code>new/delete</code>、类与面向对象、模板、<code>std::vector</code>/<code>std::string</code>、STL、文件读写、多文件工程。<br>本清单里凡涉及范围外内容的条目，用途一栏都显式标了「<strong>范围外，仅防越界</strong>」。</p><p><strong>第三项 = 实际落点路径（本轮修正）</strong>：每条资源的第三个字段写的是<strong>它现在真正躺在哪</strong>：<br>- 已落盘的在线来源正文 → <code>sources/&lt;文件名&gt;.md</code>（<strong>不是</strong> <code>fetch/</code>，本机没有 <code>fetch/</code> 这个目录）<br>- 只抓到 HTML、没转 md 的 → <code>raw_html/&lt;文件名&gt;.html</code>（在 stage 目录里，见文末「机器可读附录」）<br>- 本地教材 → <code>reference/&lt;文件名&gt;.md</code><br>- 取不到正文的（纸书、403 站点）→ 只留原址 URL，并在条目里写明"只有原址"<br>上一轮有一批条目第三项只写了 <code>sources/xxx.md</code> 而没写清这是科目根下的相对路径，本轮全部补全为<strong>可定位的路径或 URL</strong>。</p></blockquote>
+<h2>Knowledge</h2>
+<h3>0. 编译器与开发环境（<strong>本轮补收集的第一优先：课程的硬缺口</strong>）</h3>
+<blockquote><p>第 1 章要手把手带零基础读者装环境，读者以 <strong>Windows</strong> 为主、少数 <strong>macOS</strong>。<br>这一节的关键不是"推荐哪个"，而是<strong>每条路都有官方出处、且如实说明它的维护状态</strong>。</p></blockquote>
+<ul>
+<li><a href="https://code.visualstudio.com/docs/cpp/config-mingw" target="_blank" rel="noopener">Source: VS Code 官方 · Using GCC with MinGW</a> · 已落盘 <code>sources/vscode-config-mingw.md</code>（HTML 原文 <code>raw_html/vscode-config-mingw.html</code>）<br><strong>Windows 主推路径的官方教程</strong>：装 MSYS2 → <code>pacman</code> 装 MinGW-w64 工具链 → VS Code 装 C/C++ 扩展 → 建 <code>tasks.json</code> → F5 调试，每一步都有官方截图与 JSON。用途：第 1 章「装环境」整节的骨架。</li>
+<li><a href="https://code.visualstudio.com/docs/cpp/cpp-ide" target="_blank" rel="noopener">Source: VS Code 官方 · Editing and Navigating C++ Code</a> · 已落盘 <code>sources/vscode-cpp-ide.md</code><br>用途：VS Code 里建源文件、编译、运行、看「问题」面板的官方说明；对应课程开篇的"写→编→跑"循环。</li>
+<li><a href="https://code.visualstudio.com/docs/cpp/c-cpp-properties-schema-reference" target="_blank" rel="noopener">Source: VS Code 官方 · C++ extension settings reference（<code>c_cpp_properties.json</code> 逐字段）</a> · 已落盘 <code>sources/vscode-cpp-settings.md</code><br>用途：<strong>核对 <code>includePath</code> / <code>compilerPath</code> / <code>cppStandard</code> 这些字段的官方定义</strong>——零基础读者配错环境十有八九错在这三个字段，课程要给出官方字段名而不是凭印象写。</li>
+<li><a href="https://code.visualstudio.com/docs/cpp/cpp-debug" target="_blank" rel="noopener">Source: VS Code 官方 · Debug C++ in Visual Studio Code</a> · 已落盘 <code>sources/vscode-cpp-debug.md</code><br>用途：断点、单步、看变量的官方步骤。<strong>本课程不把调试当主线</strong>，只作"程序输出不对时怎么办"的旁注。</li>
+<li><a href="https://www.msys2.org/" target="_blank" rel="noopener">Source: MSYS2 官方站（Getting Started）</a> · 已落盘 <code>sources/msys2-home.md</code>（HTML <code>raw_html/msys2-home.html</code>）<br>MinGW-w64 工具链<strong>官方推荐的获取渠道</strong>（<code>pacman -S mingw-w64-ucrt-x86_64-gcc</code>）。用途：核对"gcc 到底从哪装"以及包名拼写。</li>
+<li><a href="https://www.mingw-w64.org/" target="_blank" rel="noopener">Source: MinGW-w64 官方站 · Introduction</a> · 已落盘 <code>sources/mingw-w64-home.md</code><br>用途：讲清 MinGW-w64 是什么（Windows 上的头文件+导入库+运行时），以及它和 GCC 的分工——读者第一次听到这两个名字时最需要的一句话。</li>
+<li><a href="https://www.mingw-w64.org/downloads/" target="_blank" rel="noopener">Source: MinGW-w64 官方站 · Pre-built Toolchains（官方列出的各获取渠道）</a> · 已落盘 <code>sources/mingw-w64-downloads.md</code><br>用途：<strong>核对渠道的官方入口页</strong>（MSYS2 / WinLibs / LLVM-MinGW 等官方认可的分发）。网站改版时以这页为准。</li>
+<li><a href="https://winlibs.com/" target="_blank" rel="noopener">Source: WinLibs · standalone build of GCC and MinGW-w64 for Windows</a> · 已落盘 <code>sources/winlibs-home.md</code>（HTML <code>raw_html/winlibs-home.html</code>）<br>免安装 zip 版工具链。用途：<strong>不想装 MSYS2 的备选路径</strong>；含"解压后怎么加 PATH、怎么在 CMD 里验证 <code>g++ --version</code>"的官方步骤。</li>
+<li><a href="https://github.com/Embarcadero/Dev-Cpp" target="_blank" rel="noopener">Source: github.com/Embarcadero/Dev-Cpp · 仓库元数据 / 全部发布版本 / README（GitHub 官方 API 取证）</a> · 已落盘 <code>sources/devcpp-status-2026.md</code><br><strong>Dev-C++ 现状事实单</strong>：现维护方是 Embarcadero（不是 Bloodshed）；<strong>最后一个正式版本 <code>v6.3</code>，发布于 2021-01-31，此后未再发版</strong>；仓库最后代码 push 是 2024-06-17；未被 GitHub 归档但版本停更；内置编译器为 TDM-GCC 9.2（对应 GCC 9.2，2019 年）。<strong>用途：课程要如实告知 Windows 读者"Dev-C++ 能装、能编，但已停更"，本文件是这件事的证据</strong>（含 Releases 直链，因为 SourceForge 已 403）。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/installing-an-integrated-development-environment-ide/" target="_blank" rel="noopener">Source: LearnCpp 0.6 · IDEs to avoid（权威方的反对意见，原文照录）</a> · 已落盘 <code>sources/lc-00-06-installing-an-ide.md</code><br>该页「IDEs to avoid」一节的原文是：<em>"You should avoid the following IDEs altogether because they do not support at least C++11, do not support C++ at all, or are no longer actively supported or maintained: Borland Turbo C++ …; Visual Studio for Mac …; <strong>Dev C++ -- not actively supported</strong>"</em>。<strong>用途：课程若保留 Dev-C++ 这条路，必须同时把这条反对意见如实写进课件</strong>——不是假装它没问题，而是告诉读者"它停更了，你可能只是在学校机房遇到它"。</li>
+<li><a href="https://developer.apple.com/documentation/xcode/installing-the-command-line-tools" target="_blank" rel="noopener">Source: Apple 官方 · Installing the command-line tools（<code>xcode-select --install</code> 的正规出处）</a> · 已落盘 <code>sources/apple-installing-command-line-tools.md</code><br><strong>macOS 装编译环境这一节的唯一官方依据</strong>：工具链装在 <code>/Library/Developer/CommandLineTools</code>；<code>xcode-select --install</code> 的确切命令与提示语；<code>pkgutil --pkg-info=com.apple.pkg.CLTools_Executables</code> 查版本；<code>sudo rm -rf</code> 卸载。用途：macOS 读者照着敲。</li>
+<li><a href="https://developer.apple.com/library/archive/technotes/tn2339/_index.html" target="_blank" rel="noopener">Source: Apple 官方 · Technical Note TN2339: Building from the Command Line with Xcode FAQ</a> · 已落盘 <code>sources/apple-tn2339-xcodebuild.md</code><br>用途：核对 <code>xcode-select</code> / <code>xcrun</code> / <code>/usr/bin/clang</code> 三者的关系；<strong>支撑"macOS 上命令行里的 <code>clang</code> 来自 Command Line Tools"这一说法</strong>（配合下一条的实测）。</li>
+<li><strong>本机实测记录（不是外部来源，是环境事实，供讲解引用）</strong>：macOS 15.7.5 (24G624)、Command Line Tools 路径 <code>/Library/Developer/CommandLineTools</code>，<br><code>/usr/bin/g++</code>、<code>/usr/bin/gcc</code>、<code>/usr/bin/clang++</code>、<code>/usr/bin/clang</code> <strong>四个路径指向同一个 inode（<code>stat -f %i</code> 全部相同，链接数 78）</strong>，<br><code>g++ --version</code> 输出 <code>Apple clang version 17.0.0 (clang-1700.0.13.5)</code>。<br><strong>这就是讲解里「macOS 上 <code>g++</code> 其实是 Apple clang 的别名」的依据</strong>；复现命令：<code>stat -f '%i %N %l links' /usr/bin/g++ /usr/bin/clang++</code>。</li>
+</ul>
+<h3>1. C++ 语言参考（cppreference，<strong>本轮补上、可离线打开</strong>）</h3>
+<blockquote><p>⚠️ <strong>重要事实（本轮实测）</strong>：<code>en.cppreference.com</code> / <code>zh.cppreference.com</code> / <code>cppreference.com</code> / <code>www.cppreference.com</code><br>在本机<strong>四个域名全部 HTTP 403</strong>（Cloudflare "Just a moment..." 挑战页）；<code>web.archive.org</code>、<code>isocpp.org</code>、<br><code>sourceforge.net</code> 同样 403/超时。<strong>因此本组条目的正文不是从官网直抓的</strong>，而是取自<br><strong>cppreference 官方离线包（<code>html_book</code>）的 GitHub 转存镜像</strong> <code>0mega3/cppreference-doc</code><br>（经 GitHub contents API 取回、本地 HTML→Markdown）。原址仍按官方 URL 写出，<strong>下游采图/核对照旧能读</strong>。<br>讲解正文里挂的那条 <code>zh.cppreference.com/w/cpp/language/pointer</code> <strong>现在有对应的离线正文可读了</strong>（见第一条）。</p></blockquote>
+<ul>
+<li><a href="https://en.cppreference.com/w/cpp/language/pointer" target="_blank" rel="noopener">Source: cppreference · Pointer declaration（指针声明与指针算术）</a> · 已落盘 <code>sources/cppref-pointer.md</code><br><strong>讲解在正文里挂了 <code>zh.cppreference.com/w/cpp/language/pointer</code> 但打不开——本条就是它对应的正文。</strong> 指针声明语法、<code>*</code>/<code>&amp;</code> 的规范定义、"pointer past the end"、空指针、无效指针、数组到指针转换、缺陷报告（DR）。用途：指针这一章的规范级依据。</li>
+<li><a href="https://en.cppreference.com/w/cpp/language/array" target="_blank" rel="noopener">Source: cppreference · Array declaration（数组）</a> · 已落盘 <code>sources/cppref-array.md</code><br>数组声明语法、元素连续存放、下标、<strong>数组到指针转换（退化）</strong>、多维数组。用途：数组一章的规范级依据。</li>
+<li><a href="https://en.cppreference.com/w/cpp/language/operator_member_access" target="_blank" rel="noopener">Source: cppreference · Member access operators（<code>a[b]</code> / <code>*p</code> / <code>&amp;x</code> / <code>p-&gt;m</code>）</a> · 已落盘 <code>sources/cppref-operator-member-access.md</code><br>用途：讲清 <strong><code>a[b]</code> 就等价于 <code>*(a+b)</code></strong> 这条等式；指针与数组为什么能混着写，依据在这一页。</li>
+<li><a href="https://en.cppreference.com/w/cpp/language/operator_arithmetic" target="_blank" rel="noopener">Source: cppreference · Arithmetic operators（含指针算术）</a> · 已落盘 <code>sources/cppref-operator-arithmetic.md</code><br>用途：<code>p + i</code> 到底前进几个字节（按所指类型大小步进）、指针相减的结果类型。</li>
+<li><a href="https://en.cppreference.com/w/cpp/language/operator_precedence" target="_blank" rel="noopener">Source: cppreference · C++ Operator Precedence（官方优先级总表）</a> · 已落盘 <code>sources/cppref-operator-precedence.md</code><br>用途：<code>*p++</code>、<code>*p[i]</code>、<code>&amp;a[i]</code> 这类写法到底怎么结合的依据；配合 6.1 的讲解。</li>
+<li><a href="https://en.cppreference.com/w/cpp/io/manip/fixed" target="_blank" rel="noopener">Source: cppreference · std::fixed / std::scientific / std::hexfloat / std::defaultfloat</a> · 已落盘 <code>sources/cppref-iomanip-fixed.md</code><br><strong>第 4 章「输出格式控制」一节原先没有任何依据（按实测写的）——本条补上</strong>：<code>fixed</code> 把 <code>floatfield</code> 设为定点表示。</li>
+<li><a href="https://en.cppreference.com/w/cpp/io/manip/setprecision" target="_blank" rel="noopener">Source: cppreference · std::setprecision</a> · 已落盘 <code>sources/cppref-iomanip-setprecision.md</code><br>用途：<strong><code>setprecision(n)</code> 在默认模式下是有效数字位数、在 <code>fixed</code> 模式下是小数点后位数</strong>——这个差异正是「输出格式控制」一节的核心，页内带完整示例与输出。</li>
+<li><a href="https://en.cppreference.com/w/cpp" target="_blank" rel="noopener">Source: cppreference 离线镜像首页（C++ reference）</a> · 已落盘 <code>sources/cppref-index.md</code><br>用途：离线镜像的入口；查别的语言特性页时从这份镜像同源取，路径规则见文末附录。</li>
+<li><a href="https://learn.microsoft.com/zh-cn/cpp/cpp/pointers-cpp?view=msvc-170" target="_blank" rel="noopener">Source: Microsoft Learn（中文）· 指针 (C++)</a> · 已落盘 <code>sources/mslearn-pointers-cpp-zh.md</code><br>用途：<strong>中文官方措辞</strong>的指针概念页（MSVC 官方文档），cppreference 只能拿到英文时给中文对照。<strong>注意：这一页是"指针"主题的目录页（2.7 KB，主要是一串子页链接），实质内容在下一条 <code>raw-pointers</code>。</strong></li>
+<li><a href="https://learn.microsoft.com/zh-cn/cpp/cpp/raw-pointers?view=msvc-170" target="_blank" rel="noopener">Source: Microsoft Learn（中文）· 原始指针 (C++)</a> · 已落盘 <code>sources/mslearn-raw-pointers-cpp-zh.md</code><br>用途：比上一页更有实质内容：指针声明、解引用、指针算术、常见错误的中文官方说明。</li>
+<li><a href="https://learn.microsoft.com/en-us/cpp/cpp/arrays-cpp?view=msvc-170" target="_blank" rel="noopener">Source: Microsoft Learn · Arrays (C++)</a> · 已落盘 <code>sources/mslearn-arrays-cpp.md</code><br>用途：数组声明/初始化/"数组名会转换成指针"的官方英文说明。</li>
+<li><a href="https://learn.microsoft.com/en-us/cpp/standard-library/iomanip?view=msvc-170" target="_blank" rel="noopener">Source: Microsoft Learn · <code>&lt;iomanip&gt;</code> 与 iomanip functions</a> · 已落盘 <code>sources/mslearn-iomanip.md</code>、<code>sources/mslearn-iomanip-functions.md</code><br>用途：<code>&lt;iomanip&gt;</code> 头文件里所有操纵符的官方清单（<code>fixed</code>/<code>setprecision</code>/<code>setw</code>/<code>setfill</code> 各自语义与示例）；核对"这个函数在哪个头文件"。</li>
+<li><a href="https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/strlen-wcslen-mbslen-mbslen-l-mbstrlen-mbstrlen-l?view=msvc-170" target="_blank" rel="noopener">Source: Microsoft Learn · <code>strlen</code> / <code>strcpy</code> / <code>strcmp</code>（CRT 参考，逐函数）</a> · 已落盘 <code>sources/mslearn-cstring-strlen.md</code>、<code>sources/mslearn-cstring-strcpy.md</code>、<code>sources/mslearn-cstring-strcmp.md</code><br>用途：C 风格字符串三件套的<strong>官方定义与边界条件</strong>（<code>strlen</code> 不含 <code>\0</code>；<code>strcpy</code> 目标空间不足会溢出；<code>strcmp</code> 返回值只有符号有意义）。这是「字符串不能用 <code>==</code> 比较」这句结论的依据。</li>
+<li><a href="https://learn.microsoft.com/en-us/cpp/c-runtime-library/string-manipulation-crt?view=msvc-170" target="_blank" rel="noopener">Source: Microsoft Learn · String Manipulation (CRT) 总览</a> · 已落盘 <code>sources/mslearn-cstring.md</code><br>用途：<code>&lt;cstring&gt;</code> 家族的总索引页（含安全版本 <code>_s</code> 的说明）。</li>
+<li><a href="https://cplusplus.com/doc/tutorial/pointers/" target="_blank" rel="noopener">Source: cplusplus.com · Pointers / Arrays 教程</a> · 已落盘 <code>sources/cplusplus-pointers.md</code>、<code>sources/cplusplus-arrays.md</code><br>用途：<strong>通俗向对照</strong>（零基础措辞、图示多）。⚠️ 它<strong>不是</strong>标准文档，措辞不如 cppreference 严谨，只用来对照"读者第一遍会怎么理解"。</li>
+<li><a href="https://cplusplus.com/reference/iomanip/setprecision/" target="_blank" rel="noopener">Source: cplusplus.com · <code>setprecision</code> 参考页</a> · 已落盘 <code>sources/cplusplus-iomanip-setprecision.md</code><br>用途：与 cppreference 的 <code>setprecision</code> 页对照着写第 4 章那节。</li>
+</ul>
+<h3>2. 本地主教材（学生指定首选依据）</h3>
+<ul>
+<li><a href="reference/C++PrimerPlus-第6版-中文版-00-书目与章节结构.html">Local: C++ Primer Plus（第 6 版）中文版 · 书目与章节结构</a><br>全书书目信息 + 18 章完整章节结构与 PDF/书页页码对照 + <strong>本课程范围内 60 余个知识点的页码索引</strong>（<code>cout</code>/<code>sizeof</code>/<code>指针算术</code>/<code>strlen</code> 等到哪一页找）。做大纲、排讲次、核对"这个知识点原书怎么讲、在哪一页"时<strong>先查这一份</strong>，不用翻 800 页 PDF。</li>
+<li><a href="reference/C++PrimerPlus-第6版-中文版-01-预备知识.html">Local: C++ Primer Plus 第 6 版 中文版 · 第 1–7 章正文</a><br>第 1–7 章正文（PDF p19–270 / 书页 1–252），逐页带 <code>### 第 N 页</code> 锚点。同目录另有 02 开始学习C++、03 处理数据、04 复合类型、05 循环和关系表达式、06 分支语句和逻辑运算符、07 函数-C++的编程模块 共 7 个分章文件。<strong>这是中文术语与"第一次怎么向零基础学生解释"的第一依据</strong>。</li>
+<li><strong>⚠️ 使用前必读（本地 PDF 的已知缺陷，由转换实测得出）</strong></li>
+<li>该 PDF 是 2013 年扫描件，文本层由 Acrobat Paper Capture OCR 生成：<strong>中文标点与少数汉字有识别错误</strong>，<code>C++</code> 常被认成 <code>C忡/C件/C朴</code>。正文叙述<strong>可用于理解与措辞参考，引用前请回查 PDF 原页</strong>。</li>
+<li><strong>全部程序清单（代码）的字符不可信</strong>（下划线丢失、<code>&lt;&lt;</code>/<code>&gt;&gt;</code> 错认、<code>endl</code>→<code>end1</code>、<code>0/O</code> 与 <code>1/l/I</code> 混淆、部分 <code>{}</code> 消失）。<strong>教材代码一律不要从这份 Markdown 誊抄</strong>，改用下面的官方配套源码。</li>
+<li>逐章质量评级（转换报告）：无「好」；ch1/ch5/ch7 为「差」，ch2/ch3/ch4/ch6 为「中」。详见 <code>.stage/resource-scout-cpp-basics/convert/CONVERT-REPORT.md</code>。</li>
+<li><strong>本轮补做</strong>：第 4、7 章已用 tesseract 重新 OCR 出一份可读性更好的正文（见下一条）。</li>
+<li><a href="reference/C++PrimerPlus-第6版-中文版-04-复合类型-tesseract重抽.html">Local: C++ Primer Plus 第 6 版 中文版 · 第 4 章 / 第 7 章 <strong>重抽稿</strong>（tesseract 重 OCR）</a><br>同目录另有 <code>reference/C++PrimerPlus-第6版-中文版-07-函数-C++的编程模块-tesseract重抽.md</code>。<strong>来源与性质</strong>：不新增任何知识，只是把原 PDF 第 88–142 页（书页 70–124）与第 220–270 页（书页 202–252）的<strong>页面图像</strong>用 <code>tesseract 5.5.2 -l chi_sim+eng --psm 3</code>（450 dpi）重新识别一遍，逐页带 <code>### 第 N 页（PDF pM）</code> 锚点。<br><strong>为什么需要它</strong>：原文本层（Acrobat Paper Capture）在这两章把核心术语系统性认错——例如原层把"数组"章开头写成 <code>需要一些比C朴的简单基本类型更复杂的东西</code>、把 <code>#include</code> 认成 <code>~include</code>、把 <code>char name1[Size]</code> 认成 <code>char namel[Sizel</code>；重抽稿对应位置是 <code>#include &lt;fstream&gt;</code>、<code>char name1[Size]</code> 这类正常结果。<br><strong>用途：讲第 4 章（数组/字符串/指针）与第 7 章（函数与数组）时，中文措辞与术语以这份重抽稿为准，原文本层那份作对照。</strong><br><strong>⚠️ 边界（必须照做）</strong>：重抽稿的<strong>中文叙述可读性明显更好，但灰底代码/输出示例区仍然不可信</strong>（扫描件本身只有约 150 dpi，代码区反白+阴影）。<strong>代码一律以 <code>sources/C++PrimerPlus-第6版-官方配套源码/</code> 为准</strong>，重抽稿只用于取"原书怎么措辞、这个知识点在原书哪一段"。</li>
+<li>Local: C++ Primer Plus 第 6 版 · 官方配套示例源码（Chapter 2–7）（内部依据，未随课程发布）<br>Pearson/InformIT 官方书页 Downloads 区的 <code>0321776402_Examples.zip</code> 解出，保留 Chapter 2–7 共 <strong>103 个 <code>.cpp</code></strong>；已用 <code>g++ -std=c++11 -fsyntax-only</code> 验过 <strong>103/103 通过</strong>。<strong>这是全书教材代码的唯一可信来源</strong>：讲程序清单 N.M、写练习参考答案、lab 断言都从这里取，别用 PDF 里的 OCR 代码。文件名与原书清单的源文件名一致（如 <code>Chapter 4/pointer.cpp</code> = 程序清单 4.11）。</li>
+<li><a href="https://www.informit.com/store/c-plus-plus-primer-plus-9780321776402" target="_blank" rel="noopener">Source: InformIT 官方书页（证明配套源码的合法入口）</a> · 已落盘 <code>sources/official-companion-source-code.md</code><br>用途：核对 ISBN、版次、官方 Downloads 区地址；下游若需重新下载配套源码从这里进。</li>
+</ul>
+<h3>3. 英文对照主干（同一知识点拿英文权威说法交叉验证）</h3>
+<ul>
+<li><a href="https://www.learncpp.com/" target="_blank" rel="noopener">Source: LearnCpp.com — 按本课程讲次整理的 85 篇分节译文原文</a> · 已落盘 <code>sources/lc-*.md</code><br>LearnCpp 是公认写给零基础读者的 C++ 教程站，逐课维护、带「Best practice / Warning / Key insight」框。已抓 85 篇正文落盘（原址为链接、落盘文件供大纲与讲解对齐，<strong>不挂科目主页</strong>）。<strong>用途：中文教材 OCR 不可信时，用它的英文原文交叉验证技术结论与术语</strong>——尤其"指针"这一块（下面「指针主线」5 篇）。</li>
+<li><a href="https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/Warning-Options.html" target="_blank" rel="noopener">Source: GCC 官方手册 · Warning Options</a> · 已落盘 <code>sources/gcc-warning-options.md</code><br><code>-Wall</code> / <code>-Wextra</code> / <code>-Wpedantic</code> / <code>-Werror</code> 每个开关到底报什么。<strong>用途：写"看懂报错"那一节时，把编译器警告的准确含义对齐官方措辞</strong>；也是 <code>-Wconversion</code>、<code>-Wsign-compare</code> 这类会真的帮到新手的开关的依据。</li>
+<li><a href="https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/Invoking-GCC.html" target="_blank" rel="noopener">Source: GCC 官方手册 · Invoking GCC / Overall Options / C Dialect Options</a> · 已落盘 <code>sources/gcc-invoking-gcc.md</code>、<code>sources/gcc-overall-options.md</code>、<code>sources/gcc-c-dialect-options.md</code><br>用途：<code>g++ x.cpp -o x</code> 这条命令各段、<code>-std=c++11</code> 这类选项的官方定义；第 1 章命令行的依据。</li>
+<li><a href="https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2023/n4950.pdf" target="_blank" rel="noopener">Source: ISO C++ 标准草案 N4950（C++23 working draft，PDF）</a><br><strong>只有原址</strong>（4.5 MB PDF，本机可达但未落盘——本清单是检索入口，不做标准原文搬运）。用途：cppreference 之外<strong>最权威的一层</strong>；只在核对规范措辞、追究"标准原文到底怎么写"时用，不适合讲解。</li>
+</ul>
+<h3>4. 主线学习路径（按讲次排，每条给"什么时候用"）</h3>
+<p><strong>A. 起点：写源文件 → 编译 → 运行 → 看懂报错 → 改对（课程开篇循环）</strong></p>
+<ul>
+<li><a href="https://www.learncpp.com/cpp-tutorial/compiling-your-first-program/" target="_blank" rel="noopener">Source: 0.7 — Compiling your first program</a> · 已落盘 <code>sources/lc-00-07-compiling-your-first-program.md</code><br><code>g++ main.cpp -o main</code> 这条命令逐段拆解。<strong>用途：开篇第一讲的命令依据</strong>；Windows 一份命令给法也在这。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/a-few-common-cpp-problems/" target="_blank" rel="noopener">Source: 0.8 — A few common C++ problems</a> · 已落盘 <code>sources/lc-00-08-a-few-common-cpp-problems.md</code><br>新手最高频的编译/运行故障。<strong>用途：「看懂报错」一节的错误样本来源</strong>。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-cpp-development/" target="_blank" rel="noopener">Source: 0.4 — Introduction to C++ development</a> · 已落盘 <code>sources/lc-00-04-introduction-to-cpp-development.md</code><br>「源文件/编译器/可执行文件」这套流程与术语的来历。<strong>用途：讲"为什么需要编译"这个故事线</strong>。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-the-compiler-linker-and-libraries/" target="_blank" rel="noopener">Source: 0.5 — Introduction to the compiler, linker, and libraries</a> · 已落盘 <code>sources/lc-00-05-compiler-linker-libraries.md</code><br>编译、链接、库三者分工。<strong>用途：解释 <code>#include &lt;iostream&gt;</code> 与"未定义的引用"报错</strong>。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-functions/" target="_blank" rel="noopener">Source: 2.1 — Introduction to functions</a> · 已落盘 <code>sources/lc-02-01-introduction-to-functions.md</code><br><strong>用途：讲"<code>main</code> 也是函数"时的依据</strong>（学生第一次见 <code>int main()</code> 时的困惑点）。</li>
+</ul>
+<p><strong>B. 变量、类型、内存直觉</strong></p>
+<ul>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-objects-and-variables/" target="_blank" rel="noopener">Source: 1.3 — Introduction to objects and variables</a> · <code>sources/lc-01-03-objects-and-variables.md</code><br>用途：变量 = 一块有名字的内存，为后面「地址」铺路。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/variable-assignment-and-initialization/" target="_blank" rel="noopener">Source: 1.4 — Variable assignment and initialization</a> · <code>sources/lc-01-04-variable-assignment-and-initialization.md</code><br>用途：<code>=</code> 是赋值不是等于；大括号初始化。这是零基础最高频误解之一。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/uninitialized-variables-and-undefined-behavior/" target="_blank" rel="noopener">Source: 1.6 — Uninitialized variables and undefined behavior</a> · <code>sources/lc-01-06-uninitialized-variables-and-undefined-behavior.md</code><br>用途：「未初始化变量」与"未定义行为"第一次出现时的准确说法（后面悬空指针要靠它）。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-fundamental-data-types/" target="_blank" rel="noopener">Source: 4.1 — Introduction to fundamental data types</a> · <code>sources/lc-04-01-fundamental-data-types.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/object-sizes-and-the-sizeof-operator/" target="_blank" rel="noopener">Source: 4.3 — Object sizes and the sizeof operator</a> · <code>sources/lc-04-03-sizeof.md</code><br>用途：<code>sizeof</code> 的官方定义；<strong>指针算术"每次加几个字节"的依据</strong>。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/signed-integers/" target="_blank" rel="noopener">Source: 4.4 — Signed integers</a> · <code>sources/lc-04-04-signed-integers.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/unsigned-integers-and-why-to-avoid-them/" target="_blank" rel="noopener">Source: 4.5 — Unsigned integers, and why to avoid them</a> · <code>sources/lc-04-05-unsigned-integers.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/floating-point-numbers/" target="_blank" rel="noopener">Source: 4.8 — Floating point numbers</a> · <code>sources/lc-04-08-floating-point-numbers.md</code><br>用途：<code>0.1+0.2 != 0.3</code>、浮点比较，学生成绩管理系统算平均分的坑。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/boolean-values/" target="_blank" rel="noopener">Source: 4.9 — Boolean values</a> · <code>sources/lc-04-09-boolean-values.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/chars/" target="_blank" rel="noopener">Source: 4.11 — Chars</a> · <code>sources/lc-04-11-chars.md</code><br>用途：<code>'A'</code> 与 <code>"A"</code> 的区别、字符就是小整数——<strong>通向 C 风格字符串与 <code>\0</code> 的必经一步</strong>。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-type-conversion-and-static_cast/" target="_blank" rel="noopener">Source: 4.12 — Introduction to type conversion and static_cast</a> · <code>sources/lc-04-12-type-conversion-static-cast.md</code><br>用途：整数除法 <code>7/4==1</code>、隐式转换，成绩平均分必踩。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/constant-variables-named-constants/" target="_blank" rel="noopener">Source: 5.1 — Constant variables (named constants)</a> · <code>sources/lc-05-01-constant-variables.md</code><br>用途：<code>const</code>；数组长度、<code>#define</code> 与 <code>const</code> 的取舍。</li>
+</ul>
+<p><strong>C. 运算符与表达式</strong></p>
+<ul>
+<li><a href="https://www.learncpp.com/cpp-tutorial/operator-precedence-and-associativity/" target="_blank" rel="noopener">Source: 6.1 — Operator precedence and associativity</a> · <code>sources/lc-06-01-operator-precedence.md</code><br>用途：「为什么 <code>2+3*4</code> 是 14」的官方优先级表（配合 cppreference 那张总表一起看）。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/arithmetic-operators/" target="_blank" rel="noopener">Source: 6.2 — Arithmetic operators</a> · <code>sources/lc-06-02-arithmetic-operators.md</code><br>用途：整数除法 vs 浮点除法；<code>static_cast</code> 做浮点除法。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/remainder-and-exponentiation/" target="_blank" rel="noopener">Source: 6.3 — Remainder and exponentiation</a> · <code>sources/lc-06-03-remainder-and-exponentiation.md</code><br>用途：<code>%</code> 只作用于整数、负数取余——成绩统计里判断奇偶/分组的依据。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/increment-decrement-operators-and-side-effects/" target="_blank" rel="noopener">Source: 6.4 — Increment/decrement operators, and side effects</a> · <code>sources/lc-06-04-increment-decrement.md</code><br>用途：<code>i++</code> 与 <code>++i</code> 的区别与"副作用"这个词的来历（<strong>为避免 UB，只讲单独成句的用法</strong>）。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/the-conditional-operator/" target="_blank" rel="noopener">Source: 6.6 — The conditional operator</a> · <code>sources/lc-06-06-conditional-operator.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/relational-operators-and-floating-point-comparisons/" target="_blank" rel="noopener">Source: 6.7 — Relational operators and floating point comparisons</a> · <code>sources/lc-06-07-relational-operators.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/logical-operators/" target="_blank" rel="noopener">Source: 6.8 — Logical operators</a> · <code>sources/lc-06-08-logical-operators.md</code><br>用途：<code>&amp;&amp;</code>/<code>||</code> 短路求值；条件里写 <code>0 &lt; x &lt; 10</code> 为什么永远为真的依据。</li>
+</ul>
+<p><strong>D. 分支与循环</strong></p>
+<ul>
+<li><a href="https://www.learncpp.com/cpp-tutorial/if-statements-and-blocks/" target="_blank" rel="noopener">Source: 8.2 — If statements and blocks</a> · <code>sources/lc-08-02-if-statements-and-blocks.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/common-if-statement-problems/" target="_blank" rel="noopener">Source: 8.3 — Common if statement problems</a> · <code>sources/lc-08-03-common-if-statement-problems.md</code><br>用途：<code>if (x = 1)</code>、悬空 else、缺大括号——<strong>排错层题目的错误样本</strong>。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/switch-statement-basics/" target="_blank" rel="noopener">Source: 8.5 — Switch statement basics</a> · <code>sources/lc-08-05-switch-statement-basics.md</code><br>用途：<code>switch</code> 只能比整数/字符、<code>break</code> 与贯穿（成绩等级 A/B/C 正好用得上）。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-loops-and-while-statements/" target="_blank" rel="noopener">Source: 8.8 — Introduction to loops and while statements</a> · <code>sources/lc-08-08-loops-and-while-statements.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/do-while-statements/" target="_blank" rel="noopener">Source: 8.9 — Do while statements</a> · <code>sources/lc-08-09-do-while-statements.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/for-statements/" target="_blank" rel="noopener">Source: 8.10 — For statements</a> · <code>sources/lc-08-10-for-statements.md</code><br>用途：数组遍历的标准写法，后面数组+指针全靠它。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/break-and-continue/" target="_blank" rel="noopener">Source: 8.11 — Break and continue</a> · <code>sources/lc-08-11-break-and-continue.md</code></li>
+</ul>
+<p><strong>E. 函数（形参实参、返回值、作用域、值传递）</strong></p>
+<ul>
+<li><a href="https://www.learncpp.com/cpp-tutorial/function-return-values-value-returning-functions/" target="_blank" rel="noopener">Source: 2.2 — Function return values</a> · <code>sources/lc-02-02-function-return-values.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/void-functions-non-value-returning-functions/" target="_blank" rel="noopener">Source: 2.3 — Void functions</a> · <code>sources/lc-02-03-void-functions.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-function-parameters-and-arguments/" target="_blank" rel="noopener">Source: 2.4 — Introduction to function parameters and arguments</a> · <code>sources/lc-02-04-function-parameters-and-arguments.md</code><br>用途：<strong>形参 vs 实参</strong>、值传递（拷贝一份）——中文里这两个词最容易混，这条给英文对照。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-local-scope/" target="_blank" rel="noopener">Source: 2.5 — Introduction to local scope</a> · <code>sources/lc-02-05-local-scope.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/forward-declarations/" target="_blank" rel="noopener">Source: 2.7 — Forward declarations and definitions</a> · <code>sources/lc-02-07-forward-declarations.md</code><br>用途：<strong>函数原型为什么必须写在前面</strong>；"先声明后使用"的来历。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/local-variables/" target="_blank" rel="noopener">Source: 7.3 — Local variables</a> · <code>sources/lc-07-03-local-variables.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/scope-duration-and-linkage-summary/" target="_blank" rel="noopener">Source: 7.12 — Scope, duration, and linkage summary</a> · <code>sources/lc-07-12-scope-duration-linkage-summary.md</code><br>用途：作用域/生存期一页速查（<strong>linkage 部分超范围，只看 scope/duration 两张表</strong>）。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-iostream-cout-cin-and-endl/" target="_blank" rel="noopener">Source: 1.5 — Introduction to iostream: cout, cin, and endl</a> · <code>sources/lc-01-05-iostream-cout-cin-endl.md</code><br>用途：<code>cin &gt;&gt;</code> 的空白符行为——<strong>解释"为什么输入姓名只读到半个"</strong>，接 C 风格字符串。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/input-and-output-io-streams/" target="_blank" rel="noopener">Source: 28.1 — Input and output (I/O) streams</a> · <code>sources/lc-28-01-io-streams.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/input-with-istream/" target="_blank" rel="noopener">Source: 28.2 — Input with istream</a> · <code>sources/lc-28-02-input-with-istream.md</code><br>用途：<code>getline()</code>、<code>get()</code>、<code>ignore()</code> 家族与缓冲区溢出。<strong>⚠️ 原书讲 <code>cin.get(ch)</code>/<code>cin.get()</code> 的那一整页（第 5 章 PDF p172）在本地 PDF 里文本层为空，本条目是这一知识点的实际依据。</strong></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/stream-states-and-input-validation/" target="_blank" rel="noopener">Source: 28.5 — Stream states and input validation</a> · <code>sources/lc-28-05-stream-states-and-input-validation.md</code><br>用途：输入失败后 <code>cin</code> 卡死、<code>cin.clear()</code> + <code>cin.ignore()</code>——<strong>学生成绩管理系统输入校验的依据</strong>。</li>
+</ul>
+<p><strong>F. 数组与 C 风格字符串</strong></p>
+<ul>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-c-style-arrays/" target="_blank" rel="noopener">Source: 17.7 — Introduction to C-style arrays</a> · <code>sources/lc-17-07-introduction-to-c-style-arrays.md</code><br>用途：数组声明、下标从 0 开始、越界不报错的依据。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/c-style-array-decay/" target="_blank" rel="noopener">Source: 17.8 — C-style array decay</a> · <code>sources/lc-17-08-c-style-array-decay.md</code><br>用途：<strong>数组名作函数参数时"退化成指针"</strong>——本课程从"数组"过渡到"指针"的关键一步，中文教材里这块最绕。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/c-style-strings/" target="_blank" rel="noopener">Source: 17.10 — C-style strings</a> · <code>sources/lc-17-10-c-style-strings.md</code><br>用途：<code>char name[20]</code>、结尾 <code>\0</code>、<code>&lt;cstring&gt;</code> 里 <code>strlen/strcpy/strcat/strcmp</code>、<code>cin.getline(name, 20)</code>。<strong>范围规定不用 <code>std::string</code>，这条是字符串部分的正面依据</strong>。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/c-style-string-symbolic-constants/" target="_blank" rel="noopener">Source: 17.11 — C-style string symbolic constants</a> · <code>sources/lc-17-11-c-style-string-symbolic-constants.md</code><br>用途：字符串字面值是 <code>const char*</code>，不能改——常见崩溃点的依据。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/multidimensional-c-style-arrays/" target="_blank" rel="noopener">Source: 17.12 — Multidimensional C-style arrays</a> · <code>sources/lc-17-12-multidimensional-c-style-arrays.md</code><br>用途：<strong>⚠️ 超出课程范围，仅防越界</strong>（成绩单若要二维表，最多讲到用一维数组+下标换算）。</li>
+</ul>
+<p><strong>G. 指针主线</strong></p>
+<ul>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-compound-data-types/" target="_blank" rel="noopener">Source: 12.1 — Introduction to compound data types</a> · <code>sources/lc-12-01-introduction-to-compound-data-types.md</code><br>用途：引出"复合类型"这一族，为数组/指针定位。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/value-categories-lvalues-and-rvalues/" target="_blank" rel="noopener">Source: 12.2 — Value categories (lvalues and rvalues)</a> · <code>sources/lc-12-02-value-categories-lvalues-rvalues.md</code><br>用途：<strong>"左值"这个词的来历</strong>（<code>&amp;x</code> 为什么左边必须是变量）。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-pointers/" target="_blank" rel="noopener">Source: 12.7 — Introduction to pointers</a> · <code>sources/lc-12-07-introduction-to-pointers.md</code><br>用途：<strong>指针第一讲的主依据</strong>：地址、<code>&amp;</code> 取地址、<code>*</code> 解引用、指针初始化、<code>&amp;</code>/<code>*</code> 在不同上下文的不同含义（中文教材讲得散）。配合 <code>sources/cppref-pointer.md</code> 出规范措辞。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/null-pointers/" target="_blank" rel="noopener">Source: 12.8 — Null pointers</a> · <code>sources/lc-12-08-null-pointers.md</code><br>用途：<code>nullptr</code>（老代码里的 <code>NULL</code>/<code>0</code>）、空指针解引用为什么崩。<strong>课程范围明确要"空指针"</strong>。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/pointers-and-const/" target="_blank" rel="noopener">Source: 12.9 — Pointers and const</a> · <code>sources/lc-12-09-pointers-and-const.md</code><br>用途：<strong>⚠️ 超出课程范围，仅防越界</strong>（3 种 const 组合先不讲）。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/pass-by-address/" target="_blank" rel="noopener">Source: 12.10 — Pass by address</a> · <code>sources/lc-12-10-pass-by-address.md</code><br>用途：<strong>指针作函数参数</strong>——与"值传递"对照讲，是成绩管理系统改数据的基础。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/pass-by-address-part-2/" target="_blank" rel="noopener">Source: 12.11 — Pass by address (part 2)</a> · <code>sources/lc-12-11-pass-by-address-part-2.md</code><br>用途：什么时候用"传地址"、什么时候仍该"传值"；空指针作参数。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/return-by-reference-and-return-by-address/" target="_blank" rel="noopener">Source: 12.12 — Return by reference and return by address</a> · <code>sources/lc-12-12-return-by-reference-and-address.md</code><br>用途：<strong>悬空指针</strong>为什么产生（返回局部变量地址）。<strong>范围外部分（引用返回）只取"为什么是 bug"这一段</strong>。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/in-and-out-parameters/" target="_blank" rel="noopener">Source: 12.13 — In and out parameters</a> · <code>sources/lc-12-13-in-and-out-parameters.md</code><br>用途：函数用指针"往外送结果"的命名与写法约定。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/pointer-arithmetic-and-subscripting/" target="_blank" rel="noopener">Source: 17.9 — Pointer arithmetic and subscripting</a> · <code>sources/lc-17-09-pointer-arithmetic-and-subscripting.md</code><br>用途：<strong>指针与数组</strong>：<code>*(p+i)</code> 与 <code>p[i]</code> 等价、<code>p+1</code> 到底加几个字节。配合 <code>sources/cppref-operator-member-access.md</code>、<code>sources/cppref-operator-arithmetic.md</code> 出规范依据。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/the-stack-and-the-heap/" target="_blank" rel="noopener">Source: 20.2 — The stack and the heap</a> · <code>sources/lc-20-02-the-stack-and-the-heap.md</code><br>用途：<strong>只取"栈"那半节</strong>做内存直觉（局部变量的地址为什么连在一起）。<strong>堆与 <code>new/delete</code> 明确超范围，不展开</strong>。</li>
+</ul>
+<ul>
+<li><a href="https://www.learncpp.com/cpp-tutorial/statements-and-the-structure-of-a-program/" target="_blank" rel="noopener">Source: 1.1 — Statements and the structure of a program</a> · <code>sources/lc-01-01-statements-and-structure-of-a-program.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/comments/" target="_blank" rel="noopener">Source: 1.2 — Comments</a> · <code>sources/lc-01-02-comments.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/keywords-and-naming-identifiers/" target="_blank" rel="noopener">Source: 1.7 — Keywords and naming identifiers</a> · <code>sources/lc-01-07-keywords-and-naming-identifiers.md</code><br>用途：变量命名规则、保留字清单；<code>cin</code>/<code>cout</code>/<code>endl</code> 这些词第一次出现时的出处。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-literals-and-operators/" target="_blank" rel="noopener">Source: 1.9 — Introduction to literals and operators</a> · <code>sources/lc-01-09-literals-and-operators.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-expressions/" target="_blank" rel="noopener">Source: 1.10 — Introduction to expressions</a> · <code>sources/lc-01-10-expressions.md</code><br>用途：表达式、语句、求值顺序这几个词的分界。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/developing-your-first-program/" target="_blank" rel="noopener">Source: 1.11 — Developing your first program</a> · <code>sources/lc-01-11-developing-your-first-program.md</code><br>用途：从需求到可运行程序的分步示范，可直接改造成本课程的第一个练习。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/naming-collisions-and-an-introduction-to-namespaces/" target="_blank" rel="noopener">Source: 2.9 — Naming collisions and an introduction to namespaces</a> · <code>sources/lc-02-09-namespaces.md</code><br>用途：<code>using namespace std;</code> 到底做了什么、为什么这么写。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/introduction-to-the-preprocessor/" target="_blank" rel="noopener">Source: 2.10 — Introduction to the preprocessor</a> · <code>sources/lc-02-10-preprocessor.md</code><br>用途：<code>#include</code> 为什么有 <code>#</code>；预处理器与编译器不是一回事。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/programs-with-multiple-code-files/" target="_blank" rel="noopener">Source: 2.8 — Programs with multiple code files</a> · <code>sources/lc-02-08-programs-with-multiple-code-files.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/header-files/" target="_blank" rel="noopener">Source: 2.11 — Header files</a> · <code>sources/lc-02-11-header-files.md</code><br>用途：<strong>⚠️ 多文件工程超出课程范围</strong>，只在「编译与链接」一节讲清概念时取一点材料，不要求学生写多文件项目。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/literals/" target="_blank" rel="noopener">Source: 5.2 — Literals</a> · <code>sources/lc-05-02-literals.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/numeral-systems-decimal-binary-hexadecimal-and-octal/" target="_blank" rel="noopener">Source: 5.3 — Numeral systems</a> · <code>sources/lc-05-03-numeral-systems.md</code><br>用途：十六进制——<strong>打印出来的地址为什么长成 <code>0x7ffd…</code></strong>，讲 <code>&amp;x</code> 输出时必须先垫这一节。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/void/" target="_blank" rel="noopener">Source: 4.2 — Void</a> · <code>sources/lc-04-02-void.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/fixed-width-integers-and-size-t/" target="_blank" rel="noopener">Source: 4.6 — Fixed-width integers and size_t</a> · <code>sources/lc-04-06-fixed-width-integers-size-t.md</code><br>用途：<code>sizeof</code> 返回的 <code>size_t</code> 是什么。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/compound-statements-blocks/" target="_blank" rel="noopener">Source: 7.1 — Compound statements (blocks)</a> · <code>sources/lc-07-01-compound-statements-blocks.md</code></li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/configuring-your-compiler-warning-and-error-levels/" target="_blank" rel="noopener">Source: 0.11 — Configuring your compiler: Warning and error levels</a> · <code>sources/lc-00-11-compiler-warning-and-error-levels.md</code><br>用途：<strong>"警告也要当错看"这条教学约定的依据</strong>（<code>-Wall -Wextra</code>），配合 GCC 官方 Warning Options 一条。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/installing-an-integrated-development-environment-ide/" target="_blank" rel="noopener">Source: 0.6 — Installing an Integrated Development Environment (IDE)</a> · <code>sources/lc-00-06-installing-an-ide.md</code><br>用途：编辑器/IDE/编译器三者关系；本课程以命令行 <code>g++</code> 为主，这条只用来解释"为什么不用 IDE 也行"，<strong>以及「IDEs to avoid」里对 Dev-C++ 的反对意见</strong>（见第 0 节）。</li>
+<li><a href="https://www.learncpp.com/cpp-tutorial/chapter-12-summary-and-quiz/" target="_blank" rel="noopener">Source: 第 5 章 / 第 12 章 / 第 17 章 章末自测</a> · <code>sources/lc-05-x-chapter-5-summary-and-quiz.md</code>、<code>sources/lc-12-x-chapter-12-summary-and-quiz.md</code>、<code>sources/lc-17-x-chapter-17-summary-and-quiz.md</code><br>用途：<strong>只在设计题目时做难度与考法参照</strong>。题目唯一 owner 是 practice-evaluator，本清单不提供题目。</li>
+</ul>
+<h2>Wisdom (Communities)</h2>
+<ul>
+<li><a href="https://www.learncpp.com/latest-changes/" target="_blank" rel="noopener">LearnCpp.com 官方站（附「Latest Changes」与勘误通道）</a><br>学生卡住时查英文原站；站点逐课标注"更新时间"，可直接核对"这条说法是不是已经被 C++ 新标准改过"。</li>
+<li><a href="https://gcc.gnu.org/onlinedocs/" target="_blank" rel="noopener">GCC 官方手册（onlinedocs）</a><br>报错信息、编译选项的最终解释处；下游核对编译器行为的落脚点。</li>
+<li><a href="https://en.cppreference.com/" target="_blank" rel="noopener">cppreference 官方站</a> 与 <a href="https://zh.cppreference.com/" target="_blank" rel="noopener">中文版</a><br>⚠️ <strong>本机两个域名都 403</strong>（见第 1 节说明）。<strong>给学生的话：这两个站要能联网才打得开，课程正文里不挂它们当必读链接</strong>；离线可读的内容已落 <code>sources/cppref-*.md</code>。</li>
+<li>{可选，未核实} 中文提问社区（如 SegmentFault / 博客园 / V2EX）<br><strong>未纳入清单</strong>：本机到中文社区站点连通性未验证（<code>segmentfault.com</code>/<code>cnblogs.com</code>/<code>zhihu.com</code> 首页可达但内容质量参差），且质量参差。若学生主动要求"有人帮我看看代码"，由总控决定是否加入，本清单不背书。</li>
+<li><strong>学生拒绝加入社区就记在这里</strong>：（暂无记录）</li>
+</ul>
+<h2>Gaps</h2>
+<blockquote><p>结论先说：<strong>没有阻塞项</strong>。本课程主干知识每一块都指得出依据（见上），第 1 章的装环境缺口本轮已补上官方来源。<br>下面是"依据质量"与"覆盖密度"上的缺口，逐条写明缺什么、为什么找不到。</p></blockquote>
+<ol>
+<li><strong><code>cppreference.com</code> 官网（中/英）整站仍抓不动——本轮用「官方离线包的镜像」绕过去了，但直连这件事本身没解决。</strong><br>缺什么：官网可点的 URL 之外，<strong>没有"目录结构完整、内部链接可点"的一份离线副本</strong>。<br>为什么找不到：本机 <code>curl</code> / 抓取工具访问 <code>en.cppreference.com</code>、<code>zh.cppreference.com</code>、<code>cppreference.com</code>、<code>www.cppreference.com</code> <strong>全部 HTTP 403（Cloudflare "Just a moment..." 挑战页）</strong>；<code>isocpp.org</code> 403；<code>web.archive.org</code> 超时；<code>sourceforge.net</code> 403。<strong>这是网络可达性限制，不是"没有权威资料"。</strong><br>本轮已做的替代（<strong>可用，且已落盘可离线打开</strong>）：从 <strong>cppreference 官方离线包 <code>html_book</code> 的 GitHub 转存镜像</strong> <code>0mega3/cppreference-doc</code> 经 GitHub contents API 取回 8 页，落 <code>sources/cppref-*.md</code>，覆盖：指针声明（= 讲解正文里挂过但打不开的那条）、数组、成员访问运算符、算术运算符、优先级总表、<code>fixed</code>、<code>setprecision</code>、镜像首页。<br>→ <strong>仍然缺的是</strong>：<code>zh.cppreference.com</code> 的<strong>中文</strong>规范措辞（镜像只有英文版；中文对照目前靠 Microsoft Learn 的 <code>zh-cn</code> 页，见第 1 节）。需要中文规范级措辞时，请在能过 Cloudflare 的网络环境补抓 <code>zh.cppreference.com/w/cpp/language/pointer</code>。</li>
+</ol>
+<ol>
+<li><strong>本地 PDF 第 5 章 PDF p172（书页 154）整页内容 100% 丢失：<code>cin.get(ch)</code> / <code>cin.get()</code> / <code>while (ch != '#')</code> 及「5.5.3 使用哪个 cin.get()」。</strong><br>为什么找不到：该页在内置文本层里 0 字符（扫描/OCR 漏页），已渲染图像目视确认是<strong>整页实质内容</strong>。<br>已用的替代：<code>sources/lc-28-02-input-with-istream.md</code>（英文，覆盖 <code>get()</code>/<code>getline()</code>/<code>ignore()</code> 家族）。<br>→ <strong>缺口性质</strong>：中文依据缺失，英文依据已有。本轮的重抽只做了第 4、7 章，<strong>没有覆盖第 5 章这一页</strong>；若要中文，需把该页按 <code>pdftoppm</code>/<code>fitz</code> 导出成图片配进课件（本轮未做）。</li>
+</ol>
+<ol>
+<li><strong>本地 PDF 第 4、7 章：原文本层的乱码问题本轮已用 tesseract 重抽缓解，但没有"彻底解决"。</strong><br>已做的：第 4 章（PDF p88–142）与第 7 章（PDF p220–270）共 <strong>106 页</strong>用 <code>tesseract 5.5.2 -l chi_sim+eng --psm 3</code>@450 dpi 重抽，产出 <code>reference/…-04-…-tesseract.md</code> 与 <code>…-07-…-tesseract.md</code>；<strong>中文叙述的可读性明显优于原文本层</strong>（原层 <code>~include &lt;fbstream&gt;</code> / <code>char namel[Sizel</code> 这类被纠正为 <code>#include &lt;fstream&gt;</code> / <code>char name1[Size]</code>）。<br>→ <strong>仍然缺的</strong>：<strong>灰底代码/输出示例区两次都不可信</strong>。根因是<strong>扫描件本身分辨率只有约 150 dpi</strong>（<code>fitz</code> 实测每页内嵌图 982×1400 JPEG，PDF 1.5、DeviceGray），重抽只是把同一张低清图放大后识别，没有新增信息。<strong>因此这两章的代码依据仍然只有官方配套源码（<code>sources/C++PrimerPlus-第6版-官方配套源码/</code>），重抽稿只用于取中文措辞。</strong><br>→ <strong>要真正做到"代码也可信"</strong>，需要一本文本层的电子版（epub/mobi/官方 PDF）而不是扫描件；本机没有第二份副本（已查 <code>/Users/chenyilin/Desktop/电子书/计算机/</code>，只有这一份 C++ Primer Plus 中文版）。<strong>这是环境限制，本清单不拿低质来源凑数。</strong></li>
+</ol>
+<ol>
+<li><strong>第 4、7 章以外的页仍有约 11.5% 不可用（除已重抽的两章）。</strong><br>统计（来自 <code>convert/CONVERT-REPORT.md</code>）：另有 33 页文本层含大段乱码，分布 ch1:29；ch2:38,46,53；ch3:56,62,66,68,80；ch5:146,149,151,169,182；ch6:185,196,199,202；ch7:226,233,241,242,245,265,270（ch7 的那 8 页本轮已随重抽覆盖）。<br><strong>⚠️ 更正一条上一轮的说法</strong>：上一轮 Gaps 写「第 7 章 PDF p228（书页 210）整页丢失」。本轮重抽后<strong>该页仍然不可用</strong>——tesseract 在这一页 OCR 出来的仍是成片乱码（<code>os SHAT, AALS PR BAR R ILE CEN ...</code>），实测这一页是<strong>插图/灰底设计区</strong>，重抽救不回来。<strong>结论：p228 这个缺口依然存在，只是从"0 字符"变成"有字但不可读"。</strong><br>→ <strong>缺口性质</strong>：非阻塞；受影响的多是插图/输出示例区。若某个具体知识点正好落在这几页，用对应的 LearnCpp 条目兜底。</li>
+</ol>
+<ol>
+<li><strong>教材插图（图 3.1、图 4.x 等）本次仍未导出。</strong><br>缺什么：讲内存模型、指针指向关系时，"原书那张图"往往比文字有效。<br>为什么没有：本轮的转换只做文本层（重抽也只出文字），未做页面图像导出（也不必：科目有独立的采图角色）。<br>→ <strong>交给下游</strong>：<code>image-scout</code> 需要知道——本地 PDF 的插图<strong>没有现成位图可捡</strong>，要么按页 <code>fitz</code>/<code>pdftoppm</code> 导出再裁，要么从网页采。<strong>顺带一条好消息</strong>：本轮重抽证明了按页导出图像完全可行（<code>page.get_pixmap(dpi=450)</code> 一次约 5 秒/页），采图角色可以直接复用 <code>ocr_chapters.py</code> 的取图代码。</li>
+</ol>
+<ol>
+<li><strong>Dev-C++：官方 SourceForge 项目页与 Embarcadero 产品页在本机 403，只能用 GitHub 官方 API 取证。</strong><br>缺什么：SourceForge 上的 <strong>Orwell Dev-C++</strong> 项目页（下载量、最后更新日期、原始发布说明）原文。<br>为什么找不到：<code>sourceforge.net/projects/orwelldevcpp</code>、<code>sourceforge.net/p/orwelldevcpp</code>、<code>www.embarcadero.com/free-tools/dev-cpp</code> 全部 <strong>HTTP 403</strong>（Cloudflare）；<code>bloodshed.net</code>、<code>dev-cpp.com</code>、<code>orwelldevcpp.blogspot.com</code> 连接超时。<br>已用的替代：<code>sources/devcpp-status-2026.md</code>（GitHub 官方 API 取的仓库元数据 + 全部 releases + README）——<strong>"最后一版 v6.3 / 2021-01-31 / 此后未发版"这个结论是硬的</strong>，且给了 GitHub Releases 直链。<br>→ <strong>缺口性质</strong>：非阻塞。<strong>注意</strong>：课程<strong>不要</strong>写"去 SourceForge 下载 Dev-C++"的步骤（链接在本机就是 403，读者那边也可能失效）。</li>
+</ol>
+<ol>
+<li><strong>本机（教师在用的这台）编译器是 Apple clang 17，不是 GCC。</strong><br>说明：报错措辞与 GCC 不完全一致（如 <code>-Wconversion</code> 的行为、模板报错格式）。课件里贴的报错样本<strong>请以 GCC 输出为准</strong>（用 GCC 官方手册核对），不要拿本机 clang 的输出当教材；命令行写法（<code>g++ -std=c++11 -Wall x.cpp -o x</code>）两边通用。<br><strong>本轮补充</strong>：这条已从"环境说明"升级为<strong>可复现的证据</strong>——<code>/usr/bin/g++</code> 与 <code>/usr/bin/clang++</code> 是同一 inode，详见第 0 节末的实测记录。</li>
+</ol>
+<ol>
+<li><strong>C 风格字符串的"中文、权威、且成体系"的依据仍偏薄，但本轮已明显改善。</strong><br>缺什么：<code>strlen/strcpy/strcat/strcmp</code> 与 <code>\0</code> 的<strong>中文</strong>系统讲解（原书第 4 章有，重抽稿可读性已变好，但代码仍不可信）。<br>已用的替代（本轮新增）：<code>sources/mslearn-cstring-strlen.md</code>、<code>mslearn-cstring-strcpy.md</code>、<code>mslearn-cstring-strcmp.md</code>（<strong>中文可切</strong>的官方逐函数参考，含边界条件）+ <code>sources/lc-17-10-c-style-strings.md</code>（英文成体系）+ 第 4 章重抽稿（中文叙述）。<br>→ <strong>缺口性质</strong>：已从"偏薄"降到"可接受"；讲这一节时建议中英对照。</li>
+</ol>
+<ol>
+<li><strong>范围外声明（不是缺口，是护栏）</strong>：结构体、<code>new/delete</code>、类与 OOP、模板、<code>std::string</code>/<code>std::vector</code>、STL 算法、文件读写、多文件工程在本清单里都<strong>没有</strong>正面依据条目；上面出现的 <code>lc-12-09</code>（指针与 const）、<code>lc-17-12</code>（多维数组）、<code>lc-02-08</code>/<code>lc-02-11</code>（多文件与头文件）、<code>lc-20-02</code> 的堆部分、<code>lc-12-12</code> 的引用返回、<code>cppref-operator-member-access</code> 的 <code>p-&gt;m</code> 部分，均是为"防越界"而列的对照，<strong>不要据此展开</strong>。</li>
+</ol>
+<hr>
+<h2>机器可读附录（供总控与下游角色定位）</h2>
+<blockquote><p><strong>路径基准</strong>：以下相对路径一律以<strong>科目根</strong>（<code>&lt;subject_path&gt;</code> = <code>…/subjects/cpp-basics</code>）为基准。<br><strong>上一轮有一批条目第三项写成 <code>fetch/…</code>，本机不存在 <code>fetch/</code> 目录</strong>；正确落点是下面这三处。</p></blockquote>
+<ul>
+<li><strong><code>reference/</code></strong>（本地教材转换稿，学生可见、挂科目主页）：<strong>10</strong> 个 <code>.md</code></li>
+<li><code>00-书目与章节结构</code>、<code>01</code>–<code>07</code> 七章正文（Acrobat 文本层）</li>
+<li><strong>本轮新增 2 个</strong>：<code>C++PrimerPlus-第6版-中文版-04-复合类型-tesseract重抽.md</code>（143 KB / 55 页）、<code>C++PrimerPlus-第6版-中文版-07-函数-C++的编程模块-tesseract重抽.md</code>（115 KB / 51 页）</li>
+<li><strong><code>sources/</code></strong>（在线来源正文，不挂主页）：<strong>121</strong> 个 <code>.md</code> + <code>C++PrimerPlus-第6版-官方配套源码/</code>（103 个 <code>.cpp</code> + README）</li>
+<li><code>lc-*.md</code> — LearnCpp <strong>85</strong> 篇</li>
+<li><code>gcc-*.md</code> — GCC 官方手册 <strong>4</strong> 篇</li>
+<li><strong>本轮新增 31 篇</strong>（明细）：<code>vscode-config-mingw</code>、<code>vscode-cpp-ide</code>、<code>vscode-cpp-settings</code>、<code>vscode-cpp-debug</code>、<code>msys2-home</code>、<code>mingw-w64-home</code>、<code>mingw-w64-downloads</code>、<code>winlibs-home</code>、<code>devcpp-status-2026</code>、<code>apple-installing-command-line-tools</code>、<code>apple-tn2339-xcodebuild</code>、<code>cppref-index</code>、<code>cppref-pointer</code>、<code>cppref-array</code>、<code>cppref-operator-member-access</code>、<code>cppref-operator-arithmetic</code>、<code>cppref-operator-precedence</code>、<code>cppref-iomanip-fixed</code>、<code>cppref-iomanip-setprecision</code>、<code>mslearn-pointers-cpp-zh</code>、<code>mslearn-raw-pointers-cpp-zh</code>、<code>mslearn-arrays-cpp</code>、<code>mslearn-iomanip</code>、<code>mslearn-iomanip-functions</code>、<code>mslearn-cstring</code>、<code>mslearn-cstring-strlen</code>、<code>mslearn-cstring-strcpy</code>、<code>mslearn-cstring-strcmp</code>、<code>cplusplus-pointers</code>、<code>cplusplus-arrays</code>、<code>cplusplus-iomanip-setprecision</code></li>
+<li><strong><code>.stage/resource-scout-cpp-basics/raw_html/</code></strong>（<strong>只抓到 HTML、没有转 md 的原文</strong>，本轮共 <strong>119</strong> 个 <code>.html</code> + <strong>12</strong> 个 <code>.json</code>）</li>
+<li>说明：<strong>这里不是 <code>fetch/</code></strong>。第一轮的 90 份 HTML 与第二轮新增的 18 份都在这个目录里，文件名与 <code>sources/*.md</code> 同名（除 cppreference 的 <code>cppref-*.html</code> 与 Dev-C++ 的 <code>.json</code>）。</li>
+<li><strong>md_test/ 不存在</strong>：派工里提到的 <code>md_test/</code> 目录在本机<strong>找不到</strong>（<code>find</code> 全盘无同名目录），<code>sources/*.md</code> 里也<strong>没有</strong>"只剩一行标题"的空壳文件（逐个 <code>grep -c '[^[:space:]]'</code> 检查，最小的一份是 2.9 KB 的 <code>lc-04-02-void.md</code>，正文完整）。<strong>结论：上一轮那批空壳在交付阶段已被重转覆盖，本轮无需修复，也不需要"只有 HTML 原文可用"的标记。</strong></li>
+<li><strong>本轮新增的脚本与证据</strong>（都在 <code>.stage/resource-scout-cpp-basics/</code>，不进正式目录）：</li>
+<li><code>fetch2.py</code> — 第二轮抓取（29 个目标，成功 28、404 一个：<code>code.visualstudio.com/docs/cpp/intellisense</code>）</li>
+<li><code>convert_new.py</code> — 新增 HTML→md（含 VS Code / MinGW-w64 / MS Learn / cplusplus / Apple TN2339）</li>
+<li><code>convert_cppref.py</code> — <strong>cppreference 离线镜像专用</strong>（钉 <code>#mw-content-text</code> 容器，去掉撑爆页面的全站导航表，并收紧代码块里 token 间的空格）</li>
+<li><code>build_devcpp.py</code> — 生成 <code>sources/devcpp-status-2026.md</code></li>
+<li><code>docc2md.py</code> — Apple DocC JSON → Markdown（Apple 文档页是 JS 渲染，HTML 抓不到正文，改取 <code>developer.apple.com/tutorials/data/…json</code>）</li>
+<li><code>ocr_chapters.py</code> — 第 4/7 章 tesseract 重抽（可复用其 <code>page.get_pixmap</code> 取图逻辑给采图角色）</li>
+<li><code>fetch2_log.txt</code>、<code>ocr_run.log</code>、<code>ocr/</code>（重抽中间稿）、<code>ocr_test/</code>（OCR 方案对比样张）</li>
+<li><code>convert/CONVERT-REPORT.md</code> + <code>convert/convert_chapters.py</code>、<code>convert/build_index.py</code>、<code>convert/raw/</code>（第一轮）</li>
+</ul>
+  <footer class="lesson-footer">
+    StudyMate · 资源清单 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

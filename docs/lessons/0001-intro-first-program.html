@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>你的第一个 C++ 程序 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../assets/ -->
+<link rel="stylesheet" href="../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0001</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0001 · 你的第一个 C++ 程序</span>
+    <h1>你的第一个 C++ 程序</h1>
+    <p class="lesson-goal"><b>本节目标：</b>走通「写源文件 → 编译 → 运行 → 看懂报错 → 改对」这条循环，让终端打印出一行 Hello。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <div class="lesson-note">
+    <b>这节课从一屏红字讲起</b>
+    <p>很多人学编程的第一天，是照着别人给的例子敲下一段代码，然后 <code>g++</code> 甩回一屏红字。这一课不先讲 C++ 是什么，先把那屏红字变成一行输出。</p>
+  </div>
+
+  <h2>一条循环：从文本到程序</h2>
+
+  <p>先讲清楚一件事：<b>为什么写程序要先准备一个纯文本文件</b>。</p>
+
+  <p>计算机的处理器只认识一串串由 0 和 1 组成的指令，那套东西叫机器指令。人几乎不可能直接写机器指令，写完也读不懂。于是人们退一步：用一种人看得懂的写法把要求写下来，再让一个程序把它翻译成机器指令。这个「人看得懂、机器看不懂」的文本文件，就是<b>源文件</b>（source file）；C++ 的源文件习惯以 <code>.cpp</code> 结尾。把源文件翻译成机器能执行的指令，这个翻译过程叫<b>编译</b>（compile）。</p>
+
+  <p>一份稍大的程序会被拆成好几个源文件，翻译完还会用到现成的代码。把编译产生的若干目标文件，以及程序用到的标准库代码，拼装成一个完整程序，这个过程叫<b>链接</b>（link）。链接完成后得到的、可以直接运行的产物，就是<b>可执行文件</b>（executable）。你双击它、或者在终端里敲它的名字，它就跑起来。</p>
+
+  <p>对写代码的人来说，这三件事是连在一起的一条循环：</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="源文件经过编译与链接变成可执行文件，再运行看到输出；输出不对就回到编辑器改源文件">
+<svg viewBox="0 0 720 230" role="img" aria-hidden="true">
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="24" y="34" width="140" height="60" rx="10"/>
+    <rect x="204" y="34" width="150" height="60" rx="10"/>
+    <rect x="394" y="34" width="150" height="60" rx="10"/>
+    <rect x="584" y="34" width="112" height="60" rx="10"/>
+  </g>
+  <g fill="currentColor" font-size="16" text-anchor="middle">
+    <text x="94" y="60">编辑源文件</text>
+    <text x="94" y="82">intro-01.cpp</text>
+    <text x="279" y="60">编译 + 链接</text>
+    <text x="279" y="82">g++ 帮你做</text>
+    <text x="469" y="60">可执行文件</text>
+    <text x="469" y="82">first</text>
+    <text x="640" y="60">运行</text>
+    <text x="640" y="82">看到输出</text>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M168 64 H198" marker-end="url(#lc1arrow)"/>
+    <path d="M358 64 H388" marker-end="url(#lc1arrow)"/>
+    <path d="M548 64 H578" marker-end="url(#lc1arrow)"/>
+  </g>
+  <defs>
+    <marker id="lc1arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+  <path d="M640 100 V150 H94 V100" fill="none" stroke="currentColor" stroke-width="2" marker-end="url(#lc1arrow)"/>
+  <text x="367" y="176" fill="currentColor" font-size="16" text-anchor="middle">输出不对：回去读报错、改源文件，再编译一次</text>
+  <text x="367" y="205" fill="currentColor" font-size="16" text-anchor="middle">这一圈从今天开始，你会走几百次</text>
+</svg>
+    <figcaption>图 1 · 写、编译、运行、改错构成一条绕回来的循环</figcaption>
+  </figure>
+
+  <p><b>编译</b>之所以需要单独一个程序，是因为翻译这件事必须有人替你做：机器不认识 <code>std::cout</code>，只认识机器指令；编译器（compiler）就是干这个翻译的现成工具。本课程用到的编译器是 <code>g++</code>。</p>
+
+  <h2>写第一份源文件</h2>
+
+  <p>新建一个文本文件，内容如下。存成 <code>intro-01.cpp</code>，再编译。</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hello" &lt;&lt; std::endl;
+    return 0;
+}</code></pre>
+
+  <p>先看懂每一部分在干什么，暂时不用记住细节：</p>
+
+  <table>
+    <thead>
+      <tr><th>写法</th><th>它在做什么</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>#include &lt;iostream&gt;</code></td><td>把名字叫 iostream 的头文件借进来。输入输出要用到的名字都写在这个文件里</td></tr>
+      <tr><td><code>int main()</code></td><td>每个 C++ 程序都有且只有一个 <code>main</code>，程序从这里开始执行</td></tr>
+      <tr><td><code>{</code> 与 <code>}</code></td><td>一对花括号圈出一个范围，<code>main</code> 要执行的东西写在里面</td></tr>
+      <tr><td><code>std::cout &lt;&lt; "Hello" &lt;&lt; std::endl;</code></td><td>把 <code>Hello</code> 送到终端，再换一行</td></tr>
+      <tr><td><code>return 0;</code></td><td>告诉系统「我正常结束了」。0 表示一切正常</td></tr>
+    </tbody>
+  </table>
+
+  <p><b>头文件</b>（header file）是为「名字太多、要分类」准备的。标准库里的现成代码有成百上千个名字，全部堆在一起查找困难，官方就把它们按用途切开，每个文件管一类。要比方的话，它更像一份「这些名字在这里」的清单：<code>#include &lt;iostream&gt;</code> 的意思是把 iostream 这份清单拿进来，好让编译器认识 <code>std::cout</code>。</p>
+
+  <p><code>std::</code> 是<b>名称空间</b>（namespace）限定的写法。标准库的作者担心自己起的名字（比如 <code>cout</code>）和你的名字撞车，于是把所有标准库名字都放进一个叫 <code>std</code> 的柜子里。<code>std::cout</code> 读作「std 柜子里的 cout」，撞名就不会发生了。</p>
+
+  <p><b>语句</b>（statement）是一条完整的指令，C++ 里以分号结尾。程序就是按顺序执行的一条条语句——这解释了为什么下面那个反例里的分号那么要紧。</p>
+
+  <h2>编译、运行、看到 Hello</h2>
+
+  <p>在存放 <code>intro-01.cpp</code> 的目录下打开终端，敲这条命令：</p>
+
+  <pre data-lang="sh"><code>g++ intro-01.cpp -o first</code></pre>
+
+  <p>命令读法是：用 <code>g++</code> 编译 <code>intro-01.cpp</code>，产物叫 <code>first</code>。<code>-o</code> 是 output（输出）的缩写，<code>-o first</code> 就是「输出的文件叫 first」。编译期间没有任何输出，就是成功了——这一条要记牢：<b>编译器的风格是没有消息就是好消息</b>。</p>
+
+  <p>接着运行它。注意前面的 <code>./</code>：</p>
+
+  <pre data-lang="term"><code>$ ./first
+Hello</code></pre>
+
+  <p><code>./first</code> 的意思是「运行当前目录下的 first」。只敲 <code>first</code> 系统会去别的地方找，通常找不到，然后回你一句 <code>command not found</code>。</p>
+
+  <div class="lesson-tip">
+    <b>不加 -o 会怎样</b>
+    <p>如果敲的是 <code>g++ intro-01.cpp</code>，编译一样成功，只是产物叫 <code>a.out</code>，运行要敲 <code>./a.out</code>。<code>-o</code> 的作用就是给产物起个好认的名字：你编了 first、average、grade 三个程序，桌面上三个 <code>a.out</code> 会互相覆盖，谁也分不清谁。<b>本课程统一用 <code>g++ 源文件.cpp -o 程序名</code>。</b></p>
+
+    <p>顺带一句命名上的讲究：源文件叫 <code>intro-01.cpp</code>，产物叫 <code>first</code>，两者不同名。它们本来就是两样东西——一个是给你读的文本，一个是给机器执行的程序——名字分开，<code>ls</code> 列目录时一眼就分得清哪个是哪个。</p>
+  </div>
+
+  <div class="lesson-warn">
+    <b>macOS 上看到 Apple clang，是正常的</b>
+    <p>在终端敲 <code>g++ --version</code>，输出第一行是 <code>Apple clang version 17.0.0</code>，不是 "GCC"。这不是装错了：macOS 自带的 <code>/usr/bin/g++</code> 一路指向苹果的编译器 clang，它照样按 C++ 标准编译你的代码。这一套课程里凡是说 <code>g++</code> 的地方，照敲就行。</p>
+
+    <p>macOS 上编译器的安装方式是 <code>xcode-select --install</code>（本机不需要单独装 GCC）。装好之后敲 <code>xcode-select -p</code>，会打印出编译工具所在的路径，比如 <code>/Library/Developer/CommandLineTools</code>；能打印出路径就说明装好了。Linux 上则用发行版的包管理器装 <code>gcc-c++</code> 或 <code>build-essential</code>，那里的 <code>g++</code> 是真 GCC（GCC 官方文档写明：编译 C++ 程序时用 <code>g++</code> 而不是 <code>gcc</code>）。</p>
+  </div>
+
+  <h2>一屏红字怎么读</h2>
+
+  <p>现在把示例改成下面这样。这一份少了一个分号，是故意留错的反例，存成 <code>broken-intro-01.cpp</code> 试试。</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hello" &lt;&lt; std::endl
+    return 0;
+}</code></pre>
+
+  <p>编译它，屏幕上会出现这样一屏：</p>
+
+  <pre data-lang="text"><code>broken-intro-01.cpp:5:38: error: expected ';' after expression
+    5 |     std::cout &lt;&lt; "Hello" &lt;&lt; std::endl
+      |                                      ^
+      |                                      ;
+1 error generated.</code></pre>
+
+  <p>逐行拆开看。第一行是全部信息里最要紧的一行，它由五段拼成：</p>
+
+  <table>
+    <thead>
+      <tr><th>片段</th><th>含义</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>broken-intro-01.cpp</code></td><td>出问题的文件</td></tr>
+      <tr><td><code>5</code></td><td>第 5 行</td></tr>
+      <tr><td><code>38</code></td><td>第 38 列，也就是第二行里 <code>^</code> 指着的那个位置</td></tr>
+      <tr><td><code>error</code></td><td>严重程度：error 会导致编译失败，warning 只是提醒</td></tr>
+      <tr><td><code>expected ';' after expression</code></td><td>编译器的话：这个表达式后面应该有个分号</td></tr>
+    </tbody>
+  </table>
+
+  <p>第二行把那第 5 行原文抄给你看，第三行的 <code>^</code> 指着它发现问题的那一列。第四行 <code>;</code> 是它顺手给你的建议——它认为这里该补一个分号。最后一行 <code>1 error generated.</code> 是统计。</p>
+
+  <p>这一屏要看的信息其实就三样：<b>哪个文件、哪一行、它认为哪里不对</b>。编译器打印的这类信息有个正式叫法叫<b>诊断消息</b>（diagnostic message）。Learn C++ 讲这一处时的说法是：诊断消息里通常带着编译器发现问题的<b>文件名和行号</b>，再加一句「它期望什么、实际碰到什么」；而<b>真正的问题可能就在那一行，也可能在前一行</b>。</p>
+
+  <div class="lesson-note">
+    <b>编译器不同，这几行的样子会变</b>
+    <p>C++ 标准<b>没有规定</b>诊断消息该怎么分类、怎么措辞。同一份代码，不同编译器给出的字句和排版都可能不一样：</p>
+
+    <ul>
+      <li><b>列号不一定有</b>。上面这一屏里有 <code>5:38</code>，冒号后面那个 38 就是列号，有些编译器会给，有些只给到行号。</li>
+      <li><b>抄出原文的那几行、<code>^</code>、以及最后一行替你写好的建议，都可能没有</b>，只留一句纯文字的诊断消息。</li>
+      <li><b>统计那一行的写法各地不同</b>。Visual Studio 会给每个问题一个编号，写成 <code>error C2143</code> 这样；GCC 与 Clang 的口径也不一样。</li>
+    </ul>
+
+    <p>所以真正稳定的只有一条：<b>诊断消息里带着文件名和行号</b>。其余的都是锦上添花，你的编译器给多少就用多少。</p>
+  </div>
+
+  <p>学长的建议在这里很实用：看到报错先别慌，按这条顺序来。</p>
+
+  <ol>
+    <li>从诊断消息里找出文件名与那个行号；</li>
+    <li>看那一行，再看它<b>上下周围</b>的几行，找拼写错误或者漏掉的东西；</li>
+    <li>顺手确认一件事：代码里没有混进编辑器显示的<b>行号数字</b>（那行号是编辑器画上去的，不该出现在文件内容里）；</li>
+    <li>改完<b>重新编译一次</b>，看那条消息还在不在——诊断消息一条一条消掉，就是编译在往前走。</li>
+  </ol>
+
+  <div class="lesson-warn">
+    <b>报错的行号常不是真正错的那一行</b>
+    <p><code>^</code> 指着 <code>std::endl</code> 的末尾，可这一行本身读起来并没有毛病。原因是编译器读到这一行末尾时，原本在等一个分号，结果等来的是下一行的 <code>return</code>，于是它判定「这个表达式还没结束」——报的是<b>它意识到不对的位置</b>，而分号漏在了它刚读完的那一行。</p>
+
+    <p>这就是上面第 2 步里「再看它上下周围的几行」为什么不是客套话：<b>真正的问题可能就在它指的那一行，也可能在前一行</b>。C++ 里漏分号几乎都是这个形状。</p>
+  </div>
+
+  <p>改对一个，再看下一个，这也是常态。把第 5 行末尾补上分号、第 6 行故意不补，得到 <code>broken-intro-02.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "Hello" &lt;&lt; std::endl;
+    return 0
+}</code></pre>
+
+  <pre data-lang="text"><code>broken-intro-02.cpp:6:13: error: expected ';' after return statement
+    6 |     return 0
+      |             ^
+      |             ;
+1 error generated.</code></pre>
+
+  <p>结构一模一样，只是换到了第 6 行。这就是编译器的工作方式：<b>它一次只报它最先撞上的那个问题</b>，不会替你把所有错误一次挑完。修一个、编一次、再看下一个，是正常节奏，不是笨。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "编译器给了这样一屏：\n\n```text\nbroken-intro-01.cpp:5:38: error: expected &#39;;&#39; after\n    expression\n    5 |     std::cout &lt;&lt; \"Hello\" &lt;&lt; std::endl\n      |                                      ^\n      |                                      ;\n```\n\n这一屏里，哪一条信息是稳定能拿到的？\n（其余几行可能因为编译器不同而变样）",
+    "opts": [
+      "文件名与行号，也就是 broken-intro-01.cpp 的 5",
+      "列号 38，以及 ^ 指着的那一列在哪个位置",
+      "编译器顺手替你写好的那一行补分号的建议行",
+      "最后一行的汇总，也就是 1 error generated."
+    ],
+    "ans": 0,
+    "why": "C++ 标准没有规定诊断消息怎么措辞、怎么\n排版，所以抄出的原文、^、替你写好的建\n议、汇总行这几样都可能没有。稳定带着的\n只有文件名与行号——这也是为什么读报错永\n远从这两样开始。"
+  }
+]'></div>
+
+  <h2>改一次、编一次、跑一次</h2>
+
+  <p>修好第 6 行，再编译、再运行，<code>Hello</code> 就出来了。然后试试改内容：</p>
+
+  <pre data-lang="sh"><code>g++ intro-01.cpp -o first &amp;&amp; ./first</code></pre>
+
+  <p><code>&amp;&amp;</code> 的意思是「前一条成功了再做后一条」，可以省掉一次敲命令。把 <code>"Hello"</code> 改成 <code>"Hello, GDMU"</code>，存盘，重新编译运行，输出就变了。<b>每次改了源文件都必须重新编译</b>——编译产物是上一次源文件翻译出来的成品，源文件改了它不会自己更新。</p>
+
+  <div class="lesson-warn">
+    <b>改了没保存，跑出来还是旧的</b>
+    <p>最常见的假 bug：代码改了、编译了、运行了，输出还是老样子。查一下编辑器标题栏有没有一个小圆点，有就是没存盘。编译读到的是硬盘上的文件，编辑器里那点改动还在内存里。</p>
+  </div>
+
+  <p>再练一件必须会的事：分清哪一行是谁说的。运行程序时终端上出现的文字，都是<b>你的程序</b>打印的；编译时出现的 <code>error</code>、<code>warning</code>、<code>note</code> 那些行，都是<b>编译器</b>打印的，你的程序那时候还没生成，根本没机会说话。一眼分清这个，后面排错会省很多力气。</p>
+
+  <h2>轮到你走一遍</h2>
+
+  <p>看别人敲和亲手敲，差别在这一节。刚才示范的那份源文件在 <code>code/intro-01.cpp</code>，你自己那份写完可以对着它比一比。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">从空白文件到 Hello</span>
+    </div>
+
+      <p><b>第 1 步 · 自己建一份</b>。新建一个文本文件，敲进前面那份 <code>intro-01.cpp</code> 的内容，存成 <code>myfirst.cpp</code>（文件名由你定，<code>.cpp</code> 结尾就行）。</p>
+
+      <p><b>第 2 步 · 编译运行</b>。在存放这个文件的目录下敲（产物名换成你自己的）：</p>
+
+      <pre data-lang="sh"><code>g++ myfirst.cpp -o myfirst &amp;&amp; ./myfirst</code></pre>
+
+      <p>看到这一行，循环就跑通了：</p>
+
+      <pre data-lang="term"><code>$ ./myfirst
+Hello</code></pre>
+
+      <p>把引号里的字换成你自己的名字或学号，存盘、重新编译、再看一次。<b>改了源文件必须重新编译</b>，这一步你刚亲眼验证过。</p>
+
+      <p><b>第 3 步 · 故意改坏它</b>。把 <code>std::endl</code> 后面那个分号删掉，再编译。屏幕会还你一屏红字：</p>
+
+      <pre data-lang="text"><code>myfirst.cpp:5:38: error: expected ';' after expression
+    5 |     std::cout &lt;&lt; "Hello" &lt;&lt; std::endl
+      |                                      ^
+      |                                      ;
+1 error generated.</code></pre>
+
+      <p>按前面教的顺序读它：<b>哪个文件、哪一行、它认为缺了什么</b>。这一屏会指出第 5 行，而 <code>^</code> 指在行尾——分号确实就是漏在那里，这一回编译器指对了。你那份报错里的行号可能和这里不一样（前面多一行注释、或者消息措辞不同），<b>按它给的行号去找就行</b>。</p>
+
+      <p><b>第 4 步 · 改回来</b>。把分号补上，重新编译运行，<code>Hello</code> 又回来了。</p>
+
+      <p>走到这里，你已经独立走完了「写源文件 → 编译 → 运行 → 看懂报错 → 改对」这一整条循环。后面每一课都在这个循环里加新东西，这条循环本身不会变了。</p>
+  </div>
+
+  <h2>想装到 Windows 上</h2>
+
+  <p>前面用的是命令行。Linux 上打开终端就能用 <code>g++</code>，macOS 上装好命令行工具也有；Windows 上多两步：Windows 本身不带 <code>g++</code>，要自己装一套带 GCC 的工具链；而且课程用的是命令行，Windows 上得有地方敲命令。</p>
+
+  <p><b>推荐路径：VS Code + MSYS2</b>。两者都在积极维护，装完之后敲的命令和前几节完全一致。</p>
+
+  <p><b>第一步，装 MSYS2</b>：从 <a href="https://www.msys2.org/">msys2.org</a> 下载安装包并运行（需要 64 位 Windows 10 1809 或更新）。安装完成后它会自动打开一个终端窗口。</p>
+
+  <p><b>第二步，在这个终端里装 GCC</b>。VS Code 官方文档给的是完整工具链这一条：</p>
+
+  <pre data-lang="sh"><code>pacman -S --needed base-devel mingw-w64-ucrt-x86_64-toolchain</code></pre>
+
+  <p>中途问 <code>Proceed with installation?</code> 时按回车、看到要 <code>Y</code> 的地方敲 <code>y</code>。装完可以敲 <code>g++ --version</code> 确认能打印出版本号。</p>
+
+  <p><b>第三步，装 VS Code 并加 C/C++ 扩展</b>。VS Code 本身只是编辑器，它靠扩展认识 C++。在 VS Code 里按 <code>Ctrl+Shift+X</code> 打开扩展面板，搜 <code>C++</code> 装上微软那个 C/C++ 扩展即可。</p>
+
+  <p>MSYS2 官方还给了更小的一条安装命令 <code>pacman -S mingw-w64-ucrt-x86_64-gcc</code>，只装编译器。两条都能用，官方 VS Code 教程推荐前者，因为它把调试器也一起装上了。</p>
+
+  <p>装好之后，后面每一节的命令照敲：</p>
+
+  <pre data-lang="sh"><code>g++ intro-01.cpp -o first</code></pre>
+
+  <div class="lesson-tip">
+    <b>Windows 上敲命令的几个小差别</b>
+    <ul>
+      <li>运行程序敲 <code>first.exe</code> 或 <code>.\first.exe</code>（Windows 用反斜杠加一个点表示当前目录，对应 macOS 的 <code>./</code>）。</li>
+      <li>终端建议用 PowerShell 或 MSYS2 的那个终端窗口，不用 Windows 自带的 <code>cmd</code> 也行。</li>
+      <li>如果敲 <code>g++</code> 提示「不是内部或外部命令」，是第 2 步装出来的 <code>bin</code> 目录没进系统的 PATH——VS Code 官方教程里「Add the path of your ucrt64 bin folder to the Windows PATH」那几步讲的就是这件事（默认目录是 <code>C:\msys64\ucrt64\bin</code>）。</li>
+    </ul>
+  </div>
+
+  <div class="lesson-note">
+    <b>如果你已经在用 Dev-C++</b>
+    <p>Dev-C++ 的官方下载渠道已经失效（原站连不上、SourceForge 上的项目页也打不开），而它本身已经很多年不再维护了——Learn C++ 的 IDE 选择那一节把它列进了「应当避免的 IDE」。<b>这些都不影响你继续用它</b>：它里面打包的编译器能正常按 C++ 标准编译本课程的全部代码，你只需要把「命令行里做的」和「Dev-C++ 里点的」对上。</p>
+
+    <table>
+      <thead>
+        <tr><th>命令行里做的</th><th>Dev-C++ 里点的</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>新建 <code>intro-01.cpp</code></td><td>文件 → 新建 → 源代码，写完按 Ctrl+S 存成 <code>.cpp</code></td></tr>
+        <tr><td><code>g++ intro-01.cpp -o first</code></td><td>按 <b>F11</b>（编译并运行），或点工具栏上那个「编译运行」按钮</td></tr>
+        <tr><td><code>./first</code> 看输出</td><td>F11 之后自动弹出一个黑色控制台窗口，输出就在里面</td></tr>
+        <tr><td>看报错</td><td>窗口下方那一栏，双击报错行会跳到出问题的代码行</td></tr>
+      </tbody>
+    </table>
+
+    <p>上面的菜单叫法随版本略有差别，<b>F11 这个键是稳定的</b>。至于新装环境，建议按上面那条推荐路径来；<b>本课程后面的命令一律照命令行写</b>，Dev-C++ 用户对照上表操作即可。</p>
+  </div>
+
+  <div class="lesson-warn">
+    <b>从 IDE 拷代码时，别把行号一起拷进去</b>
+    <p>从网页或课件里复制代码时，如果连左边显示的行号一起选了进来，就会编不过——那些数字会被当成代码。编辑器左边那排行号是它自己画上去的，不用你写，也不该出现在文件内容里（Learn C++ 在「编译失败怎么办」一节里专门提醒了这一点）。</p>
+  </div>
+
+  <ul class="lesson-resources">
+    <li><a href="https://gcc.gnu.org/onlinedocs/gcc-14.2.0/gcc/Invoking-GCC.html">GCC 官方手册 · 调用方式</a><span class="lesson-resources__meta">官方 · <code>g++</code> 的正式用法，编译 C++ 程序该用 <code>g++</code> 的出处</span></li>
+    <li><a href="https://www.msys2.org/">MSYS2 官网</a><span class="lesson-resources__meta">官方 · Windows 上装 GCC 工具链的推荐途径与 <code>pacman</code> 命令</span></li>
+    <li><a href="https://code.visualstudio.com/docs/cpp/config-mingw">VS Code 官方 · 用 MSYS2 配 GCC</a><span class="lesson-resources__meta">官方 · Windows 上从装工具链到跑通 Hello World 的完整步骤</span></li>
+    <li><a href="https://winlibs.com/">WinLibs GCC 构建</a><span class="lesson-resources__meta">工具 · 不想装 MSYS2 时，直接下 MinGW-w64 压缩包的另一条路</span></li>
+    <li><a href="https://www.learncpp.com/cpp-tutorial/compiling-your-first-program/">Learn C++ 0.7 编译你的第一个程序</a><span class="lesson-resources__meta">教程 · 各 IDE 里编译运行的动作对照，含「编译失败先看什么」</span></li>
+    <li><a href="https://www.learncpp.com/cpp-tutorial/a-few-common-cpp-problems/">Learn C++ 0.8 常见 C++ 问题</a><span class="lesson-resources__meta">教程 · 控制台一闪就关、<code>cin</code>/<code>cout</code>/<code>endl</code> 未声明一类新手问题的清单</span></li>
+    <li><a href="https://www.learncpp.com/cpp-tutorial/configuring-your-compiler-warning-and-error-levels/">Learn C++ 0.11 告警与错误的级别</a><span class="lesson-resources__meta">教程 · 诊断消息里有什么、error 与 warning 的区别、为什么不该攒着不管</span></li>
+  </ul>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--next" href="0002-variables-and-types.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">变量、类型与内存</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0001 你的第一个 C++ 程序 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../assets/sayo/sayo.js"></script>
+
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

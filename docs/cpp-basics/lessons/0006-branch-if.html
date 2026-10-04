@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>分支：让程序会判断 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0006</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0006 · 分支：让程序会判断</span>
+    <h1>分支：让程序会判断</h1>
+    <p class="lesson-goal"><b>本节目标：</b>用 <code>if</code> / <code>else if</code> / <code>else</code> 给成绩划出及格线与等级，并拦住输错的分数。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <div class="lesson-note">
+    <b>成绩管理系统需要第二个本事</b>
+    <p>到上一课为止，程序会算数了，但它对每个分数都一视同仁：算完平均分就结束。成绩管理系统还得回答两类问题——「这个人及格没有」「这个分数该给什么等级」——还要拦住输错的分数。这三件事都是「判断」，也就是让程序在不同情况下走不同的路。</p>
+  </div>
+
+  <h2>让程序走不同的路</h2>
+
+  <p>先看一个具体的要求：分数大于等于 60 就打印「及格」，否则打印「不及格」。存成 <code>branch-01.cpp</code> 编译运行：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int score = 87;
+
+    if (score &gt;= 60)
+    {
+        std::cout &lt;&lt; "及格" &lt;&lt; std::endl;
+    }
+    else
+    {
+        std::cout &lt;&lt; "不及格" &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./branch-01
+及格</code></pre>
+
+  <p>把它拆成三段来读：</p>
+
+  <ul>
+    <li><code>if (score &gt;= 60)</code> 是<b>条件</b>。括号里的 <code>score &gt;= 60</code> 是一个表达式，它算出来的值是 <code>true</code> 或 <code>false</code>。</li>
+    <li>紧跟其后的一对花括号里，是条件为真时执行的东西。</li>
+    <li><code>else</code> 后面那对花括号里，是条件为假时执行的东西。</li>
+  </ul>
+
+  <p>这种「如果……否则……」的结构叫 <b>if 语句</b>，它模仿的是英语里的说法。C++ 判定条件的方式很宽松：任何值都能拿来当条件，<b>0 算假，非 0 算真</b>。所以 <code>if (score)</code> 这种写法也能编译，只要 <code>score</code> 不是 0 就为真——但这种写法读代码的人要停下来想一下，不如把关系写清楚。</p>
+
+  <p>括号里那种比大小的表达式叫<b>关系表达式</b>，用到的符号有六个：</p>
+
+  <table>
+    <thead>
+      <tr><th>运算符</th><th>含义</th><th>写法</th><th>别和它混</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>==</code></td><td>等于</td><td><code>score == 60</code></td><td><code>=</code> 是赋值，不是比较</td></tr>
+      <tr><td><code>!=</code></td><td>不等于</td><td><code>score != 60</code></td><td></td></tr>
+      <tr><td><code>&gt;</code></td><td>大于</td><td><code>score &gt; 60</code></td><td></td></tr>
+      <tr><td><code>&lt;</code></td><td>小于</td><td><code>score &lt; 60</code></td><td></td></tr>
+      <tr><td><code>&gt;=</code></td><td>大于或等于</td><td><code>score &gt;= 60</code></td><td>顺序不能反写</td></tr>
+      <tr><td><code>&lt;=</code></td><td>小于或等于</td><td><code>score &lt;= 100</code></td><td>顺序不能反写</td></tr>
+    </tbody>
+  </table>
+
+  <p>上一课见过这几个符号算出来的 <code>true</code>/<code>false</code>，这一课终于用到它们身上。</p>
+
+  <h2>多岔路口：else if 链</h2>
+
+  <p>及格线只有两档，等级有四五档。要求是：90 分以上优，80 到 89 良，70 到 79 中，60 到 69 及格，60 以下不及格。存成 <code>branch-02.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int score = 72;
+
+    if (score &gt;= 90)
+    {
+        std::cout &lt;&lt; "等级：优" &lt;&lt; std::endl;
+    }
+    else if (score &gt;= 80)
+    {
+        std::cout &lt;&lt; "等级：良" &lt;&lt; std::endl;
+    }
+    else if (score &gt;= 70)
+    {
+        std::cout &lt;&lt; "等级：中" &lt;&lt; std::endl;
+    }
+    else if (score &gt;= 60)
+    {
+        std::cout &lt;&lt; "等级：及格" &lt;&lt; std::endl;
+    }
+    else
+    {
+        std::cout &lt;&lt; "等级：不及格" &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./branch-02
+等级：中</code></pre>
+
+  <p>这个链子的执行方式值得说明清楚，因为它解释了为什么每个条件只写半边：</p>
+
+  <p>程序<b>从上往下一个一个判</b>。<code>score</code> 是 72，第一个条件 <code>72 &gt;= 90</code> 为假，跳过去；第二个 <code>72 &gt;= 80</code> 也为假；第三个 <code>72 &gt;= 70</code> 为真，执行它那段，<b>然后整条链子结束</b>，下面的一律不看。</p>
+
+  <p>正因为「一旦为真，后面的都不判」，第二个条件才有资格只写 <code>score &gt;= 80</code>。走到这一句的时候，「<code>score</code> 小于 90」这个条件已经被第一个分支确认过了，不必再写一遍。如果写成 <code>score &gt;= 80 &amp;&amp; score &lt; 90</code>，结果一样，但多写的部分是白写。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="一个分数从上往下跌落，依次经过四个判断框，每个判断为真就从右侧对应的等级出口离开，全部为假则落到不及格">
+<svg viewBox="0 0 720 400" role="img" aria-hidden="true">
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="60" y="24" width="190" height="44" rx="8"/>
+    <rect x="60" y="96" width="190" height="44" rx="8"/>
+    <rect x="60" y="168" width="190" height="44" rx="8"/>
+    <rect x="60" y="240" width="190" height="44" rx="8"/>
+    <rect x="420" y="24" width="180" height="44" rx="8"/>
+    <rect x="420" y="96" width="180" height="44" rx="8"/>
+    <rect x="420" y="168" width="180" height="44" rx="8"/>
+    <rect x="420" y="240" width="180" height="44" rx="8"/>
+    <rect x="56" y="322" width="340" height="44" rx="8"/>
+  </g>
+  <g fill="currentColor" font-size="16" text-anchor="middle">
+    <text x="155" y="52">score &gt;= 90 ?</text>
+    <text x="155" y="124">score &gt;= 80 ?</text>
+    <text x="155" y="196">score &gt;= 70 ?</text>
+    <text x="155" y="268">score &gt;= 60 ?</text>
+    <text x="510" y="52">优</text>
+    <text x="510" y="124">良</text>
+    <text x="510" y="196">中</text>
+    <text x="510" y="268">及格</text>
+    <text x="226" y="350">else：不及格</text>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M155 68 V92" marker-end="url(#br1)"/>
+    <path d="M155 140 V164" marker-end="url(#br1)"/>
+    <path d="M155 212 V236" marker-end="url(#br1)"/>
+    <path d="M255 46 H414" marker-end="url(#br1)"/>
+    <path d="M255 118 H414" marker-end="url(#br1)"/>
+    <path d="M255 190 H414" marker-end="url(#br1)"/>
+    <path d="M255 262 H414" marker-end="url(#br1)"/>
+    <path d="M155 284 V318" marker-end="url(#br1)"/>
+  </g>
+  <defs>
+    <marker id="br1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+  <g fill="currentColor" font-size="15">
+    <text x="300" y="38">真</text>
+    <text x="300" y="110">真</text>
+    <text x="300" y="182">真</text>
+    <text x="300" y="254">真</text>
+    <text x="164" y="304">全为假</text>
+  </g>
+  <text x="360" y="390" fill="currentColor" font-size="16" text-anchor="middle">条件顺序不能乱：把 score &gt;= 60 写在最前面，90 分也会被判成及格</text>
+</svg>
+    <figcaption>图 1 · else if 链从头往下判，第一个为真的条件决定走哪条路</figcaption>
+  </figure>
+
+  <div class="lesson-warn">
+    <b>顺序写错，整条链子废掉</b>
+    <p>把 <code>score &gt;= 60</code> 挪到最前面，89 分、95 分都会走进「及格」那个分支——因为「72 大于等于 60」这件事对任何 60 分以上的分数都成立，第一个条件一旦为真，后面的等级判断全都不执行了。</p>
+
+    <p>写 <code>else if</code> 链的规矩：<b>从最严格的条件开始，范围从窄到宽往下排</b>。这也是为什么最后的 <code>else</code> 通常留给「其他所有情况」。</p>
+  </div>
+
+  <h2>亲手写一条分支</h2>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 1 步 · 改一行，看分支怎么拐弯</span>
+    </div>
+
+      <p>把 <code>branch-01.cpp</code> 里的 <code>int score = 87;</code> 分别改成 <code>59</code>、<code>60</code>、<code>100</code>，每改一次重新编译运行，记下三次输出。60 这一次要特别看清：「大于或等于」这个说法在等于分档线时落在哪一档。</p>
+
+      <pre data-lang="term"><code>$ ./branch-01
+及格</code></pre>
+
+      <p>再把它改回 87，把条件从 <code>score &gt;= 60</code> 改成 <code>score &gt; 60</code>，看 60 分时输出会不会变。<b>「大于」和「大于或等于」的差别，只在取到分档线那一个数时露出来</b>，所以要专门拿它试一次。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 2 步 · 自己写等级判断</span>
+    </div>
+
+      <p>打开 <code>branch-02.cpp</code>，把那条 <code>else if</code> 链改成五档里的另一套规则试试：90 分以上「优」、80 到 89「良」、70 到 79「中」、60 到 69「及格」、60 以下「不及格」——它已经写好了，先把它读懂，再按顺序念一遍每个条件，看能不能说出「为什么每个条件只写半边」。</p>
+
+      <p>然后把 <code>int score = 72;</code> 改成 <code>95</code>、<code>85</code>、<code>65</code>、<code>30</code> 各跑一次，确认四个数分别落到哪一档。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 3 步 · 亲手制造两个坑，再爬出来</span>
+    </div>
+
+      <p><b>坑一</b>：把 <code>branch-01.cpp</code> 的 <code>score &gt;= 60</code> 改成 <code>score = 60</code>，编译运行。它会打印「及格」——把 <code>score</code> 打印出来看看它变成了几。然后找出编译器给的那行 <code>warning</code>，读一遍。</p>
+
+      <p><b>坑二</b>：把 <code>branch-02.cpp</code> 里那条链子的顺序打乱，把 <code>score &gt;= 60</code> 挪到最前面，用 95 分跑一次，看它给出什么等级。</p>
+
+      <p>这两个实验各花两分钟，换来的是以后一眼就能认出这类错。</p>
+  </div>
+
+  <h2>四个会咬人的坑</h2>
+
+  <p><code>if</code> 的语法短，但写错的方式很集中。四个坑全在本课程的常见错误清单里，一个一个看。</p>
+
+  <p><b>坑一：把 <code>=</code> 写成 <code>==</code>。</b> 存成 <code>branch-04.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    char grade = 'B';
+
+    if (grade = 'A')
+    {
+        std::cout &lt;&lt; "优秀" &lt;&lt; std::endl;
+    }
+    else
+    {
+        std::cout &lt;&lt; "这次不是优秀" &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./branch-04
+优秀</code></pre>
+
+  <p><code>grade</code> 明明存的是 <code>B</code>，程序却走了「优秀」那条路。原因是 <code>=</code> 是赋值：<code>grade = 'A'</code> 把 <code>'A'</code> <b>写进了</b> <code>grade</code>，同时这个赋值表达式的值是刚赋进去的那个值，也就是 <code>'A'</code>，非 0，于是条件为真。</p>
+
+  <pre data-lang="text"><code>branch-04.cpp:7:15: warning: using the result of an assignment as a condition without parentheses [-Wparentheses]
+    7 |     if (grade = 'A')
+      |         ~~~~~~^~~~~</code></pre>
+
+  <p>编译器其实察觉到了，它给了一行 warning，说「你在条件里用了赋值的结果」。这一行不要跳过——<b>这是唯一一次提醒</b>。不改的话程序会一直走错，编译和运行都不会再报错。而 <code>branch-03.cpp</code> 是同一段代码写对的样子：<code>if (grade == 'A')</code>，输出「这次不是优秀」。</p>
+
+  <p><b>坑二：<code>if</code> 后面多写一个分号。</b> 存成 <code>branch-09.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int score = 45;
+
+    if (score &gt;= 60);
+    {
+        std::cout &lt;&lt; "及格" &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./branch-09
+及格</code></pre>
+
+  <p>45 分被判成了及格。原因是那个分号：<code>if (score &gt;= 60);</code> 里的分号本身就是一条<b>空语句</b>，它成了 <code>if</code> 唯一管着的东西。下面那对花括号跟 <code>if</code> 已经没关系了，是一段普通代码，无条件执行。</p>
+
+  <p>编译时其实也有一行提醒，说的是同一件事：</p>
+
+  <pre data-lang="text"><code>branch-09.cpp:7:21: warning: if statement has empty body [-Wempty-body]
+    7 |     if (score &gt;= 60);
+      |                     ^
+1 warning generated.</code></pre>
+
+  <p><code>if statement has empty body</code> 就是「这个 if 的身体是空的」——它在告诉你那个分号下面什么都没有。</p>
+
+  <p>这一条和第一课那个漏分号的错误是同一个道理的两面：<b>分号是语句的结束标记，写在哪儿就在哪儿切一刀</b>。</p>
+
+  <p><b>坑三：把数学写法直接搬过来。</b> 数学课上写 <span class="math-inline">60 \le score \le 100</span> 表示「在 60 到 100 之间」。C++ 不接受这个写法。存成 <code>branch-07.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int score = 150;
+
+    if (60 &lt;= score &lt;= 100)
+    {
+        std::cout &lt;&lt; "分数合法" &lt;&lt; std::endl;
+    }
+    else
+    {
+        std::cout &lt;&lt; "分数不合法" &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./branch-07
+分数合法</code></pre>
+
+  <p>150 分被判成了合法分数。原因是关系运算符也是从左往右算的：<code>60 &lt;= score</code> 先算，<code>150</code> 让它得到 <code>true</code>，在需要数值的场合 <code>true</code> 是 1；接着算 <code>1 &lt;= 100</code>，得 <code>true</code>。两个条件串成了一个，无论分数多大都会说合法。</p>
+
+  <p>C++ 里要写区间，必须用「并且」把两个条件连起来。存成 <code>branch-08.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int score = 150;
+
+    if (score &gt;= 60 &amp;&amp; score &lt;= 100)
+    {
+        std::cout &lt;&lt; "分数合法" &lt;&lt; std::endl;
+    }
+    else
+    {
+        std::cout &lt;&lt; "分数不合法" &lt;&lt; std::endl;
+    }
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./branch-08
+分数不合法</code></pre>
+
+  <p><b>坑四：用 <code>==</code> 比较两个小数。</b> 上一课已经拆过这一处：<code>0.1 + 0.2 == 0.3</code> 的结果是 <code>false</code>。在分支里的后果更隐蔽——条件永远不成立，那个分支里的话永远不执行，你看不到任何报错。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "这一段编译只给一行 warning，运行却打出\n「优秀」：\n\n```cpp\nchar grade = &#39;B&#39;;\n\nif (grade = &#39;A&#39;)\n{\n    std::cout &lt;&lt; \"优秀\" &lt;&lt; std::endl;\n}\n```\n\n① 为什么条件永远为真？\n② 编译器那行 warning 在说什么？\n③ 怎么改？",
+    "answer": "① 单个等号是赋值：grade = &#39;A&#39; 把 &#39;A&#39;\n写进了 grade，同时这个赋值表达式的值就\n是刚赋进去的 &#39;A&#39;，它非 0，于是条件为\n真。\n② warning 说的是\nusing the result of an assignment\nas a condition without parentheses，意\n思是「你在条件里用了赋值的结果」——这是\n唯一一次提醒。\n③ 改成两个等号：if (grade == &#39;A&#39;)。想\n留住这个写法就补一层括号写成\nif ((grade = &#39;A&#39;))，但本课程不用这种写\n法。",
+    "criteria": "三问都要答：赋值表达式的值非 0 所以恒\n真；warning 说的是「条件里用了赋值的结\n果」；改成 ==。\n只答「少写一个等号」而不说清为什么恒真\n→ 部分通过。"
+  }
+]'></div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "数学课上写 $60 \\le score \\le 100$ 表示\n「在 60 到 100 之间」，搬进 C++ 之后\n150 分被判成了合法：\n\n```cpp\nint score = 150;\n\nif (60 &lt;= score &lt;= 100)\n{\n    std::cout &lt;&lt; \"分数合法\" &lt;&lt; std::endl;\n}\n```\n\n① 为什么 150 也能判成合法？\n② C++ 里这个区间该怎么写？",
+    "answer": "① 关系运算符从左往右算：60 &lt;= score 先\n算，150 让它得到 true，在需要数值的场\n合 true 是 1；接着算 1 &lt;= 100，得到\ntrue。两个条件串成了一个，分数多大都会\n说合法。\n② 用而且把两个条件连起来：\nif (score &gt;= 60 &amp;&amp; score &lt;= 100)。",
+    "criteria": "第 ① 问必须说出「先算 60 &lt;= score 得到\ntrue / 1，再拿 1 去比 100」，只说\n「C++ 不支持连写」算部分通过；\n第 ② 问答出 &amp;&amp; 连写的区间判断才算过。"
+  }
+]'></div>
+
+  <h2>逻辑运算符：把条件拼起来</h2>
+
+  <p>上面修 <code>branch-07</code> 用到的 <code>&amp;&amp;</code> 是<b>逻辑运算符</b>。三个逻辑运算符的作用是把两个条件组合成一个：</p>
+
+  <table>
+    <thead>
+      <tr><th>运算符</th><th>读法</th><th>什么时候为真</th><th>例子</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>&amp;&amp;</code></td><td>并且</td><td>两边都为真</td><td><code>score &gt;= 60 &amp;&amp; score &lt;= 100</code></td></tr>
+      <tr><td><code>||</code></td><td>或者</td><td>至少一边为真</td><td><code>grade == 'A' || grade == 'B'</code></td></tr>
+      <tr><td><code>!</code></td><td>非</td><td>把真变假、假变真</td><td><code>!(score &lt; 60)</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>它们能拼起来用，而且<b>优先级低于关系运算符</b>——<code>score &gt;= 60 &amp;&amp; score &lt;= 100</code> 里，两个比较会先算完再算 <code>&amp;&amp;</code>，所以括号可以省。拿不准的时候加括号，代价是零。</p>
+
+  <p><code>&amp;&amp;</code> 有一个必须知道的行为叫<b>短路求值</b>：它先看左边，如果左边已经为假，整个表达式一定为假，<b>右边就不算了</b>。<code>||</code> 对称：左边为真就不看右边。</p>
+
+  <p>短路不只是省时间，它是可以依靠的写法。比如「先确认分母不为 0，再去除」：</p>
+
+  <pre data-lang="cpp"><code>if (count != 0 &amp;&amp; total / count &gt; 60)</code></pre>
+
+  <p>左边为假时右边根本不执行，那个除法就不会发生。反过来，如果把两个条件调换顺序，<code>total / 0</code> 就会真的算下去。</p>
+
+  <h2>switch：等值的判断</h2>
+
+  <p>如果判断的对象是「等于哪几个具体值」，C++ 还有一条路叫 <b>switch 语句</b>。存成 <code>branch-06.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    char grade = 'B';
+
+    switch (grade)
+    {
+    case 'A':
+        std::cout &lt;&lt; "优秀" &lt;&lt; std::endl;
+        break;
+    case 'B':
+        std::cout &lt;&lt; "良好" &lt;&lt; std::endl;
+        break;
+    case 'C':
+        std::cout &lt;&lt; "及格" &lt;&lt; std::endl;
+        break;
+    default:
+        std::cout &lt;&lt; "不及格" &lt;&lt; std::endl;
+        break;
+    }
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./branch-06
+良好</code></pre>
+
+  <p>读法：<code>switch (grade)</code> 拿 <code>grade</code> 的值去和下面每个 <code>case</code> 后面的值比，相等就跳到那一行往下执行；<code>default</code> 是「都不匹配」时走的。<code>break</code> 的作用是「执行到这里就跳出 switch」——漏掉 <code>break</code>，程序会继续往下执行下一个 <code>case</code> 的内容，这个现象叫「贯穿」。</p>
+
+  <p><b>什么时候用 switch、什么时候用 if</b>：</p>
+
+  <ul>
+    <li>判断<b>等于几个具体值</b>，而且值的个数多（菜单选择、等级字符），用 <code>switch</code> 更整齐，也更容易发现漏掉的情况。</li>
+    <li>判断<b>范围</b>（分数段）、条件里要写 <code>&amp;&amp;</code> 或 <code>||</code>、或者要判两个变量之间的关系，只能用 <code>if</code>。<code>switch</code> 的 <code>case</code> 后面只接受常量，写不了 <code>case &gt;= 60</code>。</li>
+  </ul>
+
+  <h2>主线项目：把输入接进判断</h2>
+
+  <p>第 4 课那个读成绩的程序有一个漏掉的地方：用户敲了 <code>abc</code> 或者敲了 <code>150</code>，程序会一路错下去。现在有判断能力了，可以补上这一环。存成 <code>branch-05.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int score = 0;
+
+    std::cout &lt;&lt; "请输入成绩（0 到 100）：";
+    while (!(std::cin &gt;&gt; score) || score &lt; 0 || score &gt; 100)
+    {
+        std::cout &lt;&lt; "这个数不能用，请重新输入一个 0 到 100 的整数：";
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
+    }
+
+    std::cout &lt;&lt; "收到的成绩是 " &lt;&lt; score &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./branch-05
+请输入成绩（0 到 100）：101
+这个数不能用，请重新输入一个 0 到 100 的整数：abc
+这个数不能用，请重新输入一个 0 到 100 的整数：-5
+这个数不能用，请重新输入一个 0 到 100 的整数：87
+收到的成绩是 87</code></pre>
+
+  <p>这一段把前两课的东西全用上了：</p>
+
+  <ul>
+    <li><code>std::cin &gt;&gt; score</code> 这个表达式本身的值可以当条件用：读成功为真，读失败为假，所以 <code>!(std::cin &gt;&gt; score)</code> 就是「读失败了」；</li>
+    <li>三个条件用 <code>||</code> 连起来：读失败、太小、太大，<b>任意一个成立就要重问</b>；</li>
+    <li><code>&amp;&amp;</code> 的短路特性在这里换成 <code>||</code> 同样有用：读失败时，<code>score &lt; 0</code> 那半边已经为假，但 <code>!(...)</code> 已经为真，整个条件成立，直接进去重问；</li>
+    <li><code>std::cin.clear()</code> 与 <code>std::cin.ignore(1000, '\n')</code> 照第 4 课那样，清掉失败状态、丢掉坏输入。</li>
+  </ul>
+
+  <p><code>while (...)</code> 的意思是「只要括号里为真就重复做下面那段」。循环是下一课的主角，这里先当作「一直重问直到输入能用」来用。</p>
+
+  <p>到这里，成绩管理系统学会了第一件真正有用的事：<b>拦住错的输入</b>。下一步是给这个分数贴上等级——<code>branch-02.cpp</code> 那段 <code>else if</code> 链直接接在后面就能用。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "把三件事串成一个能跑的完整程序：\n\n① 读入一个成绩，读到非数字、或数值不在\n0 到 100 之内，就重新问一次；\n② 读到合法成绩后打印它；\n③ 再按 90 及以上优、80 到 89 良、70 到\n79 中、60 到 69 及格、60 以下不及格打\n印等级。",
+    "answer": "拦输入这一段直接沿用课里的形状：\n\n```cpp\nint score = 0;\nstd::cout &lt;&lt; \"请输入成绩（0 到 100）：\";\nwhile (!(std::cin &gt;&gt; score) || score &lt; 0 || score &gt; 100)\n{\n    cout &lt;&lt; \"请重新输入一个 0 到 100 的整数：\";\n    std::cin.clear();\n    std::cin.ignore(1000, &#39;\\n&#39;);\n}\n```\n\n等级那一段用 else if 链，条件从最严格\n的一条往下排：\n\n```cpp\nif (score &gt;= 90)      std::cout &lt;&lt; \"等级：优\" &lt;&lt; std::endl;\nelse if (score &gt;= 80) std::cout &lt;&lt; \"等级：良\" &lt;&lt; std::endl;\nelse if (score &gt;= 70) std::cout &lt;&lt; \"等级：中\" &lt;&lt; std::endl;\nelse if (score &gt;= 60)\n    std::cout &lt;&lt; \"等级：及格\" &lt;&lt; std::endl;\nelse\n    std::cout &lt;&lt; \"等级：不及格\" &lt;&lt; std::endl;\n```",
+    "criteria": "逐条对：\n· 用 !(cin &gt;&gt; score) 判断读失败，并同\n  时挡住小于 0 与大于 100；\n· 重问之前有 clear() 与 ignore(1000,\n  换行符)；\n· 等级链从最严格的条件往下排，每个条件\n  只写半边；\n· 60 分落在「及格」那一档（等于分档线\n  的取值要说清）。\n用 101、abc、-5、87、60 各跑一次自测；\n等级链顺序写反（把 &gt;= 60 放最前）不通\n过。"
+  }
+]'></div>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0005-exp-1-first-program.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">实验一：跑通编译运行循环</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0007-loops.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">循环：把重复交给机器</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0006 分支：让程序会判断 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<script src="../../assets/katex/katex.min.js" defer></script>
+<script src="../../assets/lesson-math.js" defer></script>
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

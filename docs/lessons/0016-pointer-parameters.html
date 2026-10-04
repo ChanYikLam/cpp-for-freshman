@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>指针作函数参数 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../assets/ -->
+<link rel="stylesheet" href="../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../assets/learn-theme.css">
+<link rel="stylesheet" href="../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0016</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0016 · 指针作函数参数</span>
+    <h1>指针作函数参数</h1>
+    <p class="lesson-goal"><b>本节目标：</b>把统计函数改成接收指针参数的版本，函数里改的数据调用方也能看到</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <p>第 14 章用指针改动了同一个 <code>main</code> 里的变量。这一课把这件事搬到函数之间：把整张成绩表交给函数，函数在里面改，<code>main</code> 里那张表跟着变。这是本项目所有统计函数的前提。</p>
+
+  <h2>数组传参传的是什么</h2>
+
+  <p>先看一个具体的问题。上一课的 <code>parr-03.cpp</code> 把统计写在 <code>main</code> 里，代码一多就乱。想把它拆成函数，第一个念头大概是这样：函数接收一个数组，返回总分。</p>
+
+  <p>存成 <code>pparam-00.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// pparam-00.cpp -- 先试试"函数接收一个数组"最想写的样子
+#include &lt;iostream&gt;
+using namespace std;
+
+int total(int table[5])         // 形参写成数组的样子
+{
+    int sum = 0;
+    for (int i = 0; i &lt; 5; i++)
+        sum = sum + table[i];
+    return sum;
+}
+
+int main()
+{
+    int scores[5] = {88, 76, 95, 60, 82};
+    cout &lt;&lt; "总分：" &lt;&lt; total(scores) &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ pparam-00.cpp -o pparam-00
+$ ./pparam-00
+总分：401</code></pre>
+
+  <p>能跑，但这段代码里藏着一层容易被忽略的事实：形参 <code>table</code> 并不是一个数组。数组没法整个儿搬进函数——<code>scores</code> 里装着 5 个 <code>int</code>，函数调用时不会把这 5 个格子复制一份。</p>
+
+  <p>真正传过去的是 <code>scores</code> 这个地址，也就是第一个元素的地址。形参 <code>table</code> 收到这个地址，它是一个指针。<code>table[5]</code> 里那个 <code>5</code> 编译器根本不看，写成 <code>int table[100]</code> 或者 <code>int *table</code> 效果一样。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="形参 table 收到的是地址副本，中间连到 main 里同一片内存的五个格子">
+<svg viewBox="0 0 880 400" role="img" aria-hidden="true" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <text x="20" y="30" font-size="20" fill="currentColor">main 里</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="60" y="48" width="100" height="70"/>
+    <rect x="160" y="48" width="100" height="70"/>
+    <rect x="260" y="48" width="100" height="70"/>
+    <rect x="360" y="48" width="100" height="70"/>
+    <rect x="460" y="48" width="100" height="70"/>
+  </g>
+  <g font-size="22" text-anchor="middle" fill="currentColor">
+    <text x="110" y="92">88</text>
+    <text x="210" y="92">76</text>
+    <text x="310" y="92">95</text>
+    <text x="410" y="92">60</text>
+    <text x="510" y="92">82</text>
+  </g>
+  <g font-size="17" text-anchor="middle" fill="currentColor">
+    <text x="110" y="142">scores[0]</text>
+    <text x="210" y="142">scores[1]</text>
+    <text x="310" y="142">scores[2]</text>
+    <text x="410" y="142">scores[3]</text>
+    <text x="510" y="142">scores[4]</text>
+  </g>
+  <text x="580" y="92" font-size="19" fill="currentColor">同一片内存</text>
+  <path d="M20 180 H860" stroke="currentColor" stroke-width="1.5" stroke-dasharray="6 6" fill="none"/>
+  <text x="20" y="218" font-size="20" fill="currentColor">函数里</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="60" y="236" width="200" height="60"/>
+  </g>
+  <text x="160" y="262" font-size="19" text-anchor="middle" fill="currentColor">形参 table</text>
+  <text x="160" y="286" font-size="19" text-anchor="middle" fill="currentColor">0x…290（地址副本）</text>
+  <path d="M160 230 V182" stroke="currentColor" stroke-width="2.5" fill="none"/>
+  <path d="M160 182 l-9 14 h18 z" fill="currentColor" stroke="none"/>
+  <text x="300" y="262" font-size="19" fill="currentColor">→ 用 table[i] 取到的</text>
+  <text x="300" y="292" font-size="19" fill="currentColor">就是上面那五个格子</text>
+  <text x="20" y="348" font-size="20" fill="currentColor">table 这个地址本身是副本，但副本指着的还是同一片内存</text>
+  <text x="20" y="382" font-size="20" fill="currentColor">所以在函数里写下 table[0] = 100，改的就是 scores[0]</text>
+</svg>
+    <figcaption>图 1 · 传的是地址的副本，指向的还是同一片内存</figcaption>
+  </figure>
+
+  <h2>传参的副本恰好还指着同一片内存</h2>
+
+  <p>第 9 章说「函数拿到的是实参的副本」，现在这条规则和数组接上了。把这两件事连起来推一遍：</p>
+
+  <ol>
+    <li><code>total(scores)</code> 调用时，实参是 <code>scores</code> 这个地址；</li>
+    <li>值传递的规则是复制一份，所以形参 <code>table</code> 拿到的是这个地址的副本；</li>
+    <li>副本和原件是同一个数字，指向同一片内存；</li>
+    <li>函数里通过 <code>table</code> 访问到的元素，就是 <code>main</code> 里 <code>scores</code> 的那些元素。</li>
+  </ol>
+
+  <p>结论：数组传给函数时，改动会在调用方看到。这一条可以从「副本里装的是地址」直接推出来，不需要另外记一条规则。</p>
+
+  <p>存成 <code>pparam-01.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// pparam-01.cpp -- 同一个变量，函数里看到的和外面看到的是不是同一个
+#include &lt;iostream&gt;
+using namespace std;
+
+void tryByValue(int x)          // 形参不是指针：拿到的是副本
+{
+    x = 100;
+    cout &lt;&lt; "  函数里（值传递）x 现在是 " &lt;&lt; x &lt;&lt; endl;
+}
+
+void tryByPointer(int *p)       // 形参是指针：拿到的是地址
+{
+    *p = 100;
+    cout &lt;&lt; "  函数里（指针）*p 现在是 " &lt;&lt; *p &lt;&lt; endl;
+}
+
+int main()
+{
+    int score = 60;
+
+    cout &lt;&lt; "调用前 score 是 " &lt;&lt; score &lt;&lt; endl;
+    tryByValue(score);
+    cout &lt;&lt; "值传递之后 score 是 " &lt;&lt; score &lt;&lt; endl;
+
+    tryByPointer(&amp;score);
+    cout &lt;&lt; "指针传参之后 score 是 " &lt;&lt; score &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ pparam-01.cpp -o pparam-01
+$ ./pparam-01
+调用前 score 是 60
+  函数里（值传递）x 现在是 100
+值传递之后 score 是 60
+  函数里（指针）*p 现在是 100
+指针传参之后 score 是 100</code></pre>
+
+  <p>对照着看：<code>tryByValue</code> 改的是副本，<code>score</code> 没变；<code>tryByPointer</code> 收到地址，走进去改的是 <code>score</code> 本人。区别只在形参写的是 <code>int</code> 还是 <code>int *</code>。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "这个函数的形参写着数组的样子：\n\n```cpp\nint total(int table[5])\n{\n    int sum = 0;\n    for (int i = 0; i &lt; 5; i++)\n        sum = sum + table[i];\n    return sum;\n}\n```\n\n① 调用 total(scores) 时，究竟把什么交\n给了函数？\n② 形参 table 到底是什么？方括号里的 5\n有没有用？\n③ 函数里写 table[0] = 100 会改到谁？",
+    "answer": "① 交过去的是 scores 这个地址，也就是第\n一个元素的地址；数组的 5 个元素不会整\n份复制过去。\n② table 是一个指针。方括号里那个 5 编\n译器根本不看，写成 int table[100] 或\nint *table 效果一样。\n③ 改的是 main 里 scores[0]。理由可以一\n步步推：值传递复制的是那个地址，副本与\n原件是同一个数，指着同一片内存，所以写\n进去落到原件上。",
+    "criteria": "答出「传的是第一个元素的地址，形参是指\n针」→ 通过；\n第 ③ 问答出「改到 main 的 scores[0]」\n并给出推理才算完整。\n答成「数组被整个复制进函数」→ 不通过。"
+  }
+]'></div>
+
+  <h2>指针形参怎么用：统计函数</h2>
+
+  <p>把上一课写在 <code>main</code> 里的统计拆成三个函数：两个只看不改，一个要改。</p>
+
+  <p>存成 <code>pparam-02.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// pparam-02.cpp -- 把统计写成接收指针的函数
+#include &lt;iostream&gt;
+using namespace std;
+
+int total(const int *p, int n)      // 只看不改，加 const 让编译器帮忙看着
+{
+    int sum = 0;
+    for (int i = 0; i &lt; n; i++)
+        sum = sum + p[i];
+    return sum;
+}
+
+int highest(const int *p, int n)
+{
+    int top = p[0];
+    for (int i = 1; i &lt; n; i++)
+        if (p[i] &gt; top)
+            top = p[i];
+    return top;
+}
+
+void addBonus(int *p, int n, int bonus)   // 要通过指针改调用方的数据
+{
+    for (int i = 0; i &lt; n; i++)
+        p[i] = p[i] + bonus;
+}
+
+int main()
+{
+    int scores[5] = {88, 76, 95, 60, 82};
+
+    cout &lt;&lt; "总分：" &lt;&lt; total(scores, 5) &lt;&lt; endl;
+    cout &lt;&lt; "最高分：" &lt;&lt; highest(scores, 5) &lt;&lt; endl;
+
+    addBonus(scores, 5, 2);         // 全班各加 2 分
+
+    cout &lt;&lt; "加分后：";
+    for (int i = 0; i &lt; 5; i++)
+        cout &lt;&lt; scores[i] &lt;&lt; " ";
+    cout &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ pparam-02.cpp -o pparam-02
+$ ./pparam-02
+总分：401
+最高分：95
+加分后：90 78 97 62 84 </code></pre>
+
+  <p>三个函数都用指针形参，但传进去的都是 <code>scores</code>，没有一处写 <code>&amp;</code>。原因在上一节：数组名本身就是地址。</p>
+
+  <p><code>addBonus</code> 调用后，<code>main</code> 里的 <code>scores</code> 每一项都加了 2，打印出来是 90 78 97 62 84。这就是「函数真的改到了调用方的数据」。</p>
+
+  <p>请注意每个函数都多带了一个 <code>n</code>。数组交给函数的时候，长度不会跟着过去——函数只知道起点在哪，不知道有几格。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="addBonus 里写 p[i] = p[i] + 2，改的是 main 里那张成绩表的格子">
+<svg viewBox="0 0 880 360" role="img" aria-hidden="true" font-family="ui-monospace, SFMono-Regular, Menlo, monospace">
+  <text x="20" y="32" font-size="20" fill="currentColor">addBonus(scores, 5, 2) 调用中</text>
+  <text x="20" y="84" font-size="19" fill="currentColor">main 的 scores</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="240" y="56" width="110" height="66"/>
+    <rect x="350" y="56" width="110" height="66"/>
+    <rect x="460" y="56" width="110" height="66"/>
+    <rect x="570" y="56" width="110" height="66"/>
+    <rect x="680" y="56" width="110" height="66"/>
+  </g>
+  <g font-size="20" text-anchor="middle" fill="currentColor">
+    <text x="295" y="98">90</text>
+    <text x="405" y="98">78</text>
+    <text x="515" y="98">97</text>
+    <text x="625" y="98">62</text>
+    <text x="735" y="98">84</text>
+  </g>
+  <text x="20" y="196" font-size="19" fill="currentColor">函数的 p</text>
+  <g stroke="currentColor" stroke-width="2" fill="none">
+    <rect x="240" y="168" width="200" height="56"/>
+  </g>
+  <text x="340" y="202" font-size="19" text-anchor="middle" fill="currentColor">0x…290</text>
+  <path d="M340 162 V128" stroke="currentColor" stroke-width="2.5" fill="none"/>
+  <path d="M340 128 l-9 14 h18 z" fill="currentColor" stroke="none"/>
+  <text x="480" y="202" font-size="19" fill="currentColor">指向同一片内存</text>
+  <text x="20" y="272" font-size="20" fill="currentColor">p[i] = p[i] + 2;</text>
+  <text x="290" y="272" font-size="20" fill="currentColor">→ 写进的就是上面那些格子</text>
+  <text x="20" y="320" font-size="20" fill="currentColor">回到 main 一打印：86 → 90，76 → 78，95 → 97 ……</text>
+</svg>
+    <figcaption>图 2 · 通过指针写入，落到的是调用方那张表</figcaption>
+  </figure>
+
+  <h2>只读参数与 const</h2>
+
+  <p><code>total</code> 和 <code>highest</code> 只是读表，不会改任何元素。调用方看到 <code>const int *p</code> 就明白这一点：这个函数不会动我的数据。</p>
+
+  <p><code>const</code> 写在 <code>*</code> 左边，意思是「顺着 <code>p</code> 读可以，通过 <code>p</code> 写不行」。</p>
+
+  <p>存成 <code>pparam-04.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// pparam-04.cpp -- 反例：标了 const 却还想改
+#include &lt;iostream&gt;
+using namespace std;
+
+int total(const int *p, int n)
+{
+    int sum = 0;
+    for (int i = 0; i &lt; n; i++)
+    {
+        sum = sum + p[i];
+        p[i] = 0;           // 想把读过的格子清零，编译器不允许
+    }
+    return sum;
+}
+
+int main()
+{
+    int scores[5] = {88, 76, 95, 60, 82};
+    cout &lt;&lt; total(scores, 5) &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <p>这个程序编译不过，报错大意是：</p>
+
+  <pre data-lang="text"><code>error: read-only variable is not assignable</code></pre>
+
+  <p>编译器在这一行拦住了对只读数据的写入。把 <code>const</code> 去掉就能编译通过——但那时调用方就看不出这个函数会不会改自己的数据了。</p>
+
+  <div class="lesson-tip">
+    <b>什么时候加 const</b>
+    <p>只读的函数加 <code>const</code>：一是把「我不改你的数据」写成代码，看函数声明就知道；二是自己写错时编译器会拦下来；三是调用方传常量进来时不会报错。要改数据的函数（<code>addBonus</code> 这类）就不加。</p>
+  </div>
+
+  <p>存成 <code>pparam-05.cpp</code> 再编译。这张表上，<code>total</code> 只读、<code>everyonePass</code> 要改，两个形参写法不同，一眼看得出来谁动数据：</p>
+
+  <pre data-lang="cpp"><code>// pparam-05.cpp -- const 与不带 const 的形参，用一张成绩表看清楚
+#include &lt;iostream&gt;
+using namespace std;
+
+int total(const int *p, int n)      // 只读：加 const
+{
+    int sum = 0;
+    for (int i = 0; i &lt; n; i++)
+        sum = sum + p[i];
+    return sum;
+}
+
+void everyonePass(int *p, int n)    // 要改：不加 const
+{
+    for (int i = 0; i &lt; n; i++)
+        if (p[i] &lt; 60)
+            p[i] = 60;
+}
+
+int main()
+{
+    int scores[3] = {88, 45, 30};
+
+    cout &lt;&lt; "改之前总分：" &lt;&lt; total(scores, 3) &lt;&lt; endl;
+
+    everyonePass(scores, 3);
+
+    cout &lt;&lt; "改之后总分：" &lt;&lt; total(scores, 3) &lt;&lt; endl;
+    cout &lt;&lt; "改之后成绩表：" &lt;&lt; scores[0] &lt;&lt; " " &lt;&lt; scores[1] &lt;&lt; " " &lt;&lt; scores[2] &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ pparam-05.cpp -o pparam-05
+$ ./pparam-05
+改之前总分：163
+改之后总分：208
+改之后成绩表：88 60 60</code></pre>
+
+  <p>45 和 30 都被提到了 60，总分从 163 变成 208。这一处改动发生在函数里，看到变化的是 <code>main</code>。</p>
+
+  <h2>形参里的 sizeof 量不到数组长度</h2>
+
+  <p>长度必须自己传进去，还有一个原因是函数里根本量不出来。</p>
+
+  <p>存成 <code>pparam-03.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// pparam-03.cpp -- 形参里的 sizeof 量不到数组的长度
+#include &lt;iostream&gt;
+using namespace std;
+
+int total(const int *p, int n)      // 形参 p 是一个指针
+{
+    cout &lt;&lt; "函数里 sizeof(p) = " &lt;&lt; sizeof(p) &lt;&lt; " 字节" &lt;&lt; endl;
+    int sum = 0;
+    for (int i = 0; i &lt; n; i++)
+        sum = sum + p[i];
+    return sum;
+}
+
+int main()
+{
+    int scores[5] = {88, 76, 95, 60, 82};
+
+    cout &lt;&lt; "main 里 sizeof(scores) = " &lt;&lt; sizeof(scores) &lt;&lt; " 字节" &lt;&lt; endl;
+    cout &lt;&lt; "也就是说这个数组有 " &lt;&lt; sizeof(scores) / sizeof(scores[0]) &lt;&lt; " 个元素" &lt;&lt; endl;
+
+    cout &lt;&lt; "总分：" &lt;&lt; total(scores, 5) &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>$ g++ pparam-03.cpp -o pparam-03
+$ ./pparam-03
+main 里 sizeof(scores) = 20 字节
+也就是说这个数组有 5 个元素
+总分：函数里 sizeof(p) = 8 字节
+401</code></pre>
+
+  <p>同样的写法，在两处得到完全不同的结果：<code>main</code> 里 <code>sizeof(scores)</code> 是 20（5 个 <code>int</code>），函数里 <code>sizeof(p)</code> 是 8（一个地址）。</p>
+
+  <p>原因是 <code>main</code> 里 <code>scores</code> 是一个数组，函数里 <code>p</code> 是一个指针。上一课留下的那条边界在这里变成了实际的 bug：函数里写 <code>int n = sizeof(p) / sizeof(p[0]);</code> 会算出 <code>8 / 4 = 2</code>，循环只走两格，统计出来的总分只有前两个成绩的和。</p>
+
+  <p>所以长度要当成另一个参数传进去：<code>total(scores, 5)</code>。这是 C 风格数组写法的固定搭配——<b>起点加长度</b>，两个一起给。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "把统计写成接收指针的函数：\n\n```cpp\nint total(int scores[5])\n{\n    int sum = 0;\n    for (int i = 0; i &lt; 5; i++)\n        sum = sum + scores[i];\n    return sum;\n}\n\nint main()\n{\n    int scores[5] = {88, 76, 95, 60, 82};\n    std::cout &lt;&lt; total(scores) &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n改写成接收指针参数、长度也能自己传的版\n本，并加一个只读的函数与一个会改数据的\n函数，让人一眼看得出来谁动数据。",
+    "answer": "```cpp\nint total(const int *p, int n)\n{\n    int sum = 0;\n    for (int i = 0; i &lt; n; i++)\n        sum = sum + p[i];\n    return sum;\n}\n\nvoid addBonus(int *p, int n, int bonus)\n{\n    for (int i = 0; i &lt; n; i++)\n        p[i] = p[i] + bonus;\n}\n```\n\n只读的加 const（写在 * 左边：顺着 p 读\n可以，通过 p 写不行）；要改数据的不加\nconst。调用处都写 total(scores, 5) 与\naddBonus(scores, 5, 2)，不用写 &amp;——数组\n名本身就是地址。",
+    "criteria": "两个函数都用了指针形参，只读的那个标了\nconst、要改的那个没标 → 通过；\n调用处不写 &amp;、长度另外传 → 完整。\n在只读函数里写 p[i] = 0 → 不通过（标了\nconst 又去写，编译不过）。"
+  }
+]'></div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "同一个数组，在 main 里量是 20 字节，在\n函数里量却是 8 字节：\n\n```cpp\nint total(const int *p, int n)\n{\n    int sum = 0;\n    for (int i = 0; i &lt; n; i++)\n        sum = sum + p[i];\n    return sum;\n}\n\nint main()\n{\n    int scores[5] = {88, 76, 95, 60, 82};\n    std::cout &lt;&lt; total(scores, 5) &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n① 两处量到的东西分别是什么？\n② 如果函数里写\nint n = sizeof(p) / sizeof(p[0]);，n\n会是多少、总分变成多少？\n③ 为什么长度必须当成另一个参数传进去？",
+    "answer": "① main 里量的是数组对象 scores，5 个\nint 一共 20 字节；函数里量的是指针 p，\n一个地址 8 字节。\n② n = 8 / 4 = 2，循环只走两格，总分只\n加上前两个成绩：88 + 76 = 164。\n③ 因为数组交给函数时只递过去一个起点地\n址，长度不会跟着过去，函数里也没有数组\n对象可以量。所以「起点加长度」要一起\n给：total(scores, 5)。",
+    "criteria": "两处量到的东西说清（数组对象 20 字节\n/ 指针 8 字节）→ 通过；\n第 ② 问答出 n = 2、总分 164 才算完整；\n第 ③ 问答出「只传了起点地址，长度没跟\n着过去」。"
+  }
+]'></div>
+
+  <h2>动手改写统计函数</h2>
+
+  <p>前面五个程序按顺序敲一遍，重点是把 <code>pparam-03.cpp</code> 和 <code>pparam-04.cpp</code> 的报错自己看一眼。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 1 步 · 把求平均写成指针参数版</span>
+    </div>
+
+      <p>在 <code>pparam-02.cpp</code> 里加一个函数 <code>double average(const int *p, int n)</code>，返回平均分。在 <code>main</code> 里调用它，打印出 <code>80.2</code>。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 2 步 · 让函数改到调用方</span>
+    </div>
+
+      <p>再加一个函数 <code>void curveAll(int *p, int n)</code>，把每个成绩按「不到 60 的提到 60」处理。调用后打印 <code>main</code> 里的 <code>scores</code>，确认 60 分以下的那项真的变了。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 3 步 · 故意把长度写错</span>
+    </div>
+
+      <p>把 <code>total(scores, 5)</code> 改成 <code>total(scores, 2)</code> 编译运行，看总分变成多少。再把它改成 <code>total(scores, sizeof(scores) / sizeof(scores[0]))</code>，确认这一次结果是对的。</p>
+
+      <p>这一步要把「长度必须一起传」这句话变成自己踩过的一次。</p>
+  </div>
+
+  <ul class="lesson-resources">
+    <li>《C++ Primer Plus（第六版）》第 7 章「函数——C++ 的编程模块」<span class="lesson-resources__meta">本地教材：<code>reference/C++PrimerPlus-第6版-中文版-07-函数-C++的编程模块.md</code></span></li>
+    <li>本课代码：<code>code/pparam-00.cpp</code>、<code>code/pparam-01.cpp</code>、<code>code/pparam-02.cpp</code>、<code>code/pparam-03.cpp</code>、<code>code/pparam-04.cpp</code></li>
+  </ul>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0015-pointer-and-array.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">指针与数组</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0017-pointer-pitfalls.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">空指针与常见陷阱</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0016 指针作函数参数 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../assets/sayo/sayo.js"></script>
+
+<script src="../assets/quiz.js" defer></script>
+<script src="../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

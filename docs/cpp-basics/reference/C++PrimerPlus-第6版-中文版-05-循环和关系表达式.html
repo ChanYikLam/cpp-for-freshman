@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 5 章 循环和关系表达式 · C++ 零基础入门（计算机专业大一）</title>
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回科目</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">参考文档</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>第 5 章 循环和关系表达式</h1>
+<blockquote><p>来源：《C++ Primer Plus（第 6 版）中文版》Stephen Prata 著，张海龙、袁国忠译，人民邮电出版社。<br>本地 PDF：<code>/Users/chenyilin/Desktop/电子书/计算机/C++ Primer Plus：中文版（第六版） (Stephen Prata) (z-library.sk, 1lib.sk, z-lib.sk).pdf</code><br>对应 PDF 第 143–182 页 / 原书第 125–164 页。<br>转换方式：PyMuPDF 抽取原扫描件内置文本层（该 PDF 为 2013 年扫描件，内置文本层由 OCR 生成，<strong>中文标点与少数汉字有识别错误，代码行偶有粘连</strong>）。<strong>本节内容的权威性以原书为准；引用技术结论前请回查 PDF 原页。</strong></p></blockquote>
+<h2>5.1 本章要讲什么（原书小节结构）</h2>
+<ul>
+<li>5.1 for循环 … 125</li>
+<li>5.1.1 for循环的组成部分 … 126</li>
+<li>5.1.2 回到for循环 … 131</li>
+<li>5.1.3 修改步长 … 132</li>
+<li>5.1.4 使用for循环访问字符串 … 133</li>
+<li>5.1.5 递增运算符（++）和递减运算符（--） … 133</li>
+<li>5.1.6 副作用和顺序点 … 134</li>
+<li>5.1.7 前缀格式和后缀格式 … 135</li>
+<li>5.1.8 递增／递减运算符和指针 … 135</li>
+<li>5.1.9 组合赋值运算符 … 136</li>
+<li>5.1.10 复合语句（语句块） … 136</li>
+<li>5.1.11 其他语法技巧——逗号运算符 … 138</li>
+<li>5.1.12 关系表达式 … 140</li>
+<li>5.1.13 赋值、比较和可能犯的错误 … 141</li>
+<li>5.1.14 C-风格字符串的比较 … 142</li>
+<li>5.1.15 比较string类字符串 … 144</li>
+<li>5.2 while循环 … 145</li>
+<li>5.2.1 for与while … 147</li>
+<li>5.2.2 等待一段时间：编写延时循环 … 148</li>
+<li>5.3 do while循环 … 150</li>
+<li>5.4 基于范围的for循环（C++11） … 152</li>
+<li>5.5 循环和文本输入 … 152</li>
+<li>5.5.1 使用原始的cin进行输入 … 152</li>
+<li>5.5.2 使用cin.get（char）进行补救 … 153</li>
+<li>5.5.3 使用哪一个cin.get() … 154</li>
+<li>5.5.4 文件尾条件 … 155</li>
+<li>5.5.5 另一个cin.get()版本 … 157</li>
+<li>5.6 嵌套循环和二维数组 … 159</li>
+<li>5.6.1 初始化二维数组 … 160</li>
+<li>5.6.2 使用二维数组 … 160</li>
+<li>5.7 总结 … 162</li>
+<li>5.8 复习题 … 163</li>
+<li>5.9 编程练习 … 163</li>
+</ul>
+<hr>
+<h2>正文</h2>
+<h3>第 125 页</h3>
+<p>第5章循环和关系表达式</p>
+<p>本章内容包括:</p>
+<p>• for 循环。</p>
+<p>• 在这式和语句。</p>
+<p>• 递培运算符和递减运算符:++和一。</p>
+<p>• 组合赋佳运算符。</p>
+<p>• 复合语句(语句块)。</p>
+<p>• 逗号运算符。</p>
+<p>• 吏系运算符:&gt;、&gt;=‘、--、信、〈和!= 。•</p>
+<p>._ while 循正在()o.</p>
+<pre><code class="language-cpp">• typedef工. 具。
+• do wKile 循环。</code></pre>
+<p>• 字符输入方主fget() 。</p>
+<p>@ 文件尾条件。</p>
+<p>• ~套循环和二维在纽飞</p>
+<p>计毙机除了存储数据外」还可以做很多其他的工作←可以对数掘进行分析、合并、重组、抽取、修改、推断、合成以及其他操作.有时甚至会歪曲和破坏数据户不过我们所毛主组尽最防应这种行为的发生。为了发挥其5皮大的操控能力，程序宿要有执行重复的操作和避行决策的工具。当然，c忡览供了这样(fr.“I具。事实上，官使用与常规C谣言手相同的fo叫后环、whi Ie循环、dowhile循环、if语句和swit巳h 语‘句，如果读者熟悉C证言，回粗略地法班二位章和第6章;但浏览速度不要过快.-$则会错过m如何处理字符输入.这些程序控制语句通常都使用关系表达式和逻统表;这式来控制其行男子.本意将讨论循环和关系表达式，第6章将介绍给支语句和逻辑表达式。</p>
+<h2>5.1 for 5.蘑坏</h2>
+<p>很多情祝丁F都需要程序执行重复的任务7如将数址中的元素祟3日起来或指歌颂生产的赞歌打印2位份，C件中的for 循环iiþ以轻拉地‘完成这种任务。我们来看看程序清单5.I甲，以丁能for循环所傲的工作，然后ì1’论ÈJ是如何工你的。</p>
+<p>程序清单5.1f011oop.cpp</p>
+<pre><code class="language-cpp">;r-forloop.cpp --introduciñg the fo~loop
+tlinc-lude &lt; iostream&gt;</code></pre>
+<p>主ntm带n.O</p>
+<h3>第 126 页</h3>
+<pre><code class="language-cpp">us i ng namespace std;
+int孟;// create a counter
+// init ial i ze; test ; update
+for (i = 0; i &lt; 5; iH)
+cout &lt;&lt; &quot;C... knows loops. \ n&quot;;
+cout &lt;&lt; . C.. knows when to stop .\ n&quot; ;
+return 0;</code></pre>
+<p>下面是该程序的输出:</p>
+<pre><code class="language-cpp">C++ knows loops.
+C++ knows loops.
+C++ knows loops.
+C++ knows loops.
+c++ knows loops.
+c .+ knows when to stop.</code></pre>
+<p>该循环首先将整数变意1设置为0 :</p>
+<p>i = 0</p>
+<p>这是循环的初始化(loopinitialization )部分。然后，循环测试(looptest )部分检查i是否小子5:</p>
+<p>i &lt; 5</p>
+<p>如果确实小于5.则程序将执行接下来的语句一一循环体(loopbody):</p>
+<pre><code class="language-cpp">cout &lt;&lt; IIC... knows 1∞ps. \n&quot;;</code></pre>
+<p>然后，程序使用循环更新(loopupdate)部分将i1m1:</p>
+<p>1 +-1.</p>
+<p>这里使用了++运算符一一递增运算符(incrementoperator)，它将操作数的值加1.递精运算符并不仅限于用于for 循环。例如，在程序中，可以使用i++;米替换语句i=i + 1;.将I加i后，便结束了循环的第一个周期。</p>
+<p>接下来，循环开始了新的周期，将新的i值与5进行比较.由于新值( 1 )也小于5.因此循环打印另一行，然后再次将i加1，从而结束这一周期.这样又进入了新的一轮测试、执行语句和更新i的值.这一过程将一直进行下去，直到循环将i更新为5为止.这样，接下来的测试失败，程序将接着执行循环后的语句.</p>
+<h3>5.1.1 for 循环的组成部分</h3>
+<p>for循环为执行重复的操作提供了循序渐进的步骤。我们来具体看一看它是如何工作的.for循环的组成部分完成下面这些步骤.</p>
+<p>).设登初始倍。</p>
+<p>2.执行测试，看看循环是否应当继续进行。</p>
+<p>3.执行循环操作.</p>
+<p>4.更新用于测试的值。</p>
+<p>C++循环设计中包括了这些要素，很容易识别.:1日J始化、测试和更新操作构成了控制部分，这些操作由括号括起。其中每部分都是一个表达式，彼此由分号隔开。控制部分后面的语句叫作循环体，只要测试表达式为true，毡‘便被执行:</p>
+<pre><code class="language-cpp">for (initialization; test-expression; update-expression)
+body</code></pre>
+<p>C++语法将整个for 看作一条语句一一虽然循环体可以包含一条或多条语句.(包含多条语句时，窝要使用复合语句或代码块，这将在本置在后面进行讨论。〉</p>
+<p>循环只执行一次初始化。通常，程序使用该表达式将变累设究为起始值，然后用该变盘计算循环周期.</p>
+<h3>第 127 页</h3>
+<p>test-expression (测试表达式)决定循环体是否被执行。通常，这个表达式是关系表达式，即对两个值进行比较。这个例子将1的值同5进行比较，着i;是否小子5.如果比较结果为宾，则程序将执行循环体.实际上.C忡并没有将test-expression的值限制为只能为真或假.可以使用任意表达式.C++将把结果强制转换为bool类型.因此，值为0的表达式将被转换为bool值false.导致循环结束.如果表达式的值为非零，则被强?如l转换为bool值true.循环将继续进行.程序清单5.2通过将表达式i用作测试条件来演示了这一特点.更新部分的i←与i++相似，只是每使用- 次，i值就减l。</p>
+<p>程序清单5.2num_test.cpp</p>
+<pre><code class="language-cpp">// num_test.cpp --use numeric test in for loop
+掉include&lt;iostream&gt;
+int main()
+using namespace s~d;
+cout &lt;&lt; &quot;Enter the starting countdown value: &quot;;
+int l imit;
+cin &gt;&gt; limit;
+lnt 1;
+for (i = limi~; i; i-- ) //(Jits when i is 0
+cout &lt;&lt; &quot;i =‘&lt;&lt; i &lt;&lt; &quot;\n&quot;;
+cout &lt;&lt; &quot;Done now that i 5: &quot; &lt;&lt; i &lt;&lt; &quot;\n&quot;;
+return 0;</code></pre>
+<p>下丽是该程序的输出z</p>
+<p>Enter the starting countdown value: 4</p>
+<p>i = 4</p>
+<p>i = 3</p>
+<p>i = 2</p>
+<p>i = 1</p>
+<p>Done now that i = 0</p>
+<p>注意，循环在i变为0后结束。</p>
+<p>关系表达式〈如i&lt;5)是如何得到循环终止值0的呢?在引入boo1类型之前，如果关系农达式为true.则被判定为1:如果为false，则被判定为o.因此，表达式3&lt;5的值为1.而5&lt;5的值为0。然而.C++添加了boo1类型后，关系表达式就判定为胁。l字面值true和fa1se.而不是1;和0了.这种变化不会导致不兼容的问题，因为C++程序在需要整数值的地方将把true和false分别转换为1和O.而在需要bool值的地方将把0转换为false.非0转换为true 。</p>
+<p>for循环是入口条件(entJγ-condition)循环。这意味着在每轮循环之前，都将计算测试表达式的值，当测试表达式为fa1se时，将不会执行循环体。例如，假设重新运行程序消单5.2中的程序，但将起始值设置为0，则由于测试条件在首次被判定时便为false.循环体将不被执行z</p>
+<pre><code class="language-cpp">Ent er the starting countdown value: 0
+Done now that i = 0</code></pre>
+<p>这种在循环之前进行检查的方式可避免程序遇到麻烦。</p>
+<p>update-expression (更新表达式〉在每轮循环结束时执行，此时循环体已经执行完毕。通常，它用来对跟踪循环轮次的变髦的值进行增减.然而，它可以是任何有效的C++褒达式，还可以是其他控制表达式。这使for循环的功能不仅仅是从0数到5(这是第一个循环示例所傲的工作).稍后将介绍一些例子。</p>
+<p>for 循环体由一条语句组成，不过很快将介绍如何扩展这条规则。阁5.1对for 循环设计进行了总结.</p>
+<p>for语句看上去有些像函数调用，因为它使用一个后丽跟一对括号的名称.然而.for是一个C++关键字，因此编译器不会将for视为一个函数，这还将防止将函数命名为for.</p>
+<h3>第 128 页</h3>
+<blockquote><p>［本页文本层 OCR 严重损坏（该页扫描阴影/插图区产生了大量乱码字符），以下为原始抽取结果（未删改），内容以 PDF 第 146 页图像为准］</p></blockquote>
+<pre><code class="language-cpp">statetlllf忧&#x27;
+for (int_expr; test_expr; update_expr)
+state.ent2</code></pre>
+<p>.,.--statellent3</p>
+<p>i-,</p>
+<p>ba --e d</p>
+<p>吗</p>
+<p>,-</p>
+<p>_-</p>
+<p>、.". 、</p>
+<p>川</p>
+<p>_</p>
+<p>‘.、"‘.‘</p>
+<p>-</p>
+<p>，..-~&lt;'. .、</p>
+<p>..----- -----, --<em>. -</em>.<em> </em>.，晶-__…...<em>.-</em> ...- --<em>.</em>、-_叭</p>
+<p>-</p>
+<p>毛</p>
+<p>、:..:<em>-:-‘ 一-、</em> .- .. 飞，-，-’‘’‘7’=.‘’:0，‘: 画、- 唱...- 队_.<em>、，咱-</em>.__..<em>---’</em>“ .<em>---</em>.. .<em>-</em>. -•• ------ _. -__----- <em>.</em>-- - ...<em>‘t’ ‘::.ø:’ ,” 气二..-. “</em>...‘<em>..</em>. - -- ---</p>
+<p>-</p>
+<p><em>". --, </em>.<em>- -. -</em>. .._</p>
+<p>-工二-、合忡~<em>.. ..:</em>. .:.. 毛·、、，‘勺.‘-_·、、, .、.-.、确..:一-..-:--a‘ :-. 、,, -’ ..唁-.-. ‘<em>二... </em>.<em>“ </em> <em>专~~ </em> ” ..“ :..￥手-<em> --二‘‘</em>. .‘φ</p>
+<p>-.---'<em> </em>.</p>
+<p>'<em>… </em> .</p>
+<p>..一-_...-巳“:..--.. --、町、<em>s …</em>‘<em>- 二….-.. ... .~.”</em> -一..“”,<em>-</em> ’<em>‘ .</em> <em>川、.</em>、<em>:. -</em>.::..--, . .，.川衡，飞、俨____;’7‘，.一 咕γ.、- “ __-<em>钮.一合.-咽，一J-. ’.:.‘~-‘- ~-”.~--</em>---一</p>
+<p>-~. --":..' -",-</p>
+<p><em>- . " </em>.; "-.</p>
+<h3>第 129 页</h3>
+<p>这种做法e允询:存在上述语句存在的原则也ff，诲编笃声rt:T的说:句:</p>
+<p>x = y ~Z = 0,</p>
+<p>这丰肋m法可以快速地将若干个变量设-置为相同仇值。优先级袤(见附录D)表晾赋值运算符是拭右向左结合自~IJ医妇比首先将0赋给Z.然后将z_=O赋给y.依此类批τ</p>
+<p>放后，正如协商指出的丁像~x&lt;于这样的关系表达式将被判定为boof 值true 成false .程!:fi存单5.3中的.企程序指出了有关表达式徒的一些重要方面。《运算符的优允级览表达式中使用的运算符高，因此代且使用括号来获符E确的运算顺序。</p>
+<p>‘‘ a ... ---_. ...‘... ..:...:. •• ... 、.</p>
+<p>程于事清单E;“3‘ .exþr，电Ss.cpp</p>
+<p>-</p>
+<p>、.._...-</p>
+<p>-</p>
+<p>λ~. .~. .τ . .号...、. .. . 一一二, ‘ .“,‘. 一-钮’一‘</p>
+<p>-;/ express.c'PP ‘--.val'ties’ of expre'ssio口S、，号今.</p>
+<pre><code class="language-cpp">~ rncl ud~&lt; io$trea~
+、&quot;int &#x27; main () ，、怕内... • ‘ ·
+-</code></pre>
+<p>• _.~.-• ..--,,,,,.</p>
+<pre><code class="language-cpp">&#x27;
+nsing namespace std;
+int Xj</code></pre>
+<p>、.</p>
+<p>二:.cout&lt;二.‘Theexpression x二’.100has the.;ja l u马“; .-.气、e</p>
+<pre><code class="language-cpp">cout &lt;&lt; rx = 100)_&lt;&lt; endl ;
+cout啊&#x27;啊。WX =. &quot; &lt;&lt; X &lt;&lt;&quot;&quot;&quot;endlι &quot;· ..
+. cout .&lt;~&#x27;The .expreßsion &#x27;x &#x27; &lt; .3. hail.,...the&#x27; vaÏue .~;</code></pre>
+<p>品</p>
+<pre><code class="language-cpp">cout &lt;:&lt; (x &lt; 3-) &lt;&lt;-endl ;</code></pre>
+<p>cout &lt;&lt;. “The expressì on x &gt; 3 h孟电th注. value ”; . ~ 、、-</p>
+<pre><code class="language-cpp">cout .&lt;&lt; .(x &gt; 3F&#x27;&lt;&lt;, end l ;&quot; .‘
+c∞t . set f (ios::b臼e::boolal pha);-//a ne划erC++ feature
+cout &lt;&lt; &quot;The expression x &quot; 3 ha~the value &quot;
+cout &lt;&lt; (x &lt; 3.) &lt;&lt;.. end :b-,</code></pre>
+<p>cout &lt;&lt; “The e现pressionx &gt; 3-h南S”‘theval ue 巧</p>
+<pre><code class="language-cpp">cout &lt;&lt; .(x &gt;引&lt;&lt;&quot;，气endl;</code></pre>
+<p>e伞、... .，、</p>
+<p>return二。二...，，:，一、</p>
+<p>、</p>
+<p>仨</p>
+<p>注意:老式C忏实现可能妥求使用ios:bOolalpha. I听不是iós:.basc ::boc:ìlarpha 来作为cout.setf飞)的参数。有些老式实现甚主无法仅如l这两稚形式J</p>
+<p>髦写~飞--\二·山下辆是该程序的揄址i~~‘.’“二.午--.一”“.‘斗_...-. ~.，..二三-</p>
+<p>-<em>.The E!i耳p~哇Ê~qn)Ç =. .100 ha-s the v.al ue. r.O(fc. . .. . • . ….-..气-一一ι 一</em>.._._一一一一一-</p>
+<pre><code class="language-cpp">Now x = 100
+、The&#x27;expressi on x ., 3 has the&#x27;.value ()、一
+rhe expressi on.x&#x27;&gt; ~h?~the.回l ue&#x27;l、，
+，.T?e .~exp x:essioR r,&lt;.3 has. the value far~e，、~_.&#x27; ••... . -
+Tl、e &#x27;ellpressi on x ;.. ~. hëls . tha、válueq::úe一、_... ..、</code></pre>
+<p>二通常，. ‘cout在要宗:bool值之ïitr柑E们转换为ínt，但cout:’sett三Îos::bo~i~肿的·函接调用设置:“[:”‘-1二、二二刷ym命笔可T町、tt山和fal哇?而不妇和-ra-J=?‘王三芒;江-正;;:let--f」~至意:C++主运式是位或位马i生算符的经F念.每个C++.表iK灭都有位。</p>
+<p>丁τ-:---‘__: -=-~’.‘ c ~ =一二一土一二-、_..7=... ’~::--&gt;.于1-v 芝-二:::t~__φ二之吁吁二·一二?士为1判定表达来-X.=:lOO;~忡必须将roo盹给王当塑定君主这苍白9啻遮贯操作改变了内存中数据的值吐，之五二我们手l棋式有磊1自乍用才到d怡，吨ct &gt;.:- 因此，判定赋值表达式会带卖部的副作用1郎修改掉赋草树但，J有可能把赋值著作预期的效荣i但fÀ 、6+斗的构造方式这个角度来看二判定表达式才是主要作朋v 并不是所e有的表达式都有画的用二例如，判走衬15 将法草刊{二个新的值;也不会修改革的俏。然而←规定+~~+ . 15，“:-:-就有ilíll作用，因为它将x刘主1:”，号</p>
+<p>。、a、、</p>
+<p>、，、.、磊、-、,</p>
+<p>、</p>
+<h3>第 130 页</h3>
+<p>从表达式到语句的转变很容易，只要加分号即可.因此下而是一个表达式:</p>
+<p>age = 100</p>
+<p>而下而是一条语句:</p>
+<pre><code class="language-cpp">age = 100;</code></pre>
+<p>更准确地说，这是一条表达式语句.只要加上分号，所有的表达式都可以成为语旬，但不一定有编程意义.例如，如果rodents是个变量，则下丽就是一条有效的C忡语句:</p>
+<p>rodents + 6; // valid, but useless , statement</p>
+<p>编译辑允许这样的语旬，但它没有完成任何有用的工作.程序仅仅是计算和，而没有使用得到的结果，然后便进入下一条语句(智能编译器甚至可能跳过这条语句).</p>
+<p>2.非表达式和语句</p>
+<p>有些概念对于理解C++至关重要，如了解for循环的结构.不过句法中也有一些相对次要的内容，让认为自己理解语言的人突然觉得不知所措.下面来看着这样的内容.</p>
+<p>对任何表达式加上分号都可以成为语旬，但是这句话反过来说就不对了.也就是说，从语句中删除分号，并不一定能将它转换为表达式.就我们目前使用的语句而言，返回语句、声明语句和for语句都不满足“语句=表达式+分号”这种模式.例如，下面是一条语，句:</p>
+<pre><code class="language-cpp">int toad;</code></pre>
+<p>但intωad并不是表达式，因为它没有值.因此，下面的代码是非法的:</p>
+<pre><code class="language-cpp">eggs = int toad • 1000; // invalid, not an expression
+cin &gt;&gt; int toad; // can&#x27;t combine declaration with cin</code></pre>
+<p>同样，不能把for 循环赋给变最.在下面的示例中.for循环不是表达式，因此没有值，也不能给它赋值:</p>
+<pre><code class="language-cpp">int fx = for (i = 0; i&lt; 4; i++)
+cout &gt;&gt;i; // not possi bl e</code></pre>
+<p>3.修改规则</p>
+<p>C++在C 循环的基础上添加了一项特性，要求对for 循环句法做一些微妙的调整.</p>
+<p>这是原来的句法:</p>
+<pre><code class="language-cpp">for (expression; expression; expression)
+statement</code></pre>
+<p>具体地说，正如本意前面指出的.for结构的控制部分囱3个表达式组成，它们自分号分隔.然而，C++循环允许像下面这样做:</p>
+<pre><code class="language-cpp">for (int i = 0; i &lt; 5; i ++)</code></pre>
+<p>也就是说，可以在for循环的初始化部分中声明变量.这很方便，但并不适用于原来的句法，因为声明不是表达式.这种一度是非法的行为最初是通过定义一种新的表达式一一声明语句表达式( dec恼甜。，n-sta阳nent expression)一一来合法化的，声明语句表达式不宁静分号声明，只能出现在for语句中。然而，这种调整已经被取消了，代之以将for 语句的句法修改成下面这样:</p>
+<pre><code class="language-cpp">for (for-init-statement condition; expression)
+statement</code></pre>
+<p>乍一看很奇怪，因为这里只有一个分号〈而不是两个分号).但是这是允许的，因为for-init-statement被视为一条语旬，而语句有自己的分号。对于for-init-statement来说，它既可以是表达式语句，也可以是声明.这种句法规则用语句替换了后面跟分号的表达式，语句本身有自己的分号.总之，C忡程序员希望能够在for 循环初始化部分中声明和初始化变量，他们会做C++句法需要和英语所允许的工作.</p>
+<p>在for-init-statement中声明变量还有其实用的一丽，这也是应该知道的.这种变量只存在于for 语句中，也就是说，当程序，离开循环后，这种变量将消失:</p>
+<h3>第 131 页</h3>
+<p>差三章-一=二三了--τ二‘:l. U l.】~.111 1.:;J，二三日V; -= .l.~;. <em>.J，j’~I:...;..:. ，</em>..,妻之誓言:ι妻主;三二而在三号二百阳亏立言言需雪专三王军三言三三子=774TZZ『一‘=+=“;:7~”;=“.=”“’”“~==:::”‘::=-“”“”，=~ ...</p>
+<p><em>.一‘</em>“，_.-. 二左手三声~. 7”“”~.=:.-=:;::;-:--干斗--芋，一.:=-.. ，...:::::..~-~.~二牛__ 二宁_.“，工三军.<em>.</em>~--:-...o..=-...:..:-”-，<em>...~</em>~<del>=三三吉王三còUt\</del>了白~[d..!.T =庄;虽ps!:}~吨10n忧~.defined.~-~-~-= -，.=一一一九_.…--二圭苦苦三主王军专玉兰去二主专三三三王三.’.-::-~轩雪事<del>言古;.</del>.，:..:~~ξ需要;;:.~...:，g:~-:-#:-::-~7~主二=<del>岳￥石二</del>王三号岳王军豆3莹莹兰主芳.-乏二:;<em>J?f:础知道的~)点是12有些草制~:ç-a:实是遵馆旦前的规础，-对于阔的循环..年町引为是在柄:“</em>.之前声明的j因此在循环结染厉扩t 仍可用.、二、二斗.: ,” ‘:’、...:...:~申-善丰电呈.ι昂晶r二J二‘..，.“’”二，‘,</p>
+<p>;. 盯5.:L2民E虱l止Ilf&lt;阳oα『循环</p>
+<p>下面使用for 循到:完成更多的工作。程序消单5.4使制循环来计算并存储前16 个阶乘。除乘的计算方式如‘“”f:零阶悉与你01.被忽义为I ~l!楚I <em>O~’:‘ f1P ~. 2!为沪I!’f“!!的。3 t-:为3-</em>2 F.即6.依止战推。每仓‘应数的阶乘都是该整数当前-+阶’乘的乘tJ1(钢琴家Victor Borge 最著名的独自防其语音标点为特色，英中，惊叹号的·…...发音就像phflR-pp缸，带在满湿的口音.然而，网11才提到的~‘! ”读作“阶乘飞该程序阴二全循环来计算连续_’_ ”‘..阶乘的值λ并将这些值存俯在数组中.然后.-用另7个循环来显示结果。另外，该程序还夜外部声明7~些值F二二. .</p>
+<p>程序清单;:5.4formo陪.cpp</p>
+<p>/ /.: fórmor号cpp~._.more.róopin9 with.~。芷几一ni nc 1 ude.. &lt; 109 t ream&gt;</p>
+<pre><code class="language-cpp">∞nst int ArS i ze =-16; 1/ examp恒。fextern~l declara~ion
+ült &#x27;ïnain() .气‘&#x27;</code></pre>
+<p>,.. .</p>
+<p>讪</p>
+<p>. . -.击运吨10n9‘ factorials IArSize f;’一\-、-…--合，曹.</p>
+<p>、ι、.‘.-</p>
+<pre><code class="language-cpp">factori aÌ岳[~l; factor ial$(~l • 1LL;
+-&#x27;-for __(iri&quot;t -i.= -2-;、i&lt; ArS1Ze; . 1++-} -&#x27; 二._、-</code></pre>
+<p>_.. 气act古ti.àl s 怡~~<em>f&lt;l~&lt;?r~ai S! ~二-“Y，、j </em> ‘ [i -.1h、-for i.; ;”O; .i 1+.)-0 ...飞’..:U口t&lt;且rS i“乞e;‘</p>
+<pre><code class="language-cpp">std::.col!t&lt;&lt; i &lt; -:-&quot;f&quot;&quot;;&quot;&lt;&lt; factoria l s! i)&lt;&lt; st&amp;:-:endl;
+ret Ul;n&#x27; 0;</code></pre>
+<p>W子-</p>
+<p>面是峨、</p>
+<p>下阻</p>
+<p>一剧也</p>
+<p>，附</p>
+<p>1--</p>
+<p>一丁1一-一</p>
+<p>以</p>
+<p>一</p>
+<p>=</p>
+<p>引0... ... • . -</p>
+<p>引--... ... ...、-~一，“，”‘.牛…、..-“’... ”‘.,... -. 二一’“ ,.</p>
+<p>飞2.“:”飞..一ι、W♂一...，、_.，...</p>
+<p>s• 、牛，‘“ .</p>
+<p><em>-. </em> .</p>
+<p>6、-_品·白~.‘2, 飞</p>
+<p>引=e一, ‘.. ‘· ...一.</p>
+<p>们n‘、.、...</p>
+<p>=t4_.</p>
+<p>引a刊</p>
+<p>_. ... .. '.'"</p>
+<p>-</p>
+<p>川. -、-、</p>
+<p>-u刊e.-、2..---、...一.二，、.一、、一，“，‘，一φ_.、…’”</p>
+<p>仁.“~. <em>”.. .. .. ι‘“ :.’”…-• 一..</em></p>
+<p>们需:引…. ..~. ~ .一..-</p>
+<p>川DE~.</p>
+<p>川2‘</p>
+<p>刷剧mS-u</p>
+<p>=0s-</p>
+<p>刷u!剖m7ι</p>
+<p>70</p>
+<p>mm!(70∞</p>
+<p>!m8</p>
+<p>HM-m</p>
+<p>t二mu←</p>
+<p>n</p>
+<p>户mm</p>
+<p>ω</p>
+<p>U白m</p>
+<p>Um_-, _. ..,. •...•• "</p>
+<p>mtω</p>
+<p>J山</p>
+<p>m</p>
+<p>mul岳n∞</p>
+<p>u川川问u川·</p>
+<p>u</p>
+<p>叩</p>
+<p>恼</p>
+<p>阶乘i回</p>
+<p>峭m</p>
+<p>到</p>
+<p>剧民</p>
+<p>汪意:这个程序二清单使用习‘ 类型商ñglong。如采您-的系统不失梓这种英垫，在使距double。然而，应二</p>
+<p>蜘</p>
+<p>· 型彼得除乘的培大方式看起来美观豆。一</p>
+<p>手写字说明</p>
+<p>该程序创建了一个知旦采存储阶乘值。元素。存储O!-r元束L存储1! ，...:依此类推.由于前两二个协乘都</p>
+<h3>第 132 页</h3>
+<p>等于1.因此程序将factorials数组的前两个元素设置为l(记住，数组第一个元素的索引值为的。然后，程序用循环将每个阶乘设室为索引号与前一个阶乘的乘积.该循环表明，可以在循环体中使用循环计敛。</p>
+<p>该程序演示了for循环如何通过提供一种访问每个数组成员的方便途径来与数组协同工作.另外，formore叩p 还使用const 创建丁数组长度的符号表示( ArSize) .然后，它在需要数组长度的地方使用ArSize ，如定义数组以及限制循环如何处理数组时。现在，如果要将程序扩展成处理20个阶乘，则只能要将ArSize设置为20并重新编译程序即可.通过使用符号常慧，就可以避免将所有的1 0修改为20.</p>
+<p>提示:通常，定义一个const位来表示数组中的元素个数是个好办法。在声明欲生且和引用疆生组长度时(如在for 循环中)，可以使用const 位。</p>
+<p>表达式i &lt; ArSize反映了这样一个事实，包含ArSize个元素的数组的下标从0到ArSize -1，因此数组索引应在ArSize减l的位置停止.也可以使用i&lt;= ArSize -1，但它看上去没有前面的表达式好.</p>
+<p>该程序在main()的外面声明∞nstint 变量ArSize .第4章末尾提到过，这样可以便ArSize成为外部数据.以这种方式声明ArSize的两种后果是，ArSize在搭个程序周期内存在、程序文件中所有的函数都可以使用它.在这个例子中，程序只有一个函数，因此在外部声明ArSize 儿乎没有任何实际用处，但包含多个函数的程序常常会受益于共享外部常盘，因此我们现在就开始练习使用外部变量。</p>
+<p>另外，这个示例还提醒f毯，可使用std::而不是编译指令usmg来让泡定的标准名称可用。</p>
+<h3>5.1.3 修改步长</h3>
+<p>到现在为止，循环示例每一轮循环都将循环计数加1j裁减1.可以通过修改更新表达式来修改步长。例如，程序消单5.5中的程序按照用户选择的步长值将循环计数递增.它没有将1忡用作更新表达式，而是使用表达式i=i+by ，其中by是用户选择的步长值.</p>
+<p>程序清单5.5bigstep.cpp</p>
+<pre><code class="language-cpp">11 bigstep.cpp --count as directed
+样include&lt;iostream&gt;
+int main ()
+using std: :cout; 11 a using declaration
+using std: :cin;
+using 5td: :endl;
+cout &lt;&lt; &quot;Enter an integer: &quot;;
+int by;
+cin &gt;&gt; bYi
+cout &lt;&lt; &quot;Counting by &quot; &lt;&lt; by &lt;&lt; &quot;5: \n&quot; ;
+for (int i = 0; i &lt; 100; i = i + by)
+cout &lt;&lt; i &lt;&lt; endl;
+return 0;</code></pre>
+<p>下面是该程序的运行情况:</p>
+<pre><code class="language-cpp">Enter an integer: 17
+Counting by 179</code></pre>
+<p>0</p>
+<p>34</p>
+<p>Sl</p>
+<p>68</p>
+<p>85</p>
+<p>当1的值到达102时，循环终止.这里的重点是，更新表达式可以是任何有效的表达式。例如，如果</p>
+<h3>第 133 页</h3>
+<blockquote><p>［本页文本层 OCR 严重损坏（该页扫描阴影/插图区产生了大量乱码字符），以下为原始抽取结果（未删改），内容以 PDF 第 151 页图像为准］</p></blockquote>
+<p>巧.-厅~亏‘’.. • . .<em> .</em> ~二二二，ζ仨斗:.，.:.‘二斗L白愈t每锵轮:淄遥淄副』诵刷旨阔a邵勒3如日ío;:~瓦õ;:汕夜如嗣祉旦戚此桂展;周脚表达棋武L二卒~=Ti注凡2二汽引吁币φ;江K币 ’FP亏干引λ飞J品}孔汇J二二7二;丰二J二二古τY气之宇?汇ξF千;<em>.~ ‘:;<del> -</del>~~:;~</em>’:“二:芒”“芒”.古飞“1t亏-二，&gt;.三兰三__;三二三.，:.L主ζ二二二二二”.卢合γ二芝二二τ气二三ι.叮“<em>二.-</em>-:..‘正J 的取值2耳f耳i苦纠刻吉汩O吨~~~二马.~亏ι-ι-”<em>~于工一.ι ..:’.-愉-气气-“乒卢T主</em>:~; ~.二~严叫引7尹亏毛元注i之二7芝言?于亏专=二T吐二二乓乓丰兰ξ主ξ-丰ι<del>冯斗斗丰斗仨</del>飞气玛吃立巳噜古专专兰差雪迄二4三三三‘.~”::.. <em>. </em>. .’ 毛主二飞~.Ä.:..二、二:毛阿“~~~~食示协商品市切，而主阳市政年如三二三乏与三三? iET 三fTT二三</p>
+<p>,</p>
+<p>飞;二二乓J二·飞飞~. ~..2-:-:-~号τ二午4号~;;.~~ ~: :<em>~ ~::.: ::</em> ‘o:-::~. ;:’:二“..二毛兰兰三二位. ..ιr二.. ...:..~ ... :<em>. ~</em> ‘.:..’::;--γ.…. \-二二气气τ二p巧-<em>----:工-~</em>- . <em>吃二飞:二..5~1A”:</em>::使用l .fof 循环访问字符$ ι. _. .-;.: ‘:-. -，::’: -.可之了气~:“”-::-~“ -二三二-...二.二二.哇三”，:三...7三二二~.二三二~--:--:-;-之子-:，.:‘二λ.二飞二.’了三二-二飞.二丁‘.二;三斗-<em>ι九</em>~~:.二~:二仇“，ζ 二江f二二工二τ、轩-’.‘-衍循环樊解于-税依t汰R访问弓宅E符唾中每个宇符仇万骂;Lε剖如如「程序?彗雪主更艺主弘i飞黠P 能够输λ六二芝个宗农佳E;γ丁二.&lt;二t干之__γ.丁γ----寸丁与拉扫严扎仁&gt;江，.二λ乌气’”s淤后t放支￥油臼页6可访时逐个草符地豆示该字符自j在这个例子吗?二可以岳阳“S廿il)再对象γ;也可~~{费用飞出手吁.. _二丁-~ .. ~:-: :.‘二-.三盘棋;因为云fï’‘il1l战-能脱离硕标注版时往阱的阳宇捋辄符梳6珩搓街诗啡i元玉丽贺阙甫睛岳陆是‘-’;3”‘-.了到前言~ë( )获得字样申手-的字?守数循环运孟))J始化:表达式帘使}到这T?也“._将~ 被置到.字在单币最后千千字二-τ二二」二二三J坷，索引呆在络建制坦和二:为什;再畸重7.~j即使盹减运3辅二fL士)专在~轮循掷’翩数级市1幸掉;运.;..”...__ 兰二三亨:三羽外71τ眺问SiffO饮用那运算符大于兽;~i.:~:;豆豆来测试制悬窍。这笔句号if;索兰稍后;我;lÏJi皑‘Æ_.;-’:二;二7 二_~.~二.~“‘”:一边f哇系歧鲍ζ丁_，阱丁;二~二-!<em>~~</em> . =-~’“”.二二、三7丁二-卢:.. -:---: <em>,</em> .-..;工-一二-二二二二二</p>
+<p>-“.~‘:’:‘ .~. ...-.:...<em>..</em> <em>-..</em>... -::亨”’-.-二二~--_ __“...、~=-:‘ -:’‘: ... ::7’. :‘ .-:主主.::-:，’:=:::-~王，-‘”二哥王v一~.~~辜.. 二.~-:户::; ._-~.工工-~:~三-::..二ι -一-二二~---’-:-‘.二r三子主主P~<em>5$::-.!9以旦:EPP<del> . :</del>~~:二二三泣;二二二三二二三烹frf士:三;二芝E71----:-::</em>.<em>~...:--=:-.-</em>.τξ:iI ~-f。由t汇Cp'p，.<em>二:-usí牛以~with“a:: stri吁二二:王L主--..~-=-:-.~:~. ---’;</em>=&lt;<em>~-，主九二;1-”. --:=.:-: </em>::.，工‘’:‘:一=’.. . ‘:IITnC'l ude &lt;&lt;ios tï:’eam&gt;:=.-..:‘-:-士一-_.:.. ~ ’.-~ .:-三=二-←~~守主;~--“.;. --;-”= .亏了亏、芒泣τ 王之--</p>
+<p>-→、“”-.、-,-... ~‘:-’ ;二±ι~.<em>..‘ .~我.:</em> ，~三王三ζ~’-=-~ H7 . .:...,..:. -. “<em>..:...•. </em>--叫...~.~ :.::.:.;. 二二工-‘-<em> .Þ~”:’υ-... 7“:</em>~}‘:’川include三st'r呵9&gt;‘-ë.三飞‘ 二-fd飞.-::: ~~;’_:.”-:;<em>ι二、m·.:3. :‘;二.-岛’ 叫-.~气」二-干:...:~~i钮以“旺旷t芷f‘二;如-典蜘~ç~’=;二. .二-二.二..-ι</em>._…三 -L-卢亏飞元二丰斗4干斗”{._二二-二三!.二二主主-二二‘严-:...=--.~斗..~-二:’;‘;::-.，月币_宁.七-斗芒乞~“ ... . :.’, .-..~-: •</p>
+<p>-_.</p>
+<p>J 二.，.-., ‘ :-...::__ ...:::~ :u'ii.iñg-:“riames阳c~::itqJ..::” ’:.<em>~-=飞、.==-=‘.:.::.，’-:二</em>-.::...1...__.:~.土豆.产74ι二- -二~.-:‘ ~:<em>:’‘’ -;:-:;</em>-主-二-. ~ ‘ ， çoutv:&lt;&lt; ~i En~t'er'a -Wö~dr ~;~~:，..:二--二一-主...-二-立.-ι-_-二1一，..</p>
+<pre><code class="language-cpp">-…str主ngword&#x27;;
+r、cl.iL:&gt;&gt;叫rd-;
+11 disp-lay- &#x27;le&#x27;t&#x27;ters-in re.,;erse&#x27; order
+for Lint F&quot;&quot;= word.size O -1; i &gt;;&quot;&quot;&#x27;0; &#x27; i --)
+L.. cout .s&quot;.- w。此h L.._:-勺... ~:.. -_. &#x27; -.. _</code></pre>
+<p>h , ~.. .…一一、-..cou~ “,,&lt;” ~‘\nBye’. \n“;” :...γ 二~.‘-φ</p>
+<p>-</p>
+<p>... ‘ r.etÍlrn . O;- ... ... ...-…</p>
+<p>一-</p>
+<p>-</p>
+<p>,_...-，.一注意L如果所底的实现没有添加新的头文件，则必须使用string.h ，而不是csmñg;，‘“…，</p>
+<p>‘节而是该程序的运往悄况2</p>
+<pre><code class="language-cpp">Enter a.. word ιanimal
+lamina
+By_e .</code></pre>
+<p>程J否成功地按相页的方向打印了创imar:与回::)Crotator~ redder 或stats.相比，animal‘能更清晰地说明这个程芹，的tr-郎、</p>
+<p>5.,.1.5-递增运篡信-(“+川和递减运算符( -- )</p>
+<p>C+在中有多个常被用在循:ff..中的运算符，因此我们花1一点时冉来说论在们乱荫丽己经介组了两个这样的运算符:递增运算符( ++ )(名-称C++ 面此待IlD和递减运算符P→.这两个运算符快行民税极其常见的循环探作:将循环计数加I!‘，IG减l 。然.睛，它们还有很多特点不为读者脱知.这两个运算符都有两种变体。前缀( pref~x)版本位于操作数前面，声民:++x:后缀~ postfix )版本位于操-伴数后面，如~x++.两个版本对操作数的影响是一样的，但是影响f阳才闷不同←这就像耳于钱包来说，_.. 清理草坪之前仗钱和消理革坤之后付钱的最终结荣是一样的，但支付钱的时间不同。程度清单5.严演示递增运算符的这种差别。</p>
+<p>.-_ . . .</p>
+<p>-‘-</p>
+<p>.<em> “.. </em>. :”.~..ι..“ 、4二” “‘--”<em>. . .’,. ...</em>. ,一.、-<em>φ吨牛..，…-飞.一-… .一</em> ，~..十一ι“、，.-一←-、<em>.ι. ...</em>,</p>
+<h3>第 134 页</h3>
+<p>程序清单5.7plus_one.cpp</p>
+<pre><code class="language-cpp">// pl us_one .cpp --the incr ement operator
+曾inc lude&lt;iostream&gt;
+ìnt main()
+using std: :cout;
+int a = 20;
+int b = 20;
+cout &lt;&lt;&quot;a =&quot;&lt;&lt; a &lt;&lt; &quot;: b = &quot; &lt;&lt; b &lt;&lt; &quot;\n&quot;;
+cout &lt;&lt; &quot;a++ = &quot; &lt;&lt; aφ+ &lt;&lt;&quot; ++b = ,. &lt;&lt; ++b c&lt; &quot;\n&quot; ;
+cout &lt;&lt;&quot;a =&quot;&lt;&lt; a &lt;&lt; &quot;: b = &quot; &lt;&lt; b &lt;&lt; &quot; 飞n&quot;;
+return 0;</code></pre>
+<p>下而是该程序的输出:</p>
+<p>a = 20: b = 20</p>
+<p>a++ = 20: ++b = 21</p>
+<p>a = 21 : b = 21</p>
+<p>粗略地讲，a++意味着使用a的当前值计算表达式，然后将a的值加1;而++b的意思是先将b的值加1，然后使用新的值来计算褒达式.例如，我们有下面这样的关系:</p>
+<pre><code class="language-cpp">ìnt x = 5;
+ìnt y = ++x; /γchange x , then assign to y
+// ~is 6 , x is 6</code></pre>
+<p>int z : 5;-一r : -~斗斗.飞:t.:.玉仨卢公-俨叮-气.…斗.:.; i卢白市t:“i::~”亏2引斗λ川-巧... -. ，ι-二::.--...二;:.二飞7γ/ì立汇户卢ιF‘二..豆苟言岳f浮言d冗汪t二t峭峭f’:Cî崎i运豆主肖雨每母々-ι矿-歹品苦.俨川E川‘:~!先a川.’、飞飞:已毛h….气芝γ，.</p>
+<p>...，..u.: y:主L~;υ主亏l咒ß</p>
+<p>‘边增和递减运算符是处理将值:1m.诫I这种常见任务的二三种简约、…立便的方法。4…</p>
+<p>递增运算符和递减运算符都是漂亮的企型运算施，不出J万不要失去控制.在同一条主吾句对同=-~值递捕或递减多次.问题在王，规则u使用后修改川和“修改后使用俨盲工能会变得模糊不泣。也就是说，下面这条语句在不同的系统二k役生成不同的结架:</p>
+<p>X害‘~. x忖;...(3 . -川x);./.1 dõñ’..t.ðo i t . except as . an'experiment,..__ ...~..h~.~:.三刻这种语旬，二C忡没有定义正确的.行为‘0... ’_ ;:‘二...-二…二</p>
+<h3>5.1.6 副作用和顺序-点一</h3>
+<p>r:-而更详细地介绍-C冉就递增运算样?可时生效的哪些方面做了规定，哪些方面没有规定。首先: j'ijIJ作用Cside E伽)销的是在计算表达式时对某些东西(如存储夜变盘中的值〉进行丁修改;顺序点( s吨uenceQOinr )是程序执行过程中的一个点，在这里，进入下一步之前将确保对所有的副作用都进行了评估.在C书中，语句中的分号就是L个j顺序点，这意味着程序处理下一条语旬之前F 照他运算倦、递增运算传和递减运算符抵往的所脊修改都必须完成.本意后面将地论的有些银作也有}I阪J‘Ì弘点。另外，任何完整的表达式来尾都是一个顺序点L</p>
+<p>怦共1完整袭rK式呢?它是这样一个表这式二不是究~-t.!&gt;巨大表达式的子表迄式。完整表达式的例子有:表达式语句身的表达武部分以及用tFwh i le 循环中检测条件的表达式阳</p>
+<p>顺序:或有助于阎明后缀递增何时逃行.例如，请看下丽的代码r</p>
+<pre><code class="language-cpp">whi1e (guestS&quot;+矿&lt;1(0)
+cout &lt;&lt; guests &lt;&lt; endl;</code></pre>
+<p>while循环将在本主雪后面坷论L它类似于只有测试表达式陈for循环.在这旦雪“C++新手可能认为”使月1值，然后递增，~意晾着先在∞ut 语句中使用guests的值，再将其倍阳1.然而，表达式gucs始++&lt;“ 10是一个完整表达式，因为它是一个while-循环的测试条饨，应享此该表这式的末尾是一个顺序点.所战~，_C种</p>
+<h3>第 135 页</h3>
+<p>二三二号字号宇主主士号暑生王若季?尹毒是亏字号恶毒马穹<del>苦干三雯雯三空吾吾字号</del>~~季军需-确保副作胜1艳丽句。丁〉桂程序进入ωι前完成。然而气即使用同格式二可确保将白白问:吹，~.~:;.，;，..、、二进行比辈先后再将其值加民二ρ气.、‘..’...,._.</p>
+<p>、现E孟E来言磊§下丽的语句i;j:、..，‘-.’，、.~.\.r.‘二P咒.’‘:::r~’:γ二了d士二卢J 气气J、;才寸...:;.:;-...二:立芝芒乓~丁~丁~工!丁:工二ψ石二二λ二飞俨λY队川…价叫斗:‘~，二-穹:...y . ，~.(4. +x++)’‘’+.. f6 “‘’‘ x++J;;.</p>
+<p>表达式4-T'x扑不是一个完整表达式，因此.C+-ó-不保证x的值在计算予表达式4tX++后立刻L增加1.在这:个例子中，整条赋值语句是←个完整表达式，而分号标示于1顺序点，因此C++只保证程序执行到古一条语旬之前，_x的值将被递绵两次~C++没有规定店在许算每个子表达式之后将x的值递增，还是在整~表达式计算完笔后才将真的值递增，有鉴于此，您应避免使府这样的表达式。</p>
+<p>在C再11文档中户不再使用术语“顺序点百了，因为这个概念难以用毛讨论多线权执丰Jo柑辰，使册了术语”顺序“，它表示有些事件在其他事件讯发生‘这种描述方法并非要改变规则俨而昆在更清晰地描述多线程编程.</p>
+<p>5-.1.τ 前缀格式和后缀格式-</p>
+<p>显然，如果变量被用于某些目的(如期作函数参数或给变量赋值) 户使用前缀格式和后缀格式的络果将不盹「然而比如果递增表达式的值没有被使用‘←情况又如何呢?例如，τ而降条语句自包你明是否不同?</p>
+<p>X++;</p>
+<p>φ+X;</p>
+<p>主面两条语句的作用是否不同?</p>
+<pre><code class="language-cpp">for (n 5~1i1Tf; n...&gt; 0; . .n)</code></pre>
+<p>和L</p>
+<p>for-(n = -Hm;-n &gt; 0 ; n - -)</p>
+<p>从逻街上说，在上述两种情形下，使用前缀格式和后缀格式没有任何区别。表达式的值未被使用，国此只存在副作用.在上面的例子中，使用这些运算符的表达式为完整表达式，因此将x加1和nl戒1的副作用将在程序进入下一步之前完成，前缀格式和后缀格式的绿终效果相同.</p>
+<p>然而，虽然选择使用前缀格式还是后缀格式到程序的行为没菊影响，但执行速度可能有细微的差别-1苦于内宣类整和当代的编译器而言，这看币~不是在2..问睡。然而.C++允许您针对类定义这些运算符，在这种情况下，用户这样定义前缀函数:将俗加1.然后返回结果:但后缀版本首先复制一个高lþ札将;It加J，然后将复制的副本返卧。因此，对于类而言手._-前缀版本的效率比后缀版本商.</p>
+<p>总之，- 对于内置类型，来用哪种格式不会有差别:但对于用户定义的类型，如果有两户定义的递增和递减运算符，则前缀格式的效率更高.</p>
+<p>5 . 1.8-递增f递减运JU草和指针‘</p>
+<p>可以将递增运算符用于指针和基本变量.本书前可介绍过，将递增运算-符用于指钟时如将把指针的值--增加其指向的数据类型占用自包字节数，这种规则适用于对指针i运精和递减:</p>
+<pre><code class="language-cpp">double arr [5-]_ = {2Lr. 32.~ 3-.4， ~S.2. 37.4h
+double .pt = arr;-// pt points to arr[O 黠=i.. e..to 21 . 1
++..þt; _ trpt_points to ar汇flJo.，.i.e. t。一32.8</code></pre>
+<p>也可以续参使用这些运算贺和·运算吱来修改指针抱向的值.将*和++饲时用于指钟时提出了这样的问题:将什么解除引用，将什么递增.这取决于运算符的位置和优先级.前缀递增r前街边减界1够除引用运算符的优先级相同，以从右到左的方式进行综合、后缀递增和后缀递减的优先级相园，~ 比前缀运算符的优先级高，这两个运算徒以从左到右的方式进信结合.</p>
+<p>前缀运算符的从右到到结合规则意味着“++-pt的含义如1‘-:现将++应用于pl(因为忡位于*的右边} ，</p>
+<h3>第 136 页</h3>
+<p>然后将*应用于被递增后的pt:</p>
+<p>doubl e x = *++pt; // increment pointer, take the value; i.e . , arr (2] , or 23 . 4</p>
+<p>另一方面，++.pt意味着先取得pt 指向的值，然后将这个值加]:</p>
+<p>++ 舍pt;// increment the pointed to value; i .e., change 23 . 4 to 24.4</p>
+<p>在这种情况下.pt 仍然指向arr(2) .</p>
+<p>接下来，请看下面的组合:</p>
+<p>(‘ pt) ++; // i ncrement pointed-to value</p>
+<p>囚括号指出，首先对指针解除引用，得到24 .4.然后，运算符++将这个值递增到25 .4 ，pt 仍然指向arr[2].</p>
+<p>始后，来看看下丽的组合:</p>
+<p>X筐‘pt++;// dereference original location, then increment pointer</p>
+<p>后缀运算符++的优先级更高，这意味着将运算符用于pt，而不是.pt.因此对指针递增.然而后缀运算符意味着将对原来的地址C &amp;arr[2J)而不是递增后的新地址解除引用，因此.pt++的值为arr[2].Il.p 25.4 ,但该语句执行完毕后，pt的值将为arr[3]的地址.</p>
+<p>注意:指针遏止曾和递减遵循指针算术规则。因此，如果pt指向某个数组的第一个元素，忡pt将修改pt.侠之指向第二个元素。</p>
+<h3>5.1.9 组合赋值运算符</h3>
+<p>程序，消尊5. 5使用了下丽的表达式来更新循环计数:</p>
+<p>ì = i • by</p>
+<p>C++有一种合并了加法和赋值操作的运算符，能够更简洁地完成这种任务:</p>
+<p>i += by</p>
+<p>+=运算符将两个操作数栩加，并将结果赋给左边的操作数.这意味着左边的操作数必须能够被赋值，如变盘、数组元素、结构成员或通过对指钊解除引用来标识的数据:</p>
+<pre><code class="language-cpp">int k = 5;
+k += 3; // ok, k set to 8
+int *pa = new int[10!; / / pa poi nt s to pa[O)</code></pre>
+<p>pa(4) = 12;</p>
+<pre><code class="language-cpp">pa(4) += 6; // ok, pa (4] set to 18
+* (pa + 4) += 7; // ok, pa (4] set to 2S
+pa += 2; // ok, pa poi nts to the fo rmer pa(2)
+34 += 10; // quite wrong</code></pre>
+<p>每个算术运算符都有其对应的组合赋值运算符，表5.1对它们进行了总结.其中每个运算符的工作方式都和+=相似。因此，下面的话句将k与10相乘，再将结果赋给k:</p>
+<p>k • = 10;</p>
+<p>褒5.1组合赋值运算符</p>
+<p>操作符作用(L为左操作数，R为右操作数〉</p>
+<p>+= 将L+R 赋给L</p>
+<p>将L-R赋给L</p>
+<p>.= 将L.R赋给L</p>
+<p>1= 将υR赋给L</p>
+<p>%= 将L%R赋给L</p>
+<h3>5.1.10 复合语旬(语旬块〉</h3>
+<p>编写C++for语句的格式〈成句法〉看上去可能比较严格，因为循环体必须是一条语句.如果要在循环</p>
+<h3>第 137 页</h3>
+<p>体tþ{!!背多条语旬，这将很不方便.所帘的是.e++提供了避开这种限制的为-式=通过这种来式可以在循环体中包含任意多条读到二方法是用两个花括号来构造=条复合语句〈代码块〉。代码块囱--对花括号和它ω包含的话句组成，被视为=条语句，从而满足;句法的要求←例如，程序消单5.8中的程序使用花括号将3条部旬合并为7个代码块.这样，循环体便能够每示用户τ-读取输入并进行计算.该程序并S享用户输入的数字的利.因此有机会使甩h运算符.·. e --J-7</p>
+<p>程序清单5 . 8block.cpp</p>
+<pre><code class="language-cpp">// block.cpp&#x27;-町usea block statement .
+曾include.&lt;豆。strea!l)&gt;
+int 1I\ain ()
+usin&#x27;L!!ar陋spacestd;</code></pre>
+<p>, cout &lt;;&lt; ‘ ThιAmaz fi苟且ccountowill. sum亏ncF&lt;t;、，~ra9e-. i</p>
+<pre><code class="language-cpp">cout &lt;&lt;&quot;f ive numbers for you..\n&#x27;; .. ,,
+coüt &lt;&lt; &quot;P:ièaSE! entei:: five -valués: \ n&#x27;;
+doubl e numbet:;
+doub~e sum = O.~γ .
+.</code></pre>
+<p>一.、争ι-</p>
+<pre><code class="language-cpp">• for .( i nt.:.:rτ.1;主&lt;，;.5; i+ 叫&quot;
+1/ block starts here&#x27;
+couL&lt; &lt;; &quot;Va 1 ue 恒、&lt;-i&lt;&lt; M: &quot;;
+. cin-&gt;&gt; .l)umber;
+su.rn-..&#x27; number; .
+1-1 bloc&#x27;k ends..here
+C口ut&lt;&lt; ~Five exquisite chol~es lndeed! &quot;;
+C口ut飞&lt;&#x27; They sum-to • &lt;&lt; sum &lt;&lt; endl;</code></pre>
+<p>‘!’) .. ‘ coút去?中面FvEE均t!tp “ &lt;&lt; 8um产5’;~ ‘.:\证J</p>
+<pre><code class="language-cpp">eöut-:-ù ...~.The .;Arnaz ing Acc。川
+returlLOc 川、.&#x27;1/ &#x27;1 ~，.</code></pre>
+<p>下因是该程序的运仔悄况:“”. ...</p>
+<pre><code class="language-cpp">The Amadng..Accounto will sum a&#x27;!d&quot;&quot;av!!rage f ive-nUl也ersfor y口u.
+Pleasιenter f i ve values:
+Value- l_i 942
+Va-lue 2:.. 1948</code></pre>
+<p>Value 主:-1957</p>
+<pre><code class="language-cpp">Va1ue-4: 1974
+Value 5 :- 1 980</code></pre>
+<p>F1ve exq旦1s 比echoices indeed! Thex- su怦t口-9801</p>
+<pre><code class="language-cpp">and average to 1960.2.
+The Amazing Accounto bids you adieu!</code></pre>
+<p>假设对循环体进行了缩迹，也省略了花招号:</p>
+<pre><code class="language-cpp">for (int i = 1; i &lt;= 5; i令令}
+cout &lt;&lt; . Value tI &lt;&lt; i &lt;&lt; &quot;: &quot;; /1 1 ∞&#x27;P ends here
+Cln日number;/1 after the loop
+9um +. number;
+cout &lt;&lt; &#x27;Pive exquisite choices indeedl &quot;;</code></pre>
+<p>编译费量将忽略缩进，因此只有第一条语句位于循环中.因此，该循环将只打印出5条提示，而不执行Jt他操作.循环结束后，程序，移到后面儿行执行，只读取和计算一个数字.</p>
+<p>组合语句还有一种有趣的特性.如果在语句块中定义一个新的变量，则仅当程序执行该语句快中的语句时，该变最才存在.执行完该语句块后，变量将被释放.这我明此变最仅在该语句块中才是可用的2</p>
+<h3>第 138 页</h3>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+int main{)
+using namespace std;
+int x = 20;
+// block starts
+int y = 100;
+cout &lt;&lt; x &lt;&lt;endl; // ok
+cout &lt;&lt; Y &lt;&lt;endl; // ok
+// block ends
+cout &lt;&lt; x &lt;&lt; endl; //ok
+cout &lt;&lt; Y &lt;&lt; endl; // invalid, won&#x27;t compile
+return 0;</code></pre>
+<p>注意，在外部语句块中定义的变量在内部语句块中也是被定义了的.</p>
+<p>如果在一个语句块中声明一个变堡，而外部语句块中也有一个这种名称的变量，情况将如何呢?在声明位置到内部语句块结束的范围之内，新变量将隐藏旧变量:然后就变量再次可见，如下例所示:</p>
+<pre><code class="language-cpp">#include &lt;iostream&gt;
+int main{)
+using std: :cout;
+using std: :endl;
+int x = 20; // original x
+// bl ock starts
+cout &lt;&lt; x &lt;&lt;endl; // use original x
+int x • 100 ; // new x
+cout &lt;&lt; x &lt;&lt;endl; // use new x
+// block ends
+cout &lt;&lt; x &lt;&lt; endl; // use original x
+return 0;</code></pre>
+<h3>5.1.11 其他谱法技巧一一逗号运算符</h3>
+<p>正如读者看到的，语句块允许把两条或更多条语句放到按C忡句法只自撒一条语句的地方.逗号运算符对表达式完成同样的任务，允许将两个表达式放到C++句法只允许放一个表达式的地方.例如，假设有一个循环，每轮都将一个变量1J日L而将另一个变量减1.在for 循环控制部分的更新部分中完成这两项工作将非常方便，但循环句法只允许这里包含一个表达式.在这种情-况下，可以使用逗号运算符将两个表达式合并为一个:</p>
+<p>++j, --i // two expressions count as one for s归taxpurposes</p>
+<p>逗号并不总是逗号运算符。例如，下面这个声明中的逗号将变量列表中相邻的名称分开:</p>
+<p>int i, j; // comma is a separator here, not an operator</p>
+<p>程序消单5.9在一个程序中使用了两次逗号运算符，该程序将一个姐也g类对象的内容反转.也可以使用char 数组来编写该程序，但可输入的单词长度将受char 数组大小的限制.注意，程序清单5.6按相反的顺序显示数组的内容.而程序消单5.9将数组中的字符顺序反转.该程序还使用了语句块将几条语句组合成一条.</p>
+<p>程序清单5.9forstr2.cpp</p>
+<pre><code class="language-cpp">// forstr2.cpp --reversing an array
+自include&lt;iostream&gt;
+障include&lt;string&gt;
+int main ()
+01ur nt1 gn naw pt.ae cz e S EW JE
+uqmeEJ。a dAU
+u&#x27;M&lt;&lt;&quot;w</code></pre>
+<p>户hqun。</p>
+<p>」‘v伽M,</p>
+<p>良-。玄A</p>
+<p>"G</p>
+<h3>第 139 页</h3>
+<pre><code class="language-cpp">cin ~~ word;
+tl physica~ly mod圣fystring，，;。同ect
+clia.r temp;-
+i n.t i, j;
+for (5 ~ 0 , i = w。登d.size()-l;-j &lt; i; -- i , ++jl::&#x27;
+( // start block
+temp== word{i).;
+word [i l = word[j };
+wor合[ jl= t emp;
+} 1I enι.51ock
+couL &lt;.&lt; word&quot;&quot;&lt;&lt;叭nDone \ n&quot; ;
+return ~</code></pre>
+<p>“f面是该程序运行情况:</p>
+<pre><code class="language-cpp">Enter a word, 8trea8.e~
+desserts.
+Done::--</code></pre>
+<p>顺便说一旬，在反转字符扇方-丽，优ing 类提供了受为简洁的方式，这将在第1 6置在介绍.</p>
+<p>IL程序说明</p>
+<p>来看程序消单5~9-中的ÍOr 循环控-制部分.</p>
+<p>首先，它使用逗-号运算符将两个初始化操作族进控制部分第一部分的夜达式中。然后，再次使用逗E运算符将两个更新合并到控制部分藏后一部分的表达式中.</p>
+<p>接下来看循环体.程序用括号将几条语句合并为一个整体。在循环体中，程序，将数组第一个元素和是后一个元素调换，从而将单词反转过来.然后，它将j加1.将i(戒1.让它们分别指向第二个元素和倒数第二个元素，然后将这两个元素调换.注意，测试条件J &lt;I使得到达数组的中间时，循环将停止。如果过了这一点后，循环仍继续下去，则便开始将交换后的元索回到原来的位置〈参见图5.2)。</p>
+<p>|j=0-;-i=4将word-[O]与wo时间交侠E</p>
+<p>l p La‘ l叫t1 s 1</p>
+<p>如~0 1 2 3-4</p>
+<p>a bJ:-1 i --二手;-. -:--石二1=三毛之二lsI.，，:~‘ =I pI一气</p>
+<p>-</p>
+<p>f二==-<em>:‘.~.:~: --三-jtTτ仁:兰:.1..，止是气吁’心九=“-.‘-.-二-丘11泣:-~~ø. .=’</em>:~;-:.~尹尹二二·-.<em>-…... →- </em>-- 一-‘二;!..;;，主旦国-<em>...~ ”“</em> ‘--;-.•-• .，•--的-‘飞一---ζf←二”.- 毛主FV『τ|叫千二二jt+、将雨r4’Îl]局面ëd.!3J交换平气~I.:~‘_;~芝主在. :-’-.工. -ν二ρ:</p>
+<p>一句</p>
+<p>1 :-. 1s l p:i</p>
+<p>...、.</p>
+<p>~.‘ ~ 1叫r.1t JJ-士i’:“‘... . 二三千二二芒手去f 卡飞益主「二言1.i二J 一~ 4 .’~二:-:~‘:~.~~=::.”:’l. ‘“~ -’, -”‘~ .二、二三白毛艺二.-一----二.二二千二十七γ1t l’ r 181叮叮工Ja-- lJ二、，.二二-f-J飞一一</p>
+<p>1→索引‘.0，“J 2 飞3.4 . • -.1</p>
+<p>l吐，.++j、现在J 不寻呗1;因此循环笋束|</p>
+<p>，因5.2反转字符靡。-</p>
+<p>.铺要注意的劳一点是气严明变量tèmp 、i、j的位置。代码在循环之前声明i和j 正因为不能用逗号运算-‘</p>
+<h3>第 140 页</h3>
+<p>符将两个声明组合起来。这是因为声明已经将逗号用于其他用途一一号汾隔列表中的变震.也可以使用一个声明语句表达式来创建并初始化两个变囊，但是这样看起来有些乱:</p>
+<pre><code class="language-cpp">int j s 0, i 5 word.size{) -1;</code></pre>
+<p>在这种情况下，逗号只是一个列表分隔符，而不是逗号运算符，因此该表达式对j和1进行声明和初始化。然而，看上去好像只声明了j.</p>
+<p>另外，可以在for 循环内部声明temp:</p>
+<pre><code class="language-cpp">int temp = word[il;</code></pre>
+<p>这样，temp在每轮循环中都将被分配和释放。这比在循环前声明temp的速度要慢一些。另一方丽，如果在循环内部声明temp，则它将在循环结束后被丢弃。</p>
+<p>2.逗号运算符花絮</p>
+<p>到目前为止，逗号运算符敬常见的用途是将两个或更多的表达式放到一个for 循环表达式中.不过C++还为这个运算符提供了另外两个特性。首先，它确保先计算第一个表达式，然后计算第二个表达式(换句话说，逗号运算符是一个顺序点).如下所示的表达式是安全的=</p>
+<p>i = 20 , j = 2 • i // i set to 20, then j set to 40</p>
+<p>其次，C++规定，逗号表达式的值是第二部分的值.例如，上述表达式的值为40 ，因为j= 2 叫的值为40。</p>
+<p>在所有运算符中，逗号运算符的优先级是最低的.例如，下面的语句:</p>
+<pre><code class="language-cpp">cata = 17, 240;</code></pre>
+<p>被解释为:</p>
+<pre><code class="language-cpp">(cats = 17) , 240;</code></pre>
+<p>也就是说，将ωts设置为17 ，240不起作用.然而，由于括号的优先级最高，下丽的表达式将把cats设置丸2‘40-逗穹右侧的表达式值:</p>
+<pre><code class="language-cpp">cats ~ (n-, 240-) ;</code></pre>
+<p>5.呼τ 1乙关系袤达式</p>
+<p>计笑挑不只是机械的数字计数落.它能够对值进行比较俨这种能九是计算机决策的基础。在C件中，关系运算符是这种能力的侬现.C++提供工6种关系运算符苯对数;r-进行=比较。由王芋，符用其ASCll码表示，因此也可以将这些运算符用于字符.::f能将它们用于C风缸字符在但可用于string 类对象r对手阮有的关系表达式，如果比校结果J;j真，则其值将先true，否则为f划se.因此可将英用你循环测试表达式。(老式实现诙为结果为true的关系表达式的值为1.而结果为.faJSè_的关系表达式兔0.)表5.2 对这些运算符进行了总结←</p>
+<p>褒5.2.关系运算符-</p>
+<p>操-作符含-义</p>
+<p>Ib于二二三二子丁二一=二L公子或等于</p>
+<p>等于</p>
+<blockquote><p>大于</p></blockquote>
+<blockquote><p>= 大于wa邻于</p></blockquote>
+<p>不等于</p>
+<p>这6种关系运算符可以在C++中完成对数字的所有比较.如果妥对两个值遮行比较，看看哪个值更漂亮或在更幸运，则这里的运算很就派不上用场王←</p>
+<p>下面是一些测试示例z</p>
+<pre><code class="language-cpp">for {x:. = 20 ιX &gt; 5 ; x--} 1/ continue while x i s... greater than 5
+for (x = l;::-y L= x;... HX ) // continue while y í s- not eφla:t to X
+for (cin &gt;&gt; X; X兽:.0 r cin &gt;注X))// continue while X i s_O-</code></pre>
+<h3>第 141 页</h3>
+<p>;二三二二三:丢东部符.Ær&lt;J优先级白将向民. ‘ 幸运E崎表达卖/~’.~::~~，:~‘~.，~.~川二二.. 二f:1;三，; J二;二:二二二寸、毛J千~ .: -三飞:~x-:二j’~&gt; :.-y二平JJ二‘; :，:&lt;Yt，E主pt陌生ióñ-1;:’:‘己牛二己『叮. =:-- “, .;.~.二.:.~...7. ” “’~ .:~ ~ ~ <em>‘.二-f- .ι二J 二:’-. -，:.‘~.: .:-:</em> <em>:-~;M附:川〉二三言:- 71二」飞气三-.~. ”立于毛...’ ..“” </em>. .7“. <em> i ~ 、:.</em>‘ ”’:.<em>‘ . </em>,<em>..,. -. ’,:. -:. . ‘:’“ </em> ‘__ ” -7“’” ‘ . .::... -’ -;..: : ，~.. _‘.. ，鸟，工注-’..; 一、</p>
+<p>以..j-):-&gt;-(y二~)7.‘ -, ’“‘/ / EXpreê_5iò.n’ .2 ~二.气_ .ι-::-三-号子~二-，，- . .三L阿秀是id ft 气￡:毛乙二之二:‘-~:’:”~二i--二;泣仨二二;二之二J兰t气υ二ι斗.二i三二T予r飞二二7-一-一x .. -‘，(ω，3 &gt;忡-2.二:λ二-二-二-/1阶/犬’E缸xp庐re臼S5钊iõ夕口3…、.气-… 二江-</p>
+<p>由于将boo岳值提升头“，_int后h 表达式。刊}要么约f.要么为~O ‘”因此第二个和第三伞表达式都是有效…二-町的。气不过我们更希望第?个表达式等价于第二俨表达式，再C++正是这样做的ö.…-</p>
+<p>-，‘占, .-•’.‘ 5 ，r: 13~赋值、“比较和可能布的错误ζ-<em> ’.-气节刁主要混淆等于运算符:..: ，c=司与赋佳运算待-( 宁)..万丽的表达式l可τ与命音乐问题→气回u~iciaJ)s是否-，主.二; 等于4之二.乞三-亏、</em>-μ ，~<del>.. </del>;-~.;， .-~二mu~i~<del>n.骂:量</del>4，/<em>[ ç与m民E币。n号::1，4:♂·又气12· 三‘-.</em>.. _. ” :’-0--;::“二:二..:...~:i~.;.<em>丁7读者达茸的制向号时15川目的拉式将4阳，卢iclaJj，手.---:”::.‘:;’巳μ.“-‘:’二;二二J千二正J:兰;二三币us￥i:an否?￥- ‘-~:~JI苟画fgn丽占ff-i』三三二二-、在这里.整个农这王它的值为马，二因为该表达式左边的值为.4 ;;-，’主:亡;:.;.: . : :~‘:.-~，. :”.’飞;二、:‘.;.~ ::’.:~气仁、1、?二‘-’ -‘.’二:二‘二.for循哥的灵活设计啡用的暗易也错，如3号~;“ .叫‘遗漏可=干运宾符平的三三千，也号已贝’j;缸循环的事阴雨;公- J J二i~.:~.:: .~~.:.;.分将是;二:个原值茬j本21LR不是关系表洁武斗。1比时，民晤仍费有效面·辛辛因塑贯以黯f:fj何有我的泣刊袭达意”7芥ι-...，士-周作- r.or‘循环的测试条件~:;~’J忘了.非零佳方面ej 害h为:falsè-:将飞赋给讯ùsiCi功s的表达式的注汾4.三因f‘二“-由此被视为‘叫ë.;’:如果以前使用运用非j断是否相等的法苦;二如Pωc泣或医A马lC.阴尤其可能自现泣样的赣西。三‘三.1 7二.二哥J京市早到q 华南申吃3l‘~，出现更卦，错雪明销况飞.谆程[f试图检查~存储?测驻地绩回京臂，年增--，，.-到第一:1-不I'J-20 的成绩时传.11:.该程序首先模ZF?77个:æ确选衍比较的循环.然后是--r-个在测试秀气件中、错:二’”</em>. .‘误地位同了-时值运算符的宿坏。该程咫还在另一个重大白设飞全错误，稍后蒋介E绍如何偌复-(应M错d误中吸’._‘三川’够取教训11 ;而程序，消单;5:.JO~在这J!.，页很有帮!23 二二三:二.“:，，，. 二·ι一二-干‘:-</p>
+<p>程序清算5:协‘eql.ial.çpp:. <em> .，</em> -三、二三、、飞-、·←『、、1/’e机al.cpp- -equal:ìty, ÝS,‘ a:S:S ignment...气</p>
+<p>#in{;lude “&lt;iostream芳、~..‘ -’</p>
+<p>int，旧in()</p>
+<pre><code class="language-cpp">using,&#x27;-namespa,&quot;e sfd;
+int; qiii zscor.es&#x27;[l 0]. = --</code></pre>
+<p>. ~ 20. 20.. 2o r-ío, iO.:19.~20孙18;20. 20};气、工</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;Ooing i t right二:\n&#x27;I;
+int i;
+for (:i a 0; quizscores=(i]&#x27;-.. 2&quot;0;.. i ...)
+cout &lt;&lt; ~&#x27;.quiz ,-.(&gt;&lt; i &lt;&lt;蝇isa- 20\n&quot;;
+// Warning: you may prefeF reading about thfS program</code></pre>
+<p>一-γ;-tO . actually runniñg ït . ‘.’ -</p>
+<pre><code class="language-cpp">cout .&lt;&lt; &quot;Ooi09 it dangerously wrong:怡&#x27;门
+for ii = 0;你lizscore.[i]:.20; i...l
+-&quot; èout &lt;.&lt; &quot;qui z--:-.,r. ~.&lt;&#x27; 1 &lt;-&lt; &quot; 1$&#x27; a- 20\nflï
+return 0;</code></pre>
+<p>由于这个程序存在一个严重的问题.读者可能希望了解它，以便真正运行它.下面是该程序的一些输出:</p>
+<h3>第 142 页</h3>
+<pre><code class="language-cpp">Ooiog i t r i ght:
+quiz 0 is a 20
+qui z 1 is a 20
+qui z 2 is a 20
+qui z 3 is a 20
+quiz 4 is a 20
+Ooing it daogerously wrong :
+quiz 0 i9 a 20
+qui z 1 is a 20
+quiz 2 is a 20
+quiz 3 is a 20
+quiz 4 is a 20
+quiz 5 i s a 20
+quiz 6 is a 20
+quiz 7 i9 a 20
+quiz 8 i9 a 20
+quiz 9 is a 20
+quiz 10 is a 20
+quiz 11 i9 a 20
+quiz 12 is a 20
+quiz 13 is a 20</code></pre>
+<p>第一个循环在显示了前5个测验成绩后正确地终止，但第二个循环显示整个数组.更糟糕的是，显示的每个值都是20.更加糟糕的是，官到了数组末尾还不停止。最糟糕的是，该程序，可能导致其他应用程序无法运行，您必须重新启动计算机。</p>
+<p>当然，错误出在下面的测试表达式中:</p>
+<p>思儿zscores[iJ= 20</p>
+<p>首先，由于它将一个非零值赋给数组元索，因此表达式始终为非零，所以始终为true。其次，由于表达式将值赋给数组元素，它实际上修改了数据.第三，由于测试表达式一直为true.因此程序在到达数组结尾后，仍不断修改数据.它把一个又一个20 放入内存中!这会带来不好的影响。</p>
+<p>发现这种错误的困难之处在于，代码在语法上是正确的，因此编译器不会将其视为错误(然而，由于C 和C++程序员频繁地犯这种错误，因此很多编译器都会发出警告，询问这是否是设计者的真正意图).</p>
+<p>警告:不要使用=来比较两个量是否相等，而要4史用==。</p>
+<p>和C语言一样.C++比起大多数编程语言来说，赋予程序员更大的自由.这种自由以程序员应付的更大责任为代价.只有良好的规划才能避免程序超出标准C忡数组的边界.然而，对于C++类，可以设计一种保护数组类型来防止这种错误.第_1 3 章提供--‘(;-这楼的例子。另外，应在需要的暗候在程序中加入保护措施.例如，在程序清单5.1 0的循环中，应包括防止超出军后一个成员的溅试，这甚至对于“好”的循环来说也是必要的.如泉所有的成绩都是20.，τ“好”的循环也会超出数组边界..总之，循环需要测试数绩盹值和索寻|的值.第6 置在~毡介绍如何使用逻辑运算符将两个这样的测试合并为一个条钟，</p>
+<ol>
+<li>1. t4一c-凤格字符窜的比较</li>
+</ol>
+<p>假击1要知道学符数每孕的字符革是·不是Liab :如果.w~;d主数组.15-‘r面的测武可能并不能否在ffI愤: _-~二r怨的那样工作h、</p>
+<p>worâ =:: .“mat'e”</p>
+<p>请记柱，数组名定数组的地证J同样.周亏[芳1‘8起的安符串常量面是其地址.因此..上丽的关系表达式不是判断两个字符$是否相同，而是查看它怕是否存储在相同的地征上.两俨宗符郁的地址是否相同呢?答案是沓定的，虽然官们包，金相同的字符.</p>
+<p>由于C++将C，风格字符审视为地址，因此如果使用关系运算符米比较它们，将无法得到满意的结果.</p>
+<p>. .. (</p>
+<p>.</p>
+<h3>第 143 页</h3>
+<p>相反且应使用c-风格字符串库中胁strcmp( )函数来比较.该函数接受限个实符串地址作为参数。这意味着参数二可以是报怀、字符电常f在或字符数组名τ如果两个字很串#倒可.i亥函数将返回~;如果第→个事符审核字母顺序排在第二个字符审之前，则strcmp()将返回_.个负数也如果第一个字符串按字母顺序排在第二个字符串之后，则strcpmt)将返回一个正数值.实际上，ι才安系统排列顺序“比”按字母顺序“更准确.这意味着宰符是根据字符的系统编码来进行比较的.例如，使用ASCII码肘，所有大写字母的编码都比IJ‘写字母小，所以按排列顺序7大写字母将位于小写字母之前。因此，字符串:-”200“在字符*”ωiary“之前。根据统码进行比较还意味慈大写字母和小写字母是不同的』因此字符串.”F~和字符串“foo’寸之同.</p>
+<p>在有些诗丰富(如BASIC和标准Pascaf)中，存储在不同长度的数组宅的字符:t!彼此不相等.但是C凤榕窍，符华是通这结尾-的空值字符定文的，而不是由其所在数组的长度定义的.这意味着两个字街也即使被蒋储在长度不同的数组啦，也可能是相同的:</p>
+<pre><code class="language-cpp">char big (80) = &quot;Daffy&quot;; / / 5 letters plus \0
+char li ttle (6) = &quot;Daffy.;. /f 5 l etters plus \ 0</code></pre>
+<p>顺便说了句，虽然不能用关系运算符来比较字符华，但却可以用它们来比较字符，因为字符实际上是整型.面此下面的代码可以用来显示字母表中的字符，至少对于A:SCH字符集和Unicode字符集来说是有效-的:</p>
+<p>tor (ch =‘a‘; ch &lt;=-‘ Z’; ch+..•</p>
+<p>c。也lt&lt;‘三chι</p>
+<p>程序消常5.H在for循环的测试条件中使用了strcmp().该程序显示--1-单词，修~其首字母，然后再次显示这企单i如这槌循环往复，直到strcmp( )确定该单词写字符串U mate “相同为止。注意，_该程月二清单包含了文件cstn吨，因为它提供了s的mp()的函数原型.</p>
+<p>程序清单5.11∞mpstr1.cpp</p>
+<pre><code class="language-cpp">// cornpstrl、cpp--∞rnpariñg strings using arrays
+辑include&lt;iostrearn&gt;一
+提incIUde&lt;cstring&gt; // prototype for-strcmp ()
+int: rnain ()_</code></pre>
+<p>卡</p>
+<pre><code class="language-cpp">using narnesQace std~
+char wordlS 弘=&quot;?ate&quot;;-</code></pre>
+<p>for (char-ch_=飞‘;strcrnp (wo时ttlmat“e 叮;ch..)</p>
+<pre><code class="language-cpp">+
+cout &lt;&lt; word &lt;&lt; endl;
+word (O) = ch;
+cout &lt;&lt; &quot;After loop ends, word 1s &quot; &lt;&lt; word &lt;&lt; endl;
+return 0;</code></pre>
+<p>下面是该程序的输出2</p>
+<pre><code class="language-cpp">?ate
+aate
+bate
+cate
+date
+eate
+fate
+gate
+hate
+iate
+jate</code></pre>
+<h3>第 144 页</h3>
+<p>..._..… .:，=:::，:::~‘...;__如采町’L 和str2不相等ø;.-“、员盯面两个表达式都j~Hrue:γ.-. .与·…-• . . .;___. . .••• • . • :.-. ...~...;..:<em> .:. ”‘:’:‘.:</em>...:.ι.._.ν一.-由一str号mp (st:._r l ! str2l: ! = 0</p>
+<p>-.<em>~一一.</em>:.一『→二-:-~6.t rc'mp (st'rL str2.l::‘ • .’ . <em> </em>‘. -,., --.::</p>
+<p>如果:...str卜在s目的前面..141):‘下面的表达式，htrue:“:;:.:;去- -strc呻(s <em>trl，s t rZ)-&lt; -0 </em> -，. -”ε-“ ，曲-:-:--. ..:..’.:-气…，• 飞一，</p>
+<p>如来strt在str2的后面「跑下面的表达式为true:</p>
+<p>s t rcmp(strl , str2 了τ-</p>
+<p>配此，根据要如何设置测试条钟，由cmpé)可以扮演=:.:::::、!=、〈和&gt;1主算符性角色</p>
+<p>接古来，compstr l.cpp 使那递增运算符使变量ch泡历字母表:</p>
+<p>ch+.</p>
+<p>可以对字符变最使用递增运算符和递减运算符，因为cIiar 类型实际土是整型，因此这种操作实际上将修改存储在变蠢中的整数编码。另外，使用数绝索引可使修改字符革中的字符豆子为简单:</p>
+<pre><code class="language-cpp">word[ 创=ch;</code></pre>
+<p>.- 5 .1.15 比较~tfÍng类字符串-‘.’ ‘:’ .</p>
+<p>如柴使用string 类字符E扫而不是ι凤格字符E归，比较起来将能单些，因为类设计让您能够使用关系运算符进行r比较。这之所l;l‘可行，是因为类函数重载〈重新定关当了这些运算符.第12章将介绍如何将这种特性加入到类设计甲:但从应用到角麽说，读者现在只能知道可以将关系运算符用毛string对象即可言程. ;-’ F安消单5.1 2 是在程f在清单S汩的:基础土修改而成的，它使用的楚王叭ng 辛辛象而不是-ch缸数组二，</p>
+<p>e ..，_.、</p>
+<p>程序清岛主5. 12-∞rinpstr2.cpp-..‘‘气，二七/1.comps t r2.. cPP: - -cOÍ]lp串riÎlg理ti-ingsus ~ng ..ar rays -EE-</p>
+<p>ninclude &lt;iostream&gt;- . -刀二‘“,. <em>. -l!inCl ude ’ ”stri均1·子/王triñgc las s-二牛.</em>:~ -. ..., ;.~-.;..，.。‘</p>
+<pre><code class="language-cpp">in如main()
+using namespace std;
+strin~ord骂&quot;?ate &quot;;</code></pre>
+<h3>第 145 页</h3>
+<p>f o-r (char ch =‘a‘; word“ !:’ -” mat é 命;‘cl\..)</p>
+<p>、、，</p>
+<p>-:. .CO\!t..&lt;&lt;咽。id-&lt;&lt; :.endl; ~;..， . .;二-『.· Me:‘“‘-.二.-、</p>
+<p>woi::d[OL .=.ch ;今、__- .“ 1 <em> ‘...，</em>、<em>.</em>’、宁沪- - -~. <em>. 、、-白E-户‘.~ . 石昂。斗…1:&lt;丰;ι〈.?、丁’咀t乌卢r-i。卢-P飞nd臼s，-.ι‘问。worιd”’:飞i :~旷e三ζJ占…。;甜丙二eil，性讪汩:1‘γ、‘二γ，田“’,‘ 三ν. --川”</em>’,-‘ γ ，二</p>
+<pre><code class="language-cpp">retÌlr n &#x27;0;
+-
+~</code></pre>
+<p>该程序的输出与程序滔单~5.1l相同。工程序说明</p>
+<p>在程序消单5-.1 2中，下面的测试条件使用了--个关系运算咎，该运算符的左边是?个string 对象，右边是一个C-风格字符$:</p>
+<p>wdrd ! = “mate”</p>
+<p>-中ng 类重载运算符!?酣方式让您能够在下述条件.:F使何jF J至少有二?操作数为可i吨、对象~:1l ~气，个工二三7操作数可以是s创ng 对象r也可w.是C.风格字符审.; . ~.~、人·寸‘ ‘、…..-</p>
+<p>stril.1g 类的设计让您能够将甜mg“对象作为T三个实体: (在关系型测试表达式吧i )，也向以将其作为二二个聚合对象，从而1使用数组表示法来提取其中的字符.-</p>
+<p>正如您看到的，徒用ct风格宰符帝和stnng 对象可获得相同的结果，但使用. 5悦目E对象里简单~~直观，</p>
+<p>策后，和前丽大多数for循环不同，此循环不是计数循环.也就是说，它并不对话句块执行指定的次数.相反，此循环将根据情况( word为~‘ mate“)”来确定是否停血.对于这种测试.C++程序通常使用whìle循环，下面来看着这种循环.-一可’…-._...一</p>
+<h2>5.2 while i盾坏了十</h2>
+<p>while循环是没有初始化和更新部分的for 循环，它只有测试条件和循环体:</p>
+<pre><code class="language-cpp">whil~. (.tes.t .:condi&quot;tí on)
+bbdy</code></pre>
+<p>首先，程序计算困括号内的测试条佟( test.ωnd:iticin )表达式.如果该表达式为t1Ue，切可执行循环体中的语句。与for循环一样，循环体也由一条语句或两个花括号定义的语句块组成世执行完循环休后，程序返回测试条件，对它进行重新评估.如果该条件为非零，则再次执行循环休，波悦和执行将一直进行下去.]主到测试条‘件为创se为tE(参见图5.3)~显然，如果希望循环簸终能够结束，循环体中的代码必须完成某种影响测试条件表达式的操作.例如，循环可以将测试条件中使用的变量加1!或从键盘输入读取一个新值.和for循J1;:一糕，咱ile 循环也是一种入口条件循环。四面，如果测试条件一开始便为副悦，则程序将不会执行循环体.</p>
+<p>程序消单5.1 3使用丁j:--个while循环。该循环泡历字符帘，并显示其中的字符及其ASCII码。循环在…遇到空.m_字街时停止。这种逐字符遍历字符串直到遇到空值字符的孩术是C扑处理lC.风格字符串的标准方法。由于字符略中包-‘â“了结尾标记，因此程序通常不需要知渲字符净的长度。</p>
+<p>程序清单5.-1. 3.whHs.&lt;5Pp‘</p>
+<pre><code class="language-cpp">11 while.c即…introd&#x27;udñg，_&quot;Ülewhi re loop
+曾include&#x27;&lt;íò&#x27;s tream&gt;
+èònst~.i:Ìl.t .ArS.ize = 20; .
+int main.( )
+-,‘</code></pre>
+<p>切，, -<em>-. .-…‘‘-:.飞~sin'g~riái\1êspace'std;? -..</em> .-</p>
+<p>...-' '. :. ，、-</p>
+<p>λchar . name [A:rS 耳;四).;。:~</p>
+<p>..., •• -.._</p>
+<p>_“”飞F</p>
+<p>·‘ 、,</p>
+<p>,</p>
+<h3>第 146 页</h3>
+<pre><code class="language-cpp">C白ut..&lt;&lt;~.Yoür f ïrst &#x27;name., plea!3e
+cin &gt;&gt;&#x27; name ï:
+cout &#x27;&lt;&lt;咽eJ:ei~ your &#x27;name.&#x27;, verticaIized &#x27;an&lt;f: ASCII,ized : \ri&quot;;
+int-i .~ . (); Iγ &#x27;--star飞at:. fiegiruiing &#x27;.of. strî rig ..&#x27;.</code></pre>
+<p>whi1è. (ilame (i l“ !=‘ \0伽)-• 1/ pr。阴阳toend of string</p>
+<pre><code class="language-cpp">cout. &lt;:&lt;. name (i1 &lt;&lt;.&#x27; .&quot;饨-&lt;&lt;int (name !iJ i &lt;&lt;、end1;
+i ..+:;•n. don&#x27;.t forge t.&#x27; this step&#x27; -
+return .0 i</code></pre>
+<p>剖at艺..酬H</p>
+<p>E噩t仅te阳@盹叭$</p>
+<pre><code class="language-cpp">stat_nt2
+sutt帽.制tωs</code></pre>
+<p>阁.5;3while.循环的纺构</p>
+<p>下丽是该程序的运行情况:</p>
+<pre><code class="language-cpp">Your first- name; please: _Huff:t
+Rere&#x27; 1.9沪。urnanie, vert ïcalized and ASCIIized，品</code></pre>
+<p>M: '''71'</p>
+<p>u: 11~</p>
+<p>f : .102 ', -</p>
+<p>f :"'102 ".~ .<em> </em> . . ~</p>
+<p>-</p>
+<p>飞.:.:.:7‘:’~气?寸“-y: <em>12ï”二</em>-:----了丁?--一--<em>.. </em>“.-” :...:...:=-一.三-<em> ‘</em>:. yeril~TI呐?格CU附关芥是年的明二- 眸揪住咬钳制.不过芦伯确实在输出于添加了丁’-一种“可爱‘扣的氛时.-一_.:曲”程序说明-. --_. ’;“~:.‘ -.,...</p>
+<p>程序前单S .i 3中胁while 条件像这样: ι</p>
+<p>___ ---</p>
+<p>咄ìl~.(name (ÞJ l=‘ \0 ‘ )一-.:---. -宫可-以视诚数组中稳定的字符是不是主值二芸符.为使该测试最终能够成功，循环体必须修改i的值，</p>
+<p>-, ._</p>
+<p>·这是通过在循环体结尾将i加l来实现的.省略这二步稳导致循环停留在同一今数组元笨‘上萨托印该字符</p>
+<p>及其编码..自到强行终止该程序.导孩死循环范循环最常见的问题之‘..通-常，志在循环体中忘记更新某个</p>
+<h3>第 147 页</h3>
+<p>值时，便会出现这种悄况.</p>
+<p>可以这样修改while行:</p>
+<pre><code class="language-cpp">while (name[i))</code></pre>
+<p>经过这种修改后，程序的工作方式将不变。这是由于name[i]是常规字符，其值为该字符的编码一一非零值或true.然而，当name[i]为空值字符时，其编码将为0或false .这种表示法更为简洁〈也更常用)，但没有程序消单5.13中的表示法消-晰。对于后一种情况，“笨拙”的编译器生成的代码的速度将更快，“聪明”的编译苦苦对于这两个版本生成的代码将相同.</p>
+<p>要打印字符的ASCIl码，必须通过强制类型转换将name[i]转换为整型。这样，cout 将把值打印成整数，而不是将它解释为字符编码。</p>
+<p>不同于C-风格字符Ifr，string 对象不使用空字符米标记字符串末尾，因此要将程序清单5.13转换为使用string 类的版本，只需用string 对象替换char 数组即可.第16军将讨论可用于标识string 对象中最后一个字符的技术。</p>
+<h3>5.2.1 for与whìle</h3>
+<p>在C件中，for和while循环本质上是相同的.例如，下面的for循环:</p>
+<pre><code class="language-cpp">for (ini t-expression; test -expression; update-expression)
+{
+statement(s)</code></pre>
+<p>可以改写成这样t</p>
+<pre><code class="language-cpp">lnlt-expressìon;
+while (test -expression)
+{
+statement (s)
+update-expression;</code></pre>
+<p>同样，下面的while 循环:</p>
+<pre><code class="language-cpp">while (test-expression)
+body</code></pre>
+<p>可以改写成这样2</p>
+<pre><code class="language-cpp">for ( ;test-expression; )
+body</code></pre>
+<p>for 循环需要3个表达式〈从技术的角度说，官需要1条后面跟两个表达式的语句)，不过它们可以是空表达式〈语句)，只有两个分号是必需的。另外，省略for 循环中的测试表达式时，测试结果将为true ，因此下面的循环将一直运行下去:</p>
+<pre><code class="language-cpp">for ( ; ; )
+body</code></pre>
+<p>由于for 循环和while 循环几乎是等效的，因此究党使用哪一个只是风格上的问题。它们之间存在三个差别。首先，在for 循环中省略了测试条件时，将认为条件为true:其次，在for 循环中，可使用初始化语句声明一个局部变髦，但在while 循环中不能这样做;最后，如果循环体中包括continue语句，情况将稍有不间，continue 语句将在第6 章讨论。通常，程序员使用for 循环来为循环计数，因为for 循环格式允许将所有相关的信息一一初始值、终止值和更新计数器的方法一一放在同一个地方.在无法预先知道循环将执行的次数时，程序员常使用while 循环.</p>
+<p>提示:在设计循环时，请记住下面几条指导原则。</p>
+<p>• 指定循环终止的条件。</p>
+<h3>第 148 页</h3>
+<p>e‘" •</p>
+<p>、，钮“</p>
+<p>·…在首次测试之前初始化条件。</p>
+<p>._ -i呈条件被再次测试之前史~条件τ一-for 循环的一个优点定，其结构提侠了一个可实现上述3条报导房、别的地方，因此有B丸子程序员记住应该这样做。但这些指导原则也适用于while 循环。-</p>
+<p>错误的标点符号-… for 循环和while:循环都Ji1..周括号括起的表达式和后面的循习、体L 包含r条语倍)组成。“前面讲过J乞L 土”~ ~语也可以;后品‘决?其中忱多条:每句γ记在.诗句敲击届七M豆遏制定义的工-例如“;ì前二-’-r面的街兔:一一士”</p>
+<p>i = 0;</p>
+<p>Yι-吧=‘-w.h圭l-e(明me[;[]!=‘\日，} →一二_. 一一二=“ <em>.-非江.:... ~毛~-二”’c;out“,,&lt;‘ name’[1r ;:i:. : endl;与一..2.，..--:-气去羊·‘=气-:;:-;- . 一-;-</em>‘-’-” _仨_ι_.，-=-υ‘<em> : : --:0’ .-一‘一- -一--:-:--鸣‘... ;:;&gt;&gt;-于-一工-=三- 1+ 夕;二二-</em>.忖，-.</p>
+<p>-一--.-,“”,“”-</p>
+<pre><code class="language-cpp">cout阿-:..pone\~，&quot;i., .. ... . -</code></pre>
+<p>.缩进哀明，该程序的作者希望íÆ+;传句是局环你的组成部分。然而，由于没有花括芳，因此编译s.认为循环体仅由最前面的CQut 语句苦且成。因此，该循环、将不断地打~p数怨的第一个字符。该程序不会执行- 二“<em> i++; i吾句，因未它在循坏的外面飞飞-::</em> : ‘:”-:’=:F~的例子￡吸云是=.个玲在的毒草恪二五三气.~..<em>~...:::}~、二、~~:.:-~.， ‘-“:</em> 丁τ毛·</p>
+<p>-</p>
+<p>--二~..‘~. ..:.),. = ().;~..，ζ。七二、-、二ν... ...-二瞄</p>
+<p>• ~ • .. ~ ;;,:: .“,...:-‘ ”whil ii ~. (ñamê(’l‘. :!:;;. 、气。’:. f.;、~/Fpléoblem semïcol。口r“‘: ，.”. ’，_:乓丁-、奸、也..~了-二，-二τ</p>
+<p>号三-‘..心:.{二..-，气;4二d‘主?￡二; 二dl; ’._二，:-;二7二-.之?吃二乙二三二云::?二--‘“τ、，</p>
+<p>，~ 一‘‘:... ’，1 ++;. 品-...<em>‘. ..二.:::.，“’: .. -‘. ”’-, -气一·、-c。51二</em>~“‘Dq.吧e\n~I'J~.: .&lt;~;-士ι二一.，..=-<em>-丁二二主:每二’.~-，三正〈二吃二二二-YTJ‘·.. 7... ~ ... 这F 次，札且马正确地使用了花括号三但，还指本.了~.个乡号了σ=1号。位~分7号给共语句，-到儿该分号楼结~.-..;..-::-.ι. .-，求‘whY明巴拔哇在土主要垄抢到，也边t;’ 介于自均受可内量达托二二位是十所有二二、-f-f:·的.ß吗~在~主于负坏的后-Iii-:‘，-71&lt;:远不会被执4于「该错综罗拉行任何换f宇”二是于个死’循环0，请注意主号r:., =“，二-分与号。二-τ ? -龟...-‘ ~-.’ • ... .-. </em>.. _...</p>
+<p>言~&gt;，~‘.，. .可e妇、-、JJ- 7、q，2: 2’.，.“等待，-段时|司了编写延时循环,:” ,‘<em> ...二“.</em>. ... ~勺二三’几-二\二ν- 有时{民主51::程序等待.~除昨U副畏有用i例如:读者声T能遇到过这样的程序;‘:-’-8在丧事E上显示?东泊臭ζ7.-”“‘:’:.i..;”: “‘=’:‘’:宁;二而if没桌得卫生阅读之前;.~X出:现τ其他-内容.运样读者将担心、自己岳远了重要的f 无法饭望的消息二如果-‘二二_‘-;程f.f.tE显示其他内容之面等#f; 秒钟，革虎和会好得孟;。斗hik循正不可屑于这面库的正主f艳用孕，1;入计算瓦二-一二号...;:.:子- 的平所技术也让计算m进行沂数7· ·以等仕二段时间:吃71w 二二芝:号:3-?宁二?兰二二:二亏气J豆必虽褂i革h告户胆?丘巴E注兰-王亏泛飞乏二.;~~:~:芝飞1~丁斗二芝~:二fffT.亏专~<del>..</del>言兰?三二~}~.二二二，二~， .. -. ~:’-~<em>二甲丰-词由呻b灿主le:(仰w旧a杠i:t~二二ci‘邱õoóoω)’.:ζ E三-.. 二.，</em>~，飞二Lt T 三、气_. 工=:.”、，，‘ζ-:.:.~~:! ..’~气仁r二..‘气-’ 气‘~-二于- .工.乌L‘ τ? 气二尹.~~.: -z告→-二.. ~ait .，.，!-; “”，.一-/1.ëoUntín气ilentJ:;兄…~’工曲二...叮_.7T芒--一一-一穴-二1这主称彻7方Ji运去时的问且是，豆呈虽i豆L由i税玩M处垣蕃丽速吕吾i去主望妥E玩正时「♂必ML耐磊剑R障彦颇融讪i吁+数F阪阳良肺佬制u 。气h仔例d阳如凯，二-洁1者言些为『臼阮协-?P险tk云二:三士飞?.，-二二τ.雪彗#捐写的游酬玩在础迷度更盹哇的杭导密旺盹曹眨盹上红运L行时ι 蒋wait设宣为10δ怕φO∞Oóó.从而跳过该循环.更好自胁华方法是让系统M斜来完成这种工作，--二-一一~吁一叩I~l旦缸忡庄喃工个函数查盟主主!J..撞在阴主二哇二i3:1‘1电赞j旨在cl姐)，旦旦事房主监她宜垦二E 二，←所用自号系统时间、这有两个复杂的问题丁首先.clωk()返回时间的单位不一定是在~ ;其次J该函数的返回类型在某些系统k可能是long.在另一些系统上可能是unsign~long 或其-他类段。</p>
+<p>但头文件ctíme.( 较罕的实现中为time.h)提供了这些问题的解决方案.首先，它定义子一个符号常盘一-CLÖE:K~eË.R‘::SEC，该常量等气E每秒钟包含的系统时rãl单位数6因此，将系统时间除以适个值户.、可以得到秒数。或者将秒数乘防CLOCK_PER.:_SEC.可以得到以系统时间-单位tt.i单位的时间.二其次巢ctimeγ将clock:_t化为clock()返回类型的知j名(参见本章后面的注辛苦“类型别名勺，这.意味毒手可以将变最严牌为</p>
+<h3>第 149 页</h3>
+<blockquote><p>［本页文本层 OCR 严重损坏（该页扫描阴影/插图区产生了大量乱码字符），以下为原始抽取结果（未删改），内容以 PDF 第 167 页图像为准］</p></blockquote>
+<p>clock_t 类型，编译器~每把它转换为\-Iong、unsignedint或适合系统的其他类型。-、飞，二程序清单:5: f4淡示了如何使用clω)((.;)利5建交{号~ ctimι来创建延)g循环~今.ι-</p>
+<p>程序清单5 . 14waiting.cpp-_ r阳艺Y问</p>
+<p>阳</p>
+<p>M</p>
+<p>町</p>
+<p>叫</p>
+<p>由创MJY</p>
+<p>…</p>
+<p>罚，</p>
+<p>『、-ht</p>
+<p>.-二阳…如巾咽E-f卢·-</p>
+<p>…</p>
+<p>山</p>
+<p>础w…--e</p>
+<p>的f</p>
+<p>rU</p>
+<p>-</p>
+<p>圳}之L</p>
+<p>-</p>
+<p>= -‘亏二-</p>
+<p>J</p>
+<p>三一t-气---二-J阳J</p>
+<p>卜mEu J…阿哇‘</p>
+<p>-</p>
+<p>J</p>
+<p>-，--</p>
+<p>工L</p>
+<p>，-了u</p>
+<p>f</p>
+<p>二…F3-</p>
+<p>甲</p>
+<p>)'，m</p>
+<p>十</p>
+<p>…‘)Z、二-T-J-dho</p>
+<p>…</p>
+<p>-'『J，‘</p>
+<p>飞…J--</p>
+<p>t</p>
+<p>…一e</p>
+<p>山</p>
+<hr>
+<p>f</p>
+<p>~呵四，nF~EtrU---</p>
+<p>-Ut三Pfι十时‘…--一…J</p>
+<p>阳</p>
+<p>L2</p>
+<p>)如←-f</p>
+<p>一</p>
+<p>--E眈JE二ιd二二</p>
+<p>-…</p>
+<p>二</p>
+<p>…</p>
+<p>-F-…-</p>
+<p>J--u-飞J…月e…1二t</p>
+<p>…</p>
+<p>-r-</p>
+<p>甜</p>
+<p>-U~</p>
+<p>~-</p>
+<p>-cu</p>
+<p>-JDι-K~飞-Cd-~二-Je…V…L</p>
+<p>十L-一~</p>
+<p>节叮</p>
+<p>…eH1二二‘Z叮·</p>
+<p>r</p>
+<p>·</p>
+<p>二</p>
+<p>.</p>
+<p>F·</p>
+<p>一</p>
+<p>二二</p>
+<p>二∞d-~二-</p>
+<p>…</p>
+<p>盹h</p>
+<p>∞-J</p>
+<p>平</p>
+<p>飞J吁-</p>
+<p>时v</p>
+<p>7，-</p>
+<p>a</p>
+<p>♂</p>
+<p>J~十叫U二，</p>
+<p>U</p>
+<p>·F乞-~Ef-</p>
+<p>二</p>
+<p>~X</p>
+<p>二-</p>
+<p>，</p>
+<p>M</p>
+<p>二:uF…咄，十u-L</p>
+<p>i</p>
+<p>，卢;…-J十♂---…H…-月比二可…丁Mu二</p>
+<p>目</p>
+<p>Zf-</p>
+<p>E</p>
+<p>叶-飞J1l-E但y丁‘-</p>
+<p>可</p>
+<p>f2</p>
+<p>-J</p>
+<p>‘豆H-，</p>
+<p>V</p>
+<p>吁E</p>
+<p>二</p>
+<p>一fY</p>
+<p>二十</p>
+<p>-v</p>
+<p>-</p>
+<p>二抽1F一均…m?飞-:丁，‘‘飞-M·n</p>
+<p>…</p>
+<p>.</p>
+<p>…J~</p>
+<p>'J</p>
+<p>…</p>
+<p>…v</p>
+<p>-</p>
+<p>-</p>
+<p>…二~</p>
+<p>·</p>
+<p>…</p>
+<p>二</p>
+<p>户L-U响--、a-由-侃吨FJb-</p>
+<p>川</p>
+<p>一</p>
+<p>一击Jo‘’一v-Je吸MJ1</p>
+<p>…</p>
+<p>工h</p>
+<p>M四Mj二，，次</p>
+<p>m</p>
+<p>-…J气</p>
+<p>I</p>
+<p>vR</p>
+<p>·</p>
+<p>EF.芋二</p>
+<p>J</p>
+<p>~∞‘E7·Je-</p>
+<p>j</p>
+<p>叫</p>
+<p>-川比e…</p>
+<p>~…」</p>
+<p>三</p>
+<p>a</p>
+<p>A</p>
+<p>-</p>
+<p>W</p>
+<p>十</p>
+<p>-·咄-…JLJJ</p>
+<p>K虫e二</p>
+<p>'</p>
+<p>ιI</p>
+<p>-M--</p>
+<p>十-J</p>
+<p>.</p>
+<p>.'</p>
+<p>三</p>
+<p>-P.，'</p>
+<p>f</p>
+<p>…-</p>
+<p>二</p>
+<p>-1J-y-t二</p>
+<p>M川E叫</p>
+<p>J</p>
+<p>-</p>
+<p>，</p>
+<p>'</p>
+<p>·-J…ιJU~</p>
+<p>h</p>
+<p>归</p>
+<p>-咄-7</p>
+<p>川t</p>
+<p>气Uι一</p>
+<p>乙二</p>
+<p>~--E</p>
+<p>-立</p>
+<p>-‘二坤d-电uL立ω-在立JJt</p>
+<p>Lu</p>
+<p>LuU;</p>
+<p>e仙</p>
+<p>令mi-二-一LT-ιb，</p>
+<p>…r</p>
+<p>-…，4</p>
+<p>-Vi二</p>
+<p>』-</p>
+<p>十I</p>
+<p>U</p>
+<p>二r</p>
+<p>-一←</p>
+<p>γ</p>
+<p>--</p>
+<p>E一一wdre</p>
+<p>∞一J-一</p>
+<p>-</p>
+<p>L</p>
+<p>"-…-</p>
+<p>L</p>
+<p>·</p>
+<p>}R‘主-L一，一闷T~J以J二…’-每轮--系</p>
+<p>一…</p>
+<p>J呗时单是田-</p>
+<p>-</p>
+<p>、</p>
+<p>-</p>
+<p>Ju嘛‘</p>
+<p>:-</p>
+<p>·…</p>
+<p>『业-盼、--m-M一-</p>
+<p>千</p>
+<p>Z</p>
+<p>的</p>
+<p>，</p>
+<p>-f时何-</p>
+<p>二</p>
+<p>明</p>
+<p>虫</p>
+<p>-舰</p>
+<p>换</p>
+<p>r</p>
+<p>F</p>
+<p>E·…U--1</p>
+<p>的</p>
+<p>…心</p>
+<p>-</p>
+<p>w~…</p>
+<p>M</p>
+<p>‘十.</p>
+<p>靴</p>
+<p>、、</p>
+<p>二</p>
+<p>-、7</p>
+<p>-J</p>
+<p>ι</p>
+<p>E--、-u</p>
+<p>M…</p>
+<p>rJ·a-U-子·、mF</p>
+<p>W</p>
+<p>-头3\La二…{…二J…·</p>
+<p>R-</p>
+<p>-一</p>
+<p>·F</p>
+<p>…</p>
+<p>--二-</p>
+<p>-九i</p>
+<p>·</p>
+<p>-</p>
+<p>-宅-一---工</p>
+<p>二</p>
+<p>-二1eU3t v二二-J</p>
+<p>三二r，</p>
+<p>…T哺-</p>
+<p>-b-</p>
+<p>川二</p>
+<p>，</p>
+<p>4‘E夹m4M-川-4斗</p>
+<p>二</p>
+<p>…</p>
+<p>-T</p>
+<p>J记川</p>
+<p>饵I</p>
+<p>-EE4-.--T</p>
+<p>十-</p>
+<p>γ二</p>
+<p>二-</p>
+<p>-</p>
+<p>fu为-f名j-J」hi</p>
+<p>J---</p>
+<p>二</p>
+<p>-{L·F</p>
+<p>倒J</p>
+<p>-</p>
+<p>t</p>
+<p>"</p>
+<p>户f个</p>
+<p>工</p>
+<p>之·U…</p>
+<p>.类</p>
+<p>…E川、</p>
+<p>咄</p>
+<p>‘二S</p>
+<p>-</p>
+<p>r</p>
+<p>f二-…M，时呵-脚二士J一F</p>
+<p>时K</p>
+<p>E·J</p>
+<p>u种居豆-E's-</p>
+<p>U</p>
+<p>育</p>
+<p>-Z-，{</p>
+<p>占一</p>
+<p>二二川E、L十，川伽--d叭凡Uf-Eh-J-VF</p>
+<p>机</p>
+<p>-</p>
+<p>二</p>
+<p>:E</p>
+<p>)兰』勺7二</p>
+<p>十二</p>
+<p>地</p>
+<p>d、</p>
+<p>也</p>
+<p>札</p>
+<p>-r町</p>
+<p>J</p>
+<p>.E</p>
+<p>二f;一</p>
+<p>十</p>
+<p>-U</p>
+<p>V</p>
+<p>2B-R</p>
+<p>工</p>
+<p>·斗。二-</p>
+<p>W</p>
+<p>、将4mE</p>
+<p>领J</p>
+<p>w?三</p>
+<p>旦</p>
+<p>器一</p>
+<p>弘b二E立豆4川</p>
+<p>二</p>
+<p>在[</p>
+<p>J</p>
+<p>-</p>
+<p>二f</p>
+<p>-二-</p>
+<p>-</p>
+<p>H</p>
+<p>f坡盼盖二卢』a-f二版使meC以-Mtm制〕J-J</p>
+<p>吼</p>
+<p>hr毡，~·…-键卢…树面e的别</p>
+<p>EJ</p>
+<p>萨</p>
+<p>唰</p>
+<p>J-…</p>
+<p>--方，-作剧</p>
+<p>p</p>
+<p>…</p>
+<p>e</p>
+<p>…</p>
+<p>~ae</p>
+<p>吼吧</p>
+<p>时</p>
+<p>-宁叫月</p>
+<p>比</p>
+<p>J二</p>
+<p>7C</p>
+<p>-</p>
+<p>Y</p>
+<p>立-</p>
+<p>Jt</p>
+<p>·‘二</p>
+<p>…</p>
+<p>~~?fι-</p>
+<p>..</p>
+<p>、</p>
+<p>-</p>
+<p>这-J吨-r</p>
+<p>叫</p>
+<p>.</p>
+<p>f</p>
+<p>-</p>
+<p>…J</p>
+<p>叫</p>
+<p>…</p>
+<p>--</p>
+<p>ι.-样ZU-E</p>
+<p>Y</p>
+<p>e--Tt</p>
+<p>严</p>
+<p>u</p>
+<p>Mt飞</p>
+<p>-</p>
+<p>-</p>
+<p>EJ-E二---丁J</p>
+<p>三f</p>
+<p>J生-</p>
+<p>'</p>
+<p>…</p>
+<p>z</p>
+<p>飞三</p>
+<p>--叫VY-刃-二-</p>
+<p>E</p>
+<p>U飞…</p>
+<p>t</p>
+<p>叫</p>
+<p>\J</p>
+<p>-届</p>
+<p>-</p>
+<p>'</p>
+<p>-</p>
+<p>二</p>
+<p>-dJ</p>
+<p>-.</p>
+<p>在</p>
+<p>-快‘eM--←~</p>
+<p>…</p>
+<p>…-</p>
+<p>…</p>
+<p>、'-J</p>
+<p>TW毗hJ</p>
+<p>h</p>
+<p>-</p>
+<p>u</p>
+<p>--</p>
+<p>伽十</p>
+<p>L-</p>
+<p>一</p>
+<p>叨t-U</p>
+<p>十</p>
+<p>一他-一</p>
+<p>式三ih</p>
+<p>飞J</p>
+<p>:</p>
+<p>-川选r二-ι</p>
+<p>-y</p>
+<p>j</p>
+<p>M</p>
+<p>Y、\JE气一-U</p>
+<p>J-</p>
+<p>·</p>
+<p>瞅</p>
+<p>--…u-</p>
+<p>…-</p>
+<p>e~</p>
+<p>脚一</p>
+<p>·.飞--</p>
+<p>A</p>
+<p>L</p>
+<p>\</p>
+<p>，v-</p>
+<p>、?，</p>
+<p>-陀川)U</p>
+<p>-</p>
+<p>、二町d-一、</p>
+<p>M</p>
+<p>-</p>
+<p>山</p>
+<p>J</p>
+<p>JFJ</p>
+<p>k</p>
+<p>J</p>
+<p>W町</p>
+<p>』</p>
+<p>V下W‘二f…飞-v将…</p>
+<p>川</p>
+<p>、-</p>
+<p>川悦说T十，同也-</p>
+<p>γ</p>
+<p>·e</p>
+<p>\</p>
+<p>要S</p>
+<p>E</p>
+<p>二</p>
+<p>』U~</p>
+<p>M</p>
+<p>.、种山e</p>
+<p>川</p>
+<p>-</p>
+<p>Fy</p>
+<p>采p</p>
+<p>尺</p>
+<p>这</p>
+<p>-E</p>
+<p>·t来1。w</p>
+<p>f</p>
+<p>-</p>
+<p>交加阳飞叫--J-、二，</p>
+<p>U川</p>
+<p>这种持西让U指u</p>
+<p>附</p>
+<p>抽JF</p>
+<p>灿</p>
+<p>。</p>
+<p>8u土</p>
+<p>加…</p>
+<p>岛</p>
+<p>内芒，-</p>
+<p>y</p>
+<p>r品hd</p>
+<p>AJ</p>
+<p>句</p>
+<p>y0舰第卢然土u</p>
+<p>川</p>
+<p>-'，-</p>
+<p>-础州二</p>
+<p>后，-二-V</p>
+<p>可J</p>
+<p>F-</p>
+<p>·--…·J</p>
+<p>川</p>
+<p>i</p>
+<p>柑工</p>
+<p>·</p>
+<p>弘</p>
+<p>7-，M仰，“‘--</p>
+<p>加</p>
+<p>二hu‘</p>
+<p>M</p>
+<p>门创、b-然伐4---~</p>
+<p>还</p>
+<p>灿</p>
+<p>J</p>
+<p>初…二m</p>
+<p>-</p>
+<p>问</p>
+<p>吵</p>
+<p>f</p>
+<p>、川</p>
+<p>吧</p>
+<p>\J二u-</p>
+<p>γ-</p>
+<p>器</p>
+<p>。</p>
+<p>酬…e</p>
+<p>、</p>
+<p>业类P叫‘知…O-</p>
+<p>…</p>
+<p>·-</p>
+<p>U</p>
+<p>-使受‘T</p>
+<p>-</p>
+<p>例如d</p>
+<p>严</p>
+<p>品、、F~‘在aM肌尖rK</p>
+<p>-</p>
+<p>-μ</p>
+<p>←地</p>
+<p>-L发、-刊在二M-Er二m-…-</p>
+<p>叫</p>
+<p>一问正E-Y</p>
+<p>阳</p>
+<p>-</p>
+<p>-r</p>
+<p>-，</p>
+<p>h?</p>
+<p>V-t---~--γ·ι…---</p>
+<p>…</p>
+<p>t</p>
+<p>W</p>
+<p>-UιJ</p>
+<p>此</p>
+<p>ωm丁--rJ</p>
+<p>U</p>
+<p>;、协H3m…-一</p>
+<p>r</p>
+<p>U-二e-P-</p>
+<p>M</p>
+<p>--…r</p>
+<p>J---?一，</p>
+<p>，</p>
+<p>4J·二</p>
+<p>如</p>
+<p>·山-UJ</p>
+<p>r</p>
+<p>'</p>
+<p>mι沪JJ</p>
+<p>-</p>
+<p>γ</p>
+<p>二--r-f J…-m?言\h:E'E</p>
+<p>u十</p>
+<p>-</p>
+<p>户</p>
+<p>+川mu:J二…</p>
+<p>r</p>
+<p>e</p>
+<p>f}</p>
+<p>,</p>
+<p>非飞</p>
+<p>宁'</p>
+<p>川</p>
+<p>口</p>
+<p>放u</p>
+<p>…</p>
+<p>m</p>
+<p>-凯d-“ 壳</p>
+<p>器、-</p>
+<p>f</p>
+<p>-</p>
+<p>f</p>
+<p>将d</p>
+<p>-</p>
+<p>f时</p>
+<p>J-预胁，‘吧斗一--十-</p>
+<p>M、~</p>
+<p>，fh--</p>
+<p>-，-e介懈m1议二</p>
+<p>L</p>
+<p>M4(</p>
+<p>川业</p>
+<p>'、</p>
+<p>I</p>
+<p>」p</p>
+<p>叩u-</p>
+<p>n</p>
+<p>-丽</p>
+<p>，</p>
+<p>…</p>
+<p>-</p>
+<p>a</p>
+<p>-</p>
+<p>吼</p>
+<p>~fL</p>
+<p>吨、--rYf-?-F·三</p>
+<p>t</p>
+<p>J生f白-♂</p>
+<p>-</p>
+<p>，·</p>
+<p>6于</p>
+<p>立</p>
+<p>阳w三-圣u导4-，啕-s</p>
+<p>Y汇</p>
+<p>二夜kEB</p>
+<p>十</p>
+<p>二</p>
+<p>…的</p>
+<p>、</p>
+<p>u</p>
+<p>呵Y…圳“~这类民-m-UJγ</p>
+<p>陀</p>
+<p>军·h</p>
+<p>证</p>
+<p>-E弘.功m叫地、、…-m-…</p>
+<p>刷</p>
+<p>‘…飞</p>
+<p>巧·</p>
+<p>·</p>
+<p>且</p>
+<p>-e</p>
+<p>r川d仰…</p>
+<p>十;</p>
+<p>，</p>
+<p>…</p>
+<p>P二</p>
+<p>·J</p>
+<p>-1C♂</p>
+<p>…飞</p>
+<p>·-卜品、二导一二主称“E</p>
+<p>，</p>
+<p>·有…-E</p>
+<p>·J啊，优的二-EJ-JJ</p>
+<p>叫-</p>
+<p>一丘</p>
+<p>ee</p>
+<p>-</p>
+<p>M</p>
+<p>鸿…w</p>
+<p>d</p>
+<p>帐</p>
+<p>定型的一</p>
+<p>m-名域-</p>
+<p>ω</p>
+<p>e注-会M川丸伽讲甲-二-m…CF-T</p>
+<p>乡叹</p>
+<p>‘e--</p>
+<p>…</p>
+<p>L</p>
+<p>--约州t</p>
+<p>U二J</p>
+<p>…</p>
+<p>·W-r‘-</p>
+<p>M</p>
+<p>母.</p>
+<p>点</p>
+<p>品</p>
+<p>妞</p>
+<p>…</p>
+<p>-V二e-</p>
+<p>U</p>
+<p>民p‘性、-川</p>
+<p>仕</p>
+<p>川</p>
+<p>--</p>
+<p>十</p>
+<p>类:</p>
+<p>在…</p>
+<p>」-肿例，的为‘‘--u7</p>
+<p>Md</p>
+<p>·</p>
+<p>γ</p>
+<p>「〈</p>
+<p>时</p>
+<p>4d"J</p>
+<p>M</p>
+<p>E丁-</p>
+<p>时</p>
+<p>d…</p>
+<p>J扫川-i</p>
+<p>7·</p>
+<p>二</p>
+<p>p咀、、-u J，立…u-f阳</p>
+<p>树</p>
+<p>吨Ja…</p>
+<p>二</p>
+<p>♂A</p>
+<p>点高</p>
+<p>、u'iJ</p>
+<p>机</p>
+<p>h</p>
+<p>t三i二</p>
+<p>、r</p>
+<p>t扯.二-町</p>
+<p>‘hJ二--F</p>
+<p>J-'</p>
+<p>二一、</p>
+<p>h·</p>
+<p>气</p>
+<p>-</p>
+<p>VU护--fJ泞4r…i</p>
+<p>个</p>
+<p>飞</p>
+<p>川</p>
+<p>，·</p>
+<p>十t</p>
+<hr>
+<p>二</p>
+<p>“二L</p>
+<p>…</p>
+<p>j-e</p>
+<p>…</p>
+<p>…</p>
+<p>'</p>
+<p>三</p>
+<p>-</p>
+<p>…</p>
+<p>'-</p>
+<p>L</p>
+<p>「</p>
+<p>rdE</p>
+<p>-J</p>
+<p>-』\u，→</p>
+<h3>第 150 页</h3>
+<h2>5.3 do wflile 5.盾环</h2>
+<p>前面已经学习了for循环和while循环.袋子祥C料循环是dowhile.它不同于另外两种循环，因为它是出口条件(ex itconditioo)- 循环.这意咪着-这神循lB将首先执行彼环休，然后再判定测试表达式:决定是否应继续执行循坏。如果条件为falsc.则循环终正:在则，进^-新一轮的执衍和测试1这楼的循环通常‘至少执行一次，因为我程应流必须经过循环休后才能歪I~测试奈种。下而是其句法·</p>
+<p>do</p>
+<pre><code class="language-cpp">body
+whíle. (test-expressionl ;</code></pre>
+<p>循环俗是…绿江语句或府拒号括起的话句块。回到总结了do.wliilc循环的程序流程元</p>
+<p>ee--··mm t(B atn t--t enet</p>
+<p>-a ·····w •• mx 句</p>
+<p>m</p>
+<p>，</p>
+<p>·‘mmi n‘俨</p>
+<p>呻一·2国·-、v</p>
+<p>-2、·命</p>
+<p>H·o</p>
+<ul>
+<li>、--</li>
+</ul>
+<p>E … .-一一.，苟，-</p>
+<p>，户-.‘严-.-</p>
+<p>-.. i --<em>, -</em></p>
+<p>-: ‘自.户“-----” -, 、-</p>
+<p>·、“... ...,.. .. ... ,</p>
+<p>-_、.、。、.</p>
+<p>、</p>
+<p>'-.,_"</p>
+<p>, --、</p>
+<p>、@、</p>
+<p>。---、</p>
+<p>--二，-.-- ..:.:<em> ‘:. 、田自-?、’. . ‘</em>. _-‘吨，哇抖-“ • --、-一”“---</p>
+<p>.</p>
+<p>~ e、</p>
+<p>、.. .、，"..-</p>
+<p>、φ;...</p>
+<p>、</p>
+<p>-~</p>
+<p>_. ., -,' .--,..-. ',-</p>
+<p>~~---~...:. ,'-、-</p>
+<p>'、' --</p>
+<p>图5.4do while 循环的结构</p>
+<p>通讯λp 巷的首环比出口条件循环好r圄1ß!-二口条件筐F在循环天始之高阴条件迹管检啻·刷地、一. <em>..二乓二假设;程序混的:1.3‘使用:dqy户il ，可贾于是.州l张亮惯写将打问荤.{H，字符革主主编码b圳庐并发现E到，达子.. .“..‘f符串结尾「但是有时do‘ while-测试更合理;例如，请求用j马骑*昨:，程序否须注获得输大::~t&amp;}量对它进衍\测话~程序清单5.15 演示了如:何在这种情况下使用dowbile ~ 气</em>.-二”<em>“---程序清单5..1气5: :doWhile:cpp </em>…二.~...，.’.‘广.-，、￥二-二fι，...公汽1二L沪-.-江-ζ f剖J二二.4出豆 二χ4俨J旦J卢汗吾r严毛.干/旷y俨，穹尸döω阐...hi礼il...沁 .e ...υJ元cp即p.川旷.二: ~E阻，<em>;xi ” 仪t</em>’“叫-ζ~.∞~--占咛气ndi扰ti阳1αα、←叫芮町‘.l ’-:-:-∞. -，-、pH♂唁?Lν胃.…气;~ι-一伽4♂-臼;γ..-川、.</p>
+<p>#includι-&lt;ios tream&gt;</p>
+<p>主ntmain‘( l- 工--二</p>
+<p>‘:“’”-=--: -- …、-电- -.-，穹-、‘-<em> = .:...</em>-</p>
+<p>..</p>
+<p>-~</p>
+<p>• ‘、飞</p>
+<h3>第 151 页</h3>
+<blockquote><p>［本页文本层 OCR 严重损坏（该页扫描阴影/插图区产生了大量乱码字符），以下为原始抽取结果（未删改），内容以 PDF 第 169 页图像为准］</p></blockquote>
+<pre><code class="language-cpp">. .
+且lsing :&#x27; namespace .s t&lt;:l 元..-、_.. . &#x27;&gt;-</code></pre>
+<p>-,. -: int n; ...;. ~ - 、-</p>
+<p><em>:..., '</em>:':' . . '-、-…、_. --</p>
+<p>二_‘. ’_二~_s:out-:.. &lt;:&lt; .“Ente-r- nWiiDer~ ìn飞he” .r'ang~‘ 1 ;-ro. to ’f ind ‘;三日...工?二二二.=::!!气古</p>
+<p>-,. ëout 一-一_ ø.• _‘<em>一Jτ二-二“二二</em>-;;&lt;-呐fav02tehu抽~r\ri ’门L三-二--~.二一一之一? ----二-</p>
+<p>-</p>
+<p>-:.. .__ . :do “ … .,<em> --</em> -<em>:.-..:. -:‘. ’-”: ‘ :. -二，。二工</em>.. -气-:~ ψ. <em> ...:-..::.吨::.1:..--. 、二’. -:..:- “二---吨，五二了一</em>.<em>‘</em>,, ’ -- . .-…二-<em> 、--.</em>-</p>
+<p>r</p>
+<p>… .___7_i，~ .. u:-?~!..:;.. :..一:_ :.!.L: !:?‘些气t e坦9I</p>
+<p>} while (n ! = 7}-; 刀th回国民</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;Yes , 7. i9 my f avor ite .&quot;\n&quot;</code></pre>
+<p>千芒7扩‘<em>.</em>.return 0; :_. ! . .γ→...:-:--...<em>电“...” . ‘·主:-• ’..: .-.. </em>..二、二二二‘宇~.<em> ~~:~ .. </em>-“‘”:!:::.:-飞’:=,--‘: L，’:‘~ <em>~，，</em>. 7二二一~-工二、，...:::..兰兰=...-二二?二心军ξ忌剖_:..:::!-~“:.-:-. . -’ ~‘ .’ .<del> ‘.</del>:’:气生节ι辛~ -、.~.::-~二主ζ.<em>-主ti~占二=叫ω..ι . 4♂汇严三</em>-且-…吨.一:=:: . ~.τ ..;‘ -.’.‘ 毛寸. ”-. ._... .干?二..-斗二.=:;. “--:~”’=‘斗- 一心飞J、宁古斗亨手- 罔毡~~二二:i..:’ “~…-气.ι三，‘.. .-飞:一-ζT拦~:::士}工一4ζ</p>
+<p>下而是该程序的运行情况:一-一一一一一‘一-z23 1:ι-~--:主事豆豆豆哇金二inthe:- r叫-M;7492乙~in~吧，WtftJhgnp享王三~主?MF马←三-五J玄之士;尹;三i二</p>
+<p>-…</p>
+<p><em>.. ..‘:-::... --r~飞’::.9ι;二「咔←三仨『zf-</em>.<em>:.“~-‘. ”!’“τ二;:::-=.--:-~.. ::-:-.，;平- -二万二T~</em>::::- ~今J 一于写--甲毛主-干-γz工工..‘二工’:‘” ~ “;’ ‘;;<em>’ -:-飞-‘”之. ...;</em>.一-.’‘’:‘’~::<em>.~. .~;:-o‘ -=--:.;..:. --= 一-、-</em>: ’o._--= .~</p>
+<p>亏-千.__-~. ~~-‘= <em> .:-0 ..:. 二--. . ~ :.. 一::</em> -<em>...:.:-.---:--:;;::: ...，..龟申• -三雪</em>.--~...=~-:. ... ...:..一=、</p>
+<p>Yes也~7is-my fävotite _-<em>二...:... :-..:...</em>-“-.---:‘‘<em>.:-. ’0 ”“”‘7-.:.. -- ’</em>.<em>~‘- : </em>~ ’ -..:...严-:‘ ;--=‘一._.圣~.，...，~...-=..===町止... := .. .. ;.:: ..，’二</p>
+<p>一一奇特-的二foF.循环</p>
+<p>、，蚤然不是很常见，但有时出现下面这样的代亘在，:一</p>
+<p>f-</p>
+<p>.1. ='</p>
+<p>rr</p>
+<p>拍t~;.‘</p>
+<p>fo ;[，~ ι;.).-someti.mes called a. “to r ever I志。p”</p>
+<p>E</p>
+<p>+,,,+</p>
+<pre><code class="language-cpp">TAJRS menub gr
+，,-、HE -e
+/.1.
+，E qmAU &gt;铲2u bR</code></pre>
+<p>、，牛r、饨u-?』UeA ~f . s.,:atement and b;-eak (包hapter6)</p>
+<p>.‘4·1LM</p>
+<p>-</p>
+<p>·• 牛二→-</p>
+<p>我另二，种变他、圃，.比“”.1“一一”‘-:0’ 、牛牛一</p>
+<p>int 1 ~口，</p>
+<p>for {; ;1 哩~.)</p>
+<p>i t_l3-“ó &gt;;0-1). break 二-一, 兰二-由于『二·‘4//TEK-d吧旦毛-二.二一τ-三=二:二二=-’:-~‘’:‘马号”’--=F 三毛-1『二二JE; 二ιτ_三</p>
+<p>.~ .、二宁、争宁(骂.‘~ • ..::.-‘·一‘7哥.;.;:--’:...,..,.;.<em>-:..-:.r.:=.=-二</em>.“”.:!=:ï在执码基于主主样...:-个事实:布F 循环宅的空测试条件被视分阳e“.. 这些仔研既未房子阅读，也不能用‘工ι-怕丢言循环些垫底1莫也;第云ffl势:班在仔whilè循寥;中叶‘.J;:.i气得关i树=二二.<em>.二二.</em>, =</p>
+<p>.::jt.‘..r .,i.O; _</p>
+<p>do</p>
+<p>‘~’<em> l):. =::.‘二二~于‘’声.‘.: .,... : l←-工..</em>.-乌气三，，--’.:芋‘二二，...丁?飞;-</p>
+<p>• ..__ 营...;. ~.&lt;, 1喉+;~‘-::ιa卢一片?τ~“. ，..-:-ι_气-，-”’-‘--帆.’ .、_句...:.:~“:”. .: ... ,</p>
+<p>/1 d。窜。mething;;‘-, whílè {30不lL;、‘</p>
+<p>同样，第二千例于依Jllwhile彷环可以表.达得关主衔‘::’...•E F‘while : {I ~ ‘“ :-30弘一</p>
+<p>LI ，, 一一.一~</p>
+<pre><code class="language-cpp">do somethin~
+&quot;.</code></pre>
+<p>i L~ ￥;</p>
+<p>勺、</p>
+<p>通常，纷写?每晰、容易理解曲f{lt码比使用语言的晦)fl斗争脆来;显示自己的能力更为有用。</p>
+<p>-.</p>
+<h3>第 152 页</h3>
+<h2>5.4 基?范围的forì.盾坏(C++11 )</h2>
+<p>C++ ll新攒了一种循环3荼于范围( range-based )的for 循环.这简化了一种常见的循环任务·对数组(或容吉普笑，如vector 和缸ray)的每个元素执行相同的操作，如下例所示:</p>
+<pre><code class="language-cpp">d。由leprices(5 ) ~ {4.99, 10.99, 6.87 , 7.99 , 8 .49};
+for (d。飞lblex prices)
+cout &lt;&lt; x &lt;&lt; std: :endl;</code></pre>
+<p>其中，x战初表示数组prices的第一个元素.显示第一个元素后，不断执行循环，而x依次表示数组的其他元素.因此，上述代码显示全部5个元素，每个元素占据一行.总之，该循环显示数组中的每个值。</p>
+<p>要修改数组的元素，需要使用不同的循环变童话法2</p>
+<pre><code class="language-cpp">for (double &amp;x prices)
+X : X • 0. 80; //20 量。ffsale</code></pre>
+<p>符号&amp;表明x是一个引用变量，这个主题将在第8章讨论。就这里而言，这种声明让接下来的代码能够修改数组的内容，而第一种语法不能。</p>
+<p>还可结合使用基于范围的for 循环和初始化列表:</p>
+<pre><code class="language-cpp">for (int X {3, 5, 2, 8, 6})
+cout &lt;&lt; x &lt;&lt; If &quot;j
+cout &lt;&lt;‘\n&#x27; ;</code></pre>
+<p>然而，这种循环主要用于第16章将讨论的各种模板容器类.</p>
+<h2>5.5 5.盾坏和文本输入</h2>
+<p>知道循环的工作原理后，来看一看循环完成的一项虽是常见、最重要的任务:逐字符地读取来自文件或键盘的文本.例如，读者可能想编写一个能够计算输入中的字符数、行数和字数的程序。传统上，C++和C语言一样，也使用while循环来完成这类任务。下面介绍这是如何完成的.即使熟悉C语言，也不要太快地浏览本节和下一节。尽管C++中的whilc循环与C语言中的while循环一样，但C++的ν0 工具不间，这使得C++循环看起来与C语言循环有些不同.事实上.cin对象支持3种不同模式的单字符输入，其用户接口各不相同。下面介绍如何在while 循环中使用这三种模式。</p>
+<h3>5.5.1 使用原始的cin进行输入</h3>
+<p>如果程序要使用循环来读取来自键盘的文本输入，则必须有办法知道何时停止读取.如何知道这一点呢?一种方法是选择某个特殊字符一一有时被称为哨兵字符(scntinelcharactcr ) ，将其作为停止标记。例如，程序消单5.16在遇到#字符时停止读取输入.该程序计算读取的字符数，并回显这些字符，即在屏幕上显示读取的字符。按下键贫上的键不能自动将字符显示到屏幕上，程序必须通过国显输入字符来完成这项主作.通常，这种任务由操作系统处理.运行完毕后，该程序将报告处理的总字符数矿程町，消单5.16?内j:ir~ 该程序的代码。</p>
+<p>程序清单5.1õ:-texti肌识cpp</p>
+<pre><code class="language-cpp">// tex.tinLcpp --reading;;.chars with a whiFe-:foop
+辑工nclude&lt;ìostream&gt;
+int main ()
+using namespace std;</code></pre>
+<h3>第 153 页</h3>
+<p>志cbarch ; . _ 一</p>
+<p>·…</p>
+<p>一-</p>
+<p>t</p>
+<p>iÍlt∞uñc.= 0;.二/I use b.asi c input .</p>
+<p>cout &lt;&lt;咄飞tercharacters; enter # to-qu址:\~;</p>
+<pre><code class="language-cpp">cln日. ch;.. / / gec-a character_
+whil.e (ch ! =.‘ #&#x27;1 // test the character</code></pre>
+<p>「</p>
+<pre><code class="language-cpp">cout &lt;&lt; ch; // echo the character
+++count; I广countthe character
+c i n &gt;&gt; chι 具f-getrhe-next character
+}
+c∞t &lt;.&lt; endl &lt;&lt;... count &lt;&lt; &quot; characters- read\ n&quot;;
+return 0 广</code></pre>
+<p>下而是该程仰的运得f在况工</p>
+<pre><code class="language-cpp">Enter crraracters; enter # to quit:
+see ken runll.really fast
+see.Kenrun
+9 characters read</code></pre>
+<p>程序说明</p>
+<p>请注意该程序的结构。该程序在循环之前读取第一个输入字符，这样循环可以测试第一个字符。这很重要，因为第一个字符可能是仇由于textinl 呻p使用的足入口条件循环，因此在这种情况下，能够正确地跳过整个循环。由于前面已经将变盘count设置为0，因此count的值也是正确的。</p>
+<p>如果读取的第一个字符不是#.则程序进入该循环，显示字符，增加计数，然后读取下一个字符.鼓后一步是极为重要的，没有这一步.循环将反复处理第一个输入字符，一直进行下去.有了这一步后，程序就可以处理到下一个字符.</p>
+<p>注意，该循环设计遵循了前丽指出的儿条指导原则。纺束循环的条件是簸后读取的一个字符是#。该条件是通过在循环之前读取一个字符进行初始化的，而通过循环体结尾读取下一个字符进行更新.</p>
+<p>土丽的做法合情合理。但为什么程序在输出时省略了空格呢?原因在cin.读取char值时，与读取其他基本类型一样，cin将忽略空格和换行符.因此输入中的空格没有被回显，也没有被包括在计数内.</p>
+<p>更为复杂的是，发送给CID的输入被缓冲。这意味着只有在朋户按下回车键后，他输入的内容才会被发送给程序。这就是在运行该程序时，可以在#后丽输入字符的原因.按下回车键后，整个字符序列将被发送给程序，但程序在遇到#字符后将结束对输入的处理.</p>
+<p>5.5.2 使用cin.get(char)进行补救</p>
+<p>通常，逐个字符读取输入的程序需要检资每个字符，包括空格、市IJ表符和换行符。cin所属的istream类〈在iostream中定义〉中包含一个能够满足这种要求的成员函数。具体地说，成员函数cin.get(ch)读驭输入中的下一个字符〈即使它是空格)，并将其赋给变量ch .使用这个函数调用咎换cin&gt;&gt;饨，可以修补程序消单5.16的问题.程序清单5.17列出了修改后的代码。</p>
+<p>程序清单5 . 17textin2.cpp</p>
+<pre><code class="language-cpp">// textin2.cpp --using cin.get(char)
+#include &lt;iostream&gt;</code></pre>
+<p>int阳in( )</p>
+<pre><code class="language-cpp">using namespace std;
+char ch;
+int count = 0;
+cout &lt;&lt; &quot;Enter characters; enter骨toqu i t : \n&quot; ;</code></pre>
+<h3>第 154 页</h3>
+<blockquote><p>［本页文本层为空，扫描件无可用 OCR 文本，见 PDF 第 172 页］</p></blockquote>
+<h3>第 155 页</h3>
+<p>习惯函数重载.为区分不同的函数版本，我们在引用它们时提供参数列表.因此，cin .get()指的是不接受任何参数的版本，而cin.get(char)民1)衔的是接受一个参数的版本.</p>
+<p>5.5.4 文件尾条件</p>
+<p>程序消单5.1 7表明，使用诸如#等符号来表示输入结束·很难令人满意，因为这样的符号可能就是合法输入的组成部分，其他符号(如@和%)也如此.如果输入来自于文件，则可以使用一种功能更强大的技术一一检测文件尾(EOF ).C忡输入工具和操作系统协同工作，来检测文件尾并将这种信息告知1程序。</p>
+<p>乍一肴，读取文件中的信息似乎同cin和键t.:t输入没什么关系，但其实存在两个相关的地方.首先，很多操作系统(包括Unix 、Linux和Windows 命令提示符模式〕都支持重定向，允许用文件替换键盘输入.例如，假设在Windows中有一个名为gofish.exe的可执行程序和一个名为fishtale的文本文件，则可以在命令提示符模式下输入下面的命令:</p>
+<p>gofish &lt;fishtale</p>
+<p>这样，程序将从fishtale文件〈而不是键盘古〉获取输入.&lt;符号是Unix和Windows命令提示符模式的重定向运算符.</p>
+<p>其次，很多操作系统都允许通过键盘来模拟文件尾条件。在Unix中，可以在行~按下Ctrl+D来~现:在Windows 命令提示符模式下，可以在任意位置放Ctrl+Z 和Enter .有些C++实现支持类似的行为，即使底层操作系统并不支持.键盘输入的EOF 概念实际上是命令行环境边倒下来的。然而，用于Mac的Symantec C++模拟了UNIX，将Ctrl+D视为仿真的EOF .Metrowerks Codewarrior能够在Macintosh和Windows环搅下识别Ctr1+Z.用于PC的Microsoft Visual C++ 、Bor landC++ 5.5和GNUC++都能够识别行首的Ctrl +Z.但用户必须随后按下回车键.总之，很多PC编程环绕都将Ctr I+Z 视为模拟的EOF，但具体细节(必须在行首还是可以在任何位置，是否必须按下回车键之事〉各不相同.</p>
+<p>如果编程环境能够检测EOF.可以在类似于程序消且在5.1 7的程序中使用重定向的文件，也可以使用键盘输入，并在键盘输入中模拟EOF .这一点似乎很有用，因此我们来看看究竟如何做.</p>
+<p>检测到~EOF后，cin将两位(eofbit和failbit )都设咒为l。可以通过成员函数eof()来愈看ω tbid革命被设置:如果栓测到1)EOF，则cin.eof()将返回bool值tme，否则返回false .同样，如果eofbit或failbit被设置为1，则f画il()成员函数返回true ，否则返回false .注怒，eof()和fail()方法报告般近读取的结果;也就是说，它们在事后报告，而不是预先报告.囱此应将cin .eof{)或cm.凶l()测试放在读取后，程序消且在5 .18中的设计体现了这一点。官使用的是f刽I() ，而不是eofO，因为前者可用予更多的实现中。</p>
+<p>注意:有些系统不支持来自键盘的模拟EOF;有些系统对其支持不完善。cin.get()可以用来锁住屏幕，直到可以该取为止，但是这种方法在这里并不适用，因为栓iJ!‘1EOF时将关闭对输入的进一步读驭。然而，可以使用程序清单5.14中那样的计时循环来使屏幕在一段时间内是可见的。也可使用cin.clear( )来室主输入流，这将在第6章和第17章介绍。</p>
+<p>程序清单5.18textin3.cpp</p>
+<pre><code class="language-cpp">// textin3.cpp --reading chars to end of file
+Uinclude &lt;iostream&gt;
+int main ()
+using namespace std;
+char ch;
+int count : 0;
+cin.get (ch) ; // attempt to read a char
+while (cin.fail() :: false) // test for EOF
+{
+cout &lt;&lt; ch; // echo character
+令+counti</code></pre>
+<h3>第 156 页</h3>
+<pre><code class="language-cpp">cin.get (ch); // attempt to read another cha主
+cout &lt;&lt; endl &lt;&lt; count &lt;&lt; &quot; characters read\ n&quot;;
+return 0;</code></pre>
+<p>下面是该程序的运行情况:</p>
+<pre><code class="language-cpp">The green bird 8ing8 in the winter.&lt;BNTER&gt;
+The green bird sings in the winter.
+Ye8. but the crow flies in the dawn.&lt;BNTBR&gt;
+Yes. but the crow flies in the dawn .
+&lt;CTRL&gt;+&lt;Z&gt;&lt;ENTER&gt;
+73 characters read</code></pre>
+<p>这里在Windo明7系统上运行该程序，因此可以按下Ctrl+Z和回车键来模拟EOF条件。消注意，在Unix和类Unix(包括Linux 和Cygwin)系统中，用户应按Ctrl+Z组合键将程序挂起，而命令f注恢复执行程序.</p>
+<p>通过使用重定向，可以用该程序来显示文本文件，并报告它包含的字符数。下面，我们在Unix系统运行该程序，并对一个商行的文件进行读取、回显和计算字数($是Unix提示符)，</p>
+<pre><code class="language-cpp">$ textin3 &lt; stuff
+I am a Unix file. I am proud
+to be a Unix file.
+48 characters read
+$</code></pre>
+<ol>
+<li>EOF给未输入</li>
+</ol>
+<p>前面指出过.cm方法检测到EOF时，将设置cin 对象中一个指示EOF 条件的标记.设宜这个标记后，cin将不读取输入，再次调用cin也不管用.对于文件输入，这是有道理的，因为程序，不应读取超出文件尾的内容。然而，对于键盘输入，有可能使用模拟EOF来结束循环，但稍后要读取其他输入。cin.cle叫)方法可能清除EOF标记，使输入继续进行。这将在第17章详细介绍。不过要记住的是，在有些系统中，按Ctrl+Z实际上将结束输入和输出，而cin.clear( )将无法恢复输入和输出。</p>
+<p>2.常见的字符输入做法</p>
+<p>每次读取一个字符，直到遇到~EOF的输入循环的基本设计如下:</p>
+<pre><code class="language-cpp">cin.get(ch); // attempt to read a char
+while (cin.fail () == fal se) // test for EOF
+{
+// do stuff
+cin.get(ch); // attempt to read another char</code></pre>
+<p>可以在上述代码中使用一些简捷方式。第6章将介绍的!运算符可以将true切换为false或将faJse切换为true。可以使用此运算符将上述whi1e测试改写成这样3</p>
+<pre><code class="language-cpp">while ( !cin.fail()) // while input has not failed</code></pre>
+<p>方法cin.get(char)的返回值是一个cin对象。然而，is阳m类提供了一个可以将istrearn 对象(如cin)转换为bool值的函敏:当cin出现在需要bool 值的地方〈如在while循环的测试条件中)时，该转换函数将被调用。另外.如果续后一次读取成功了，则转换得到的bool值为true:否则为false.这意味着可以将上述while测试改写为这样:</p>
+<pre><code class="language-cpp">while (cin) // while input is successful</code></pre>
+<p>这比!cin.fail( )或!cin.eo代)更通用，因为它可以检测到其他失败原因，如磁盘故障.</p>
+<p>摄后，由于cin.get(char)的返回值为c山，因此可以将循环精简成这种格式:</p>
+<h3>第 157 页</h3>
+<pre><code class="language-cpp">whi1e (cin.get(ch)如1/whi l e inpuL i s-suc:cesstut
+(::
+/ιl do stuff</code></pre>
+<p>这样.cin.get(char)只被满用一次，而不是两次:循环前一次、循环花束后一次.为判断循环测试条件，程序必须首先调丹lcirr.get(chf.如果成功，则将值被入ch中。然后.程席获得函数调用的返回值.I1P cin.接下来，程序，对~ ciñ 进仔b∞1.辛苦·换，如果输入成功，则结果为true .否则方臼Ise 。三条指导原则〈确定结束条件、对奈件迸街5初始化以及更新条-件〉全部被放在循正在测试条件中晤</p>
+<p>5.5.5 另一个cin .get(‘)版本</p>
+<p>“怀旧”的C语言斥F 可能喜欢C语言中的字街U0函数一-getcñar()和-putch缸()T它们仍然适肘只要像在已语言F中那样包含头文件stdto.h(或新的‘. cstdio r rm可.也可~使用istream和ostrearn类中类似:r)l能的成员函数，来看着这耕芳式.</p>
+<p>不接受任何参数的cin.get( )成员函数返回徐入中的下一个字符。也就是说，可以这槌使用它L</p>
+<pre><code class="language-cpp">ch = cin. get:( )-;</code></pre>
+<p>该函数的工作方式r.J-.C语言中的getch叫)相似，将字符编再作为iñt倭返回守而ci陀get(ch)返回一个对象，而不是该取的字符.同样，百五以使用cout机It()函数(参见第3章)米显示字徒二</p>
+<pre><code class="language-cpp">cout . put {çh) ;</code></pre>
+<p>该函数协工作方式类似C语言噜的putchar()._只不过其参数类型为char.而不是int.</p>
+<p>注意:最手!l1-，put()成员只有一个原在』一-put(char)。可以传递一仑山参数给它，该参数将被强和f转换为-ch缸。C同标准还4要求只有一个房、型。然而F有些C++实现都提供了3伞原型:- put(char)、put(signed=“char)和put(tIIIsïgnedchar)。在这些实现王护，给put~ )传递一个inlo参数将导敛钱误消息，民好转换剧的方共不止一种。使用显式强1w:类型轮换的原型(如cin.put(char(ch))~响史用int参欲。</p>
+<p>为成功地使用cin.get{_).需要知道其如何处理EOF条件.当该函数~J达εOF时，将没有可返回的穿符，相反.cÎIhget()将返回=子用符号常登EOF表示的特殊值，该常量是在头文件iostrean←中定义的.一-EOF 值必须不同予任何有效的字符值，以便程仔，在会将EOF与常规字符混淆。通常.EOF被定义为他一一一一-1.因为没有ASCU码为斗的字符，但并不需要知道实际的值，而只需在程序中使用EOFIlP可。例如.程序消单5. 18的核心是这样:</p>
+<pre><code class="language-cpp">char ch;
+c in.get (ch) ;
+whi le (cin. fail( ) == fal se) f l test for EOF
+cout &lt;&lt; ch;
++ 叫..counti
+c in.get (ch) ;</code></pre>
+<p>可以使用int饨，并用cin.get( )代替cin.get(char).用cout机ItO代替cout.用EOF测试代替cin. fail( )测试:</p>
+<pre><code class="language-cpp">int Ch; Iff for compat 立bilitywith EOF value
+ch = cin.get ();
+while (ch != EOP)
+cout.put(ch); f/ cout.put(char (ch)} for some implement ations
+Hcount;
+ch = cin. get ( ) ;</code></pre>
+<h3>第 158 页</h3>
+<p>如果ch是一个字符3员il循j;f;将显示它.如果cIY方EOF.J..UJ循环将结束.</p>
+<p>提示:需要知道的是.EOF不表示输入中的字符.而是指出没有字符。</p>
+<p>除了当前所做的修改外，关于使用cin.get()还有一个微妙而重要的问题。由于巳OF 表示的不是有效字符编码，因此可能不与char 类型兼容.例如，在有些系统中.char 类型是没有符号的，因此char 变虽不可能为EOF值(-1)。由于这种原因，如果使用cin.get()(没有参数)并测试EOF.则必须将返回值赋给int 变髦，而不是char 交位.另外，如果将饨的类型芦明为i邸，而不是char.贝IJ必须在显示ch时将Jt强制转换为char 类型.</p>
+<p>程1于消单5.19将程序消单5. 18 进行了修改，使用了cin.get()方法。它还通过将字符输入与while循环测试合并在一起，使代码更为简洁.</p>
+<p>程序清单5. 1 9textín4.cpp</p>
+<pre><code class="language-cpp">/1 textin4 .cpp --reading chars with cin.get ()
+äinclude &lt;iostrearn&gt;
+int main (voí d )
+using namespace std;
+int ch; // should be int , not char
+int count = 0;
+while ((ch = cin .get ()) != EOF) // test for end-of - f ile
+cout . put {char(Ch)) ;</code></pre>
+<p>叫~+count;</p>
+<pre><code class="language-cpp">cout &lt;~ endl &lt;&lt; count &lt;&lt; &quot; characters read\ n.;
+ret:urn 0;</code></pre>
+<p>注意:有些系统要么不支持来自键盘的模拟EOF.姿么支持池不完善，在这种情况下，上述示例将无法正常运行。如采使用cin.get( )来锁住屏幕立到可以阅读它..ì且将不起作用，因为检测EOF时~禁止进一步读取输入。然而，可以使用程序清单5.1 4那样的计时循环来俊屏幕停留一段时间。还可使用第17拿将介绍的cin.clear()来安置输入流。</p>
+<p>下而是该程序的运行情况:</p>
+<pre><code class="language-cpp">The øullen maclterel øulkø in the shadowy shallows . &lt;BNTER&gt;
+The sul l en mackerel sulks in the shadowy shallow$ .
+Yes, but tbe blue bird of happines8 harbors secrets.&lt;BNTER&gt;
+Yes , but the bl ue bird of happiness harbors secret s.
+&lt;CTRL&gt;+&lt;Z&gt;&lt;ENTBR&gt;
+104 characters read</code></pre>
+<p>下面分析一下循环条件z</p>
+<pre><code class="language-cpp">while {(ch = cin .get {) ) ! = BOF)</code></pre>
+<p>子表达式ch=cin.get()两端的括号导致程序首先计算该表达式。为此，程序必须首先调用cin.get()函数，然后将该函数的返回值赋给ch.由于赋值语旬的值为左操作数的值，因此整个子表达式变为ch的值.如果这个值是EOF.则循环将结束，否则继续。该测试条件中所有的括号都是必不可少的.如果省略其中的一些括号:</p>
+<pre><code class="language-cpp">whil e (ch = cin.get O ! = EOF)</code></pre>
+<p>由于!罩运算符的优先级高于=，因此程序将首先对cin.get()的返回值和EOF进行比较.比较的结果为false或true.而这些bool1H将被转换为0或1，并本质赋给ch.</p>
+<p>;司“甲方面，使用cin .get(ch)(有一个参数)进行输入时，将不会导致任何类型方面的问题。前面讲过，</p>
+<h3>第 159 页</h3>
+<p>cin.get( char)P1I数在到达EOF时，不会将一-1:将放值赋统ch.事实上，在这种情况下ι它不会将任饵值赋给ch .ch._不会被用来在储非char 值。表5.~总结工cin.get(char)和cin.get().之间的兹别。</p>
+<pre><code class="language-cpp">装5.3cin.get(ch)导cin.getO</code></pre>
+<p>属俭cin.ge叫ch)ch吨‘“ι叫)传递输入字囚徒的方式b赋给参数ch将面由敛Jß刨值赋给ch-用于字符输入时函数的返回{在m:ream 对象〈执行b∞l转换后为true)int类型的-*符编码~IJ达EOF时函数的返回值istrcam 对象〈执行b∞l 转换后为false )EOF</p>
+<p>那么应使用cin.get(J还是cin.get(char)呢?使用字符参数的版本受符合对象方式，因为其返回假定istream 对象.这意味着可以将它们拼接起来。例如，下丽的钱码将输入中的‘“f-=个字符读入到ëhl帘，井-将接下来的一个宰符读入到ch2!中:</p>
+<pre><code class="language-cpp">cin-..ge&quot;,(c1&#x27;ll l .get (ch2):;</code></pre>
+<p>这是可行的，因为函数调mcin.get(ch η运回一俨cin对象，然后便可以通过该对象调只手段t(ch2).</p>
+<p>g叫)的主要用途是能够将stdio.h的getchar()和putchar()函数转换为IOstream的cin.gct()和∞ut.put()方法.只要用头文件iostream槌换stdio扎并用作用栩似的方法替换所有的getchar()和putchar()即可。(如l巢旧的代间使用int变;睦进行输入，丽所用的实现包含put( )的多个原型，则必须做进一步的调整。)</p>
+<h2>5.6 嵌套?盾坏和二维数组</h2>
+<p>虫日本主在前丽所述，for 循环是一种处理数组的J二具。下面进一步讨论如1例使用嵌套for 循环中米处理二维数组.</p>
+<p>首先，介绍一下什么是二维数组.到目前为止，本~使用的数组都是一维数组，因为每个数级都可以看作是一行数据.二维数组更像是一个表格一一既有数据行又有数据列.例如，可以用二维数组来表示6个不间地区每季度的销售额，每一个地区占一行数据。也可以川二维数组米表示RoboDork 在计算机游戏板上的位置.</p>
+<p>C忡没有提供二维数组类型，但用户可以创建每个元素本身都是数组的数组。例如，假设要存储5个城市在4年间的;段高温度。在这种箭况下，可以这样声明数组:</p>
+<pre><code class="language-cpp">int maxtemps [41 [51 ;</code></pre>
+<p>该声明意味着maxtemps是一个包含4个元素的数组，其中每个元素都是一个由5个孩数组成的数组〈参见图5 .5 )。可以将maxtemps数组看作由4行组成，其中每一行有5个温度值。</p>
+<p>回川帽ps是4个元素的11:组</p>
+<p>I ;"'''''_1''''</p>
+<p>每个元素都是5个int的数组</p>
+<p>I18Xt帽p~敬组</p>
+<p>r nw.ltm网。1)“，U阳刚J)mu”,mp'l21 翩翩网3)I</p>
+<p>、俨一__，.___、「一-ι一-、，</p>
+<p>I I I I I I I I I I _Ll_j_L_L LI I I I I</p>
+<p>“翻忧mJ'lfOJ10)m.，lem网J J[O)1M胞ml”l2 1101m..lom阳131(0)</p>
+<p>图5.5由数组组成的敛事</p>
+<h3>第 160 页</h3>
+<p>表达式maxtemps[O]是maxtemps 数组的第一个元素，因此maxt巳mps[O]本身就是一个由5个int 组成的数组。maxtemps[O]数组的第一个元素是maxtemps [0] (0)，该元素是一个int .因此，需要使用两个下标采访问int元素.可以认为第一个下标表示行，第二个下标表示列(参见阁5.6)。</p>
+<p>lot.“,t_I‘1151:</p>
+<p>皿民帽“数组撞着成褒格，</p>
+<p>3 4</p>
+<p>阁5.6使用下标访问数组元索</p>
+<p>假设要打印数组所有的内容，可以用一个for 循环来改变行，周另一个被嵌套的for 循环来改变列:</p>
+<pre><code class="language-cpp">for (int row ~ 0; row &lt; 4; row++)
+for (int col ~ 0; col &lt; 5; ++col)
+cout &lt;&lt; maxtemps [row) fcol) &lt;&lt; &quot;\t &quot;;
+cout &lt;&lt; endl;</code></pre>
+<p>对于每个ro“‘ 值，内部的for循环将遍历所有的col值。这个示例在每个值之后打印一个制表符〈使用C++转义字符表示时为旧，打印完每行后，打印一个换行符。</p>
+<h3>5.6.1 初始化二维戴组</h3>
+<p>创建二维数组时，可以初始化其所有元索.这项技术建立在一维数组初始化技术的基础之上:提供由逗号分隔的用花括号括起的值列表:</p>
+<pre><code class="language-cpp">// initializing a one-dimensional array
+i nt btus[5) ~ { 23, 26, 24 , 31, 28 };</code></pre>
+<p>对于二维数组来说，由于每个元素本身就是一个数组，因此可以使用与上述代码类似的格式来初始化每一个元索。因此，初始化自一系列逗号分阔的一维数组初始化(用花括号括起〉组成:</p>
+<pre><code class="language-cpp">int maxtemps(4) [5) = // 2- D array
+{96 , 100, 87, 101, 105}, // values fo r maxtemps[O)
+{96 , 98, 91, 107 , 104} , // values fo r maxtemps[1)
+{97, 101, 93 , 108, 107} , // values fo r maxtemps[2)
+{98. 103. 95, 109, 108 } // values for maxtemps[3)</code></pre>
+<p>可将数组maxtemps 包含4 行，每行包含5个数字.{94，饨，肘，103, 101}初始化第一行，I!Pmaxtemps [0] .作为一种风格，如果可能的话，每行数据应各占一行，这样阅读起来将更容易.</p>
+<h3>5.6.2 使用二维数组</h3>
+<p>程序清单5 .20 初始化了一个二维数组，并使用了一个嵌王军循环.这一次，循环的顺序相反，将列循环</p>
+<h3>第 161 页</h3>
+<p>(城市索号1)放在外丽，i制于循环〈年份量这引〉放在内面。另外，它还采用了C++常用的做法，将-个指钊数组初始化为一组字符审锐‘量.也就是说，将c ities声明为一个char 指针数组.这使得每个元索&lt;141cities[0])都是一个char 指针，可被初始化为一个字符期的地址。程序将cities[0]初始化为字符串“GribbleCity”的地址，等等。因此，该指告|数组的行为与字符.$数组类似。</p>
+<p>程序清单5 .20nested.cpp</p>
+<pre><code class="language-cpp">1/ nested.cpp --nested loops and 2-D array
+#include &lt;iostream&gt;
+const i nt Cit ies = 5;
+const int Years = 4;</code></pre>
+<p>ìnt旧in( )</p>
+<pre><code class="language-cpp">usìng namespace scd;
+const char • cities[Cìt ies) = // array of pointers
+// to 5 stríngs
+&quot;Gribble Ci ty&quot; ,
+&quot;Gribbletown&quot; ,
+&quot;New Gribble&quot; ,
+&quot;San Gribble&quot; ,
+&quot;Gribble Vista&quot;
+int maxtemps [Years) [Cities) = /1 2-D array
+{
+{96, 100, 87, 101 , 105}. // values for maxtemps[O)
+{96, 98, 91 , 107, 104} , // values for maxtemps[l)
+{97, 101, 93, 108 , 107} , // values for maxtemps(2)
+{98, 103, 95, 109, 108} // va1ues for maxtemps(3 )
+cout &lt;&lt; &quot;Maximum temperatures fo r 2008 -2011\n\n&quot;;
+for (int city = 0; city &lt; Cities; ++city)
+cout &lt;&lt; cities[city) &lt;&lt; &quot;:\t&quot;;
+for (int year = 0; year &lt; Years; ++year)
+cout &lt;&lt; maxtemps [year) [city) &lt;&lt; &quot;\ t&quot;;
+cout &lt;&lt; endl;
+// cin.get();
+return 0 ;</code></pre>
+<p>下而是该程序的输出z</p>
+<pre><code class="language-cpp">Maximum temperatures for 2008 -2011
+Gribble City: 96 96 97 98
+Gribbletown : 100 98 101 103
+New Gribble : 87 91 93 95
+San Gribble: 101 107 108 109
+Gribb l e Vista: 105 104 107 108</code></pre>
+<p>在输出中使用制表符比使用空格可使数据排列更有规则.然而，制表符设置不相闷，因此输出的外观将随系统而异。第1 7章将介绍更精确的、更复杂的、对输出进行格式化的方法.</p>
+<h3>第 162 页</h3>
+<p>在这个例子中，可以使用char数组的数组，而不是字符卒指针数组.在这种情况下，声明如下:</p>
+<pre><code class="language-cpp">char cities [Cítiesl [25J ~ / / array of 5 arrays of 25 char
+&quot;Gribble Ci ty霄，
+&quot;Gribbletown&quot; .
+&quot;New Gribble&quot;.
+&quot;San Gribble&quot;.
+&quot;Gribble Vista &quot;</code></pre>
+<p>上述方法将全部5个字符净的最大长度限制为24个字符。指针数组存储5个字符帘的地址，而使用char数组的数组时，将5个字符:$分别复制到5个包含25个元素的char数组中.因此，从存储空间的角皮说，使用指针数组更为经济;然而，如果要修改其中的任何一个字符串，则二维数组是更好的选择.令人惊讶的是，这两种方法使用栩同的初始化列衰，显示字符净的for 循环代码页相同。</p>
+<p>另外，还可以使用s创ng 对象数组，而不是字符$指针数组。在这种情况下，声明如下:</p>
+<pre><code class="language-cpp">const string cities[Cit i esJ ~ // array of 5 strings
+&quot;Gribble City.,
+&quot;Gribble town&quot;。
+&quot;New Gribble&quot; ,
+&quot;San Gribble&quot;.
+&quot;Gríbble Vista &quot;</code></pre>
+<p>如果希望字符串是可修改的，则应省略限定符const.使用s位ing 对象数组时，初始化列表和用于显示字符串的for 循环代码与前两种方法中相同二.在希望字符净是可修改剧宵距下，string 类自动调整大小的特性将使这种方法比使府三维数组更药方便E</p>
+<h2>5.7 '这结</h2>
+<p>C++提供了3 种循环，for 循环、whi施循环和dówhi也循环.如果循环测试条件为阳e或非零，则往年环将重复执行一组指令:如果测试条4丰为f剑“或0 ...则练束循环.fol‘循环和white循环都是入口条件循环，这意味着程序将在执行循环体唔的诋旬之前检查测试条伶.do whjj'e循环走出-口条件循环二，这-意味着其;即在执在循环体帘的语旬之后检查条件。</p>
+<p>每种循环的句法都要求循环体由「条语句组成.然而，这条语句百~b(是复:合运组，也可以是语句块{ 白花括号括起的多条语句)。</p>
+<p>关系表达式对两个值进行比较，常被用作循环测试条件。关系表达式是通过使用6 曹关泵运算符之一构成的:&lt;、&lt;=、=飞&gt;=、_ &gt;或!~。关系表达式的结果为5∞1:类型，也为仕ue或false 。</p>
+<p>许多程序，都逐字节地读取文本输入或文本文件，istream类提供了多种可究成这种工作的方法r如果ch是一个char 变盏，则下面的语句将输.Æ中的下一个字符读入到cli中:</p>
+<pre><code class="language-cpp">ci o-&gt;&gt; cn;</code></pre>
+<p>然而，它将忽略空梅、换行待和第tl表符.下面的成员函数调用读取输入中的下一个事符(j而本管该宅得是什么)-并将其存储到ch中:</p>
+<pre><code class="language-cpp">cin.get (ch ) ;</code></pre>
+<p>成员函数调用cin.get( )返回下一个输入字符一一包括空棺、换行符和制表符，因此，可以这样使用‘8:</p>
+<pre><code class="language-cpp">ch : cin.get () ;</code></pre>
+<p>cin.get (char)-Ji立页函数调腾逝过返回转换方fal:se的booJ值来指出已到达EOF，而cin.get( )成分函数</p>
+<h3>第 163 页</h3>
+<p>词用则:ìll过返回EOF值来指出己剑达EOF ，EOF是在文件iostream中定义的。</p>
+<p>嵌王E循环是循环中的循环，适合用于处理二维数组。</p>
+<h2>5.8 复习题</h2>
+<p>1.入口条件循环和出口条件循环之间的区别是什么?各种C++循环分别属于其中的哪一种?</p>
+<p>2.如果下面的代码片段是有效程序的组成部分，它将打印什么内容?</p>
+<pre><code class="language-cpp">int i;
+for (i = 0; i &lt; S; i++)
+cout &lt;&lt; i;
+cout &lt;&lt; endl;</code></pre>
+<p>3.如果下丽的代码片段是有效程序的组成部分，它将打印什么内容?</p>
+<pre><code class="language-cpp">int J;
+for (j = 0; j &lt; 11; j += 3)
+cout &lt;&lt; j;
+cout &lt;&lt; endl &lt;&lt; j &lt;&lt; endl;</code></pre>
+<p>4.如果下丽的代码片段是有效程序的组成部分，它将打印什么内容?</p>
+<pre><code class="language-cpp">int j = 5;
+while ( +φj &lt; 9)
+cout &lt;&lt; j++ &lt;&lt; endli</code></pre>
+<p>5.如果下面的代码片段是有效程序的组成部分，自将打印什么内容?</p>
+<pre><code class="language-cpp">int k = 8;</code></pre>
+<p>d。</p>
+<pre><code class="language-cpp">cout &lt;&lt;&quot; k :: &quot; &lt;&lt; k &lt;&lt; endl;
+whil e (ku &lt; S);</code></pre>
+<p>6.编写一个打印l、2 、4、8 、16、32 、64的for 循环，每轮循环都将计数变髦的值乘以2.</p>
+<p>7.如何在循环体中包括多条语句?</p>
+<p>8.下面的话句是否有效?如果无效，原因是什么?如果有效，它将完成什么工作?</p>
+<pre><code class="language-cpp">int x = (1 , 024);</code></pre>
+<p>不丽的语句又如何呢?</p>
+<pre><code class="language-cpp">int y;</code></pre>
+<p>y = 1 , 024;</p>
+<ol>
+<li>R~看输入方面，cin&gt;&gt;ch同cin.get(ch)和ch=cin.get( )有什么不同?5 .9 兰扁年呈主东习</li>
+</ol>
+<p>1.编写一个要求用户输入两个整数的程序.该程序将计算并输出这两个整数之间〈包括这两个整数〉所有整数的和.这里假设先输入较小的整数。例如，如果用户输入的是2和9.则程序将指H12- 9之间所有整数的和为44.</p>
+<p>2.使用an可对象(而不是数组〉和10ngdouble (而不是longlong )重新编写程序清单5.4 .并计算100!的值.</p>
+<p>3.编写一个要求用户输入数字的程序。每次输入后，程序都将报告到目前为止，所有输入的累计和。当用户输入0时，程序结束。</p>
+<ol>
+<li>Daphne以阶。的单利投资了l∞美元。也就是说，每一年的利润都是投资额的1 0“/0.即每年10 美元z</li>
+</ol>
+<h3>第 164 页</h3>
+<p>利息=0τ阳×原始存款</p>
+<p>而C lco以5%的复利投资五100 羡元.也就是说，利息是当前在款〈包括获得的利息Y的5%，:</p>
+<p>利息=0:05&gt;&lt; 却可存款</p>
+<p>Clc。在第-年投资100美元的盈利是50/0-一得到T105美元。下-笔的主量和J是105美元的5%一~hlU 5.25-美元，依此类推.请编写一个程1芋，计算多少年后，Clco的投资价值才能超过Daphne.的投资价值，芥显示此时两今人的投资价值.</p>
+<p>5.假设宴销售(C++For Foo[s)- 一书.请编写一个程序，输入全年中每个月的销售量〈图书数量，耐不是销售额〉。程序通过循环，使用初始化为月份字符净的char、·数组(或string 对象数组〉逐月进行提末:并将输λ的数据储存在一个int 数组中.然后，程序，计算数组中各元索的总数，并报告这一年的销售情况.</p>
+<p>6.完成制呈练习5.但这一次使棚月用乎←一个二维数维来有每年销f售等量以」放走三绊f的叮总销售量.</p>
+<p>1 .设计_.-个名为car的结构，用它存储下迹有关汽车的信息:生户商〈存储tt字符敛缉与民stnn~对象中的字符-感〉、生产年份〈整数〉。编写一个程序，向用户询问有多少辆汽车，随后.-程序，使用new-来创连-一个由相应数蠢的car结构组成的动态放组.按年来，程序提示用户输入每辆车的生产商〈可能由多个单词组成〉和年份信息。请注意，这能要特别小心，I天|为它将交锋读取数-IJ!i和字字在串(参见第~4“章〉。最后-，程序将显示每个结构的内容。i亥程序，的运行情况如下:</p>
+<p>HOw many cars do you wish to catalog? 2</p>
+<p>Car骨1:</p>
+<pre><code class="language-cpp">Please enter t l&#x27;re make: HudsOIL Horne.t
+Please enter th号yearmade: 1 952</code></pre>
+<p>_ .__.</p>
+<p>_</p>
+<p>Car胃2:..~</p>
+<pre><code class="language-cpp">prease- eiiC&#x27;er &#x27; the&#x27; make ~ Kaisei&#x27;:: .. ---_.--、_. ._. ...
+&quot;please ent Eh: : the . year made&#x27;: &#x27;1 951</code></pre>
+<p>.~. ... ~Here is your colrecti。口」、、。-</p>
+<pre><code class="language-cpp">1-9 5击IfudsonHornet
+1&quot;&quot;951 Kaiser &#x27;_. _ _&#x27;_ . ... .. . &#x27;._&#x27;号，也_，</code></pre>
+<ol>
+<li>~编写ι个程序，它使用一公char 数组和循环来每次读取一个单词，应剑用户输入done 为止。随后，该程序指出用P 输入了多少个单词〈不包括done 在内)。下面是该程序的运行情况·</li>
+</ol>
+<pre><code class="language-cpp">Ente . r ..words .(to .stop;: type .the word done).::&#x27; ;，&#x27;&quot;二.-
+-
+ànteatei&quot; ..birthd.ay&#x27; :category &#x27; du皿p itter、气-、.
+envy finagle-geometry done f or sur e</code></pre>
+<ul>
+<li>“ -‘. ...YoU’ ‘enteied -a’ t.otal-‘of. ’‘l..words\扭{应在程序中包含头文件cstring;-并使股扇数stt:cmj:i()来进行比较测试.: 9-:编写-τ个满足E前一个练习中描述的面序，也使肘-siT:ing对泵而不是字符数组J请在程序中包含头文A:.: .1’牛string，开使用关系运算符来进校比较测试。-二-</li>
+</ul>
+<p>.W.编写了÷个使用嵌套循环的程序‘ ，“要求用户输À-个位，指出要显示多少咎。然后，程序将显示栩、伊.-应行数的星号，.其中第一L行包拖一奄星号;第二行包括两1:.星号，. 依此类拔J每」衍包含.的生符数等手均产!指定的行数}在是号不够的错况下，在屋号青在丽力日J:句点.该程序的运行，情况如下:</p>
+<p>=.8nt er.. number. of‘ .iows ,...5 .-,.-. “”“ ，、.._ ”、、</p>
+<p>e</p>
+<p>,-, -.、-“品.，.. ::-.”.-，、</p>
+<p>--、、..., :.:.-</p>
+<p>--:' ~ . . . ,-</p>
+<p>... * ;齿..:.. 、- ，，_...~</p>
+<p>--口.~ ~‘-</p>
+<p>飞:、，ι.-二.、圃..ι h _-巳A• ..-;-一.，喂-, _ø.二=, 冒、</p>
+<p>-- -….. .-;- . . ..r. 二、，<em> .</em>•• ... ‘吨.‘ . 。ι、</p>
+<p>-... ",-<em>,--. . '-</em></p>
+<p>-一ι_.-钮._...、</p>
+<p>:::-，---吨‘_.，“_二.- .: -~、- -</p>
+<p>-</p>
+<p>h -~. .. -‘-. -今--’ ‘‘;二二. -. ..:,-、.----、e…一.一川: .r ’. .~;‘• 、-‘.<em> -- ‘一吧~ </em>“:’.‘.: --~:-: -.- <em>-, • -</em> -: ..<em> ... ’鸟‘”’</em>.-~ ι 守..,;: ~<em>-. --‘.:</em> • --. 、-•• ’<em>-. 白‘ 一一二二、-.、-，电:-，’、、d 。一飞一. - . </em>. <em>“ι. -、”., -民-一←. </em> -一‘.. .二/...，...，，;_.:.-4、...伞，<em>喻--..’ ‘ -... .-‘ . ~ .“ 一..” --、-’、二一-品.一-.、、• .:.一-</em>...一‘、<em>.. ..一...</em>‘ 气</p>
+<p>..~</p>
+<ul>
+<li>. -、• , .</li>
+</ul>
+<p>、、</p>
+<p>? F月，一</p>
+<p>叫‘‘h</p>
+<hr>
+<p>本章对应原书小节结构见文件开头。</p>
+  <footer class="lesson-footer">
+    StudyMate · 第 5 章 循环和关系表达式 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>

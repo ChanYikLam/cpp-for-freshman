@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>循环：把重复交给机器 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0007</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0007 · 循环：把重复交给机器</span>
+    <h1>循环：把重复交给机器</h1>
+    <p class="lesson-goal"><b>本节目标：</b>用 <code>for</code>、<code>while</code> 和 <code>do-while</code> 三种循环把一批成绩读进来并累加出总分，看清循环变量每一轮的变化。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <h2>一个班五十个人</h2>
+
+  <p>成绩管理系统要读进一班的成绩。上一章我们已经能读进一个人的成绩，也能用 <code>if</code> 给它分档。现在换了个问题：一个班五十个人。</p>
+
+  <p>如果照上一章的写法往下写，就得把 <code>cin &gt;&gt; score;</code> 抄五十遍，还要准备 <code>score1</code>、<code>score2</code>、……<code>score50</code> 五十个变量来接。这样写出来的代码，只要有一处要改，就得改五十个地方。</p>
+
+  <p>重复是程序里最常见的事情：读进一批数据、把一批数加起来、在一张表里找最大的那个，都是「同一件事做很多遍」。而计算机最擅长的，正是把同一件事准确地做很多遍。前提是，你能把它说清楚。</p>
+
+  <h2>循环：把重复交给机器</h2>
+
+  <p>为了能说清「这件事重复做几遍、什么时候停」，「循环」这个词被引进来。</p>
+
+  <p><b>循环</b>：把需要重复执行的语句只写一次，同时给出「什么时候继续、什么时候停下」的规则，让计算机按这条规则反复执行那组语句的语法结构。</p>
+
+  <p>被重复执行的那组语句叫<b>循环体</b>。循环里通常还有一个变量，用来记录「现在是第几轮」，它的值每一轮都会变，循环的继续与停止就是依据它来判断的，这个变量叫<b>循环变量</b>。</p>
+
+  <p>C++ 里有三种写循环的语法：<code>for</code>、<code>while</code>、<code>do-while</code>。三种都能表达重复，区别在于「初始化、测试、更新」这三件事写在哪里，以及测试发生在循环体的前面还是后面。</p>
+
+  <table>
+    <thead>
+      <tr><th>写法</th><th>测试在什么时候做</th><th>循环体最少跑几轮</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>for (初始化; 测试; 更新)</code></td><td>先测试，为真才执行循环体</td><td>0 轮</td></tr>
+      <tr><td><code>while (测试)</code></td><td>先测试，为真才执行循环体</td><td>0 轮</td></tr>
+      <tr><td><code>do { 循环体 } while (测试);</code></td><td>先执行循环体，再测试</td><td>1 轮</td></tr>
+    </tbody>
+  </table>
+
+  <p>表中的「真」「假」，指的是测试表达式算出来的结果。第 6 课的 <code>if</code> 已经在用这套判断，循环只是把同一个判断问了一遍又一遍。</p>
+
+  <h2>for 循环的三个部分</h2>
+
+  <p><code>for</code> 后面括号里由两个分号隔开的三样东西，就是前面表格里的初始化、测试、更新：</p>
+
+  <pre data-lang="text"><code>for (初始化; 测试; 更新)
+    循环体</code></pre>
+
+  <ul>
+    <li><b>初始化</b>：只执行一次，通常用来给循环变量设一个起始值。</li>
+    <li><b>测试</b>：每一轮开始之前算一次。结果为真，就执行循环体；结果为假，循环结束，程序接着执行循环后面的语句。</li>
+    <li><b>更新</b>：每一轮循环体执行完以后做一次，通常用来把循环变量往前推一格。</li>
+  </ul>
+
+  <p><code>for</code> 属于<b>入口条件循环</b>：判断放在入口处，测试一开始就是假的话，循环体一次都不执行。下面这个程序把三部分的作用直接打印出来，同时对照两种边界写法的差别。</p>
+
+  <p>存成 <code>loops-01.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// loops-01.cpp -- for 循环的三个部分，以及两种边界的差别
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    cout &lt;&lt; "用 i &lt; 5 控制，i 依次取到：";
+    for (int i = 0; i &lt; 5; i++)
+    {
+        cout &lt;&lt; i &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+
+    cout &lt;&lt; "用 i &lt;= 5 控制，i 依次取到：";
+    for (int i = 0; i &lt;= 5; i++)
+    {
+        cout &lt;&lt; i &lt;&lt; " ";
+    }
+    cout &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ loops-01.cpp -o loops-01
+$ ./loops-01
+用 i &lt; 5 控制，i 依次取到：0 1 2 3 4
+用 i &lt;= 5 控制，i 依次取到：0 1 2 3 4 5</code></pre>
+
+  <p>同一个起始值，把 <code>&lt;</code> 换成 <code>&lt;=</code>，循环就多跑了一轮。这是循环里最容易写错的一处，后面还会专门说。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="for 循环的执行流程：初始化一次，然后测试、循环体、更新依次进行，更新后回到测试">
+<svg viewBox="0 0 560 400">
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="40" y="16" width="240" height="48" rx="8"/>
+    <rect x="40" y="100" width="240" height="48" rx="8"/>
+    <rect x="40" y="184" width="240" height="48" rx="8"/>
+    <rect x="40" y="268" width="240" height="48" rx="8"/>
+    <rect x="350" y="100" width="190" height="48" rx="8"/>
+    <path d="M160 64 V94"/>
+    <path d="M160 148 V178"/>
+    <path d="M160 232 V262"/>
+    <path d="M40 292 H16 V124 H34"/>
+    <path d="M280 124 H344"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M156 86 L160 94 L164 86"/>
+    <path d="M156 170 L160 178 L164 170"/>
+    <path d="M156 254 L160 262 L164 254"/>
+    <path d="M34 120 L40 124 L34 128"/>
+    <path d="M336 120 L344 124 L336 128"/>
+  </g>
+  <g font-size="16" fill="currentColor">
+    <text x="160" y="46" text-anchor="middle">① 初始化：int i = 0</text>
+    <text x="160" y="130" text-anchor="middle">② 测试：i &lt; 5 ？</text>
+    <text x="160" y="214" text-anchor="middle">③ 循环体</text>
+    <text x="160" y="298" text-anchor="middle">④ 更新：i++</text>
+    <text x="445" y="130" text-anchor="middle">循环之后的语句</text>
+    <text x="172" y="176">真</text>
+    <text x="292" y="114">假</text>
+    <text x="160" y="356" text-anchor="middle">每跑完一轮，回到 ② 再测试一次</text>
+  </g>
+</svg>
+    <figcaption>图 1 · for 循环的四个部分与执行顺序</figcaption>
+  </figure>
+
+  <p>循环变量每一轮取什么值，是读代码时最该盯住的东西。上图的循环跑起来，<code>i</code> 的变化过程是这样的：</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="循环变量 i 从 0 开始每轮加 1，前五轮都执行循环体，i 变成 5 时测试为假，循环结束">
+<svg viewBox="0 0 760 260">
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M60 150 H684"/>
+    <path d="M676 146 L684 150 L676 154"/>
+  </g>
+  <g fill="currentColor">
+    <circle cx="120" cy="150" r="5"/>
+    <circle cx="215" cy="150" r="5"/>
+    <circle cx="310" cy="150" r="5"/>
+    <circle cx="405" cy="150" r="5"/>
+    <circle cx="500" cy="150" r="5"/>
+    <circle cx="615" cy="150" r="5"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="1">
+    <path d="M120 192 V206 H500 V192"/>
+  </g>
+  <g font-size="16" fill="currentColor">
+    <text x="60" y="46">for (int i = 0; i &lt; 5; i++) 里，i 的变化：</text>
+    <text x="120" y="126" text-anchor="middle">执行循环体</text>
+    <text x="215" y="126" text-anchor="middle">执行循环体</text>
+    <text x="310" y="126" text-anchor="middle">执行循环体</text>
+    <text x="405" y="126" text-anchor="middle">执行循环体</text>
+    <text x="500" y="126" text-anchor="middle">执行循环体</text>
+    <text x="615" y="126" text-anchor="middle">测试为假</text>
+    <text x="615" y="100" text-anchor="middle">跳出循环</text>
+    <text x="120" y="182" text-anchor="middle">i = 0</text>
+    <text x="215" y="182" text-anchor="middle">i = 1</text>
+    <text x="310" y="182" text-anchor="middle">i = 2</text>
+    <text x="405" y="182" text-anchor="middle">i = 3</text>
+    <text x="500" y="182" text-anchor="middle">i = 4</text>
+    <text x="615" y="182" text-anchor="middle">i = 5</text>
+    <text x="310" y="240" text-anchor="middle">这 5 轮都执行了循环体，每轮结束 i 加 1</text>
+  </g>
+</svg>
+    <figcaption>图 2 · <code>for (int i = 0; i &lt; 5; i++)</code> 里循环变量 i 的变化过程</figcaption>
+  </figure>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "这个循环会依次打出 0 1 2 3 4：\n\n```cpp\nint i = 0;\nwhile (i &lt; 5)\n{\n    std::cout &lt;&lt; i &lt;&lt; \" \";\n    i++;\n}\n```\n\n```text\n0 1 2 3 4\n```\n\n① 初始化、测试、更新各执行了几次？\n② 循环体执行了几次？\n③ 循环结束后 i 等于多少？",
+    "answer": "① 初始化 1 次（只在进入循环前做一\n次）；测试 6 次；更新 5 次。\n② 5 次。\n③ i 等于 5——正是最后一次测试（5 &lt; 5）\n为假时才停下来的。",
+    "criteria": "三问都要答对：初始化 1 次、测试比循环\n体多一次、更新与循环体同次数；\n第 ③ 问答 5 才算过。答成「i 等于 4」是\n把最后一个执行过循环体的值当成了循环结\n束时的值 → 不通过。"
+  }
+]'></div>
+
+  <h2>用循环读入一批成绩</h2>
+
+  <p>把重复交给机器以后，「读进一批成绩并累加」就变成了几行：读出人数，循环那么多次，每轮读一个数加进总分。</p>
+
+  <p>存成 <code>loops-02.cpp</code> 再编译，输入 5 个成绩试试：</p>
+
+  <pre data-lang="cpp"><code>// loops-02.cpp -- 读入已知个数的一批成绩，累加出总分
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    int n;
+    cout &lt;&lt; "请输入成绩个数：";
+    cin &gt;&gt; n;
+
+    double sum = 0.0;
+    for (int i = 0; i &lt; n; i++)
+    {
+        double score;
+        cin &gt;&gt; score;
+        sum += score;
+    }
+
+    cout &lt;&lt; "共 " &lt;&lt; n &lt;&lt; " 个成绩，总分 " &lt;&lt; sum &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ loops-02.cpp -o loops-02
+$ ./loops-02
+请输入成绩个数：5
+90
+85
+78
+92
+88
+共 5 个成绩，总分 433</code></pre>
+
+  <p>读这段代码时注意两处。第一，<code>sum</code> 在进循环之前必须是 0，它相当于一个「累加器」，每读进一个成绩就往里加一次。第二，<code>sum += score</code> 是 <code>sum = sum + score</code> 的简写：把右边的值算出来，与左边变量原来的值相加，结果存回左边那个变量。<code>+=</code> 这组写法叫组合赋值运算符，除了 <code>+=</code>，还有 <code>-=</code>、<code>*=</code> 等等；累加时写这一种就够了。</p>
+
+  <p><code>int n</code> 与 <code>i &lt; n</code> 的搭配还有一个好处：到数组那一课，这行代码不用改一个字，就能从 5 个成绩换成 50 个。</p>
+
+  <h2>while：先判再做</h2>
+
+  <p>上面的程序要求事先知道有几个成绩。真实场景未必这么配合：从一个文件里读成绩，读到文件末尾才知道有几个；让使用者一条一条敲，敲到某个约定的数才算完。这类「事先不知道要跑几轮」的重复，习惯上用 <code>while</code>。</p>
+
+  <p><b>while</b>：只有测试和循环体两部分、每轮开始前先测试的循环。它可以看成省略了初始化与更新的 <code>for</code>。</p>
+
+  <p>存成 <code>loops-03.cpp</code> 再编译。这个程序约定：读到 <code>-1</code> 就停。</p>
+
+  <pre data-lang="cpp"><code>// loops-03.cpp -- while 循环：读到 -1 为止，事先不知道有几个成绩
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    double sum = 0.0;
+    int count = 0;
+    double score;
+
+    cout &lt;&lt; "逐条输入成绩，输入 -1 表示结束：" &lt;&lt; endl;
+    cin &gt;&gt; score;
+    while (score &gt;= 0)
+    {
+        sum += score;
+        count++;
+        cin &gt;&gt; score;
+    }
+
+    cout &lt;&lt; "共 " &lt;&lt; count &lt;&lt; " 个成绩，总分 " &lt;&lt; sum &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ loops-03.cpp -o loops-03
+$ ./loops-03
+逐条输入成绩，输入 -1 表示结束：
+90
+85
+78
+-1
+共 3 个成绩，总分 253</code></pre>
+
+  <p>这段代码的形状值得记下来：<b>先读一次，再判断，循环体里再读一次</b>。为什么读的语句出现两次？因为「读到的是什么」决定了要不要进循环体，所以第一次读必须发生在测试之前；进了循环体以后要处理下一个数，所以末尾还要再读一次。循环结束时的那个 <code>-1</code> 不参与累加，它只是结束标记。</p>
+
+  <p><code>while</code> 与 <code>for</code> 之间有个容易踩的差别：<code>for</code> 的初始化里可以声明循环变量（<code>for (int i = 0; ...)</code>），<code>while</code> 的测试外面声明。所以 <code>while</code> 里的循环变量，在循环结束以后仍然可以访问。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "这段循环用结束标记 -1 收工，输入 90、\n85、78、-1 时打印总分 253：\n\n```cpp\ndouble sum = 0.0;\nint count = 0;\ndouble score;\n\nstd::cin &gt;&gt; score;\nwhile (score &gt;= 0)\n{\n    sum += score;\n    count++;\n    std::cin &gt;&gt; score;\n}\n```\n\n```text\n90\n85\n78\n-1\n```\n\n```text\n共 3 个成绩，总分 253\n```\n\n把它改写成 for 版，要求打印出来的两行\n与原来完全一样。",
+    "answer": "改写之后每次读取都配一句判断，用一个首\n轮必真的 for 把「先读一次、再判断」摊\n平：\n\n```cpp\nfor (int i = 0; ; i++)\n{\n    std::cin &gt;&gt; score;\n    if (score &lt; 0)\n        break;\n    sum += score;\n    count++;\n}\n```\n\n也可以保留原形状，只把三件事收进 for\n的圆括号：\n\n```cpp\nfor (std::cin &gt;&gt; score; score &gt;= 0; std::cin &gt;&gt; score)\n{\n    sum += score;\n    count++;\n}\n```\n\n两种写法都对。关键是结束标记那次不能被\n累加——判断必须在 sum += score 之前发\n生。",
+    "criteria": "改成 for 形状、且结束标记不参与累加，\n两行输出与 while 版一致 → 通过。\n把 -1 也累加进去了（输出的总分变成\n252）→ 不通过。\n只要逻辑对，for 循环条件留空或把读取写\n在初始化与更新那一格都算合理替代方案。"
+  }
+]'></div>
+
+  <h2>do-while：先做再判</h2>
+
+  <p>第三种写法把测试挪到循环体的后面。</p>
+
+  <p><b>do-while</b>：先执行一次循环体，再测试，结果为真就回到循环体开头再来一轮的循环。因为第一次执行循环体之前没有测试，这类循环的循环体至少跑一轮，属于<b>出口条件循环</b>。</p>
+
+  <p>存成 <code>loops-04.cpp</code> 再编译，输入与上一个程序完全相同的内容：</p>
+
+  <pre data-lang="cpp"><code>// loops-04.cpp -- do-while 循环：先读一次，再判断要不要继续
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    double sum = 0.0;
+    int count = 0;
+    double score;
+
+    cout &lt;&lt; "逐条输入成绩，输入 -1 表示结束：" &lt;&lt; endl;
+    do
+    {
+        cin &gt;&gt; score;
+        if (score &gt;= 0)
+        {
+            sum += score;
+            count++;
+        }
+    } while (score &gt;= 0);
+
+    cout &lt;&lt; "共 " &lt;&lt; count &lt;&lt; " 个成绩，总分 " &lt;&lt; sum &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ loops-04.cpp -o loops-04
+$ ./loops-04
+逐条输入成绩，输入 -1 表示结束：
+90
+85
+78
+-1
+共 3 个成绩，总分 253</code></pre>
+
+  <p>同样的输入、同样的输出，但读成绩的语句只写了一次：<code>do</code> 里面读，<code>while</code> 那里判断。它比 <code>loops-03.cpp</code> 简洁，代价是循环体必然会跑一轮——测试里判断的那个 <code>score</code>，正是这一轮读进来的。</p>
+
+  <p>两种循环的差别，在于判断站在循环体的哪一侧：</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="while 把测试放在循环体前面，为假时循环体一次都不执行；do-while 把测试放在循环体后面，循环体至少执行一次">
+<svg viewBox="0 0 760 300">
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="50" y="30" width="180" height="48" rx="8"/>
+    <rect x="50" y="118" width="180" height="48" rx="8"/>
+    <path d="M140 78 V112"/>
+    <path d="M50 142 H24 V54 H44"/>
+    <path d="M230 54 H294"/>
+    <rect x="470" y="30" width="180" height="48" rx="8"/>
+    <rect x="470" y="118" width="180" height="48" rx="8"/>
+    <path d="M560 78 V112"/>
+    <path d="M650 142 H676 V54 H656"/>
+    <path d="M560 166 V194"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M136 104 L140 112 L144 104"/>
+    <path d="M44 50 L50 54 L44 58"/>
+    <path d="M286 50 L294 54 L286 58"/>
+    <path d="M556 104 L560 112 L564 104"/>
+    <path d="M656 50 L650 54 L656 58"/>
+    <path d="M556 186 L560 194 L564 186"/>
+  </g>
+  <g font-size="16" fill="currentColor">
+    <text x="140" y="60" text-anchor="middle">① 测试条件</text>
+    <text x="140" y="148" text-anchor="middle">② 循环体</text>
+    <text x="152" y="100">真</text>
+    <text x="238" y="46">假</text>
+    <text x="302" y="60">跳过循环体</text>
+    <text x="560" y="60" text-anchor="middle">① 循环体</text>
+    <text x="560" y="148" text-anchor="middle">② 测试条件</text>
+    <text x="640" y="100">真</text>
+    <text x="572" y="188">假：结束</text>
+    <text x="140" y="250" text-anchor="middle">先判断：为假时循环体一次都不执行</text>
+    <text x="560" y="250" text-anchor="middle">先执行：循环体至少跑一次</text>
+  </g>
+</svg>
+    <figcaption>图 3 · while 与 do-while 的判断时机对照</figcaption>
+  </figure>
+
+  <h2>提前结束与跳过本轮</h2>
+
+  <p>循环跑起来以后，有两种临时的需求：一种是想在满足某个条件时提前收工，另一种是想跳过某一轮剩下的活儿、直接开始下一轮。C++ 用两个关键字管这两件事。</p>
+
+  <ul>
+    <li><b><code>break</code></b>：写在循环体里，执行到它，整个循环立刻结束，程序接着执行循环后面的语句。</li>
+    <li><b><code>continue</code></b>：写在循环体里，执行到它，本轮剩下的语句不再执行，直接跳到更新与下一次测试。</li>
+  </ul>
+
+  <p>存成 <code>loops-05.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// loops-05.cpp -- break 与 continue：一个提前结束，一个跳过本轮
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    for (int i = 1; i &lt;= 10; i++)
+    {
+        if (i % 3 == 0)
+        {
+            continue;              // 跳过后面的输出，直接进入下一轮
+        }
+        if (i == 8)
+        {
+            break;                 // 整个循环到此结束
+        }
+        cout &lt;&lt; i &lt;&lt; " ";
+    }
+
+    cout &lt;&lt; endl &lt;&lt; "循环结束" &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ loops-05.cpp -o loops-05
+$ ./loops-05
+1 2 4 5 7
+循环结束</code></pre>
+
+  <p>输出里没有 3 和 6（<code>continue</code> 把这两轮剩下的输出跳过了），也没有 8、9、10（<code>i</code> 到 8 时 <code>break</code> 让整个循环提前结束，后面几轮根本没发生）。</p>
+
+  <p><code>break</code> 与 <code>continue</code> 都只管自己所在的那一层循环，循环外面的语句不受影响。</p>
+
+  <h2>边界写 &lt; 还是 &lt;=</h2>
+
+  <p>循环次数的错误，多半出在测试那一行。一个可用的做法是：<b>盯住循环变量最后一轮的值</b>。</p>
+
+  <ul>
+    <li>从 0 开始数，数 <code>n</code> 个：<code>for (int i = 0; i &lt; n; i++)</code>，最后一轮 <code>i</code> 是 <code>n - 1</code>。</li>
+    <li>从 1 开始数，数到 <code>n</code> 为止：<code>for (int i = 1; i &lt;= n; i++)</code>，最后一轮 <code>i</code> 是 <code>n</code>。</li>
+  </ul>
+
+  <p>两种写法都对，但它们的起始值必须与 <code>&lt;=</code> 还是 <code>&lt;</code> 配成一套。把 <code>loops-01.cpp</code> 里两个循环的输出对照一下就能看出后果：<code>i &lt; 5</code> 让 <code>i</code> 走到 4，<code>i &lt;= 5</code> 让 <code>i</code> 走到 5。换成读成绩的程序，这一格之差就是「少读一个成绩」或者「多算一个根本没有的成绩」。</p>
+
+  <div class="lesson-warn">
+    <b>循环变量的两处自觉</b>
+    <p>写循环时养成两个习惯，能挡掉大部分这类错误：</p>
+
+    <ul>
+      <li><b>循环体里别顺手改循环变量</b>。<code>i</code> 该在「更新」那一格变，在循环体里再改一次，循环次数就与你想的对不上了。</li>
+      <li><b>数清楚最后一轮的值</b>。想不明白就把 <code>i</code> 打印出来跑一次，比盯着屏幕推演快。</li>
+    </ul>
+  </div>
+
+  <h2>转不停的死循环</h2>
+
+  <p>如果循环变量一直不变，测试条件就永远为真，程序会卡在循环里出不来。这时终端上会一行一行地刷屏，只能按 <code>Ctrl+C</code> 强行掐掉。</p>
+
+  <p>存成 <code>loops-06.cpp</code>，它编译得过，但不要去运行：</p>
+
+  <pre data-lang="cpp"><code>// loops-06.cpp -- 反例：循环体里忘了更新循环变量
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    int i = 0;
+    while (i &lt; 5)
+    {
+        cout &lt;&lt; "第 " &lt;&lt; i + 1 &lt;&lt; " 次循环" &lt;&lt; endl;
+        // 这里本该有 i++，漏掉了：i 一直是 0，条件永远成立
+    }
+
+    cout &lt;&lt; "循环结束" &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <div class="lesson-warn">
+    <b>转不停的循环</b>
+    <p>这个程序的问题不在语法，而在循环体里少了一句 <code>i++</code>：<code>i</code> 一直是 0，<code>i &lt; 5</code> 永远为真，<code>第 1 次循环</code> 会一直打印下去，<code>循环结束</code> 那一行永远轮不到。</p>
+
+    <p><code>while</code> 和 <code>do-while</code> 最容易出这个问题——它们的更新写在循环体里，不像 <code>for</code> 那样有固定的第三格。写完循环后回头问一句：<b>循环变量在这一轮里变了吗？</b></p>
+
+    <p>还有一种更隐蔽的写法会转不停：在 <code>while</code> 循环里用 <code>continue</code> 跳过了更新语句，<code>i</code> 一样不会再变，后果与忘记 <code>i++</code> 完全相同。<code>for</code> 循环不受这个影响：<code>continue</code> 之后，更新那一格照样会执行。</p>
+  </div>
+
+  <h2>动手做：读入并累加一批成绩</h2>
+
+  <p>到这里，三种循环都见过了，读进一批成绩并累加的逻辑也跑通过了。接下来轮到亲手写：换一种输入约定，把总分与个数算对。</p>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">读入并累加一批成绩</span>
+    </div>
+
+      <p>任务与验收标准见 <a href="../../lab/0007-loops/">动手任务：循环累加成绩</a>。</p>
+
+      <p>自己动手之前，先想清楚三件事：</p>
+
+      <ul>
+        <li>成绩的个数是事先知道（用 <code>for</code>），还是读到结束标记才停（用 <code>while</code>）？</li>
+        <li>总分那个变量，在进循环之前应该等于多少？</li>
+        <li>循环每跑一轮，哪个变量的值一定会变？</li>
+      </ul>
+
+      <p>写完照着 <code>loops-02.cpp</code> 或 <code>loops-03.cpp</code> 的编译命令编译运行，把终端输出与预期结果逐行对一遍。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "这张成绩表的总分应该是 433，程序打出来\n的却是别的数：\n\n```cpp\nint scores[5] = {90, 85, 78, 92, 88};\n\ndouble total = 0.0;\nfor (int i = 0; i &lt;= 5; i++)\n{\n    total += scores[i];\n}\n\nstd::cout &lt;&lt; \"总分：\" &lt;&lt; total &lt;&lt; std::endl;\n```\n\n① 错在哪一行？\n② 为什么结果不对？\n③ 怎么改，才能让「数组有几个元素」和\n「循环走几轮」永远是同一个数？",
+    "answer": "① 条件写成 i &lt;= 5。\n② 下标合法范围是 0 到 4；i 取到 5 时访\n问的是 scores[5]，那一格不属于这张表，\n读进来的是别处的字节，总分就掺进了一个\n没有意义的数。\n③ 把长度绑到一个常量上，两处都用同一个\n名字：\n\n```cpp\nconst int N = 5;\nint scores[N] = {90, 85, 78, 92, 88};\ndouble total = 0.0;\nfor (int i = 0; i &lt; N; i++)\n{\n    total += scores[i];\n}\n```\n\n以后数组改成 10 个元素，只改 N 一处，\n读数据的循环与统计的循环同时跟上。",
+    "criteria": "指出 i &lt;= 5 越界、说出读到了不属于数组\n的内存 → 通过；\n第 ③ 问给出「长度与边界共用一个 const\n常量」这个做法才算完整。\n只说「把 5 改成 4」→ 部分通过（这一处\n对了，但留下两个各写一遍的数字）。"
+  }
+]'></div>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0006-branch-if.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">分支：让程序会判断</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0008-functions-basics.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">函数：把一段活儿打包</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0007 循环：把重复交给机器 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

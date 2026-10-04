@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>变量、类型与内存 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0002</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0002 · 变量、类型与内存</span>
+    <h1>变量、类型与内存</h1>
+    <p class="lesson-goal"><b>本节目标：</b>用 <code>int</code>、<code>double</code>、<code>char</code> 声明变量，用它们算出一份总分，并且看懂整数与小数在结果上的差别。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <div class="lesson-note">
+    <b>这一课从「内存格子」出发</b>
+    <p>一门课的成绩，总分要算加法，平均分要算小数，还有名字首字母只是一个字母。这三样东西为什么不能都用同一个写法存？这一课讲清「格子、名字、类型」三件事的关系，以及编译器在背后替你做了什么。</p>
+  </div>
+
+  <h2>为什么需要「变量」</h2>
+
+  <p>先说一个前提：程序里的数字不能凭空存在。它必须落在内存的某个位置上。</p>
+
+  <p>内存可以想成一排编了号的房间，每个房间能放一点点数据。要往里面放一个成绩，程序必须交代三件事：</p>
+
+  <ul>
+    <li>数据放在<b>哪个</b>房间；</li>
+    <li>这个房间放<b>什么值</b>；</li>
+    <li>这个房间里的二进制位，按<b>哪种规则</b>来解释。</li>
+  </ul>
+
+  <p>第三件事最容易被忽略。同一个房间里的同一串二进制位，按整数解释是 65，按字符解释就是字母 <code>A</code>——房间本身不知道自己在存什么，是<b>解释规则</b>决定了它的含义。</p>
+
+  <p>于是 C++ 要求你在往房间里放东西之前，先把房间认下来、给它起个名字、并且说明按哪种规则解释。这套做法给出的东西叫<b>变量</b>：内存里一块有名字的存储空间，用来存一个会变的值。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="内存里一个格子贴有变量名 chineseScore，里面存着 92，格子旁边标注类型 int 规定了如何解释这些二进制位">
+<svg viewBox="0 0 720 210" role="img" aria-hidden="true">
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="60" y="60" width="240" height="76" rx="8"/>
+    <path d="M150 60 V136 M240 60 V136"/>
+  </g>
+  <g fill="currentColor" font-size="16" text-anchor="middle">
+    <text x="105" y="105">00000000</text>
+    <text x="195" y="105">00000000</text>
+    <text x="285" y="105">01011100</text>
+    <text x="180" y="48">一个 int 占 4 个字节（4 个格子）</text>
+    <text x="180" y="164">chineseScore</text>
+    <text x="180" y="188">类型 int：按整数解释 → 92</text>
+  </g>
+  <path d="M310 98 H372" fill="none" stroke="currentColor" stroke-width="2"/>
+  <g fill="currentColor" font-size="16">
+    <text x="384" y="88">名字：chineseScore</text>
+    <text x="384" y="114">类型：int</text>
+    <text x="384" y="140">值：92</text>
+  </g>
+</svg>
+    <figcaption>图 1 · 变量是内存里一块有名字的格子，类型规定格子里的位怎么解释</figcaption>
+  </figure>
+
+  <p>变量之所以能省事，是因为它把「哪个房间」这件事接管了。以后你在代码里写 <code>chineseScore</code>，编译器替你换算成那个房间的位置。否则每次想用这个成绩，你都得自己记住一串地址，程序也就没法读了。</p>
+
+  <h2>声明：给格子起名字</h2>
+
+  <p>让编译器划出格子并起名字，这条语句叫<b>声明</b>（declaration）。先看一份能跑的代码。把它存成 <code>types-01.cpp</code> 再编译。</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int chineseScore = 92;
+    int mathScore = 88;
+    int englishScore = 87;
+    int total = chineseScore + mathScore + englishScore;
+
+    std::cout &lt;&lt; "三科总分：" &lt;&lt; total &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="sh"><code>g++ types-01.cpp -o types-01 &amp;&amp; ./types-01</code></pre>
+
+  <pre data-lang="term"><code>$ ./types-01
+三科总分：267</code></pre>
+
+  <p>四行声明的形状是一样的：<b>数据类型 名字 = 初始值;</b>。<code>int chineseScore = 92;</code> 读作「划一块能放整数的格子，名字叫 chineseScore，一开始放 92」。</p>
+
+  <p><code>int</code> 是 <b>数据类型</b>（data type）：它规定了这块存储空间能存什么、占多大、怎么解释这些二进制位。C++ 把「占多大」和「怎么解释」都交给类型名来回答，所以在 C++ 里声明变量时<b>类型不能省</b>。</p>
+
+  <p>这里有个与 Python 的对照值得说一句：Python 里写 <code>x = 1</code> 直接用就行，类型由运行时的值决定；C++ 要在写代码的时候就说清类型。付出的代价是多敲一个 <code>int</code>，换来的是编译器能在<b>编译的时候</b>就告诉你「你把一个名字赋值给了整数格子」——这类错误在程序跑起来之前就被拦住了。</p>
+
+  <h2>为什么不能只有一种类型</h2>
+
+  <p><code>int</code> 只放得下整数。成绩要算小数平均分，<code>int</code> 就装不下了。于是一个念头很自然：那所有格子都按小数规则解释不就行了？</p>
+
+  <p>不行，理由有两个，都跟内存的物理形态有关。</p>
+
+  <p>第一，<b>小数和整数的存储规则完全不同</b>。整数的位直接拼成数值（二进制）；小数要拆成「基准值」和「缩放因子」两部分，缩放因子负责移动小数点的位置——「浮点」这个名字就是这么来的。同一串位按两种规则解释会得到毫无关系的两个数，所以规则必须在声明时就定下来，编译器才知道该生成哪种指令。</p>
+
+  <p>第二，<b>格子的大小是有限的，而不同的用途需要的范围不一样</b>。<code>int</code> 通常占 4 个字节（32 位），能表示的整数上限是 2147483647；再大就需要 <code>long long</code>，占 8 个字节。如果只有一个「万能类型」，要么不够用，要么平白浪费内存。</p>
+
+  <p>C++ 的做法是给出一组基本类型，各管一段范围。本课程要用的三个：</p>
+
+  <table>
+    <thead>
+      <tr><th>类型</th><th>用来存什么</th><th>常见大小</th><th>写法</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>int</code></td><td>整数，比如成绩、人数</td><td>4 字节</td><td><code>int score = 92;</code></td></tr>
+      <tr><td><code>double</code></td><td>带小数的数，比如平均分</td><td>8 字节</td><td><code>double average = 89.0;</code></td></tr>
+      <tr><td><code>char</code></td><td>单个字符，比如等级 <code>A</code></td><td>1 字节</td><td><code>char grade = 'A';</code></td></tr>
+    </tbody>
+  </table>
+
+  <p><code>int</code> 是 integer（整数）的缩写，<code>double</code> 的名字来自「双精度」——它的有效位数是 <code>float</code> 的两倍，能多存 7 位左右的有效数字。要算的数是成绩平均分这种量级时，用 <code>double</code> 就够，<code>float</code> 反而会在乘除之后一点点累积误差：经典教材里同一个 <code>10.0 / 3.0</code>，<code>float</code> 放大一百万倍后开始对不上，<code>double</code> 还能对上十几位。</p>
+
+  <p><b>char 为什么要单独一个类型</b>：字符和整数在内存里其实是同一类东西。字符 <code>A</code> 存进去的是它对应的编号 65，<code>B</code> 是 66。既然都占一个字节，用 <code>int</code> 存字符也能存得下。声明成 <code>char</code> 的意义在于<b>解释方式</b>：编译器看到 <code>char</code>，就知道你要它按字符的样子显示；看到 <code>int</code>，就按编号的数字显示。这个编号体系叫 ASCII。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="并排三个变量格子，int 的格子存 92 显示为数值，double 的格子存 89.0，char 的格子存编号 65 显示为字母 A">
+<svg viewBox="0 0 720 230" role="img" aria-hidden="true">
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="40" y="56" width="180" height="70" rx="8"/>
+    <rect x="270" y="56" width="180" height="70" rx="8"/>
+    <rect x="500" y="56" width="180" height="70" rx="8"/>
+  </g>
+  <g fill="currentColor" font-size="16" text-anchor="middle">
+    <text x="130" y="44">int total</text>
+    <text x="360" y="44">double average</text>
+    <text x="590" y="44">char grade</text>
+    <text x="130" y="88">00000000 … 00001011</text>
+    <text x="130" y="112">→ 267</text>
+    <text x="360" y="88">01000000 01010110 …</text>
+    <text x="360" y="112">→ 89.0</text>
+    <text x="590" y="88">01000001</text>
+    <text x="590" y="112">→ 'A'</text>
+    <text x="360" y="158">同一个字节，按 char 解释是字母，按 int 解释是编号</text>
+    <text x="360" y="188">类型决定了「怎么解释这些位」</text>
+  </g>
+</svg>
+    <figcaption>图 2 · 同一个字节里放 65，声明成 char 就显示 A，声明成 int 就显示 65</figcaption>
+  </figure>
+
+  <p><code>char</code> 的值可以用编号展示出来。存成 <code>types-03.cpp</code>，编译运行：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    char firstLetter = 'L';
+    int letterCode = firstLetter;
+
+    std::cout &lt;&lt; "首字母是 " &lt;&lt; firstLetter &lt;&lt; std::endl;
+    std::cout &lt;&lt; "它的编码是 " &lt;&lt; letterCode &lt;&lt; std::endl;
+
+    firstLetter = firstLetter + 1;
+    letterCode = firstLetter;
+    std::cout &lt;&lt; "再加 1，字符变成 " &lt;&lt; firstLetter
+              &lt;&lt; "，编码变成 " &lt;&lt; letterCode &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./types-03
+首字母是 L
+它的编码是 76
+再加 1，字符变成 M，编码变成 77</code></pre>
+
+  <p><code>L</code> 的编号是 76，<code>M</code> 是 77。字母在 ASCII 表里是挨着排的，所以给字符加 1 就等于顺着往下挪一个字母。<code>assert</code> 一下这个观察很重要：<b>字符在内存里就是编号</b>，<code>char</code> 只是让编译器按字母的样子给你看。</p>
+
+  <h2>初始化：读不到值的那种错</h2>
+
+  <p><code>int total;</code> 这样只声明、不给初始值，也是合法的。但接下来如果直接拿它做加法，读到的是一串来路不明的值。</p>
+
+  <p>原因是内存不擦。上一段程序用过的格子，操作系统直接交给下一段程序接着用，里面留着什么就是什么。C++ 为了性能，声明时不会替你把格子清成 0，所以那个值可能是 0、可能是 1610612736，每次跑还可能不一样。这类现象在 C++ 里叫<b>未定义行为</b>：标准没有规定结果是什么，编译器也没有义务帮你兜底。</p>
+
+  <p><b>规矩：声明变量时顺手给它一个初始值</b>。想不出合理的初值，就给 0。这一条能省掉一大类「跑一次对、跑一次错」的怪事。</p>
+
+  <h2>常量与 const</h2>
+
+  <p>有一类数字不该变：一门课固定三门，一石等于 14 磅，一个月 12 个月。这种数字写进代码叫<b>字面值</b>，但直接写数字有个麻烦：</p>
+
+  <pre data-lang="cpp"><code>double average = total / 3;</code></pre>
+
+  <p>三周后回来看，<code>3</code> 是什么？是科目数，还是别的什么？而且以后科目从三门改成五门，你得在程序里把每个 <code>3</code> 都找出来——漏掉一个就出错。</p>
+
+  <p>办法是给这个数字起个名字，并且声明它<b>不许被改</b>。做法是在类型前面加关键字 <code>const</code>：</p>
+
+  <pre data-lang="cpp"><code>const int kSubjectCount = 3;</code></pre>
+
+  <p><code>const</code> 是 constant（常量）的缩写，它叫<b>限定符</b>：它限定了这条声明里变量的值固定下来，之后任何想给它赋值的代码都会被编译器直接拦下。这样「科目数」这个名字只有一个定义处，改一处就全改了。</p>
+
+  <pre data-lang="cpp"><code>const int kSubjectCount;</code></pre>
+
+  <p>这一行是错的。存成 <code>broken-types-01.cpp</code> 编译一下，报错是这样的：</p>
+
+  <pre data-lang="text"><code>broken-types-01.cpp:5:15: error: default initialization of an object of const type 'const int'
+    5 |     const int kSubjectCount;
+      |               ^            
+      |                             = 0</code></pre>
+
+  <p><code>default initialization of an object of const type</code> 的意思是「一个 const 类型的对象被默认初始化了」——也就是没给值就放着了。原因是常量必须在声明的时候就给出值：值一旦固定就不允许再改，那么声明时不给值，这个名字就永远拿不到值了。注意编译器最后那行给的建议 <code>= 0</code>：它甚至替你想好了改法。</p>
+
+  <p>这一条和上面「顺手给初值」是同一个毛病的两种表现，但 <code>const</code> 这种更严重——编译器会直接拦住你，<b>这是好事</b>，比跑到一半读出乱值好得多。</p>
+
+  <p>命名上，常量用小写字母 <code>k</code> 打头（<code>kSubjectCount</code>）是一种常见约定，一看就知道它不是普通变量。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "C++ 声明变量时类型不能省。编译器要靠类\n型回答的是哪两件事？",
+    "opts": [
+      "这块格子占多大，以及这些二进制位按哪种规则解释",
+      "这块格子的名字有多长，以及它能不能被改到",
+      "这个变量有没有初值，以及它的作用域有多大",
+      "这个变量会不会被改，以及它要不要放寄存器"
+    ],
+    "ans": 0,
+    "why": "同一个字节里放 65：按 int 解释是 65，\n按 char 解释是 A。解释规则决定了含义，\n格子宽度决定了范围——两件事都写在类型\n里，所以编译器必须在看到声明时就拿到类\n型。"
+  }
+]'></div>
+
+  <h2>亲手试一遍</h2>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 1 步 · 声明几个变量，看总分</span>
+    </div>
+
+      <p>把下面的程序存成 <code>types-02.cpp</code> 编译运行。它和 <code>types-01.cpp</code> 只差一行：把总分除以 3 得到平均分。</p>
+
+      <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int chineseScore = 92;
+    int mathScore = 88;
+    int englishScore = 87;
+    int total = chineseScore + mathScore + englishScore;
+    double average = total / 3;
+
+    std::cout &lt;&lt; "总分：" &lt;&lt; total &lt;&lt; "，平均分：" &lt;&lt; average &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+      <pre data-lang="term"><code>$ ./types-02
+总分：267，平均分：89</code></pre>
+
+      <p>平均分是 89，不是 89.0，也不是 89.666…。这不是打印格式的毛病，<code>average</code> 这个格子里真的就是 89——下一课专门拆这一处。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 2 步 · 改一处，看类型怎么影响结果</span>
+    </div>
+
+      <p>把 <code>double average = total / 3;</code> 的三处改动分别试一次，每次改完重新编译运行，记下输出：</p>
+
+      <ol>
+        <li>把 <code>average</code> 的声明改成 <code>int average = total / 3;</code>；</li>
+        <li>把 <code>3</code> 改成 <code>3.0</code>；</li>
+        <li>把 <code>total</code> 的声明改成 <code>double total = chineseScore + mathScore + englishScore;</code>。</li>
+      </ol>
+
+      <p>编译运行还是那条命令：</p>
+
+      <pre data-lang="sh"><code>g++ types-02.cpp -o types-02 &amp;&amp; ./types-02</code></pre>
+
+      <p>第 1 处改完，输出里连小数位都没了：</p>
+
+      <pre data-lang="term"><code>$ ./types-02
+总分：267，平均分：89</code></pre>
+
+      <p>第 2 处开始能算出小数。哪一处改动能改变结果、为什么能，就是下一课的全部内容。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">第 3 步 · 造一个未定义行为，再治好它</span>
+    </div>
+
+      <p>新写一份文件：声明 <code>int total;</code> 之后<b>不给值</b>，直接打印它，编译运行两三次，看每次打印的是不是同一个数。照着上面那条命令编译（把文件名换成你自己的）。</p>
+
+      <pre data-lang="sh"><code>g++ uninit.cpp -o uninit &amp;&amp; ./uninit</code></pre>
+
+      <p>三次运行的输出长这样——<b>每次都可能不一样</b>：</p>
+
+      <pre data-lang="term"><code>$ ./uninit
+1610612736
+$ ./uninit
+32767
+$ ./uninit
+-1073743896</code></pre>
+
+      <p>然后把这一行补成 <code>int total = 0;</code> 再跑三次，输出就每次都一样了：</p>
+
+      <pre data-lang="term"><code>$ ./uninit
+0</code></pre>
+
+      <p>编译通过、运行也没有报错，可那个数在两次运行之间会变。这就是「顺手给初值」这条规矩的由来：你没法预测那个格子原来装着谁的什么数据。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "小组把平均分写成了这样，屏幕上打出\n89，心里想的是 89.0：\n\n```cpp\nint total = 267;\nint average = total / 3;\n```\n\n改成能算出小数平均分的写法，并说明改的\n是哪一步。",
+    "answer": "改运算那一步，而不是接收结果的格子。两\n种写法都能用：\n\n```cpp\ndouble average = total / 3.0;\n```\n\n```cpp\ndouble average = static_cast&lt;double&gt;(total) / 3;\n```\n\n理由：两个操作数都是整数时，除法按整数\n规则算完再赋值，89 是算出来的结果，小\n数在第一步就没有了。把 3 写成 3.0（或\n先把 total 转成 double）之后，除法里有\n一个操作数是小数，两边都按小数算，得到\n89.0。",
+    "criteria": "必须同时满足两条：\n· 改的是运算（分母写 3.0，或\n  static_cast 转 total），不是只把\n  int average 换成 double；\n· 能说出理由：整数除法先算完，89 里已\n  经没有小数，后面换什么格子都救不回\n  来。\n写成 double average = total / 3; 只改\n格子不改运算 → 不通过。"
+  }
+]'></div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "一位同学想让「科目数」不再是一个写死的\n数字，写成了这样：\n\n```cpp\n#include &lt;iostream&gt;\n\nint main()\n{\n    const int kSubjectCount;\n    std::cout &lt;&lt; kSubjectCount &lt;&lt; std::endl;\n    return 0;\n}\n```\n\n编译器直接把他拦下了：\n\n```text\nbroken-types-01.cpp:5:15: error: default initialization\n    of an object of const type &#39;const int&#39;\n    5 |     const int kSubjectCount;\n      |               ^\n```\n\n① 这一行错在哪？\n② 为什么常量必须在声明时就给值？\n③ 这一条和「普通变量忘了给初值」相比，\n哪一个更该高兴？",
+    "answer": "① const int kSubjectCount; 声明之后没\n给值。\n② 常量一旦定下来就不允许再改，声明时不\n给值，这个名字就永远拿不到值了——编译器\n只能在门口拦下，不能放它过去。\n③ const 这一条更该高兴。普通变量忘给初\n值会读到内存里残留的随机值，编译通过、\n现象随机；const 忘给初值编译器当场拦\n住。",
+    "criteria": "第 ① 问答「声明 const 时没给初值」；\n第 ② 问答到「值一旦固定就不能再改，所\n以声明处必须给出」，只说「语法规定」算\n部分通过；\n第 ③ 问说出编译器拦住比运行时读到随机\n值好，才算过。"
+  }
+]'></div>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0001-intro-first-program.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">你的第一个 C++ 程序</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0003-arithmetic-and-conversion.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">算术运算与类型转换</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0002 变量、类型与内存 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

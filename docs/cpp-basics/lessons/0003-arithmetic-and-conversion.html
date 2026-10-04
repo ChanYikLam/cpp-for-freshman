@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>算术运算与类型转换 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0003</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0003 · 算术运算与类型转换</span>
+    <h1>算术运算与类型转换</h1>
+    <p class="lesson-goal"><b>本节目标：</b>讲清整数除法为什么算出 89，并把平均分算对、让它显示成 89.0。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <div class="lesson-note">
+    <b>这一课从一个算错的平均分开始</b>
+    <p>总分 267，三个人，平均分写成 <code>267 / 3</code>，屏幕上却是 89，心里想的是 89.0。程序没坏，是「除法」这个词在 C++ 里有两个意思。这一课把运算符、优先级与类型转换讲清楚，让算出来的数和心里的数对上。</p>
+  </div>
+
+  <h2>五个运算符与优先级</h2>
+
+  <p>计算机上的算术靠<b>运算符</b>（operator）完成。运算符是告诉计算机「对这些值做一个动作」的符号。一个运算符加上它的操作数构成一个<b>表达式</b>（expression）——一段能算出一个值的代码。</p>
+
+  <p>C++ 有五个基本算术运算符：</p>
+
+  <table>
+    <thead>
+      <tr><th>运算符</th><th>动作</th><th>例子</th><th>结果</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>+</code></td><td>加法</td><td><code>4 + 20</code></td><td><code>24</code></td></tr>
+      <tr><td><code>-</code></td><td>减法</td><td><code>12 - 3</code></td><td><code>9</code></td></tr>
+      <tr><td><code>*</code></td><td>乘法</td><td><code>28 * 4</code></td><td><code>112</code></td></tr>
+      <tr><td><code>/</code></td><td>除法</td><td><code>1000 / 5</code></td><td><code>200</code></td></tr>
+      <tr><td><code>%</code></td><td>求模（除法的余数）</td><td><code>19 % 6</code></td><td><code>1</code></td></tr>
+    </tbody>
+  </table>
+
+  <p><code>%</code> 是 remainder（余数）的意思，读作「19 模 6」，算的是 19 除以 6 剩下的那部分：19 是 6 的 3 倍余 1。19 除以 6 的商存在，余数也存在，加法减法只给一个结果，所以除法要拆成两个运算符来问。</p>
+
+  <p>表达式里出现多个运算符时，先算哪个由<b>优先级</b>决定，这套规则和数学课上一致：先乘除、后加减。存成 <code>arith-03.cpp</code>，跑一遍看每个表达式算出什么。</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int a = 7;
+    int b = 3;
+
+    std::cout &lt;&lt; "7 / 3 = " &lt;&lt; a / b &lt;&lt; std::endl;
+    std::cout &lt;&lt; "7 % 3 = " &lt;&lt; a % b &lt;&lt; std::endl;
+    std::cout &lt;&lt; "1 + 2 * 3 = " &lt;&lt; 1 + 2 * 3 &lt;&lt; std::endl;
+    std::cout &lt;&lt; "(1 + 2) * 3 = " &lt;&lt; (1 + 2) * 3 &lt;&lt; std::endl;
+    std::cout &lt;&lt; "1 + 2.0 = " &lt;&lt; 1 + 2.0 &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./arith-03
+7 / 3 = 2
+7 % 3 = 1
+1 + 2 * 3 = 7
+(1 + 2) * 3 = 9
+1 + 2.0 = 3</code></pre>
+
+  <p>第 3 行是 <code>1 + 2 * 3 = 7</code>，因为 <code>*</code> 比 <code>+</code> 先算。第 4 行加了括号，括号的优先级高于所有算术运算符，所以先算加法再乘。<b>优先级</b>（precedence）解决的是「谁先算」，<b>括号</b>是你推翻默认顺序的手段，看不懂的表达式加个括号比记规则划算。</p>
+
+  <p>优先级相同的运算符还有一个「往哪边结合」的规则：算术运算符从左往右算，赋值运算符 <code>=</code> 从右往左算。<code>average = total / kSubjectCount</code> 里，<code>=</code> 右边整块先算完，结果再交给 <code>average</code>，这是结合性在起作用。</p>
+
+  <h2>整数除法：89 是怎么来的</h2>
+
+  <p>看 <code>arith-03.cpp</code> 的第 1 行：<code>7 / 3</code> 得到的是 <code>2</code>。</p>
+
+  <p>数学上 7 除以 3 是 <span class="math-inline">2\frac{1}{3}</span>。程序给出 2，说明它把小数部分丢掉了。这个规则是类型决定的：<b>两个操作数都是整数类型时，<code>/</code> 执行整数除法，结果只保留商的整数部分</b>。小数部分被直接扔掉，这个动作叫<b>截断</b>（truncation）——不是四舍五入，<code>8 / 3</code> 得到的也是 <code>2</code>。</p>
+
+  <p>为什么会有这么个规则？因为 <code>int</code> 这个格子的存储规则只放得下整数，放不进 <span class="math-inline">2\frac{1}{3}</span>。要给出一个小数结果，编译器就得换一种存储规则，而它不能悄悄替你换——换了以后这个格子的类型就不是你写的那个了。所以 C++ 的选择是：<b>运算结果按参与运算的类型来定</b>，两个整数进去，整数出来。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="267 除以 3 的两种走法并排对照，整数走法丢弃小数得到 89，小数走法保留小数得到 89.0">
+<svg viewBox="0 0 720 250" role="img" aria-hidden="true">
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="30" y="40" width="300" height="80" rx="10"/>
+    <rect x="390" y="40" width="300" height="80" rx="10"/>
+  </g>
+  <g fill="currentColor" font-size="16" text-anchor="middle">
+    <text x="180" y="72">int total / int 3</text>
+    <text x="180" y="100">→ 89（小数被丢掉）</text>
+    <text x="540" y="72">int total / double 3.0</text>
+    <text x="540" y="100">→ 89.0（保留小数）</text>
+    <text x="180" y="152">两个操作数都是整数</text>
+    <text x="180" y="176">走整数除法，结果只能是整数</text>
+    <text x="540" y="152">有一个操作数是小数</text>
+    <text x="540" y="176">两边都换成 double，再做小数除法</text>
+    <text x="360" y="222">同一个式子，写法差一个 3 与 3.0，走的是两条不同的路</text>
+  </g>
+</svg>
+    <figcaption>图 1 · 两个操作数都是 int 时走整数除法，其中一个换成 double 就改走小数除法</figcaption>
+  </figure>
+
+  <h2>把平均分算对</h2>
+
+  <p>想让平均分带上小数，就得让这个除法<b>至少有一个操作数是小数</b>。三条路都能走通，存成 <code>arith-01.cpp</code> 编译运行：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int chineseScore = 92;
+    int mathScore = 88;
+    int englishScore = 87;
+    int total = chineseScore + mathScore + englishScore;
+
+    int average = total / 3;
+    std::cout &lt;&lt; "整数写法：" &lt;&lt; total &lt;&lt; " / 3 = " &lt;&lt; average &lt;&lt; std::endl;
+
+    double decimalAverage = total / 3.0;
+    std::cout &lt;&lt; "小数写法：" &lt;&lt; total &lt;&lt; " / 3.0 = " &lt;&lt; decimalAverage &lt;&lt; std::endl;
+
+    double castAverage = static_cast&lt;double&gt;(total) / 3;
+    std::cout &lt;&lt; "强制转换：" &lt;&lt; total &lt;&lt; " 转成 double 再 / 3 = " &lt;&lt; castAverage &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./arith-01
+整数写法：267 / 3 = 89
+小数写法：267 / 3.0 = 89
+强制转换：267 转成 double 再 / 3 = 89</code></pre>
+
+  <p>三行输出看起来一样，都是 89。这里要停一下：后两行算出来的值<b>确实是</b> 89.0，只是 <code>cout</code> 默认不显示小数点，整数级别的小数值它就印成整数样子。值和显示是两件事——第 4 课讲输出格式控制时，会把它印成 89.0。</p>
+
+  <p>三处改动的区别在于<b>在哪一步换的类型</b>：</p>
+
+  <ul>
+    <li><code>int average = total / 3;</code>：先按整数除法算出 89，再把 89 存进 <code>int</code> 格子。小数在第一步就没了，格子类型写 <code>double</code> 也救不回来。</li>
+    <li><code>double decimalAverage = total / 3.0;</code>：<code>3.0</code> 是小数常量，除法按小数规则算，得到 89.0，再存进 <code>double</code> 格子。</li>
+    <li><code>double castAverage = static_cast&lt;double&gt;(total) / 3;</code>：先把 <code>total</code> 从 <code>int</code> 换成 <code>double</code>，再除。</li>
+  </ul>
+
+  <p>第 2 条和第 3 条为什么都能成？因为「有一个操作数已经是小数」这个条件满足了，编译器就会把它按小数规则算。</p>
+
+  <div class="lesson-warn">
+    <b>最常见的错法：换格子类型，不换运算类型</b>
+    <pre data-lang="cpp"><code>double average = total / 3;   // 还是 89</code></pre>
+
+    <p>这一行看着像「我把结果存进 double 了，应该有小数了吧」。表达式 <code>total / 3</code> 先算完，那时两个操作数还是 <code>int</code>，整数除法的规则已经生效，89 是算完的结果。后面的 <code>double</code> 只负责存，管不了算。<b>要改的是运算本身，不是接收结果的格子。</b></p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">练习</span>
+      <span class="lesson-practice__title">动手改一处 · 先把结果猜出来</span>
+    </div>
+
+      <p>把 <code>arith-01.cpp</code> 里的三处除法各改一次，<b>改之前先在纸上写出你猜的结果</b>，再编译运行对答案。猜错了就回到前面找原因：</p>
+
+      <ol>
+        <li><code>int average = total / 3;</code> 改成分母写 <code>3.0</code>，接收的格子还是 <code>int</code>；</li>
+        <li><code>double decimalAverage = total / 3.0;</code> 改成 <code>double decimalAverage = total / 3;</code>；</li>
+        <li><code>static_cast&lt;double&gt;(total) / 3</code> 改成 <code>static_cast&lt;int&gt;(decimalAverage) / 3</code>。</li>
+      </ol>
+
+      <p>第 1 处能算出小数，但存进 <code>int</code> 格子之后又没了；第 2 处得到 89 而不是 89.0。<b>改对了运算、改错了格子</b>，和<b>改对了格子、改错了运算</b>，是两种不同的错法——这一课的其余部分都在讲这件事。</p>
+  </div>
+
+  <h2>类型转换：谁变成了谁</h2>
+
+  <p><code>total / 3.0</code> 能算出小数，是因为编译器在背后做了一件事：把 <code>total</code> 从 <code>int</code> 换成了 <code>double</code>。这种由编译器自动完成的转换叫<b>隐式类型转换</b>，规则里有几条对你有用：</p>
+
+  <ul>
+    <li><b>小的往大的转，安全</b>。<code>short</code> 的值放进 <code>long</code> 格子、<code>int</code> 的值放进 <code>double</code> 格子，值的范围装得下，结果不变。上面这个除法用的就是这条。</li>
+    <li><b>大的往小的转，有风险</b>。把一个 32 亿的 <code>long</code> 值放进 <code>float</code> 格子（<code>float</code> 只有 6 位有效数字），这个值会被四舍五入，精度就掉了。</li>
+    <li><b>小数转整数，小数部分直接截断</b>。<code>int n = 2.9;</code> 得到的 <code>n</code> 是 <code>2</code>，不是 3。这就是整数除法丢小数的同一条规则在赋值上的样子。</li>
+  </ul>
+
+  <p>自动转换很方便，但它有一个让人不放心的性质：<b>它不会出声</b>。你写 <code>int average = total / 3;</code> 而心里想的是小数，编译器一句提醒都不会给。所以 C++ 还提供一种「我要你在这里换」的写法。</p>
+
+  <p>比大小这一类表达式算出来的也是值。存成 <code>arith-02.cpp</code> 跑一下：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int score = 89;
+
+    std::cout &lt;&lt; std::boolalpha;
+    std::cout &lt;&lt; "score &lt; 60 -&gt; " &lt;&lt; (score &lt; 60) &lt;&lt; std::endl;
+    std::cout &lt;&lt; "score &gt;= 60 -&gt; " &lt;&lt; (score &gt;= 60) &lt;&lt; std::endl;
+    std::cout &lt;&lt; "score &gt;= 60 &amp;&amp; score &lt; 90 -&gt; " &lt;&lt; (score &gt;= 60 &amp;&amp; score &lt; 90) &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./arith-02
+score &lt; 60 -&gt; false
+score &gt;= 60 -&gt; true
+score &gt;= 60 &amp;&amp; score &lt; 90 -&gt; true</code></pre>
+
+  <p><code>score &lt; 60</code> 这种写法叫关系表达式，它的值是 <code>true</code> 或 <code>false</code>，也就是<b>布尔值</b>——布尔这个词来自 19 世纪的数学家 George Boole，他建立了用代数表示逻辑推理的方法。<code>std::boolalpha</code> 是让 <code>cout</code> 把布尔值印成 <code>true</code>/<code>false</code> 而不是 <code>1</code>/<code>0</code> 的开关；<code>&amp;&amp;</code> 是「并且」，两个条件都成立才为真。这一行先当作「比大小能算出一个值」来认识，怎么用它让程序分岔，是第 6 课的事。</p>
+
+  <h2>强制转换：把意图写出来</h2>
+
+  <p>叫<b>强制类型转换</b>（type cast）的写法有两种，本课程统一用一种：</p>
+
+  <pre data-lang="cpp"><code>static_cast&lt;double&gt;(total)</code></pre>
+
+  <p><code>static_cast</code> 读作「静态转换」，尖括号里写你要换成的类型，圆括号里写被换的东西。它的意思是「我知道这里类型不一致，我是故意的，照我说的换」。C++ 的创造者 Bjarne Stroustrup 认为 C 语言式的强制转换写法 <code>(double)total</code> 太宽松、容易误用，<code>static_cast</code> 把「这是一次类型转换」这件事写得更显眼、检查也更严格，所以本课程用它。</p>
+
+  <p>上一课的 <code>types-03.cpp</code> 里其实已经用过它的一次隐含形态：把 <code>char</code> 赋给 <code>int</code> 格子时，编译器自动把字符编号转成了整数。同一件事写成强制转换就是 <code>static_cast&lt;int&gt;(firstLetter)</code>，把「我要它的编号」这个意图讲明白，读代码的人不用再猜。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "平均分要带小数，total 与 N 都是 int。\n下面哪一种改法真的能算出小数？",
+    "opts": [
+      "double average = static_cast&lt;double&gt;(total) / N;",
+      "double average = total * 1.0 / N;",
+      "double average = (double)total / N;",
+      "double average = static_cast&lt;int&gt;(total) / N;"
+    ],
+    "ans": 0,
+    "why": "要改的是运算本身：让除法里至少有一个操\n作数是小数，两边就都按小数规则算。只把\n接收结果的格子换成 double，表达式在赋\n值之前就已经按整数算完了，89 里已经没\n小数。"
+  }
+]'></div>
+
+  <h2>两个必须知道的反例</h2>
+
+  <p><b>反例一：对小数用 <code>%</code></b>。存成 <code>broken-arith-01.cpp</code> 试试：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    double score = 4.5;
+    std::cout &lt;&lt; score % 2 &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="text"><code>broken-arith-01.cpp:6:24: error: invalid operands to binary expression ('double' and 'int')
+    6 |     std::cout &lt;&lt; score % 2 &lt;&lt; std::endl;
+      |                  ~~~~~ ^ ~
+1 error generated.</code></pre>
+
+  <p><code>%</code> 问的是「整除以后剩下多少」，前提是先有整数除法。<code>4.5</code> 除以 2 没有「余数」这个概念可以用整数表示——余 0.5 里那个 0.5 本来就是被整数除法丢掉的。所以 <code>%</code> 的两个操作数都必须是整数类型，不是整数就编译不过。</p>
+
+  <div class="lesson-warn">
+    <b>这个报错本身是好事</b>
+    <p><code>double</code> 和 <code>int</code> 不能一起取模，编译器在你还没运行程序的时候就拦住了。读懂 <code>invalid operands to binary expression ('double' and 'int')</code> 这一句：<code>invalid operands</code> 是「操作数不合法」，后面括号里两个类型就是它拿到的那两个操作数。这一行的意思完全可以自己读出来。</p>
+  </div>
+
+  <p><b>反例二：用 <code>==</code> 比较两个小数</b>。这个更阴——它编译通过、运行也不报错，只是给出你不想要的结果。存成 <code>arith-05.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    double a = 0.1 + 0.2;
+
+    std::cout &lt;&lt; "a = " &lt;&lt; a &lt;&lt; std::endl;
+    std::cout &lt;&lt; "0.3 = " &lt;&lt; 0.3 &lt;&lt; std::endl;
+    std::cout &lt;&lt; "a == 0.3 的结果：" &lt;&lt; (a == 0.3) &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./arith-05
+a = 0.3
+0.3 = 0.3
+a == 0.3 的结果：0</code></pre>
+
+  <p>打印出来两个都是 0.3，一比却说<b>不相等</b>。</p>
+
+  <p>原因在浮点数的存储方式上：<code>double</code> 用二进制存小数，而 0.1、0.2、0.3 这些十进制小数在二进制里都是<b>无限循环小数</b>。格子里放得下的位数有限，所以它们都是「最接近的近似值」。近似值相加之后，误差凑巧没有抵消，<code>0.1 + 0.2</code> 的结果和 <code>0.3</code> 那个近似值差在最后几位上。<code>cout</code> 默认只印 6 位有效数字，把差异盖住了，所以看起来一样。</p>
+
+  <p>结论：<b>浮点数永远不要用 <code>==</code> 判断相等</b>。要比的话，比较两个数之差的绝对值是否小于某个很小的数（比如 <code>0.000001</code>），这条路留到后面讲函数时再写。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "0.1 + 0.2 与 0.3 打印出来一模一样，但\na == 0.3 却是假。\n下面哪一种比较方式是对的路子？",
+    "opts": [
+      "比较两个数之差的绝对值是不是小于一个很小的数",
+      "把两个数都乘 100，再直接用 == 比一次",
+      "把 double 换成 float 之后再用 == 比",
+      "把两个数打印出来，肉眼看着一样就算相等了"
+    ],
+    "ans": 0,
+    "why": "这两个值是二进制近似值，最后几位本来就\n不同，而 cout 默认只印 6 位有效数字把\n差异盖住了。判相等要比「够不够近」，也\n就是差的绝对值小于某个很小的数（例如\n0.000001）。"
+  }
+]'></div>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0002-variables-and-types.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">变量、类型与内存</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0004-input-output.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">让用户把数据敲进来</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0003 算术运算与类型转换 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<link rel="stylesheet" href="../../assets/katex/katex.min.css">
+<script src="../../assets/katex/katex.min.js" defer></script>
+<script src="../../assets/lesson-math.js" defer></script>
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

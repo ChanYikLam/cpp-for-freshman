@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>遍历数组做统计 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0011</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0011 · 遍历数组做统计</span>
+    <h1>遍历数组做统计</h1>
+    <p class="lesson-goal"><b>本节目标：</b>用循环把 10 个成绩挨个看一遍，算出总分、均分与最高分。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <h2>总分、均分、最高分</h2>
+
+  <p>成绩表存进数组了，接下来要的是三个数字：这一批成绩的总分、平均分，以及最高分是多少。</p>
+
+  <p>三件事看着不同，做法是同一个动作：把数组里的元素挨个看一遍，一边看一边记。记总分就把每个元素加到累加器里；记最高分就把「目前为止最大的那个」留在手上，遇到更大的就换掉。</p>
+
+  <p>这一课要讲的，就是「挨个看一遍」这套动作在数组上的写法，它也是成绩统计最核心的那段逻辑。</p>
+
+  <h2>遍历：挨个看一遍</h2>
+
+  <p><b>遍历</b>：按顺序访问数组里的每一个元素，每个元素访问一次。</p>
+
+  <p>为什么需要这个词：数组有几十个元素，代码里不可能把每个下标都写出来。要表达「从头到尾都过一遍」，就得有一个说法，循环变量正好能把这件事说清楚——让 <code>i</code> 从 0 取到 <code>N - 1</code>，<code>scores[i]</code> 就依次指向每一个元素。</p>
+
+  <p>存成 <code>stats-01.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// stats-01.cpp -- 遍历：挨个看一遍，把每个成绩打印出来
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    int scores[5] = {90, 85, 78, 92, 88};
+
+    for (int i = 0; i &lt; 5; i++)
+    {
+        cout &lt;&lt; "第 " &lt;&lt; i + 1 &lt;&lt; " 个：" &lt;&lt; scores[i] &lt;&lt; endl;
+    }
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ stats-01.cpp -o stats-01
+$ ./stats-01
+第 1 个：90
+第 2 个：85
+第 3 个：78
+第 4 个：92
+第 5 个：88</code></pre>
+
+  <p>这段代码的形状是后面所有统计的基础：<b>循环变量既当计数器，又当下标</b>。它数到第几个，就访问第几个元素。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="循环变量 i 从 0 走到 4，scores 的五个元素被依次访问一次">
+<svg viewBox="0 0 760 200">
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="120" y="60" width="94" height="56" rx="6"/>
+    <rect x="220" y="60" width="94" height="56" rx="6"/>
+    <rect x="320" y="60" width="94" height="56" rx="6"/>
+    <rect x="420" y="60" width="94" height="56" rx="6"/>
+    <rect x="520" y="60" width="94" height="56" rx="6"/>
+    <path d="M110 36 H630"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <path d="M118 32 L110 36 L118 40"/>
+    <path d="M622 32 L630 36 L622 40"/>
+  </g>
+  <g font-size="16" fill="currentColor">
+    <text x="380" y="26" text-anchor="middle">i 从 0 走到 4</text>
+    <text x="167" y="94" text-anchor="middle">90</text>
+    <text x="267" y="94" text-anchor="middle">85</text>
+    <text x="367" y="94" text-anchor="middle">78</text>
+    <text x="467" y="94" text-anchor="middle">92</text>
+    <text x="567" y="94" text-anchor="middle">88</text>
+    <text x="380" y="150" text-anchor="middle">循环变量 i 依次取 0、1、2、3、4</text>
+    <text x="380" y="180" text-anchor="middle">scores[i] 就依次指向这五个元素</text>
+  </g>
+</svg>
+    <figcaption>图 1 · 用循环变量当下标，把数组从头到尾走一遍</figcaption>
+  </figure>
+
+  <h2>累加求和</h2>
+
+  <p>把遍历的循环体从「打印」换成「加进总分」，就得到总分；总分再除以个数，就是均分。</p>
+
+  <p>存成 <code>stats-02.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// stats-02.cpp -- 累加求和，再除以个数得到均分
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    int scores[5] = {90, 85, 78, 92, 88};
+
+    double total = 0.0;
+    for (int i = 0; i &lt; 5; i++)
+    {
+        total += scores[i];
+    }
+
+    double average = total / 5;      // total 是小数，除出来的也是小数
+    cout &lt;&lt; "总分：" &lt;&lt; total &lt;&lt; endl;
+    cout &lt;&lt; "均分：" &lt;&lt; average &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ stats-02.cpp -o stats-02
+$ ./stats-02
+总分：433
+均分：86.6</code></pre>
+
+  <p>两个地方值得说明。</p>
+
+  <p><b>累加器的初值必须是 0</b>。<code>total</code> 在进循环之前等于 0，循环第一轮才有「0 加上第一个成绩」这件事。初值给别的数，总分就从那个数开始往上加。</p>
+
+  <p><b>均分用小数算</b>。<code>total</code> 声明成 <code>double</code>，<code>total / 5</code> 得到的就是小数 86.6。如果 <code>total</code> 写成 <code>int</code>，<code>433 / 5</code> 会做整数除法得到 86，小数部分被丢掉，之后无论怎么打印都找不回来。</p>
+
+  <p>分母写什么，取决于你要平均的是哪一批数据。这一课读固定 10 个成绩，分母就是 10；如果程序是「读到结束标记才停」，实际读到的个数与数组长度可能不同，分母就得用<b>实际读到的个数</b>。</p>
+
+  <h2>打擂台找最高分</h2>
+
+  <p>找最高分的做法叫<b>打擂台</b>：让一个变量当擂主，手里拿着目前为止最大的那个成绩；剩下的元素依次上台挑战，比擂主大就把擂主换掉。</p>
+
+  <p>擂台上的擂主初值不能随手写 0。要是所有成绩都比 0 小，那个 0 会一直站在台上，最后报出一个根本不存在的最高分。稳妥的做法是让<b>第一个元素</b>先站上擂台——它一定真实存在——然后从第二个元素开始挑战。</p>
+
+  <p>存成 <code>stats-03.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// stats-03.cpp -- 打擂台找最高分
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    int scores[5] = {90, 85, 78, 92, 88};
+
+    int best = scores[0];            // 先让第一个元素站在擂台上
+    for (int i = 1; i &lt; 5; i++)      // 从第二个元素开始挨个挑战
+    {
+        if (scores[i] &gt; best)
+        {
+            best = scores[i];        // 挑战者赢了，换它站在擂台上
+        }
+    }
+
+    cout &lt;&lt; "最高分：" &lt;&lt; best &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ stats-03.cpp -o stats-03
+$ ./stats-03
+最高分：92</code></pre>
+
+  <p>注意循环从 <code>i = 1</code> 开始：第一个元素已经在台上了，让它再和自己比一次没有意义，结果也不会变。</p>
+
+  <p>整个过程的每一轮发生了什么：</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="擂主 best 从 90 开始，依次与 85、78、92、88 比较，只在遇到 92 时换人，最后 best 是 92">
+<svg viewBox="0 0 760 280">
+  <g fill="none" stroke="currentColor" stroke-width="1.5">
+    <rect x="120" y="50" width="94" height="56" rx="6"/>
+    <rect x="220" y="50" width="94" height="56" rx="6"/>
+    <rect x="320" y="50" width="94" height="56" rx="6"/>
+    <rect x="420" y="50" width="94" height="56" rx="6"/>
+    <rect x="520" y="50" width="94" height="56" rx="6"/>
+    <rect x="120" y="150" width="94" height="48" rx="6"/>
+    <rect x="220" y="150" width="94" height="48" rx="6"/>
+    <rect x="320" y="150" width="94" height="48" rx="6"/>
+    <rect x="420" y="150" width="94" height="48" rx="6"/>
+    <rect x="520" y="150" width="94" height="48" rx="6"/>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="3">
+    <rect x="420" y="50" width="94" height="56" rx="6"/>
+    <rect x="420" y="150" width="94" height="48" rx="6"/>
+  </g>
+  <g font-size="16" fill="currentColor">
+    <text x="380" y="28" text-anchor="middle">打擂台：best 只在遇到更大的数时才换人</text>
+    <text x="167" y="84" text-anchor="middle">90</text>
+    <text x="267" y="84" text-anchor="middle">85</text>
+    <text x="367" y="84" text-anchor="middle">78</text>
+    <text x="467" y="84" text-anchor="middle">92</text>
+    <text x="567" y="84" text-anchor="middle">88</text>
+    <text x="167" y="126" text-anchor="middle">下标 0</text>
+    <text x="267" y="126" text-anchor="middle">下标 1</text>
+    <text x="367" y="126" text-anchor="middle">下标 2</text>
+    <text x="467" y="126" text-anchor="middle">下标 3</text>
+    <text x="567" y="126" text-anchor="middle">下标 4</text>
+    <text x="380" y="144" text-anchor="middle">擂台上的 best</text>
+    <text x="167" y="180" text-anchor="middle">best = 90</text>
+    <text x="267" y="180" text-anchor="middle">best = 90</text>
+    <text x="367" y="180" text-anchor="middle">best = 90</text>
+    <text x="467" y="180" text-anchor="middle">best = 92</text>
+    <text x="567" y="180" text-anchor="middle">best = 92</text>
+    <text x="380" y="240" text-anchor="middle">第一个元素先站上擂台，剩下的元素依次和它比一次</text>
+  </g>
+</svg>
+    <figcaption>图 2 · 打擂台过程中擂主 best 的每一次变化</figcaption>
+  </figure>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "打擂台找最高分时，擂主初值为什么取第一\n个元素？",
+    "opts": [
+      "0 不一定在表里，所有成绩都为负时它会留在台上",
+      "取第一个元素能让循环少跑一轮，省掉一次比较",
+      "循环从第二个元素开始时，必须有个数先站在台上",
+      "因为成绩都大于 0，写 0 会让每一次比较都换人"
+    ],
+    "ans": 0,
+    "why": "擂主要拿着「目前为止最大的那个成绩」，\n所以它的初值必须是表里真实存在的数。写\n0 的话，一旦所有成绩都比 0 小，0 会一\n直站在台上，最后报出一个根本不存在的最\n高分。"
+  }
+]'></div>
+
+  <h2>三件事合成一个</h2>
+
+  <p>总分、均分、最高分可以在同一趟循环里算出来：总分与最高分都只是在遍历的循环体里多做一件事。</p>
+
+  <p>存成 <code>stats-04.cpp</code> 再编译，输入 10 个成绩：</p>
+
+  <pre data-lang="cpp"><code>// stats-04.cpp -- 完整版：读入 10 个成绩，算总分、均分、最高分
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    const int N = 10;
+    int scores[N];
+
+    cout &lt;&lt; "请依次输入 " &lt;&lt; N &lt;&lt; " 个成绩：" &lt;&lt; endl;
+    for (int i = 0; i &lt; N; i++)
+    {
+        cin &gt;&gt; scores[i];
+    }
+
+    double total = 0.0;
+    int best = scores[0];
+    for (int i = 0; i &lt; N; i++)
+    {
+        total += scores[i];
+        if (scores[i] &gt; best)
+        {
+            best = scores[i];
+        }
+    }
+
+    double average = total / N;
+    cout &lt;&lt; "总分：" &lt;&lt; total &lt;&lt; endl;
+    cout &lt;&lt; "均分：" &lt;&lt; average &lt;&lt; endl;
+    cout &lt;&lt; "最高分：" &lt;&lt; best &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ stats-04.cpp -o stats-04
+$ ./stats-04
+请依次输入 10 个成绩：
+92
+88
+95
+79
+84
+91
+76
+88
+90
+86
+总分：869
+均分：86.9
+最高分：95</code></pre>
+
+  <p>这段程序里三件事各自的分工很清楚：第一个循环负责把数据读进数组，第二个循环负责统计，最后三行负责输出。把读和算分成两个循环，是因为打擂台需要先有第一个成绩当擂主——数据全都读进来了，擂台的初值才有来源。</p>
+
+  <p>这就是成绩管理系统的第一块真正能用的东西：给它一批成绩，它吐出三个数字。后面几课的字符串与指针，都会在这张成绩表上继续加工。</p>
+
+  <h2>两个常见错法</h2>
+
+  <p>统计程序的错，多半不在语法，而在循环体里那几行的细节。下面两种错法编译都能过、运行也不报错，只是结果不对。</p>
+
+  <p>存成 <code>stats-05.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// stats-05.cpp -- 反例：找最大值的比较号写反了
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    int scores[5] = {90, 85, 78, 92, 88};
+
+    int best = scores[0];
+    for (int i = 1; i &lt; 5; i++)
+    {
+        if (scores[i] &lt; best)        // 写成 &lt; 之后，留在擂台上的是最小的那个
+        {
+            best = scores[i];
+        }
+    }
+
+    cout &lt;&lt; "最高分：" &lt;&lt; best &lt;&lt; endl;      // 打印出来的其实是 78
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ stats-05.cpp -o stats-05
+$ ./stats-05
+最高分：78</code></pre>
+
+  <div class="lesson-warn">
+    <b>比较号写反</b>
+    <p>要挑最大的那个，条件是 <code>scores[i] &gt; best</code>：只有当挑战者比擂主大，才换人。写成 <code>&lt;</code> 以后，换人的时机变成了「挑战者更小」，擂台上留下的就成了最小的那个，这个程序打印的「最高分」其实是 78。</p>
+
+    <p>这类错误的特征是<b>结果看着像那么回事</b>：78 确实是这五个成绩里的一个，只是取错了。检查的办法是拿一组心里有数的数据跑一遍——取五个成绩，自己先算出最高分。</p>
+  </div>
+
+  <p>再存成 <code>stats-06.cpp</code> 再编译：</p>
+
+  <pre data-lang="cpp"><code>// stats-06.cpp -- 反例：循环少跑一个元素
+#include &lt;iostream&gt;
+using namespace std;
+
+int main()
+{
+    int scores[5] = {90, 85, 78, 92, 88};
+
+    double total = 0.0;
+    for (int i = 0; i &lt; 4; i++)      // 只跑到下标 3，最后一个元素没进统计
+    {
+        total += scores[i];
+    }
+
+    cout &lt;&lt; "总分：" &lt;&lt; total &lt;&lt; endl;
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ g++ stats-06.cpp -o stats-06
+$ ./stats-06
+总分：345</code></pre>
+
+  <div class="lesson-warn">
+    <b>边界少算了一个</b>
+    <p>五个成绩的总分应该是 433，这里算出来 345，少的正是最后一个 88。条件写成 <code>i &lt; 4</code>，循环只走到下标 3。</p>
+
+    <p>数组的长度是 5，循环的上界就该跟着 5 走。写成 <code>const int N = 10;</code> 再用 <code>i &lt; N</code>，是为了把长度与边界绑在同一个常量上：以后数组改成 20 个元素，只要改 <code>N</code> 一处，读数据的循环和统计的循环同时跟上，不会漏。</p>
+
+    <p>改完代码先别急着怀疑算法，把中间值打印出来看看：把每一轮的下标和累加结果都打印一次，少算的那一格立刻就现形了。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "五个成绩的总分应该是 433，这段程序打出\n来却是 345：\n\n```cpp\nint scores[5] = {90, 85, 78, 92, 88};\n\ndouble total = 0.0;\nfor (int i = 0; i &lt; 4; i++)\n{\n    total += scores[i];\n}\n\nstd::cout &lt;&lt; \"总分：\" &lt;&lt; total &lt;&lt; std::endl;\n```\n\n① 少的是谁？\n② 循环最后一轮的下标是多少？正确的边界\n应该怎么写？\n③ 数组长度以后改成 10、20，怎么写才不\n会再漏一格？",
+    "answer": "① 少的是最后一个成绩 88——433 减 345 正\n好是 88。\n② 最后一轮下标是 3；数组长度是 5，条件\n应写成 i &lt; 5，这样最后一轮下标正好是\n4。\n③ 把长度提成常量并让边界跟着它走：\n\n```cpp\nconst int N = 5;\nfor (int i = 0; i &lt; N; i++)\n{\n    total += scores[i];\n}\n```\n\n数组改成 20 个元素时只改 N 一处，读数\n据的循环与统计的循环同时跟上。",
+    "criteria": "指出漏掉最后一个元素、算出 345 与 433\n相差 88 → 通过；\n给出 i &lt; N 的边界写法（或常量化的做\n法）才算完整。\n把 345 当成「算法本身有问题」→ 不通过\n（这是边界差一格）。"
+  }
+]'></div>
+
+  <h2>动手做：遍历统计</h2>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">遍历统计总分、均分与最高分</span>
+    </div>
+
+      <p>任务与验收标准见 <a href="../../lab/0011-array-loop-stats/">动手任务：遍历统计成绩</a>。</p>
+
+      <p>自己动手之前，先想清楚三件事：</p>
+
+      <ul>
+        <li>三个结果里，哪两个可以在同一趟循环里算出来？</li>
+        <li>擂台上那个变量的初值从哪儿来？</li>
+        <li>循环的条件写 <code>i &lt; N</code> 还是 <code>i &lt;= N</code>，最后一轮的下标是多少？</li>
+      </ul>
+
+      <p>写完照着 <code>stats-04.cpp</code> 的编译命令编译运行，输入一组自己心里有数的成绩，把三行输出与手算的结果对一遍。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "真实使用时，成绩常常是「读到 -1 才\n停」，读到的个数与数组长度并不一样。\n\n① 算均分时，分母该用数组长度 N 还是实\n际读到的个数？\n② 用错了会得到什么结果？两种都说清。\n③ 那么成绩表至少该开多大？",
+    "answer": "① 用实际读到的个数——均分是「这批成绩的\n平均」，分母要与分子出自同一批数据。\n② 读到的比 N 少：分母偏大会把均分算\n小；读到的比 N 多：多出来的成绩根本没\n地方存，要么被丢掉（数字少了），要么越\n界写坏别的变量。\n③ 至少开到「最多可能读到的个数」那么\n大；读到多少个要单独用变量记下来，循环\n边界与分母都用它。",
+    "criteria": "答出「用实际读到的个数」并说清理由（分\n子分母同一批数据）→ 通过；\n第 ② 问能举出「分母偏大、均分偏小」这\n一种后果是完整答案；\n把「读到的比 N 多」也能说出后果（越界\n或丢数据）算加分。"
+  }
+]'></div>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0010-arrays.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">数组：一次声明一批变量</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0012-exp-2-score-storage.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">实验二：存下并统计一批成绩</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0011 遍历数组做统计 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>让用户把数据敲进来 · C++ 零基础入门（计算机专业大一）</title>
+
+<!-- 共享层在 .learning/../../assets/，课件在 .learning/subjects/<slug>/lessons/ 下，所以是 ../../assets/ -->
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+
+<!-- 主题要在首帧前应用，避免闪白/闪黑 -->
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+</head>
+
+<body class="lesson-body">
+
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回课程</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">0004</span>
+  <!-- 课件页自带主题开关：学生从文件管理器直接打开课件时也能切暗色 -->
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="lesson-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+
+  <header class="lesson-header">
+    <span class="lesson-header__eyebrow">0004 · 让用户把数据敲进来</span>
+    <h1>让用户把数据敲进来</h1>
+    <p class="lesson-goal"><b>本节目标：</b>写出一个能读入 3 个成绩、自己算出并打印平均分的完整程序。</p>
+  </header>
+
+  <!-- ── 正文：渲染器按内容文件（lessons/<序号>-<节点id>.md）产出，块词汇见 docs/规范/课件内容格式.md ── -->
+
+  <div class="lesson-note">
+    <b>这一课是主线项目的起点</b>
+    <p>前面三课的成绩都是写死在代码里的，换一个人的分数就得改代码再编译一次。成绩管理系统要能对着一群学生用，第一步就是让程序自己开口问、自己听得见回答。</p>
+  </div>
+
+  <h2>程序得能开口</h2>
+
+  <p>先把「写死」这件事看清楚。存成 <code>io-06.cpp</code> 编译运行：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "请输入三门课的成绩：";
+
+    int score1 = 0;
+    int score2 = 0;
+    int score3 = 0;
+    std::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;
+
+    double average = (score1 + score2 + score3) / 3;
+
+    std::cout &lt;&lt; std::endl;
+    std::cout &lt;&lt; "平均分：" &lt;&lt; average &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <p>这份程序读进来了三个成绩，但平均分那一行又踩了整数除法的坑。它是这一课的反面教材，也是「改造」那道题的目标。</p>
+
+  <h2>流：为什么叫「输入输出流」</h2>
+
+  <p>要让程序从键盘拿数据，得先有一个「数据从哪里来、往哪里去」的模型。C++ 用的模型是<b>流</b>（stream）：把数据看成一串按顺序流动的字符。</p>
+
+  <ul>
+    <li><b>输入流</b>：从键盘流向程序的一串字符。你在终端敲 <code>92 88 87</code> 再回车，这 8 个字符就按输入流的方向进到程序里。</li>
+    <li><b>输出流</b>：从程序流向终端的一串字符。程序打印的每个字都往这个方向走。</li>
+  </ul>
+
+  <p>这个模型解决了一个实际问题：程序不用关心数据具体是从键盘、还是从一个文件、还是从网络来的——它只管从一个「输入流」里往外取。取到一个流对象，就等于接通了数据来源。</p>
+
+  <p>C++ 提供了两个现成的流对象，都在 <code>&lt;iostream&gt;</code> 里：</p>
+
+  <table>
+    <thead>
+      <tr><th>对象</th><th>方向</th><th>用途</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>std::cout</code></td><td>程序 → 终端</td><td>输出，前面几课一直在用</td></tr>
+      <tr><td><code>std::cin</code></td><td>终端 → 程序</td><td>输入，这一课的主角</td></tr>
+    </tbody>
+  </table>
+
+  <p><code>iostream</code> 这个名字就是 input-output stream 的缩写。<code>cout</code> 的 c 是 console（控制台），<code>cin</code> 的 c 是 character（字符）——它按字符往外取。</p>
+
+  <p>两个运算符的方向很容易记反，因为刚学时脑子里想的是「取」和「印」。记不住的时候看箭头的尖：<b>箭头从数据出发，指向要去的地方</b>。</p>
+
+  <p>接着看那两个运算符。<code>&lt;&lt;</code> 和 <code>&gt;&gt;</code> 的形状是有讲究的：<b>箭头指向哪边，数据就往哪边流</b>。</p>
+
+  <figure class="lesson-figure lesson-figure--inline" role="img" aria-label="键盘的数据经过 cin 与右移箭头进入变量格子，程序里的数据经过 cout 与左移箭头流向终端屏幕">
+<svg viewBox="0 0 720 240" role="img" aria-hidden="true">
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <rect x="24" y="70" width="130" height="60" rx="10"/>
+    <rect x="290" y="70" width="140" height="60" rx="10"/>
+    <rect x="566" y="70" width="130" height="60" rx="10"/>
+  </g>
+  <g fill="currentColor" font-size="16" text-anchor="middle">
+    <text x="89" y="106">键盘</text>
+    <text x="360" y="96">程序里的变量</text>
+    <text x="360" y="118">score1 score2 score3</text>
+    <text x="631" y="106">终端</text>
+  </g>
+  <g fill="none" stroke="currentColor" stroke-width="2">
+    <path d="M158 100 H284" marker-end="url(#io1arrow)"/>
+    <path d="M434 100 H560" marker-end="url(#io1arrow)"/>
+  </g>
+  <defs>
+    <marker id="io1arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+    </marker>
+  </defs>
+  <g fill="currentColor" font-size="15" text-anchor="middle">
+    <text x="221" y="60">cin &gt;&gt; score1</text>
+    <text x="221" y="148">数据流进程序</text>
+    <text x="497" y="60">cout &lt;&lt; total</text>
+    <text x="497" y="148">数据流出去显示</text>
+    <text x="360" y="204">同一个运算符换个方向，负责的就是另一件事</text>
+  </g>
+</svg>
+    <figcaption>图 1 · 箭头的方向就是数据流动的方向</figcaption>
+  </figure>
+
+  <div class="lesson-warn">
+    <b>把两个箭头写反，编译器一次全给你挑出来</b>
+    <p>初学最常出的错就是把 <code>&gt;&gt;</code> 写成 <code>&lt;&lt;</code>。存成 <code>broken-io-01.cpp</code> 就长这样：</p>
+
+    <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int score = 0;
+    std::cout &lt;&lt; "请输入成绩：";
+    std::cin &lt;&lt; score;
+    return 0;
+}</code></pre>
+
+    <pre data-lang="text"><code>broken-io-01.cpp:7:14: error: invalid operands to binary expression ('istream' (aka 'basic_istream&lt;char&gt;') and 'int')
+    7 |     std::cin &lt;&lt; score;
+      |     ~~~~~~~~ ^  ~~~~~</code></pre>
+
+    <p>这一行的读法是：<code>&lt;&lt;</code> 左边应该是 <code>ostream</code>（输出流）一类的对象，可你给它的是 <code>istream</code>（输入流）。<b>看括号里那两个字就够了</b>——<code>istream</code> 和 <code>ostream</code> 差一个字母，含义完全不同：「往输出流里插」和「从输入流里取」是两件事。</p>
+
+    <p><code>std::cout &gt; "..."</code> 这种写反的半边也一样会被拦下：</p>
+
+    <pre data-lang="text"><code>broken-io-02.cpp:6:15: error: invalid operands to binary expression ('ostream' (aka 'basic_ostream&lt;char&gt;') and 'const char[19]')
+    6 |     std::cout &gt; "请输入成绩：";
+      |               ^ ~~~~~~~~~~~~~~</code></pre>
+  </div>
+
+  <h2>第一次读入</h2>
+
+  <p>写法就是把 <code>cout</code> 那套反过来。存成 <code>io-01.cpp</code>，编译运行，然后在终端里敲一个数：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int score = 0;
+
+    std::cout &lt;&lt; "请输入一个成绩：";
+    std::cin &gt;&gt; score;
+    std::cout &lt;&lt; "你输入的成绩是 " &lt;&lt; score &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./io-01
+请输入一个成绩：88
+你输入的成绩是 88</code></pre>
+
+  <p>三行代码各自负责一件事，缺一件就出问题：</p>
+
+  <ol>
+    <li><code>std::cout &lt;&lt; "请输入一个成绩：";</code> 是<b>输入提示语</b>。它不参与计算，作用只是告诉屏幕前的人「现在该你了」。</li>
+    <li><code>std::cin &gt;&gt; score;</code> 从输入流取一个值放进 <code>score</code>。取不到东西，程序就在这里等。</li>
+    <li>第三行把读到的值打印出来，让你确认读到的和你敲的是同一个。</li>
+  </ol>
+
+  <div class="lesson-warn">
+    <b>忘记写提示语，看起来就像死机</b>
+    <p><code>std::cin &gt;&gt; score;</code> 执行时会<b>一直等</b>，直到输入流里来了数据。如果前面没有提示语，屏幕上就是一个静止的光标，敲键盘也没反应（因为字符还在缓冲区里、要按回车才送出去）。用户会以为程序卡死了。</p>
+
+    <p>写输入代码的规矩：<b>每一个 <code>cin</code> 前面配一句提示语</b>，并且提示语要说清要输入的是什么、什么格式。<code>"请输入一个成绩："</code> 比 <code>"请输入："</code> 有用得多。</p>
+  </div>
+
+  <h2>一次读多个值</h2>
+
+  <p>成绩有三个，可以连着读。存成 <code>io-03.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int age = 0;
+    char grade = ' ';
+
+    std::cout &lt;&lt; "请输入年龄：";
+    std::cin &gt;&gt; age;
+    std::cout &lt;&lt; "请输入等级（A/B/C）：";
+    std::cin &gt;&gt; grade;
+    std::cout &lt;&lt; "年龄：" &lt;&lt; age &lt;&lt; "，等级：" &lt;&lt; grade &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./io-03
+请输入年龄：18
+请输入等级（A/B/C）：B
+年龄：18，等级：B</code></pre>
+
+  <p>也可以用一条语句连读多个：<code>std::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;</code>。<code>&gt;&gt;</code> 是从左往右依次执行的，效果和写三行一样。</p>
+
+  <p><b>空格分隔</b>是这里要掌握的一件实事：<code>cin &gt;&gt;</code> 取一个值时，会先自动跳过前面所有的空格、制表符和换行符，然后一直取到下一个空白为止。所以下面三种输入，程序读到的三个数完全相同：</p>
+
+  <pre data-lang="text"><code>92 88 87</code></pre>
+
+  <pre data-lang="text"><code>92
+88
+87</code></pre>
+
+  <pre data-lang="text"><code>   92    88
+87</code></pre>
+
+  <p>判断的边界是<b>空白</b>。这个性质让你不用操心用户是按空格还是按回车分的——但第 6 课会看到，它在另一种场景下也会带来麻烦。</p>
+
+  <h2>主线项目：三门成绩算平均分</h2>
+
+  <p>现在把这一课的东西拼成完整的程序。存成 <code>io-02.cpp</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+
+int main()
+{
+    const int kSubjectCount = 3;
+
+    std::cout &lt;&lt; "请输入三门课的成绩（用空格或回车分开）：";
+
+    double score1 = 0.0;
+    double score2 = 0.0;
+    double score3 = 0.0;
+    std::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;
+
+    double total = score1 + score2 + score3;
+    double average = total / kSubjectCount;
+
+    std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(1);
+    std::cout &lt;&lt; std::endl;
+    std::cout &lt;&lt; "三门成绩：" &lt;&lt; score1 &lt;&lt; "、" &lt;&lt; score2 &lt;&lt; "、" &lt;&lt; score3 &lt;&lt; std::endl;
+    std::cout &lt;&lt; "总分：" &lt;&lt; total &lt;&lt; std::endl;
+    std::cout &lt;&lt; "平均分：" &lt;&lt; average &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./io-02
+请输入三门课的成绩（用空格或回车分开）：92 88 87.5
+
+三门成绩：92.0、88.0、87.5
+总分：267.5
+平均分：89.2</code></pre>
+
+  <p>这个程序里有四处设计决定，每一处都有理由：</p>
+
+  <ul>
+    <li><b>三个成绩声明成 <code>double</code></b>。成绩本身可能是 87.5，用 <code>int</code> 会在读入那一步就把小数切掉。</li>
+    <li><b><code>const int kSubjectCount = 3;</code></b>。科目数只有一处定义，以后要改成五门就改这一行。</li>
+    <li><b><code>total / kSubjectCount</code></b> 里两个操作数一个是 <code>double</code>：<code>kSubjectCount</code> 是 <code>int</code>，但 <code>total</code> 是 <code>double</code>，所以走的是小数除法——上一课那条规则的直接应用。</li>
+    <li><b>输出对齐用两行</b>：<code>std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(1);</code> 是<b>输出格式控制</b>，<code>&lt;iomanip&gt;</code> 是它所在的头文件。</li>
+  </ul>
+
+  <p>第三条里的 <code>std::setprecision(1)</code> 是「小数点后保留 1 位」；<code>std::fixed</code> 是「用定点表示法，不要自己切换成科学计数法」。两者要一起用，只写 <code>setprecision</code> 在某些值上会变成有效位数，而不是小数位数。<code>std::fixed</code> 会一直生效到你改回来为止，所以上面那行只写一次，后面所有 <code>cout</code> 都按这个格式印——注意它连 <code>score1</code> 都影响到了，所以 <code>92</code> 印成了 <code>92.0</code>。</p>
+
+  <div class="lesson-tip">
+    <b>为什么要给小数定精度</b>
+    <p><code>double</code> 打印 267.5 / 3 这种除不尽的值时，默认会印出一串很长的小数。成绩单上不需要 15 位小数，一位就够。<code>setprecision(1)</code> 管的就是这件事：<b>控制显示，不改变存的值</b>。算的时候仍然是完整的 <code>double</code>，只是印出来的时候按你的要求裁。</p>
+  </div>
+
+  <h2>输入失败：cin 会坏掉</h2>
+
+  <p>读输入有一件必须提前知道的事：<b>用户可能敲进来的东西不是数字</b>。</p>
+
+  <p>存成 <code>io-04.cpp</code> 试试，输入 <code>90 abc 80</code>：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+#include &lt;iomanip&gt;
+
+int main()
+{
+    std::cout &lt;&lt; "请输入三个成绩：";
+
+    double score1 = 0.0;
+    double score2 = 0.0;
+    double score3 = 0.0;
+    std::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;
+
+    std::cout &lt;&lt; "读到的三个数：" &lt;&lt; score1 &lt;&lt; " " &lt;&lt; score2 &lt;&lt; " " &lt;&lt; score3 &lt;&lt; std::endl;
+    std::cout &lt;&lt; "输入是否成功：" &lt;&lt; std::boolalpha &lt;&lt; static_cast&lt;bool&gt;(std::cin) &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./io-04
+请输入三个成绩：90 abc 80
+读到的三个数：90 0 0
+输入是否成功：false</code></pre>
+
+  <p>第一个数读到了 90，后面两个都是 0，最后一行说输入失败了。经典教材里把这一刻发生的事情列成四条，每条都要记住：</p>
+
+  <ul>
+    <li><code>score2</code> 的值<b>保持不变</b>——它没被写成什么奇怪的东西，<code>abc</code> 这个值根本没有进到它里面；</li>
+    <li>不匹配的输入<b>留在输入队列里没被取走</b>，<code>abc</code> 还在那儿；</li>
+    <li><code>cin</code> 对象内部被<b>设置了一个错误标记</b>；</li>
+    <li>之后所有对 <code>cin</code> 的读取<b>全部失败</b>，包括后面本来要读的 <code>score3</code>。</li>
+  </ul>
+
+  <p>最后一条是最坑的地方：一次输入失败会让 <code>cin</code> 从此进入<b>失败状态</b>，后面读什么都读不到，而这一行 <code>abc</code> 还赖在队列里。所以失败之后不能直接再读，必须先做两件事：</p>
+
+  <pre data-lang="cpp"><code>std::cin.clear();
+std::cin.ignore(1000, '\n');</code></pre>
+
+  <p><code>clear()</code> 清掉那个错误标记，让 <code>cin</code> 重新可用——这一步与数组、与指针都无关，就是「把错误状态复位」。<code>ignore(1000, '\n')</code> 是「从队列里丢掉字符」，最多丢 1000 个，或者丢到遇见换行符为止——这一步是把赖在队列里的 <code>abc</code> 清出去。</p>
+
+  <p>存成 <code>io-05.cpp</code>，看恢复过程：</p>
+
+  <pre data-lang="cpp"><code>#include &lt;iostream&gt;
+
+int main()
+{
+    int score = 0;
+
+    std::cout &lt;&lt; "请输入成绩：";
+    std::cin &gt;&gt; score;
+
+    if (std::cin.fail())
+    {
+        std::cout &lt;&lt; "\n这一段不是数字，读入失败了。丢弃这一行，重新读一次。\n";
+        std::cin.clear();
+        std::cin.ignore(1000, '\n');
+
+        std::cout &lt;&lt; "请重新输入成绩：";
+        std::cin &gt;&gt; score;
+    }
+
+    std::cout &lt;&lt; "最终读到：" &lt;&lt; score &lt;&lt; std::endl;
+
+    return 0;
+}</code></pre>
+
+  <pre data-lang="term"><code>$ ./io-05
+请输入成绩：abc
+这一段不是数字，读入失败了。丢弃这一行，重新读一次。
+请重新输入成绩：90
+最终读到：90</code></pre>
+
+  <p>这份程序里新出现了 <code>if (...)</code> 和一对花括号。它们是「如果……就……」的写法，里面那段就是「如果读失败了才做」。第 6 课会把 <code>if</code> 完整讲一遍，这里先用着——它的意思从字面上就能读出来。</p>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "一位同学敲进去的第二个成绩是 abc，程序\n后面全乱了：\n\n```cpp\ndouble score1 = 0.0;\ndouble score2 = 0.0;\ndouble score3 = 0.0;\nstd::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3;\n\nstd::cout &lt;&lt; \"读到的三个数：\" &lt;&lt; score1 &lt;&lt; \" \"\n          &lt;&lt; score2 &lt;&lt; \" \" &lt;&lt; score3 &lt;&lt; std::endl;\n```\n\n```text\n请输入三个成绩：90 abc 80\n读到的三个数：90 0 0\n输入是否成功：false\n```\n\n① score2 和 score3 为什么都是 0？\n② 为什么「后面所有读取都会失败」？\n③ 要让程序重新问一次，必须补哪两步？",
+    "answer": "① abc 不是数字，读 score2 时就失败了；\n这个值没有进 score2，两个格子保持声明\n时的初值 0。\n② 读取失败会给 cin 设上一个错误标记，\n它从此进入失败状态，后面每一次读取都直\n接失败——包括本来要读 score3 的那一次；\n而且 abc 还留在输入队列里没被取走。\n③ 先复位、再丢坏输入：\n\n```cpp\nstd::cin.clear();\nstd::cin.ignore(1000, &#39;\\n&#39;);\n```",
+    "criteria": "三问都要答到：\n· 读失败导致 score2/score3 保持初值 0\n  （不是被写成了 0）；\n· cin 进入失败状态，后续读取全部失败；\n· clear() 与 ignore(1000, 换行符) 两\n  步，少一步算部分通过。"
+  }
+]'></div>
+
+  <h2>动手做</h2>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">第 1 步 · 把写死的成绩变成读进来的</span>
+    </div>
+
+      <p>把开头那份 <code>io-06.cpp</code> 改对。要求：读入三个成绩，打印平均分，并且平均分要有小数。改完之后用 <code>92 88 88</code> 和 <code>92 88 87.5</code> 各跑一次，看两次的结果差别。</p>
+
+      <p>这一步的验收标准是：输入 <code>92 88 87.5</code> 时，平均分那一行印出来的数<b>和按计算器算出来的一致</b>。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">第 2 步 · 补上提示语与格式</span>
+    </div>
+
+      <p>在上一份程序上补两件事：</p>
+
+      <ul>
+        <li>每个 <code>cin</code> 前面都要有提示语，说清要输入什么、怎么分隔；</li>
+        <li>用 <code>std::fixed</code> 与 <code>std::setprecision(1)</code> 把平均分印成小数一位。</li>
+      </ul>
+
+      <p>补完之后，输入 <code>92 88 87.5</code> 应该看到这样：</p>
+
+      <pre data-lang="term"><code>$ ./io-06
+请输入三门课的成绩（用空格或回车分开）：92 88 87.5
+平均分：89.2</code></pre>
+
+      <p>再故意试一次「不写提示语」：把提示语那一行删掉，编译运行，屏幕上就只剩光标在那里等着——用户不知道程序要什么，也不知道该敲几位数。这就是用户以为程序死机的现场。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">第 3 步 · 让程序扛住乱输入</span>
+    </div>
+
+      <p>先看现在的程序读到 <code>abc</code> 会怎样。<code>io-04.cpp</code> 是专门用来看这件事的一份：它读三个 <code>double</code>，然后把读到的值和输入是否成功都打印出来。存成自己的一份，编译运行，敲 <code>abc 88 87</code>：</p>
+
+      <pre data-lang="sh"><code>g++ io-04.cpp -o io-04 &amp;&amp; ./io-04</code></pre>
+
+      <pre data-lang="term"><code>$ ./io-04
+请输入三个成绩：abc 88 87
+读到的三个数：0 0 0
+输入是否成功：false</code></pre>
+
+      <p>三个格子<b>一个都没读到</b>——第一个值就读失败了，后面的连试都不试，三个都还是声明时的初值 0。最后一行 <code>false</code> 是 <code>std::cin</code> 自己被转成布尔值之后的样子，它说明 <code>cin</code> 已经进了失败状态：<b>从这里往后，所有的 <code>cin</code> 读取都会失败</b>。</p>
+
+      <p>这就是问题的全貌，也是第 4 课那个 <code>clear()</code> 与 <code>ignore()</code> 的用处。按 <code>io-05.cpp</code> 的样子加上那两行，让程序在读到非数字之后重新问你一次：</p>
+
+      <pre data-lang="sh"><code>g++ io-05.cpp -o io-05 &amp;&amp; ./io-05</code></pre>
+
+      <pre data-lang="term"><code>$ ./io-05
+请输入成绩：abc
+这一段不是数字，读入失败了。丢弃这一行，重新读一次。
+请重新输入成绩：90
+最终读到：90</code></pre>
+
+      <p><b>这一步就是成绩管理系统第一次变得能用的地方</b>：一个同学敲错了分数，程序不会一路错到底。</p>
+  </div>
+
+  <div class="lesson-practice">
+    <div class="lesson-practice__head">
+      <span class="lesson-practice__level">上手做</span>
+      <span class="lesson-practice__title">第 4 步 · 完整交付</span>
+    </div>
+
+      <p>把前三步合成一个程序：连读三个成绩、算总分与平均分、输出对齐、读入失败能重来。编译通过之后，用下面三组输入各跑一次，把输出抄下来：</p>
+
+      <pre data-lang="text"><code>92 88 87.5
+92
+88
+87
+abc
+92 88 87.5</code></pre>
+
+      <p>第三组会走一次失败重读的路径。跑到这里，这个程序已经能交给人用了。</p>
+
+      <p>留白任务与验收标准见 <a href="../../lab/0004-input-output/">动手任务：读入三门成绩算平均分</a>，参考解在 <code>lab/solutions/0004-input-output/</code>。</p>
+  </div>
+
+  <div class="quiz" data-quiz='[
+  {
+    "q": "写一个完整程序，读入三个成绩，打印总分\n与平均分（平均分保留一位小数），并且第\n一次输入不是三个数时能重来。\n\n要求三条：\n① 每个读取前面都有说清格式的提示语；\n② 平均分不许被整数除法截断；\n③ 读到非数字之后能清掉失败状态、丢掉坏\n输入，重新读一次。",
+    "answer": "一份可运行的参考答案：\n\n```cpp\n#include &lt;iostream&gt;\n#include &lt;iomanip&gt;\n\nint main()\n{\n    std::cout &lt;&lt; \"请输入三门课的成绩（用空格或回车分开）：\";\n\n    double score1 = 0.0;\n    double score2 = 0.0;\n    double score3 = 0.0;\n\n    while (!(std::cin &gt;&gt; score1 &gt;&gt; score2 &gt;&gt; score3))\n    {\n        std::cout &lt;&lt; \"这组输入不是三个数，请重新输入：\";\n        std::cin.clear();\n        std::cin.ignore(1000, &#39;\\n&#39;);\n    }\n\n    const int kSubjectCount = 3;\n    double total = score1 + score2 + score3;\n    double average = total / kSubjectCount;\n\n    std::cout &lt;&lt; std::fixed &lt;&lt; std::setprecision(1);\n    std::cout &lt;&lt; \"总分：\" &lt;&lt; total &lt;&lt; std::endl;\n    std::cout &lt;&lt; \"平均分：\" &lt;&lt; average &lt;&lt; std::endl;\n\n    return 0;\n}\n```\n\n要点：三个成绩用 double 接收，读入那一\n步就不会把小数切掉；分母写成\nconst int kSubjectCount = 3; 只有一个\n定义处；失败重试用 clear() 与\nignore(1000, 换行符) 两步配一次重读。",
+    "criteria": "逐条对：\n· 成绩声明成 double（或读入后按\n  double 参与运算），不是 int；\n· 除法里至少有一个操作数是小数；\n· 打印带 fixed 与 setprecision(1)；\n· 失败路径里有 clear() 与\n  ignore(1000, 换行符)；\n· 每个读取前有提示语。\n五条里缺两条以上按不通过；缺一条算部分\n通过。\n写出来自己编译运行，输入 abc 再输\n92 88 87.5 验收。"
+  }
+]'></div>
+
+  <!-- ── 提问提示：固定写法，别删 ── -->
+
+  <div class="lesson-ask">
+    <b>没看懂？随时问</b>
+    把看不懂的段落（或报错）原样复制回会话，说一句哪里不懂就行，我只解释这一段，不打断你的进度。
+  </div>
+
+  <!-- ── 上/下节课指针由渲染器按 curriculum.yaml 的 nodes 顺序算（第一课无 --prev、最后一课无 --next） ── -->
+
+  <nav class="lesson-nav" aria-label="上一课 / 下一课">
+    <a class="lesson-nav__link lesson-nav__link--prev" href="0003-arithmetic-and-conversion.html">
+      <span class="lesson-nav__dir">上节课</span>
+      <span class="lesson-nav__title">算术运算与类型转换</span>
+    </a>
+    <a class="lesson-nav__link lesson-nav__link--next" href="0005-exp-1-first-program.html">
+      <span class="lesson-nav__dir">下节课</span>
+      <span class="lesson-nav__title">实验一：跑通编译运行循环</span>
+    </a>
+  </nav>
+
+  <footer class="lesson-footer">
+    StudyMate · 0004 让用户把数据敲进来 · 本地学习工作区
+  </footer>
+
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+
+<script src="../../assets/quiz.js" defer></script>
+<script src="../../assets/lesson-toc.js" defer></script>
+<script>LearnTheme.wire(document.getElementById('lesson-theme-checkbox'));</script>
+</body>
+</html>

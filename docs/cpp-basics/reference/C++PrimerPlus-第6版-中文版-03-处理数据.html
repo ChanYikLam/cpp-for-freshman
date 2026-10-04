@@ -1,0 +1,1538 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>第 3 章 处理数据 · C++ 零基础入门（计算机专业大一）</title>
+<link rel="stylesheet" href="../../assets/sayo/sayo.css">
+<link rel="stylesheet" href="../../assets/learn-theme.css">
+<link rel="stylesheet" href="../../assets/style.css">
+<script src="../../assets/learn-theme.js"></script>
+<script>LearnTheme.apply();</script>
+<style>
+.lesson h1 {
+  margin: var(--syo-space-2, 8px) 0 var(--syo-space-4, 16px);
+  font-size: clamp(1.6rem, 3.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+  color: var(--syo-fg-default);
+}
+</style>
+</head>
+<body class="lesson-body">
+<nav class="lesson-bar">
+  <a href="../index.html">← 返回科目</a>
+  <span>C++ 零基础入门（计算机专业大一）</span>
+  <span class="lesson-bar__no">参考文档</span>
+  <label class="syo-toggle syo-toggle--theme lesson-bar__toggle" title="切换深浅主题" aria-label="切换深浅主题">
+    <input type="checkbox" id="attachment-theme-checkbox" checked>
+    <span class="syo-toggle-track"></span>
+    <span class="syo-toggle-knob">
+      <svg class="syo-toggle-sun" viewBox="0 0 20 20" fill="none" aria-hidden="true"><circle cx="10" cy="10" r="3.5" stroke="#f57c00" stroke-width="1.5"/><path d="M10 2v2.5M10 15.5V18M2 10h2.5M15.5 10H18M4.34 4.34l1.77 1.77M13.89 13.89l1.77 1.77M4.34 15.66l1.77-1.77M13.89 6.11l1.77-1.77" stroke="#f57c00" stroke-width="1.2" stroke-linecap="round"/></svg>
+      <svg class="syo-toggle-moon" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M16.5 12.5A6 6 0 019 4.5a6 6 0 007.5 8z" stroke="#5c6bc0" stroke-width="1.5" stroke-linejoin="round"/></svg>
+    </span>
+  </label>
+</nav>
+
+<article class="lesson">
+<h1>第 3 章 处理数据</h1>
+<blockquote><p>来源：《C++ Primer Plus（第 6 版）中文版》Stephen Prata 著，张海龙、袁国忠译，人民邮电出版社。<br>本地 PDF：<code>/Users/chenyilin/Desktop/电子书/计算机/C++ Primer Plus：中文版（第六版） (Stephen Prata) (z-library.sk, 1lib.sk, z-lib.sk).pdf</code><br>对应 PDF 第 55–87 页 / 原书第 37–69 页。<br>转换方式：PyMuPDF 抽取原扫描件内置文本层（该 PDF 为 2013 年扫描件，内置文本层由 OCR 生成，<strong>中文标点与少数汉字有识别错误，代码行偶有粘连</strong>）。<strong>本节内容的权威性以原书为准；引用技术结论前请回查 PDF 原页。</strong></p></blockquote>
+<h2>3.1 本章要讲什么（原书小节结构）</h2>
+<ul>
+<li>3.1 简单变量 … 37</li>
+<li>3.1.1 变量名 … 38</li>
+<li>3.1.2 整型 … 39</li>
+<li>3.1.3 整型short、int、long和long long … 39</li>
+<li>3.1.4 无符号类型 … 43</li>
+<li>3.1.5 选择整型类型 … 45</li>
+<li>3.1.6 整型字面值 … 45</li>
+<li>3.1.7 C++如何确定常量的类型 … 47</li>
+<li>3.1.8 char类型：字符和小整数 … 47</li>
+<li>3.1.9 bool类型 … 53</li>
+<li>3.2 const限定符 … 54</li>
+<li>3.3 浮点数 … 55</li>
+<li>3.3.1 书写浮点数 … 55</li>
+<li>3.3.2 浮点类型 … 56</li>
+<li>3.3.3 浮点常量 … 58</li>
+<li>3.3.4 浮点数的优缺点 … 58</li>
+<li>3.4 C++算术运算符 … 59</li>
+<li>3.4.1 运算符优先级和结合性 … 60</li>
+<li>3.4.2 除法分支 … 60</li>
+<li>3.4.3 求模运算符 … 61</li>
+<li>3.4.4 类型转换 … 62</li>
+<li>3.4.5 C++11中的auto声明 … 66</li>
+<li>3.5 总结 … 67</li>
+<li>3.6 复习题 … 67</li>
+<li>3.7 编程练习 … 68</li>
+</ul>
+<hr>
+<h2>正文</h2>
+<h3>第 37 页</h3>
+<p>第3章处理数据</p>
+<p>本章内容包括:</p>
+<p>• C++变量的命名规则。</p>
+<p>• C++ 内直的整型一一-unsignedlong、long、unsignedint、iot、unsi伊edshort 、</p>
+<p>short、ch缸、unSJ伊edchar、signedchar和bool 。</p>
+<p>• • •</p>
+<p>C++ll新增的整型:unsigned long long和longlong。</p>
+<p>表示各种整型的系统限制的climits文件。</p>
+<p>各种整型的数字字面值(常量)。</p>
+<p>• 使用const限定符来创建符号常量。</p>
+<p>• • • •</p>
+<p>C++ 内直的浮点类型:f1 0at 、double和long doubleo</p>
+<p>表示各种浮点类型的系统限制的cf10at文件。</p>
+<p>各种浮点类型的数字字面值。</p>
+<p>C++的算术运算符。</p>
+<p>• 自动类型转换。</p>
+<p>• 强制类型转换。</p>
+<p>面向对象编程&lt; OOP)的本质是设计并扩展自己的数据类型。设计自己的数据类型就是让类型与数据匹配。如果正确做到了这一点，将会发现以后使用数据时会容易得多.然而，在创建向己的类型之前，必须了解并理解C++内寰的类型，因为这些类型是创建自己类型的基本组件.</p>
+<p>内置的C++类型分两组:基本类型和复合类型.本意将介绍基本类型，~p重要数和浮点数。似乎只有两种类型，但C++知边，没有任何一种整型和浮点型能够满足所有的编程要求，因此对于这两种数据，它提供了多种变体.第4章将介绍在基本类型的基础上创建的复合类型，包括数组、字符串、指针和结构。</p>
+<p>当然，程序还需要一种标识存储的数据的方法，本宣言将介绍这样一种方法一一使用变量:然后介绍如何在C++中进行算术运算:是后，介绍C忡如何将值从一种类型转换为另一种类型。</p>
+<h2>3.1 简单交量</h2>
+<p>程序通常都需要存储信息一一如Google股票当前的价格、纽约市8月份的平均混度、美国宪法中使用最多的字母及其相对使用频率或猪王模仿着的数目。为把信息存储在计算机中，程序必须记录3个基本属性:</p>
+<p>• 信息将存储在哪里:</p>
+<p>• 要存储什么值:</p>
+<p>• 存储何种类型的信息。</p>
+<p>到目前为止，本书的示例采取的策略都是声明一个变:fß.声明中使用的类型描述了信息的类型和通过</p>
+<h3>第 38 页</h3>
+<p>!设3美验室首席助理I~价1要用I~Tì面睡房:句:三主飞川忖占二尸饥亨些谙句宦诉程仔队气飞它E在存储整金点比:主L飞~井并.并并佳届融运卷禄.-、豆阳阳I斗?∞…U币来录示最整数的值」这粤皂句为引向干实白际f江毛丰~~:‘.-:i川飞)fF 程序2捋在找势仨吏t块能够假-存有:饨整数的内在，捋该内于更毛单元标丑兑.J，.均斗~.bra吨怜’“. ‘、.;..后，您可在程序.中.~月f.b~~i.ñcow:it 来访问该内存单元。，这些话句没有青诉您~f’这不值将存储在内存的什么叹位主f; .但程序确实记录了这种信息..实际1::;~” 可以便阐&amp;运算符来检索‘ þràincounr的内存地址豆下~~公二;二三:~.;;~二!明明擎的才注H使FFfTZ也吃何??!至此之:二二三三气tz:;二二“’;.‘<em>~~’兰兰二;三:-二芒:::”工3.f1、; 主量磊二三、专r飞飞“‘.~.二..三ι. ..立司二;二72平二、之ι:ν气~--?-,’. - ~. ‘’:.~~~~... :-王气二士二可-二</em>--:.- γ飞三_.;飞f伊.. -..<em>.. .-:::己.</em>，飞.气」圣圭芝?芒-弘LιL芸匀兰户~刁士予气飞兰~~三豆;仨罚.，..二三乏士J牛工兰仨d丁:工寸古:二‘:.:~J”.主(二L二乌J川_..;.. .C++提倡使用有?定-含义的变量各c虫Ii架变量表示差旅费，应将其命名为∞st_o仨trip班回stOITnp.二~:~而’21‘要将其丁命~五主政命。j必翠遵循几种简单的主什面名规则，二，毡“二..’-<em>汗牛:，:‘，...~~..:: ... ~.~’ ~:.兰兰·二飞‘二.::.，飞; …二-:~丘名称仨书’只能使用字第字符、数字和下划线.-(.</em>)..川J 二;二二、气、;. ...:• .. ;::”.名称的第←，个字符不能是数妥õ‘ 才f二、·气.~. _，、工豆可.-二扎二飞汇:三</p>
+<p>.、区分大革字f守与小写字符吧_ -二二三穴冉γ川-‘.飞-穴二二气ιι’掠柿B百E掬将-ιLλL改兼键宅缸柑名称札~.二三二-二:二主f宇二勺jf.?f二:二二;二‘:丁之兰三三丁..乞...-;气\子二，二二~二二乞二三二汪i主7二主斗气:哉三于子:户气-二二.=芒二:了工立二二3二，<em>..~…，』:=污</em>-:- .毛Uι之二.以崎以崎拚如舍付芳阴划均哇哇伺r惑事~;f刊划撇线线.布啦录写捋巧哼砾“胁础悻-团结观:编i醉月便回帧源)...:使用.ry-r二_...: .. ___ -个下~J线?手头的名称被保留给实现，庸作垂肩标识格。俨-、二_-‘:.三兰’:&gt;.. ;‘_ -’ =~~ . ..-~ ~‘--~二二.--f二;~.:. =~</p>
+<p>•• C+千英t:‘f名称的长度没有限制，名称中所莉的字符都在意头，但有些吧台有长度’限制伽J</p>
+<p>倒数失二三点与;前面)l;“点有些不哩，因为使用像，.;.1fme:_stop. 或_Donuf这样的名称不金导致编译器错误，而会导致行为的不确定性.换句话说，不知道结果粉是什么。不出现编译器错泼的原因是，这样的名称不是非法的，‘但要留给实现使用。全局名称指的是名称被声明的位置，这将在丘第4章讨论E--3;如?再贵得好哇时1旦旦盼望醉如J二阳县保证i岳阳的’前6泣如存在义t乱也Sl‘~::::斗…，~ ~户”;_’.币tr6王j二字待?节目lfI5J名称被认为是梅同的p即使第64 个字符~I司.).二ζ $2 • f&lt;‘1:原是_丁些右效和宠效的C++名称;: .:.,.:::. ~ :;...;-</p>
+<p>int poodle; 11 valid r‘ 三、，、.‘intPood lE~’; :‘7’:..//valid and‘ô i:stinëç from.poodle. ~.~ ’:. ‘:.,.-int.-讳。DLE;二1/va1id ’ a:nd e~en:. ~~~e‘-dist inct奇:. :...• •••• ...:-’ -“..:. 1I1t tert:ier; 1仇ιnvaìid..-二_has.tιbe .int牛_n?~Int</p>
+<p>、-, . -一、-</p>
+<pre><code class="language-cpp">主ntrnY&#x27;:_st:ar&#x27;s3 &#x27;11&#x27; valid. eφ--
+int _Mystars3:&#x27;,. I元va lid-. but. rese凹&#x27;ed&#x27; - -. starts with underscore-
+i&#x27;nt 4ever&#x27;; .tr.inv-al&#x27;id because starts witñ &#x27;a:. d ígit
+irit &#x27;double!.&#x27;. &#x27;1) inval-id -_ do咀ble.&#x27;l.S 、aC+ ←key如6rd</code></pre>
+<p>‘ _--:..ínt)iegïn:; ’ . /1 va1id --begin is a‘ Pas心a1I&lt;eyword’</p>
+<pre><code class="language-cpp">ínt __fools; 11 val Íd ~ut reserved---starts wíth t吨underscores
+int the_very_best_var iab1e_i_car飞be_versi∞_ 1l&#x27;2;1/ va1 ïff
+int honl&lt;y-tonl&lt;•11 rnvaìid --no ñyphens-a11owed</code></pre>
+<p>如架在京用两个或更多的单词维成--个名称，通常的做法是用下划线字符将单词分开3虫11my_oruonsõ或者从第二个单词开始将每个单词的第个字母大写，如myEyeTooth .(C程序员倾向于按C语言的好式使用下tJJ线，而Pas创程序员喜欢采用大写方式J这两种形式都很在易将尊词区位菇，如l.carDrip和cardRip~ boat..sport.和boats::__port.</p>
+<p>吕最</p>
+<p>A发一些宋锐伪反对</p>
+<p>E二ze\.，…</p>
+<p>敛精确二-“命2~二十</p>
+<p>U-、的A</p>
+<p>」‘m“年呵F约</p>
+<p>--·-?~γ</p>
+<p>γ，</p>
+<p>---.. -.-m.-·~</p>
+<p>-<em> </em>.</p>
+<p>-.-一‘...<em>--‘:“’”: ‘. “”“:..;:.:. ...-</em>. -”’.旷_-<em>“--‘:’”“ J一三”:‘</em>;~、’ :“.;-..:;&gt;-.;二…二~ι中τ;→产于吵吵-川.. 、_--:-. -一--...--•? .‘---<em>一二甲一.</em>-J -</p>
+<p>.</p>
+<p>卢十@牛…...;c..~ 一... ••• • 『←-.:‘ .-, . . 协，、-.--::. ..’ ‘<em> ---~自-. .:’.:,.,</em>;:-... • .• -: ，、<em>...</em>.‘“”!‘-呵--“ 牛伊·_. ---‘一一?</p>
+<p>-&gt;--.--一一二4二.‘..,.-.--</p>
+<p>-_'. -</p>
+<p>甲，一_-一.. <em>一.一• </em>. .、-. <em>. .-“, </em>.</p>
+<p>... . .;::::.<em> .-,-,.</em>. - _ .</p>
+<p>咕‘<em>’</em>;“..‘ <em>” .. • ,... .</em>“-; .:-. ‘‘ 宁、--<em> . ..</em>.. . -• ...，~ .-.:...-. ’ -.,...; 崎咽‘‘<em>.</em>-• ...<em>-</em>”--. -ι‘、-、<em> .:’--一...‘.’@叫-匈“.哩吹-. ~ ” - </em> , .~ ，<em>、.. </em>-••.••.. ‘ .~-、-…?手ν-庐---.“--,. .<em> ---、.E .、专甸、</em>.<em>.四、..</em>.飞达-.<em>:..~...一’畸「飞</em>，一·</p>
+<p>、</p>
+<h3>第 39 页</h3>
+<p>与函数命名一样，大写在交受命名中也是一个关键问题(参见第2幸的注释“命名约定”)，但很多程序员可能会在交量名中加入其他的信息，)!p描述交量类型或内容的前缀。例如，可以将整型交量myWe ight命名为陆4yWeight ，其中前缀n用来表示~数位，在阅读代码或变量定义不是十分清楚的情况下，前级很有用。另外，这个交量也可以叫做intMyWeight.这将采精确，而且容易理解，不过它多了几个字母(对于很多程序员来说，这是非常讨反的事)。常以这种方式使用的其他，前线有:str或sz( 求示以空字符结束的字符串)、b(表示布尔位)、p(表示指针)和c(表示羊个字符)。</p>
+<p>随着对C忡的逐步了解，将发现很多有关前缀命名风格的示多.J(包括漂亮的m_lpctstr前缀一一这是一个类成员位，其中包含了指向常量的长指针和以空字符结尾的字符串)，还有其他关奇异、更违反直觉的风格，采不采用这些风格，完全取决于程序页。在C++所有主观的风格中，一效性和精度是最重妥的。请根据自己的需要、喜好和个人风格来使用交量名(或必妥时，根据Ai立的需妥、喜好和个人风格来选择交量名)。</p>
+<p>3.1.2 整型</p>
+<p>整数就是没有小数部分的数字，如2 、98 、-5286和10 .黯放有很多，如果将无限大的整数看作很大，则不可能用有限的计算机内存来表示所有的整数.因此，语言儿能表示所有整数的一个子集.有些谣言只提供一利l p模型〈一种类型满足所有姿求! )，而C++则提供好儿种，这样便能够根据程序的具体要求地挎敲合适的整型.</p>
+<p>不同C++塾型使用不同的内存量来存储整数.使用的内存量是越大，可以表示的整数值范围也越大。另外，有的类型(符号类型〉可表示正值和负值，而有的类型(无符号类型〕不能表示负值.术语宽度( width)用于描述存储整数时使用的内存量.使用的内存越多，则越宽.C++的基本整型〈放宽度i运增的)1顶序排列〉分别是char、short、int、long 和C++II新增的longlong.其中每种类型都有符号版本和无符号版本，因此总共有10种类型可供选择.下面更详细地介绍这些整数类型。由于char类型有一些特殊属性(它最常用来表示字符，而不是数字) .因此本意将首先介绍其他类型。</p>
+<p>3.1.3 整型short、i nt、long和longlong</p>
+<p>计算机内存由一些叫做位Cbit)的年，元组成(参见本主运后面的旁注“位与字节勺。C++的short、川、long 和Ilonglong 类型通过使用不同数目的位来存储假，最多能够表示4 种不间的幸在数宽度。如果在所有的系统中，每种类型的宽度都相同，则使用起来将非常方便.例如，如果short总是1 6位，mt总是32位，等等.不过生活并非那么简单，没有一种选择能够满足所有的计算机设计要求。C++提供了一种灵活的标准，它确保了最小长度(从C语言fli鉴而来)，如下所示:</p>
+<p>• short 至少1 6位:</p>
+<p>• int 至少与short一样长:</p>
+<p>• long 至少32役，且至少与mt一样长:</p>
+<p>• long long 至少64位，且至少与long 一样长.</p>
+<p>位与字节</p>
+<p>计算机内存的基本单元是位(bit )。可以将位看作电子开关，可以开，也可以关。关表示位O.开表示值1081立的内存块可以设置出256种不同的组合，因为每一位都可以有两种设置，所以81主的总组合数为2x 2 x 2 x 2 x 2 x 2 x 2 x 2. 111‘ 256 。因此，81主单元可以表示0-255或者-1 28到127。每培加一位，组合数使加倍。这意味着可以把16位单元设王成65536个不同的位，才巴32位单元设置成4294672 296个不同的佳，把64’Í主单元设置为1 8 446 744 073 709 55 1 616个不同的值。作为比较.unsigned long 存储不了地球上当前的人数和银河系的星星数，而longlong能够。</p>
+<p>字节(byte)通常指的是81主的内存单元。从这个意义上说，字节指的就是描述计算机内存量的反量单位.IKB等于1 024字节，1MB等于1 024KB。然而，C忡对字节的定义与此不同。C++字节由至少能够容纳实现的基本字符集的相邻位组成.也就是说，可能取位的数目必须等于或超过字符敬目。在美国，基本字符集通常是ASC lJ和EBCDIC字符集，它们都可以用8位来容纳.所以在使用这两种字符集的系统中，</p>
+<h3>第 40 页</h3>
+<p>C++字节通常包含8位。然而，国际编程可能需要快用更大的字符集，如Unicode.因此有些实现可能使用16 i主甚至32i主的字节。有些人使用术语八位组(octet)表示8i主字节。</p>
+<p>当前很多系统都使用最小长度，!lp short为16位，10ng为32位。这仍然为mt提供了多种选择，其宽度可以是16位、24位或32位，同时又符合标准:甚至可以是64 位，因为long 和longlong 至少长64位.通常，在老式IBMPC的实现中，mt的宽度为16位(与short 相同) ，而在WìndowsXP , Windows Vista、Windows 7 、Macintosh08 X、VAX和很多其他微型计算机的实现中，为32位(与long相同).有些实现允许选择如何处理int .(读者所用的实现使用的是什么?下丽的例子将演示如何在不打开手册的情况下，确定系统的限制J类型的宽度随实现而异，这可能在将C++程序从一种环境移到另一种环境〈包括在同一个系统中使用不同编译器〉时引发问题.但只要小心一点〈如本意后面讨论的那样) ，就可以最大限度地减少这种问题。</p>
+<p>可以像使用int一样，使用这些类型名来声明变量:</p>
+<pre><code class="language-cpp">short score; // creates a type short integer variab1e
+int temperature ; // creates a type int integer variable
+10ng posicion; // creates a type 10ng integer variab1e</code></pre>
+<p>实际上.short 是shortint的简称，而long是longint的简称，但是程序设计者们几乎都不使用比较长的形式。</p>
+<p>这4种类型( 川、short、10ng 和longlong )都是符号类型，这意味着每种类型的取值范围中，负值和正值几乎相向。例如，16 位的int的取值范围为-32768到+32767.</p>
+<p>要知道系统中整数的最大长度，可以在程序中使用C++工具来检查类型的长度.首先.sizeof运算符返回类型或变量的长度，单位为字节(运算符是内莹的语言元素，对一个或多个数掘进行运算，并生成一个值.例如，为日号运算符+将两个值相加).前面说过，“字节”的含义依赖于实现，因此在一个系统中，两字节的mt 可能是16位，而在另一个系统中可能是32 位。其次，头文件climits( 在老式实现中为1im its.h)中包含了关于整型限制的信息.具体地说，它定义了表示各种限制的符号名称.例如.INT_MAX为int的最大取值，CHA凡BIT为字节的位数。程序清单3 .1演示了如何使用这些工具.该程序还演示如何初始化，即使用声明语句将值赋给交囊。</p>
+<p>程序清单3.1Iimits.cpp</p>
+<pre><code class="language-cpp">// 1imits.cpp --some integer 1imits
+#include &lt;iostream&gt;
+#include &lt;climits&gt; // use limits.h for older systems
+int main ()
+using namespace std;
+int n int = INT MAX; // initialize n int to max int va1ue
+short n_short = SHRT_MAX; // s沪ηb01sdefined in c1 i mits fi1e
+10ng n_10ng = LONG_MAX;
+10ng 10ng n_110ng = LLONG_MAX;
+// sizeof operator yields size of type。古。fvariab1e
+cout &lt;c::: &quot;int is • &lt;&lt; sizeof (int) &lt;&lt; tI bytes.&quot; &lt;&lt; endl;
+cour &lt;&lt; &quot;short 19 &quot; &lt;&lt; sizeof n_short &lt;&lt; U bytes.&quot; &lt;&lt; endl;
+cout &lt;&lt; &quot;10ng is &quot; &lt;&lt; sizeof n_10ng &lt;&lt; &quot; bytes.&quot; &lt;&lt; end1;
+cout &lt;&lt; &quot;10ng 10ng i5 • &lt;&lt; 5izeof n_110ng &lt;&lt; &quot; bytes.&quot; &lt;&lt; end1;
+cout &lt;&lt; end1;
+cout &lt;&lt; &quot;Maximum values:&quot; &lt;&lt; endl;
+cout &lt;&lt; &quot;int: fI &lt;&lt; n int &lt;&lt; endl;
+cout &lt;&lt; &quot;short: • &lt;&lt; n short &lt;&lt; endl;</code></pre>
+<h3>第 41 页</h3>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;long: &quot; &lt;&lt; n_long &lt;&lt; endl;
+cout &lt;&lt; &quot;long long: &#x27; &lt;&lt; n_llong &lt;&lt; endl &lt;&lt; endl;
+cout &lt;&lt; &quot;Minimum int value = U &lt;&lt; INT MIN &lt;&lt; endli
+cout &lt;&lt; &quot;Bits per byte = &#x27; &lt;&lt; CHAR_BIT &lt;&lt; endl;
+return 0;</code></pre>
+<p>注意:如果您的系统不支持类型longlong，应删除使用该类型的代码行。</p>
+<p>下面是程序清单3.1中程序的输出:</p>
+<p>lt 48n b2 ybl tbys eyt</p>
+<p>'t</p>
+<p>-咱且nhrgg ha-eu-es s-</p>
+<p>aa。-1。-</p>
+<p>咽scA-En』·b</p>
+<p>e s</p>
+<p>E</p>
+<p>a。。nn3 a』vd r-</p>
+<p>L、且‘o</p>
+<p>o</p>
+<pre><code class="language-cpp">问aximumvalues:
+int: 2147483647
+short: 32767
+long: 2147483647
+long long: 9223372036854775807
+问inimumint value = - 2147483648
+Bits per byte = 8</code></pre>
+<p>这些输出来自运行64位Windows7的系统。</p>
+<p>我们来看一下该程序的主要编程特性。</p>
+<p>l运算符sizeof和头文件limits</p>
+<p>sizeof运算符指出，在使用8位字节的系统中，时的长度为4 个字节.可对类型名或变盘名使用siz∞f运算符。对类型名(如int)使用sizeof 运算符时，应将名称放在括号中:但对变量名〈如n_short)使用该运算符，括号是可边的:</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;int is &quot; &lt;&lt; sizeof (int) &lt;&lt; 11 bytes . \n&quot;j
+cout &lt;&lt; &quot;short i s 11 &lt;&lt; sizeof n_short &lt;&lt; &quot; bytes .\ntl;</code></pre>
+<p>头文件climits 定义了符号常最(参见本章后面的旁注“符号常量一一预处理吉普方式”)来表示类型的限制。如前所述，剧T_MAX 表示类型int能够存储的绿大值，对于Wmdows7系统，为2147483647 .编译器厂商提供了cLimits 文件，该文件指出了其编译苦苦中的值.例如，在使用16 位ínt的老系统中，climits 文件将INT_MAX定义为32767 .表3.1对该文件中定义的符号常量进行了总结，其中的一些符号常量与还没有介绍过的类型相关.</p>
+<p>表3.1clìmìts中的符号常量</p>
+<p>符号常最农巧守</p>
+<p>CHAR BIT char的位数</p>
+<p>CHAR..MAX ch缸的最大f1ï.</p>
+<p>CHAR M1N cb町的最小值</p>
+<p>SCHAR MAX signed char的簸j(值</p>
+<p>SCHAR_MIN signed ch町的局小值</p>
+<p>UCHAR_MAX unsigned char的戴大值</p>
+<p>SHRT如lAXshort的最大值</p>
+<p>SHRT MIN sho目的最小值</p>
+<p>USHRT MAX unsigned short的最大值</p>
+<h3>第 42 页</h3>
+<p>续表-</p>
+<p>-符号唱·盘表示</p>
+<p>--n唱TMAX= -川的最大也-一一一一一一一-一------一一一一-一-一一一一一一←一一-</p>
+<p>的飞M肘-inl. 的域小值</p>
+<p>_..'、.-,</p>
+<p>二一、-、UN汀MAX严...:..岛今ilnsignωint的祭大值</p>
+<p>LONG MAX 一一long 一一</p>
+<p>(l&lt;J 最大值</p>
+<p>-</p>
+<p>、司，气-岳、，.一、←^民LO肘GM1N -导‘. • 飞万, ι ‘Iong 的最小值’.‘、’“ι铲-一、ULONG_MAX 、四SlgJ、edlong的最大似.</p>
+<p>LLO~G_MAX-， long long的缎大的</p>
+<p>LtONG_M剧., _; ‘ Iong long 的最小-值.一</p>
+<p>ULLONG MAX ^ lulsigned lo,;g lo.;g 1的级大值</p>
+<p>符号;常量-一预处理量S.ñ式二.~吨、</p>
+<p>.</p>
+<p>...占• 、</p>
+<p>-、、川、-二-</p>
+<p>eφ、、</p>
+<p>. dimits文4牛中包含与下面类似的语匈牙T-:』.. .-</p>
+<p>~define'lNT MAX 32767</p>
+<p>在C++编译过程中，首先将源代码传递给领处理~;在这里，#defiñe和#inèJude一样，也J支-个预处理器编译指令。该编译指令告诉预处理2:在程序中查找别T:J.帆X ，并将所有的制飞MAX，都替换方32767。因此.#define编译指令约子作方式与文:券编辑荡豆豆字处恶器中的全局校舍并替换命令相似。修改后的稳序将在元成这些替换后工被编聋。预处理器查找独立的刷己(羊独的单饲):跳过嵌入的单词。足或是说，预处理器不会将PrNT~MÄXTM替换东P327阴阳。也可以4史用他fine来定义自己的符号常受( 参见采序清单j .ï 兑然而，#defIDe编译指令ÆC语言遗-留下来的。C++有之种关好的创建符号常爱的方法【使用关键字阳1琪，将在后面的r节讨论}，所以不会，经一‘教4之用制efin牛然而，有些县文件“尤某是那些被设计点亏了用于C 和C忏中你头文件，丁;.iL.iji1史’用制efineo今</p>
+<p>2 初始化emHr</p>
+<p>n -m</p>
+<p>·</p>
+<p>初始化将赋值与声明合并;在一起.例如，·凡·</p>
+<p>，，并将川的最文取值赋给它z</p>
+<p>ñ 下面的变</p>
+<p>ì.nt í白t;‘ INT MAX’; ·一母</p>
+<p>号二一之也可以使用宅丽值常室主~初始化。可以将变量初始化为先时一“”“”“”个变囊，条件足后者已经定义过「苦苦至可以使用表达式来初始化变量，条件是当程序执行到该声明时，炭运式EÞ所有的值都走已知的:-. int uncles = 5; fI inìtia},i ze-uncles t o- 5 -</p>
+<pre><code class="language-cpp">ínt aunts ; uncles; 1/ ini:tiaJ:-i ze aunts t o-5 -
+int chairs ; aunts + uncles + 4; /1 initiar主zechair氢to14-</code></pre>
+<p>-如果将uncles‘的声明移剑诞句列表的战后，贝l阴外两条初始化语句将非法，因为这样当程序试图对其他变盘进行初始化时.unc-les的值是未知的』-------前面的初始化语法来台e语言，C-H’还有另一种C语言E没有的初始化语法:_ ínt owl s = 101“;斤traditiona-lC initialization , sets owls to 101‘</p>
+<p>int盯ens( 432 r;/1 alternative C+~ s沪、t.gx-俨setwrens t.0&lt;--t32-_</p>
+<p>警告:如果不对函数内却定义的交量进行革矿始化，该交量的位将是二在确定的。这意味着该变受的任将是它被创建之前，相应内存单元怀存的位。</p>
+<p>如架知道变缘的初始俗应该是什么，则应对它进行初始化.将变革E声明和赋值分开.-可能接徽来瞬间悬而米决的问题:</p>
+<pre><code class="language-cpp">short year; // what coul d it be?
+year = 1492; I/oh</code></pre>
+<p>然而丁在声明变蠢时对它进行初始化，可避免~后忘记给官赋值的情况发1::.</p>
+<p>3 C朴}]初始化方式</p>
+<p>还存穷一种初始化方式，这种方式用于数组和结构，但在C忡98中，也百I用于单值变量:</p>
+<h3>第 43 页</h3>
+<p>int hamburgers = {24 }; // set hamburgers to 24</p>
+<p>将大括号初始化苦苦用于单值变蠢的情形还不多，但C十+11标准使得这种情形更多了。首先，采用这种方式时，可以使用等号〈斗，也可以不使用:</p>
+<pre><code class="language-cpp">int emus {7} ; // set emus to 5
+int r heas = (12); // set rheas to 12</code></pre>
+<p>其次，大括号内可以不包含任何东西。在这种情况下，变量将被初始化为零:</p>
+<pre><code class="language-cpp">i nt rocs = {}; // set rocs to 0
+i nt pSYChics(}; // se t pSYChics to 0</code></pre>
+<p>第三，这有助于更好地防范类型转换错误，这个主题将在木意末尾讨论。</p>
+<p>为何需要更多的初始化方法?有充分的理由吗?原因是让新手更容易学习C忡，这可能有些奇怪。以前，C++使用不同的方式米初始化不同的类型3初始化类变蠢的方式不同于初始化筒‘规结构的方式，而初始化常规结构的方式又不同于:fJJ始化简单变髦的方式:通过使用C++新娟的大括号初始化糕，初始化常规变量的方式与初始化类变莹的方式更像.C++门使得可将大括号初始化器用于任何类型(可以使用等号，也可以个使用)，这是一种通用的初始化诸法。以后，教材可能介绍使用大括号进行初始化的方式，并出于向后兼容的考虑，顺便提及其他初始化方式。</p>
+<p>3.1.4 无符号类型</p>
+<p>前面介绍的4种整型都有一种不能存储负数值的无符号变体，其优点是可以增大变量能够存储的最大值。例如，如果short 表示的范围为-32768到+32767 ，则无符号版本的表示范围为0-65535。当然，仅当数值不会为负时才应使用无符号类型，如人口、粒数等。要创建无符号版本的基本整型，只需使用关键字unsigned 来修改声明即可s</p>
+<pre><code class="language-cpp">unsigned short change; // unsigned short type
+unsigned int rovert; /1 unsigned int t ype
+unsigned quart erback; /1 also unsigned int
+unsigned 10ng gone; /1 unsigned 10ng type
+unsigned 10ng 10ng 1ang_1ang; /1 unsigned 10ng 10ng type</code></pre>
+<p>注意，unsi胆ed 本身是unsignedint的缩写。</p>
+<p>程序清单3.2演示了如何使用无符号类型，并说明了程序试图超越整型的限制时将产生的后果。最后，再看一看预处理器语句#defme.</p>
+<p>程序清单3.2exceed.cpp</p>
+<pre><code class="language-cpp">1/ exceed.cpp - -exceeding some i nteger 1imits
+骨inc1ude&lt;i ostream&gt;</code></pre>
+<p>#define ZERO 0 11阳kesZ ElRO叩巾。1for 0 va1ue</p>
+<p>#incluåe &lt;c1imits&gt; 1/ defines INT_MAX as largest int va1ue</p>
+<p>int旧in( )</p>
+<pre><code class="language-cpp">uSlng口amespacestd;
+short sam = SHRT MAX; /1 initia1 i ze a variable to max va1ue
+unsi gned short sue = sam;l/ okay if variable sam al ready def i ned
+cout &lt;&lt; nSam has • &lt;&lt; sam &lt;&lt; &quot; dollars and Sue has &quot; &lt;&lt; suei
+cout &lt;&lt; &quot; dol lars deposited . &quot; &lt;&lt; endl
+&lt;&lt; uAdd $1 to each account.&quot; &lt;&lt; endl &lt;&lt; &quot;Now &quot;;
+sarn = sam + 1;
+sue = sue + 1;
+cout &lt;&lt; &quot;Sam has &quot; &lt;&lt; sam &lt;&lt; &quot; dollars and Sue has &quot; &lt;&lt; sue ;
+cout&lt;&lt; &quot; dollars deposited.\nPoor Sam!&quot; &lt;&lt;end1;</code></pre>
+<h3>第 44 页</h3>
+<p>二“C_.<em> ...</em>. .. -.. c‘?平t:: :&lt;&lt;. .~?，am has ~:~: .ú sam &lt;&lt; ’:. .dolIars <em>jlnd Sue : h.~毡”&lt;&lt;sue‘;, </em>-ι-“ .- ..--二- -, ..::-’-. <em>.. </em>.. colit dólla r s .. ...,‘-_ --:&lt;&lt;. .’- . ...、end1;:. -. .;‘ ... ’:-‘<em>号</em>’，..-, =t:._ ...::... ~.， . ::... .~.. :...‘. ..;:号 ” ，</p>
+<p>.i.,. &lt;&lt;..，~~ depos主fÉid. :“.<em>币、-二~二，、..-电-牛~.</em>,‘ ” • _.<em>乎~</em>..--c∞。-u叽t.. “;” .: -:-’ . -二、严气~-气、.-~、--:-. .sam .=-电‘庐.. sam嘈: .-:1. ;二“’，”~ --.~【-~恒手阙M‘;;;:r:.…“τ:;: 止一...矗_--. --ω --- 、. -<em>-、...-.; 、~-</em>::--: .-寸_-’ • 一←~二飞-f -工. --一二、-. --飞--二四卢</p>
+<pre><code class="language-cpp">s ue-.. sue -1:; -
+coue .&lt;&lt;&quot;:&#x27; &#x27;&#x27;Sam has &quot;.&lt;&lt; sam--&lt;&lt; &#x27;~dollars-and -$ue has : &quot;. 毛&lt;.SUei
+cout &lt;&lt;咆d01.1arsdepos.it.e4_&quot; &lt;&quot;&lt; .end1 &lt;&lt; &quot;Lucky Sue!.&quot; &lt;&lt;.end1;
+reeurn 6r</code></pre>
+<p>卡-‘...:.‘. .., ’ ~ ,</p>
+<p>F</p>
+<p>下而是该程序的输出:1 、--.,. S!lm has 32767 dollars. and. Sue has 32761 dollars-degos全ted.</p>
+<pre><code class="language-cpp">Add...$l. co, each accounc ._ _
+Now Sam has. -32768 dollars and .Sue has . .32τ68 dollat:s.:..deposi.ted.
+Poor Sam-l</code></pre>
+<p>~ . Sam has O.d6Ilara. anà- Sùe -has () dollal;.s . deþosi-ted.</p>
+<pre><code class="language-cpp">Takè. $1 f r.om. .each account.
+Now Sam has -J. dollars -ahd .S&#x27;ue. has 6SS3S dollars. .deposit&quot;ed ...
+Lucky臼le!</code></pre>
+<p>该程序将卢个short 变量〈锦m)和一1-unsigr飞edsbort-变量(sue)给别设置为最主大的short 值，.在我们的系统尘，是32167 ~然后，将这些变蠢的值都如ll'h这对于sue 来说没有什么问题，因为新值仍比无符号‘要数的最大俗小得多:但sam的值;从3276艾变成了-’321681同样，对于sam，将其设置为0并减埠r.也不会有，问题;但对手无符号姆: .s…将其设董市。并减去后，它变成了65535。可以看旺，这些栩如的苛刻就·.像里程表.如果超越了限制，其值将为范窗另二二端的取值〈参见匪3:1).C-H确保了无符号类型的这种行为:但c++并不保证符号‘衷型超越限制C上溢和不滋〉时不出错，而这正是当前实现中续为，常见的行36ie</p>
+<p>~置点</p>
+<p>-3276ð</p>
+<p>-16384 -</p>
+<p>/湖大</p>
+<p>-1 @</p>
+<p>&lt;32768</p>
+<p>令49152 -</p>
+<p>&lt;65535</p>
+<p>@f</p>
+<p>l</p>
+<p>重置点</p>
+<p>副主F典型的整!:I:!溢出行头F</p>
+<h3>第 45 页</h3>
+<h2>3.1 .5 选择整型类型</h2>
+<p>c++提供了大量的孩型，应使用哪种类型呢?通常-;int议诙置为E对目标计算机而言最为“自然”的长度。自然~i是皮( natural~ size)衔的是诗算枕处理起来效率萤高峰氏度。如果没在非常有说服力的理-由来选择;其他类型;则应使用剧。</p>
+<p>现在来表春句:能绞府巢他类型的原因。如果变‘且表示的值不可能为兔p如文革F血的字数，则可以便周五符号类~o.o这样变·是可以表运更大的值.</p>
+<p>如果-知道变虽可能表示的整数值大于1 6 位‘院数的挝太可能值，贝li更用lbng。阻使系统七int 办咒位，也应这样{如这样，将程序移植到1&lt; 6位系统时，就不会突然无法正筒’工作(参见图-3.2“).如果要存储的值超过20-:亿，可使用long long.</p>
+<p>g</p>
+<p>息</p>
+<p>据·抽‘. ，桐..</p>
+<p>搞“抽扭曲”</p>
+<p>int失望在这台计算机上工作.int樊m.无法在这台计算机上工作.</p>
+<p>阁3.2为提高可移赖性，请使用long</p>
+<p>如果short比int小，则使用short 可以节省内存.通常，仅当有大型整型数组时，才有必要使用short.〈数级是一种数据结构，在内存中连续:(f-储同类型的多个值。〉如果节省内存很重要，则应使用short 而不是使用int.即使它们的长度是一样的.例如，假设要将程序从mt为16位的系统移到int为32位的系统，则用于存储int 数组的内存量将加倍.f.ê. short数组不受影响。请记住，节省一点就是赢得一点.</p>
+<p>如果只需要一个字节，可使用char，这将稍后介绍.</p>
+<h3>3.1.6 整型字面值</h3>
+<p>整型字丽值〈常蠢〉是显式地书写的常是，如212或1776.与C相同，C++能够以三种不同的计数方式来书写整数:基数为10、基数为8(老式山也X版本〕和基数为16(硬件黑客的最爱).附录A介绍了这几种计数系统:这里将介绍C忡表示法。C++使用前-(两)位来标识数字常盘的基数.如果第一位为1 -9 ，则基数为10(十迸制);因此93是以10为基数的。如果第一位是0，第二位为1 - 7.则基数为8〈八进制) ;因此042的基数是8.它相当于十进制数34。如果前两位为ox或OX，则基数为16(十六遮制):</p>
+<h3>第 46 页</h3>
+<p>因此Ox42为十六进制数，相当于十进制数66.对于十六进制数，字符a-f和A- F表示了十六进制位，对应予10-15.OxF为15.OxA5为165(1 0个16加5个1)。程序清单3 .3演示了这三种基数.</p>
+<p>程序清单3.3hexoct.cpp</p>
+<pre><code class="language-cpp">// hexOCtl. cpp --shows hex and octal literals
+#include &lt;iostream&gt;
+int main ()
+using namespace std;
+int chest = 42 ; // decimal integer literal
+int waist = Ox42; // hexadecimal integer literal
+int inseam = 042; // octal integer literal
+cout &lt;&lt; &quot;Monsieur cuts a striking figure!\n&quot;;
+cout &lt;&lt; &quot;chest = &quot; &lt;&lt; chest &lt;&lt; &quot; (42 in decimal) \n&quot;;
+cout &lt;&lt; . waist :; .. &lt;&lt; waist &lt;&lt; &quot; (Ox42 i n hex)\n&quot;i
+cout &lt;&lt; . inseam :; 11 &lt;&lt; inseam&lt;&lt; &quot; (042 in octal)\n&quot;i
+return 0;</code></pre>
+<p>在默认情况下，∞ut以十进制格式显示整数，而不管这些整数在相予中是如何书写的，如下丽的输出所示:</p>
+<pre><code class="language-cpp">Mons 立eurcuts a striking figure!
+chest = 42 (42 in decimal )
+waist = 66 (Ox42 in hex)
+inseam = 34 (042 in octal)</code></pre>
+<p>记住，这些表示方法仅仅是为了表达上的方便.例如，如果CGA视频内存段为十六进制8000.则不必在程序中使用之前将它转换为十进制数45056.而只箭使用OxBOOOI1P可。但是，不管把值书写为10 、012还是OxA.都将以相同的方式存储‘在计算机中一一被存储为二进制数(以2为基数)。</p>
+<p>顺便说一句，如果要以十六进制~}l.j茬制方式显示值，则可以使用cout的一些特殊特性.前面指出过，头文件iostream提供了控制符end1 ，用于指示cout重起一行。同样，它还提供了控制符dω 、hex和oct.分别用于指示cout以十进制、十六进制和八进制格式显示整数.程序消单3 .4使用了hex和oct以上是在三种格式显示十进制值42.默认格式为十进制，在修改格式之前，原来的格式将一真有效.</p>
+<p>程序清单3.4hexoct2.cpp</p>
+<pre><code class="language-cpp">// hexoct2.cpp --display values in hex and octal
+#include &lt;iostream&gt;
+using namespace std;
+int main()
+using namespace std;
+int chest = 42;
+int wais t = 42;
+int inseam = 42;
+cout &lt;&lt; &quot;Monsieur cuts a striking figure !&quot; &lt;&lt;endl;
+cout &lt;&lt; .chest = &quot; &lt;&lt; chest &lt;&lt; • (decimal f。古42)&quot;&lt;&lt; endl ;
+cout &lt;&lt; hex; // manipulator for changing number base
+cout &lt;&lt; &quot;&#x27;Ñaist = &quot; &lt;&lt; wai st &lt;&lt; 11 (hexadecimal for 42)&quot; &lt;&lt; endl i
+∞的&lt;&lt;oct; // mani pulator for changing number base
+cout &lt;&lt; tI inseam = &quot; &lt;&lt; inseam &lt; &lt;: &quot; (octal for 42) &quot; &lt;&lt; endl;
+return 0;</code></pre>
+<h3>第 47 页</h3>
+<p>下丽是运行该程序时得到的输出:</p>
+<pre><code class="language-cpp">Monsieur cuts a striking figure!
+chest = 42 (decimal for 42)
+waist = 2a (hexadecimal for 42)
+inseam = 52 (octal for 42)</code></pre>
+<p>诸如cout&lt;&lt;hex;等代码不会在屏幕上显示任何内容，而只是修改cout 显示‘些数的方式.I玉|此，控制符hex实际上是一条消息，告诉∞ut采取何种行为.另外，由于标识符hex位于名称空间std中，而程序，使用了该名称空间，因此不能将hex 用作交盘名.然而，如果省略编译指令ωmg.而使用std::cout、std ::endl 、std::hex和std::oct.则可以将hex 用作变盘名。</p>
+<p>3.1.7 C++如何确定常量的类型</p>
+<p>程序的声明将特定的整型变蠢的类型告诉了C忡编译器，但编译器是如何知道常蛊的类型呢?假设在程序中使用常量表示一个数字:</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;Year ; &quot; &lt;&lt; 1492 &lt;&lt; &quot;\ n&quot;;</code></pre>
+<p>程序将把1492存储为int 、long还是其他整型呢?答案是，除非有理由存储为其他类型(如1 使用了特殊的后缀来表示特定的类型，或者值太大，不能存储为int ) ，否则C++将被型常量存储为int类型.</p>
+<p>首先来看看后缀。后缀是放在数字常ilt后丽的字母，用于表示类型.整数后面的1!或L后缀表示该鹦数为long常盘.u或U后缀表示阻四ignedint 常蠢.ul (可以采用任何一种顺序，大写小写均可〉表示unsigned long常蠢(由于小写l看上去像1.因此应使用大写L作后缀).例如，在mt为16位、long为32位的系统上，数字22022被存储为int，占1 6位，数字22022L 被存储为long，占32 位。同样.22022LU和22022UL都被存储为unsignedlong. C++ 11提供了用于表示类型longlong的后缀11和LL.还提供了用于表示类型unsigned long long的后缀ull 、UIl、uLL 和ULL .</p>
+<p>接下来考察长度.在C++中，对十进制整数采用的规则，与十六进制和)\.逃制稍微有些不同.对于不带后缀的十进制‘应数，将使用下ï!iÏ几种类型中能够存储该数的最小类型来表示:int 、long或longlong.在int为16位、long为32位的计算机系统上.20000被表示为int类型，40000被表示为long类型，3000000000被表示为longlong类型.对于不带后缀的十六进制成八进常IJ整数，将使用下面几种类型中能够存储该数的最小类型来表示:圳、unsignedint long 、unsignedlong、longlong或unsignedlong long.在将40000表示为long的计算机系统中，十六进制数Ox9C40( 40000)将被表示为unsignedint .这是因为十六进制常用来表示内存地址，而内存地址是没有符号的，因此.usigned int比long更适合用来表示16位的地址.</p>
+<p>3.1.8 char类型:字符和小擎数</p>
+<p>下面介绍最后一种整型:char类型.顾名思义.char类型是专为存储字符〈如字母和数字〉而设计的.现在，存储数字对于计算机来说算不了什么，但存储字母则是另一由凉。编程语言通过使用字母的数值编码解决了这个问题.因此.char 类型是另一种整型.它足够长，能够表示目标计算机系统中的所有基本符号一一所有的字母、数字、标点符号等.实际上，很多系统支持的字符都不超过128个，凶此用一个字节就可以表示所有的符号。因此，虽然char最常被用来处理字符，但也可以将它用做比short更小的孩型.</p>
+<p>在美国，最常用的符号集是ASCll字符集〈参见附录。.字符集中的字符用数值编码(ASCII码〕表示.例如，字符A的编码为65，字母M的编码为77.为方便起见，本书在示例中使用的是Ascn码.然而.C++实现使用的是其主机系统的编码一一例如，IBM大型机使用EBCDIC编码。ASCll和EBCDIC都不能很好地满足国际需要.C忡支持的宽字符类型可以存储更多的值，如同际Unicode字符然使用的伯.本主在稍后将介绍wchar_t 类型.</p>
+<p>程序消单3.5使用了char 类型.</p>
+<h3>第 48 页</h3>
+<blockquote><p>［本页文本层 OCR 严重损坏（该页扫描阴影/插图区产生了大量乱码字符），以下为原始抽取结果（未删改），内容以 PDF 第 66 页图像为准］</p></blockquote>
+<p>‘----<em>.. </em>. -...院-, ·程;李清单3.5.chårtypeφp 、...，.-.-‘-’:“ _‘.~: 、,</p>
+<p>』</p>
+<p>--~.‘I/ ~haí-type..CI2P -~ the .cha巳“-~ype’只、</p>
+<pre><code class="language-cpp">#i:nclude .&lt;Ìòstream&gt;
+.i Ílt njaüi( ) 、、</code></pre>
+<p>、-、、</p>
+<h3>第 49 页</h3>
+<pre><code class="language-cpp">cout &lt;&lt; endl &lt;&lt; &quot;Done&quot; &lt;&lt; endl;
+return 0;</code></pre>
+<p>下面是程序消单3.6中程序的输出:</p>
+<pre><code class="language-cpp">The ASCII code for M is 77
+Add one to the character code:
+The ASCII code for N is 78
+Displaying char ch using cout .put(ch): N !
+Done</code></pre>
+<p>l程序说明</p>
+<p>在程序清单3.6中t M‘表示字符M的数值编码，因此将char变Jìl:ch初始化为’M‘，将把c设置为77 .然后，程序将同样的值赋给int变意1 ，这样ch和1的值都是77.接下来，cout 把ch 显示为M，而把i显示为77.虫11前所述.值的类型将引导cout 选将如何显示值一一这是智能对象的另一个例子。</p>
+<p>由于ch实际上是一个整数，因此可以对它使用整数跺作，如加1 ，这将把你的值变为78。然后，程序将i重新设置为新的值(也可以将i加1)。∞ut再次将这个值的char版本显示为字符，将int版本显示为数字。</p>
+<p>C++将字符表示为整数提供了方便，使得操纵字符值很容易。不必使用笨重的转换函数在字符和ASCIl码之间来回转换.</p>
+<p>即使通过键盘输入的数字也被视为字符.请看下丽的代码=</p>
+<pre><code class="language-cpp">char ch;
+cin &gt;&gt; ch;</code></pre>
+<p>如果您输入5并按回车键，上述代码将读取字符“5 飞并将其对应的字符编码( ASCII编码53)存储到变主主ch中.常看下丽的代码:</p>
+<pre><code class="language-cpp">int n;
+Cln &gt;&gt; nj</code></pre>
+<p>如果您也输入5并按回车键，上述代码将读取字符“5”，将其转换为相应的数字值5，并存储剑变盘n中。</p>
+<p>;战后，该程序使用函数cout.put()显示变量ch和一个字符常髦。</p>
+<p>2.成员函数coul. put( )</p>
+<p>cout.put( )到底是什么东西?莫名称中为何有一个句点?函数cout.put()是一个重要的C忡∞P 概念一一成员函数一一的第一个例子.类定义了如何表示和控制数据。成员函数归类所有，描述了操纵类数据的方法.例如类ostream有一个put()成员函数，用来输出字符.只能通过类的特定对象〈例如这里的cout 对象〉来使用成员函数。要通过对象(如cout )使用成员函数，必须用句点将对象名和函数名称( put( ))连接起来。句点被称为成员运算符.cout.put()的意思是，通过类对象cout来使用函数put().第10宣言介绍类时将更详细地介绍这一点.现在，1ft}.接触的类只有istream和ostream ，可以通过使用它们的成员函数来熟悉这一概念.</p>
+<p>cout.put( )成员函数提供了另-种显示字符的方法，可以替代《运算符.现在读者可能会闷，为何需要cout.put( )。答案与历史有关。在C++的Release2.0之前，cout 将字符变量显示为字符，而将字符常量(如‘M’和‘ N‘)显示为数字。问题是，C忡的早期版本与C一样，也将把字符常量存储为int 类型.也就是说，1 M’的编码77将被存储在一个1 6位或32 位的单元中.而char 变量一般占8位.下面的语句从常盘‘M’中复制8位( 左边的8位〉剑变盘ch中z</p>
+<pre><code class="language-cpp">char ch : &#x27;M&#x27;;</code></pre>
+<p>遗憾的是，这意味着对∞ut来说，‘ M’和ch看上去有天壤之别，虽然它们存储的值相同.因此，下面的语句将打印$字符的ASCll码，而不是字符$:</p>
+<h3>第 50 页</h3>
+<p>: • .è“”“. . ..”很叫，可_-々年节山、“.‘~.-:”飞宁·γ~ ，..乡?‘“’-”~-、二_.!-‘扩士乞r、y芒，飞二，，‘、飞穹 :“启俐二二二~;ç.~’.~~飞飞γ._.‘-;7.;:~二，川λ β古、.-<em>灸.~兴片J川飞飞.，乒户川、兰:号哈穿zζξ..’:~~”::手子二二;-二ν主习:二二;兰二?三主丘辛;:.</em>;‘.’、二写:手主二沟;污~tJ豆i圳.~ “: .:. :~二二二句~.:二」主‘~.~;:’:‘;.汇艺仁仨-二=~二二二-二i二与导乒ιJ二{二气三立飞乓巳-丁士三:二三、二-二:三二二νιe二λ:二三:J二-雪但丁丽-自费城叫树SJYt:王:言号;二~-:.-:... :”. -二，可m引-气f 币二二三.:.<em>:.- ...‘二三二二</em>.<em>.二;二’.二二二二二三」βωti pii~~;鸣u毛~ .~=-:..，二</em>.&lt;?气;写‘.了，τ二三.~~.::~、可:-.-:，’:汪、了:-.-叫-飞喃子<del>.ζ二三斗;二三产汁“.;:.:</del>-: .二-‘.’二;二三.-<em>..-与::;:.~，.;:-c~豆叶系1;d~i高;二豆叶版时童手倍或α豆类基拍扫盲类型1~~ii:量面有di边等均主确7，;二:二‘.’</em>~... ~;-.‘ . ~ : -:-. .::川..~ 电-飞__，”:--，~-二~:<em>.:..2:飞，’.‘“，τ-旷~宅二f-处理字符常荒: Tiλ三干ττ 二二二-二噜二，三之.γ?吨矶ι...::-:丁- ~:旨’</em>‘_乓..二E二-卢-.二ι巳ζ二:三二叫二飞-:-~-叫二勺二-二::..’:.:;<em>气-三川卢旷寸:二二.‘二~ ~-，.~’)λ~‘~. 主.手</em>:... :..;，，，...扩，-γ川!二J气’;‘工.’1、~可可?以E重E 辛吞F易地每领豆会茹到J这-叮γJ点点肌马ν、囱此Z￥f第之‘-5主章言介绍:芋T循到环〈后窑来说奄这个主题L 二、. .;<em>... 二e i斗’ 二-二二‘~..:-”:’.. .‘:. . ... ，.二ι?与</em>.气。; .’泣，...-、二飞f‘二号?飞飞‘~.:’<em>.:‘:“~. ，: :.~;.. ’. . 飞，吃;.:.‘ :.:飞主.’-τ”:::-. : • .1‘“;寸τ</em> i.:-”: ~ ~(’..~3二ëhl扩二穿画ÍJ.ii丁二了飞、兰仨二、<em>:..-</em>:...飞毛..<em>~-“ .”:二--峰、7、..-户，，‘dh乒...千二，... .:..二.--.交二:1二，亏宇FιJ二二与-.’斗J-」Jj二-二;-二:二.</em>.-方法1延正将字钗-升符用兽引;乡彗哇捍。二:这种3农交J示示t哇李代孝盹是宅符j月的盖哇E值编甲J皂伊伊例J判咒j二4户-不草~.s2引1廿f系统中的对应悄宅二f.f气二.‘二-兰’. -.J让丛ι币λ二飞二二卢ζ: 三.<em>.工...乓三况况.如如如J:丁万f.丁y♂~::.:主穹.:烂拦兰... γ泛兰f二仨i仨￥汪J?J 号仨;ζ.‘:’::~于二子气-泣三J二二二二三二-卅. ，.:...，.二二飞二‘二-.牛?二-~..:~.:---.:<del>.丑二’..</del>. =二; 二…二</em>... 二, t HJ :?二</p>
+<p>φ川为邸叩宁革泣正石f歧必C吨I(豆码乓屯i二U…\飞“川气《气二三7二乞云;二〉二二L二、二;气‘飞:=.:..’.合-二-…-芝:子ξ三气气;;:.~吁为‘9瓦f汇，即附甏栩符俐i 的们ASÇI}宇何段阴阳玛可阱Fι飞二豆=二主￥.二乓气二气:了二‘飞E川..亨_tt?卢?兰毛二ι二气千二:乏尘之七-气-吃宅二±±::: 三-二;三二L二:卢气_，:’”- :-:::- ~飞-二，穹专~_ .;</p>
+<p>二二-二</p>
+<p>... ..、叹为53，..即数字，5睁ASCll码.~ 、_..</p>
+<p>毛.飞，:，为32 ，即空格兰;符的AsCi I码...:.‘飞’飞:“</p>
+<p>• ‘!’为33，即惊叹号的人scn码.</p>
+<p>法种表态法优于数值编码，它更加清晰，且不需要知道编码方式.如栗系统使用的是EBCDJC，则A的编码将石是65，但走‘A ’表示的仍然是字符A .</p>
+<p>有些字符不能宜接通过键盘输入到程序中.例如，按回车键并不能使字符审包急了个换行符:相反，程序编辑摇将把这种键击解释为在源代码中开始新的一仔。其他一些字符也无法从键盘输入，因为C冉语言赋予了它们特殊的含义.例如.双引号字符用来分隔字符司5字面值，因此尔能把双引号放在字符喧Z严酷值中。对于这些字役，C件提供了一种特殊的表示方法一一转义序列r如表3.2.所示.例如，\3表示振件字符，它可以便终端扬F茹苦苦振符.转义序列川表示换行符，飞“将双引号作为常规字符.而不是字符$分隔符。百E以在字符E和或字符常囊中使用这些表示法L如下倒所示:</p>
+<pre><code class="language-cpp">char a.l arm ~ &#x27; \a&#x27;.
+cout &lt;&lt; aiarm &lt;&lt; &quot;00π&#x27;t do that againf\a 飞n&quot;;
+cout &lt;&lt; &quot;Ben \&quot;Buggsie\&quot; Hacker\nwas here !\n&quot;</code></pre>
+<p>最后一行的输出如下L</p>
+<pre><code class="language-cpp">Ben..&#x27;!B口ggsre:俨Hacker.
+&#x27;was here&#x27;! . .._.. . ... -，.，..，...&quot;:.&quot;τ:_，:...，-:-:-...</code></pre>
+<p>,.:‘7r:.;-... :&lt;;叫豆t~，，.我多:2 .户..-.，.，..，，(矿工、..飞二...结H乓C.豆1二七赞J异x单汇:序序e月巧‘的塑嗖圣二豆守f泛二:辽二ι志古;斗ι牛二μ斗币L二乏二-’!.二:.~三;二;44:豆弘μ臼立忑X飞;.，二吟二二J马λ♂毛卫.~~ι:.e... ..立λ:.;、勺杰二:叮.φf川、飞合二γ￥<em>-3可#在‘. ~叮Y巴，-二..烹符.名忍4称引:二;川叫、-..ν二γ “:’:γ~1r、….二仇川飞A础s缸蚓CI附号?二飞叭吁另寸| \付川… 讪代榈码企h呐、子伊仰严严纠2与;0;，1? :;”~:.f逃制均C)1码、:1:+六进切地由旦注1:. 川山:.~‘:.;人均银行贮’.+</em>.，;&lt;.，矶‘向;&gt;~’:“ ‘.~川、3、...，,. .\n”“七川、卡; 二...，.豆叶0&lt;;‘6.&gt;..::’;.:t、，川、|飞..:\::，，!‘:;&gt;.:、’OXA” 川‘M汽~’ .. 、“...;.;.. .. :.5</p>
+<p>水平制表符| 即-寸-飞t1:: <em> -9一一工1 -M 工</em></p>
+<p>霉豆制表符| VT I \v I 11 I OxB</p>
+<pre><code class="language-cpp">格1BS \b B Ox8
+车1CR 1 \r 13 OxD
+铃IBEL I \a 7 Ox7</code></pre>
+<p>斜仔| 飞i u 怪92 Ox5~</p>
+<p>一仁</p>
+<p>二-川电一:气Jr±二了“，::;‘:’-7 二斗二二二气二t-&gt;&gt;~ \?二二-~.‘ .，1-宁、_ -63:;”::’:<em>O~旦、.</em>，~，;三_二</p>
+<p>-二啊f号..‘-~:.1-二..“吧?亡”，.1电’.‘::“V ~-”.“’三- 仁川3号‘，:._:..~气‘1:-. ..:.-_岛1Q7.啕』…气</p>
+<pre><code class="language-cpp">I~号I&quot; I \ . C 34. Ox22
+--</code></pre>
+<p>--,--,d-τ{. <em> . '--</em>, :~~. "-. -ø",_' 、"、'</p>
+<p>• _-</p>
+<p>、P :.:.~:~=~.<em>;S</em></p>
+<p>‘} 、『、• ...,. --<em>..“、-、-.;” -</em>-=‘一... ..~.;= “N _ .”’:‘、飞，马、,</p>
+<p>白</p>
+<p>-</p>
+<p>_卢.</p>
+<p>-</p>
+<p>-‘-’=-7.“;;;”~ _ ; ~ • • -“-...:. ‘咛守-__.__、• 4,,-’ .‘ . ..:...:-</p>
+<p>“. 也‘... . -~ ，. ’ ... . 、•,... .- ”‘ <em>. ,. .-’ .. .. ‘’</em>‘. ,-:: ’&lt; • . ... _、... 、、__. t-,<em>. ‘An.~毛</em>.’--.~</p>
+<h3>第 51 页</h3>
+<p>注意，应该像处理常规字符(如Q)那样处理转义序列〈如\nλ也就是说，将它们作为字符常盘时，应用单引号括起:将官们放在字符*中时，不要使用单引号.</p>
+<p>转义序，列的概念可迫溯到使用电传打字机与计算机通信的时代，现代系统并非都支持所有的转义序列.例如，输入振铃字符时，有些系统保持沉默.</p>
+<p>换行符可替代end1 ，用于在输出中重起一行。可以以字符常最表示法(‘恼，)或字符$方式(“n勺使用换行符。下面三行代码都将光标移到下一行开头:</p>
+<pre><code class="language-cpp">cout &lt;&lt; endl; // using the end1 manipu1ator
+cout &lt;&lt; &#x27;\n&#x27;; // using a character constant
+cout &lt;&lt; &quot;\n&quot;; / / using a string</code></pre>
+<p>可以将换行符Ib:入到校长的字符中中，这通常比使用end1方便.例如，下面两条cout语句的输出相同:</p>
+<pre><code class="language-cpp">cout &lt;&lt; endl &lt;&lt; endl &lt;&lt; &#x27;What next?&quot; &lt;&lt; end1 &lt;&lt; &quot;Enter a number:&quot; &lt;&lt; endl;
+cout &lt;&lt;叫n\nWhatnext?\nEnter a number: \n&quot;;</code></pre>
+<p>显示敛字时，使用endl比输入“油”或‘恼‘更容易些，但显示字符感时，在字符E将来尾添加一个换行符所需的输入最要少些:</p>
+<pre><code class="language-cpp">cout &lt;&lt; x &lt;&lt; endl; / / easier than cout &lt;&lt; x &lt;&lt; &quot;\ n&quot; ;
+cout &lt;&lt; &quot;Dr. X. \n&quot;; // easier than cout &lt;&lt; &quot;The Dr. X.&quot; &lt;&lt;endl ;</code></pre>
+<p>段后，可以去辈子字符的J\..逃制和十六进制编码来使用转义序列。例如，Ctr+Z的ASCII码为26，对应的八进制编码为032，十六进制编码为Oxla.可以用下丽的转义序列来表示该字符:\032或\x la.将这些编码用单引号括起，可以得到相应的字符常量，如‘\032’ ，也可以将它们放在字符$中，如“hi\x1 a there” •</p>
+<p>提示:在可以使用数字转义序列或符号转义序列(如\Ox8和飞b)时，应使用符号序列。数字永示与特定的编码方式(如ASCll码)相关，而符号表示适用于任何编码方式，其可读性也更强。</p>
+<p>程序清单3.7演示了一些转义序列.宫使用振铃字符来提请注意，使用换行符使光标前进，使用退格字符使光标向左返一格(Houdini曾经在只使用转义序列的情况下，绘制了一幅哈得逊河图画:他无疑是一位转义序列艺术大师).</p>
+<p>程序清单3.7bondini.cpp</p>
+<pre><code class="language-cpp">// bondini .cpp --using escape sequences
+#include &lt;iostream&gt;
+int main()
+using namespace std;
+cout &lt;&lt; &quot;\aOperation \
+cout &lt;&lt; &quot;Enter your agent code: \b\b\b\b\b\ b\b\b&quot;川,
+10ng code;
+cin &gt;&gt; code;
+cout &lt;&lt; &quot;\aYou entered 11 &lt;&lt; code &lt;&lt; &quot; .. . \n&quot;;
+cout &lt;&lt; &quot;\aCode verified! proceed with P1an Z3 ! \n&#x27;;
+ret urn 0;</code></pre>
+<p>注意:有些基于ANS1C之前的编译器的C忡系统不能仅如1) \aO对于使用ASCll字符集的系统，可以用\007替换油。有些系统的行为可能有所不同，例如可能~飞b显示为一个小矩形，而不是这格.或者在l!.格时删除，还可能忽略恼。</p>
+<p>运行程序清单3.7中的程序时，将在屏幕上显示下丽的文本:</p>
+<pre><code class="language-cpp">Operation &quot;HyperHype&quot; is now activated!
+Enter your agent code: ______ __</code></pre>
+<h3>第 52 页</h3>
+<p>打印下:lM线字符后，程序使用返格字符将光标退到第-个下如l线处。读者可以输入自己的密码，并继续。下丽是完整的运行销况:</p>
+<pre><code class="language-cpp">Operation &quot;HyperHype&quot; is now activated!
+Bnter your agent code: 42007007
+You entered 42007007..
+Code verified! Proceed with Plan Z3!</code></pre>
+<ol>
+<li>ì远Jtl字符名</li>
+</ol>
+<p>C忡头‘现支持一个基本的源字符集，即可用来编写源代码的字符集。它由标准美国键盘上的字符〈大写和小写〉和数字、C谣言中使用的符号(如{和=}以及其他一些字符〈如l换行符和空格〉组成.还有一个基本的执行字符集，它包括在程序执行期间可处理的字符(如可从文件中读取或显示到屏幕上的字符〉。它增加了一些字符，如返格和振铃。C忡标准还允许实现提供扩展源字符集和扩展执行字符集.另外，那些被作为字母的额外字符也可用于标识符名称中。也就是说，德国实现可能允许使用日耳曼语的元音变音，而法|划实现则允许使用重元音.C++有一种表示这种特殊字符的机制，它独立于任何特定的键敛，使用的是通用字符名(un i versal character name).</p>
+<p>汹用字符名的刑法类似于转义序列.通用字符名可以以\u或\U打头.\u后面是8个十六进制位.\U J吕阳则怂16个十六进制位。这些位表示的是字符的18010646 码点(lSO10646是一种正在制定的国际标准，为大量的字符提供了数值编码，请参见本意后面的“Unicode和1801 0646勺.</p>
+<p>如果所用的实现支持扩展字符，则可以在标识符〈如字符常蠢)和字符申中使用通用字符名。例如，请看下面的代码:</p>
+<pre><code class="language-cpp">int k\uOOP6rper;
+cout &lt;&lt; &quot;Let them eat g\uOOE2teau.飞n&quot;;</code></pre>
+<p>。的IS010646码点为00时，而a的码点为00E2.因此，上述C++代码将变量名设置为körper，并显示下面的输出:</p>
+<p>Let them eat gâteau.</p>
+<p>如果系统斗、支持18010646，它将显示其他字符或guOOE2tcau，而不是â.</p>
+<p>实际上，从易读性的角度看，在变盘名中使用\uOOF6没有多大意义，但如果实现的扩展源字符集包含凸，它可能允许您从键盘输入该字符。</p>
+<p>讷注意，C++使用术语“通用编码名”，而不是“通用编码”，这是因为应将\uOO F6解释为“Unicode阳点为U-00F6的字符飞支持Unicode的编译器知道，这表示字符ö，但无需使用内部编码OOF6.无论计算机使用是ASCIl还是其他编码系统，都可在内部表示字符T:同样，在不向的系统中，将使用不同的编码来表示字符趴在源代码中，可使用适用毛所有系统的:$周编码名，而编译器将根据当前系统使用合适的内部编码来表示它7</p>
+<p>~垣坠回豆j日ISOl侃46</p>
+<p>Unicode提供了r种表示:~..i种宅，符集的碎决方案--为大量字符浮白符号提供标准数位编码，并根据类型将它们分组。例如，A8Cl1码为Unicod“e-的予集，因此在这两种东就中7美国的拉T字符:-(如A和z.)的表示相同。然荷亨=Unic创石还包含弃他拉丁字符，如欧洲语言使用的拉丁字符、来自其他，证言( 如希腊语、画里尔语、.希伯来语、切罗基语、阿拉伯语、参语和孟加拉语r中的字符以及象形文字(如中咽和日本的文字)。到目前二天T止，Unïcode可以表示109000多枪经号和90参企手写徒步tscript ).它王莲在不幌发. -展中二‘中:‘.:.-ü此时c给每个字符指定一不编号ζ...码点。Un向de 玛点通常类似于下面远在U-222B。其中-U 表示这是一个Unicode字役..m 2228::;是该字符(积分正孩符号)的卡次进制编号σ</p>
+<p>罔际标准化组织(ISO-)建立了一个工作组，专ì1-7t.:5tlSOo10646-一-这也是一个对-多种语言义本进行编码的新.准。ISO10646-.，j、组和Unicode小组从1 99-1年开始合作τ以确保他们的标准同步。</p>
+<h3>第 53 页</h3>
+<p>5, signed char和unsignedch缸</p>
+<p>与int不同的是.char在默认情况下既不是没有符号，也不是有符号.是否有符号由C++实现决应，这样编译者普开发入员可以最大限度地将这种类型与硬件属性匹配起来。如果char 有某种特定的行为对您来说非常重要，则可以显式地将类型设置为signed char 或unsigned char,</p>
+<pre><code class="language-cpp">char fodo; //阳ybe signed, may be unsigned
+unsigned char bar; // defini tely unsigned
+signed char snark; // def ini tely signed</code></pre>
+<p>如果将char 用作数也类型，则unsignedch缸和signedch缸之间的差异将非常重要。unsignedchar 类峨的表示范罔通常为O~255 ，而signedchar的表示范围为τ128到J 27.例如，假设要使用一个char 变蠢米存储像20。这样，大的也如则在某些系统上可以，而在约一些系统上百I能不可以。但使用unsignedchar可以在任何系统上达到这种目的。另一方面;如果使用char变量来存储标准ASC lt字符，则char有没有符号都没关系，在这种情况下，再以使用char._ 6, wcha t</p>
+<p>程序需要处理的字符集耳能无法用一全!t位的字节表示，如l 日交汉字系统.对于这种f的兄，8刊的处理万式有两种←首先，如果大型字符集是实现的基本字符集，则统浮苦苦严商吁以将cnar定文为r个16位的字节或更长的字节←其次7一科实现可以同附支持一个小型基本字符集和?个授人的扩展主役集τ8位ch町可以表示基本宅楼集ZF另一科类型wcha畏_r( 宽字符类型〉可以表法扩展字符集。wchar_t类型f是←种墨登数类茧，官有足够的空阁.PL以表示茶统使用的最大扩展字符集.这种类型与另一种事些现(底层( under1ying)类型〉的长度和符号底性相i吾共对底层-类型的选择取决于实现，因此在一个系统中，它可能是unsignedsho町，而在另一个系统中，则哥能是削。</p>
+<p>cin 和∞1，It 将输入和输出眷作是char 流「因此不适于用来处理wèhar_t类型。ÎQstrea阶头文件的簸~版本提供了件均相似的工具--wd比利wco邸，可用毛处理Ir wchar_t流.员纯，可以通，tlJJu上前缀L来指示宽事符筒‘最和宽字符郁。下丽的代码将字母P白兔wchar_t 版本存储至11变’li1:bob电，并显示单词taJ←的wchar_t版本:</p>
+<pre><code class="language-cpp">wcnar t bob = L&#x27;P&#x27;; f/ a wide-character constant
+wcout &lt;&lt; L&quot;tall U &lt;&lt; endl; / / outputt.ing a w1de:character string</code></pre>
+<p>在支持两字节wchaJ:._t的系统中，上述找码将把每个字符存锁在一个两个字节的内存单元中.本书不使用宽字符类型，但读者应知道有途种类型，尤其是在进行国际编程或使用Unìcode或lSO10646时e</p>
+<ol>
+<li>C++U新堆的类型:charl6_t 和char3 2‘~t_，随着编程人员日益熟悉UrlÌcoo..e( ，类型wchaó 显然不再能够满足需求;事实上，在诗算机系统上进行毛、字符和字符串编码时，仅使商Unicode码点并不够。只，体地说，进行字符吊编码峙，如果有特定长皮和符号特征的类型，将很在帮助，而类型wchar:_t的长度和符号特征随实现而己。因此.C忡11新增了类型chatl6_t-和char37_:r.某电前者是无开号的，长16 位，而后者也是无符号的，但长32 位。“、C++II佼肚前缀u 表示cnár'T 6:’J 字符常量和字符串常囊，如; 旷C‘和u’，‘be'goóO”;并使用说缀U表示charJ2:_t常量，直1l.u'R'f(lU“dtFty rat”。类型chad6_f与/.uOOF6 形式前通用字得名匹配.而类型char32_J与LUO∞02228 形式的通用字符名匹配F前绩u和U分别指出字符字ffiiI值的类型为chãrl l，)二t和chai32_h</li>
+</ol>
+<pre><code class="language-cpp">charlr6_t chl = u~ q&#x27; ; 1/ basic-character, ìn ,16-bì t f口rm
+char32_t ch2 = U&#x27;\ eO&#x27; O O&#x27;O&#x27;222，B 勺// uriiversal character mime in -n-bit form-</code></pre>
+<p>与wchar_t::-楼，chai‘ 16_t革nchar32_t:’也都有底层类型一一一种内擎的整型，但底层类型可能随系统而已.、3 ，1‘，9bobl 类型</p>
+<p>ANSVISQC，叶标准添加7了一种名oHþo'or 的新类型I对_ C忡来说是新的儿宫的名称来源寺炎!均数学家、</p>
+<h3>第 54 页</h3>
+<p>George Boole.是他开发.þ，逻辑律的数学表示法俨在计算中，布尔交蠢的值可以是true或false.过去.C++和C一梓7也没有布尔类型.在第5章和第6章中将会看到.C忡将非零值解释为true.将零解释为fa lse.然而，现在可以使用怕。l类型来表示真和假了，它们分别用预定义的字面值阳e和fal se 表示.也就是说，可以这样编写语句:</p>
+<pre><code class="language-cpp">bool is_ready = true;</code></pre>
+<p>字面值true和false都可以通过提升转换为int类型.true被转换为1.而false被转换为0:</p>
+<pre><code class="language-cpp">int ans = true; 11 ans assigned 1
+int promi se = fal se; 11 promise assigned 0</code></pre>
+<p>另外，任何数字值或指针值都可以被隐式转换(即不用显式强制转换〉为bool值。任何非~值都被转换为true.而零被转换为创se :</p>
+<pre><code class="language-cpp">0001 start = -100; /1 start assigned true
+bo01 stop = 0; /1 stop assigned false</code></pre>
+<p>在第6章介绍if语句后，示伊j 中将经常使用数据类型bool.3 .2 const 限定符</p>
+<p>现在回延头宋介绍和量的雄号名称.符号名船旨出了常量表示的内容。另外，如果程序在多今地另-使用冉一个常量，则需要修改该给童时，只需修改=舍符号定关即吨。本章前面关于#defmeo语句盹说明f 券注“符号常量一一预处理器方法”)指出过-;-C++有一种更好的处理得与常蠢的方法，这种办法就是使用conSI关键-字来修改变童声明和初始化.例如，假4设需要z叶圣表示一笔中h月份数-的街号-常堡，请在程序电输入下面这行代码:</p>
+<p>const int Months = 12二;/1 Months i s:: 叩nbolicconstan巳for12</p>
+<p>这样F 便可以在程序中使用Mon缸，而不:Ilr 12了f在程序中、1 2耳能表示一英尺有多功英寸或一打面包圈是多少个，而名称Months指出了倍12表示的是什么λ常窒〈虫nMonths)被初始化后，其{直就被固定I_.级革译器粮不允诲再修改该常髦的值』如果您这样做，伊士将指出程序试图给一个只读变盘赋值。关键字consf叫做限定符.fß.:为它限定了声明的合S/...</p>
+<p>一种常庭的做法是将名称的首字母大写，以提醒您Months是个常景。这决不是F种通用约定，但在阅读程序时有助于区分饭量和变量.另一种约定是将整----þ名称大写，使用百de而e创建常i段时通常使用这种约定.还有一科约定是以宅母k打头，如kmonths.当然，还有其他约定。锻多组织都有特殊的编码约定丁要求其程序员遵守:“0</p>
+<p>创建常量的通用格式虫萨F:</p>
+<pre><code class="language-cpp">const t}φe name =. value;</code></pre>
+<p>注意，应在声明中对censt进行初始化。下面的代码不好?.. r const ‘ i地白白-γ (V;il_ueof toe.9 un远efined: ät.thispò iÏ)t、</p>
+<p>toes二1 0;‘.&gt;/1 tóó.l ate l</p>
+<p>、如奥在声明常量111.没有提供值1则该常髦的值将是不确髦的，且无法修出←-飞二如果以前使.用过:-C 语言:二您可能觉得前面讨论的制巳fui啤语句已经足够完成这样的王作宁.但∞nst比#defien好。首先，它能够明确指定类些F其次，可以使用C+-F的佬用域规则将定义限制在特定的面数或交-在忡忡用域删描述了牵制各种瞅髦的叫做了棚‘第.情讨论)~’第二~PJ Il.l:14岳阳用于最二杂的类型，如第4寥将介绍的数组和结构.认:γ-f-L何:如采读科学Vf:十之:哲学;叫叶之七贵州fM#def手扶J主义挝常雪:..‘奇不知棚，γ而应使1思∞nst。</p>
+<p>..</p>
+<p>.. . “ .~~.， -一-、...、_::” : .. • ‘ .;二~ ...</p>
+<p>.., -; .“.-目</p>
+<h3>第 55 页</h3>
+<p>刷SlC.土E使用- conSÏ限定符，这是从C忡借鉴来的。如果熟悉iAN SIE:..版本」贝11&amp;注意.C忡版本稍微辛苦些不同.区别之一是作用城规贝1]“，这将在第9-lli夺谁r另--个主要的区别是，在C冉f而不是C)中可以用const值来声明数组长房，第4-意将介绍一些这样的例子←-3 .3 ;孚点数-</p>
+<p>了解各艳C忡整型后，来看看浮点类黠创凡是C冉的第二组基在类型@浮点数能够表示带小孩部分的数字，如I.M“-油箱的汽油里程数( 0 . 56MPG)，它们提供的倍范酷也更大ι如果数字很大，无法表示为long类型，如J、体的细菌数(估计超过100~I:.)，则可以使用浮点类型来表示，</p>
+<p>使用浮点类至全可bt袤示诸如2.5飞3. 141 59和1 22442.32这样的数宅，f!队带小数部分的数字.计算桃将这样的值分成两部分存储。一部分表示值，另一部处用于对值进行放犬或缩小。下丽n个比方。对于数字3 4:“1245-和34124，5.官们除了小数点的位置不同外，其他都是栩间的。可以把第一今数表示为0.341 245(基准值)幸自酬100(缩放因子〉τ而将第-二个数表示为0.34 应45(”‘，基准值相同)= 和.0000(缩放因子更大)。缩放即子的作m;是移动小数点的位置，术语浮点因此而得怎.C++~~部表示浮点数的方法与此相同，只不过它基于的是二进制数，因此缩放因子是7的寐，习二是10 的辙。幸运的楚，程序货不必详绕IÞ了解内部表示.重要的是，淫点数能够袭示小数值、非常大和非常小的值，它们的内部表态方法与整数有天壤之别F</p>
+<p>3 .3.1;-书写浮点曼史</p>
+<p>,</p>
+<h3>第 56 页</h3>
+<p>可以使用ellE</p>
+<p>小.点没有空格</p>
+<p>可选</p>
+<p>阁3，3E 农示法</p>
+<p>3,3,2 浮点类型</p>
+<p>和ANSIC一样.C忡也有3种浮点类型:float 、double 和longdouble.这些类型是按它们可以表示的有效数位和允许的指数载小范围来描述的.有效位(si伊ificantfigure)是数字中有意义的位.例如，加利福尼亚的Shasta山脉的高度为14 179英尺，该数字使用了5个有效位，指出了报接近的英尺数.然而，将Shasta山脉的高度写成约140∞英尺时，有效位数为2位，因为结果经过四舍五入稍确到了千位。在这种情况下，其余的3位只不过是占位符而已。有效位数不依赖于小数点的位置.例如，可以将高度写成14 ，162千英尺.这样仍有5个有效位，因为这个值精确到了第5位.</p>
+<p>事实上.C和C++对于有效位数的要求是.float 至少32 位.double 至少48 位，且不少于float.long double至少和double一样多.这三种类型的有效位数可以一样多.然而，通常.float为32位.double为64 位，longdouble为80、96或128 位.另外，这3种类型的指数范围至少是-37到37 . 可以从头文件cfloat或float. h中找到系统的限制。(cfloat是C语言的float.h文件的C++版本。〉下而是BorlandC++ Builder 的float ，h文件中的一些批注项3</p>
+<pre><code class="language-cpp">// the following are the minimum number of significant digits
+#define DBL DIG 15 // double
+#def ine FLT DIG 6 / / float
+#define LDBL DIG 18 // long double
+// the fol lowing are the number of bits used to represent the mantissa
+#define DBL MANT DIG 53
+持defineFLT MANT DIG 24
+曾defineLDBL MANT DI G 64
+// the following are the maximum and minimum exponent values
+#def ine DBL MAX 10 EXP +308
+样defineFLT MAX 10 EXPφ38
+#defi ne LDBL MAX 10 EXP +4932
+#define DBL MIN 10 EXP -307
+#define FLT MIN 10 EXP -37
+#define LDBL MIN 10 EXP -4931</code></pre>
+<h3>第 57 页</h3>
+<p>注意」有些C++ 实现尚未添加头义件ct1oat ，有些基于ANSI: C 之首恬守编译器的巳件实法没有提供头文锥fJoaf.h .，..</p>
+<p>程阵，消且在3.8演示了tloat和double类型及官们表示数宅Ilf在精度方丽的差异〈即有效位数) .该程JT预览王将在第1-7培介绍的ostream方法setf()。这种调用迫佼输出使用定点表示法7以便更姥地了曲事精度，它防止程序把较大的值切换为E-衰示法，并使程序报示到小数点后6位。参数ios_base::fixed和ios_base:: f1oatfield是通过包在iostream来提供的常最.</p>
+<p>程序清单3. 8-floatnum.cpp</p>
+<pre><code class="language-cpp">/ Ffloatnum. cp立--floati ng-point t ypes
+#incl ude &lt;i ostream&gt;
+int main ()
+using-namespace std;
+cout .setf (ios_base:: fi xed, i os_base : : f l oatf iel d}; Iι/ ffxed-point
+float- tub = 10.0 / 3-0; 1/ good to about 6- places-
+doubl e mi nt‘10 . 0 r 3.0; / / good to about 1S places
+cons t... float mi :Flion- = 1. Oe6户，
+cout &lt;&lt; &quot;t.ub = ., &lt;&lt; t ub;
+cout &lt;&lt; &#x27;L , a million tubs = &quot; .:--&#x27;&quot; mill i on • tub•-
+cout &lt; &lt;气.\nandten mi1110n tubs ~&quot;;
+cout &lt;&lt; 10 • mi l lion • t ub &lt;&lt; end1;
+cout &lt;&lt; &quot;mint = It &lt;&lt; mi nt &lt;&lt; 11 and a mi llion mints = &quot;;
+cout &lt;&lt; mi 1l ion • mint &lt;&lt; endl;
+return 0:</code></pre>
+<p>下面是该程序的输出:</p>
+<pre><code class="language-cpp">tub = 3. 333333, a mi 1lion tubs = 3333 333.250000,
+and ten m主11 iontubs = 33333332.000000
+mi nt = 3.333333 and a mi11ion mints = 3333333.333333</code></pre>
+<p>l 程序说明</p>
+<p>通常coul会删除结尾的零。例如，将3333333 .250000显示为3333333 .25.调用coul.self()将覆盖这种行为，至少在新的实现中是这样的。这里要注意的朵，为何f10at的精度比double低.tub和minl都被初始化为1 0.0/3.φ一--3 .333333333333333333 … 由于cout打印6位小数，因此tub和miot都是精确的.但当程序将每个数乘以一面万后，tub在第7个3之后就与正确的值有了误差。tub在7位有效位上还是精确的( 该系统确保f10at至少有6位有效位，但这是;段糟糕的情况) .然而.doublc类型的变量显示了13个3，因此也至少有13位是精确的。IÉf系统确保15位有效位，因此这就没有什么好奇怪的了.另外，将tub乘以一百万，再乘以10后，得到的结果不正确，这再一次指出了f10at的精度限制。</p>
+<p>cout所属的ostream类有一个类成员函数，能够精确地控制输出的格式一一导段宽度、小数位数、采用小数格式还是E格式等。第17j军将介绍这些选项.为简单起见，本书的例子通常只使用《运算符.有时候，这种方法显示的位数比需要的位数多，但这只会影响美观.如果您介意这种问题，可以浏览第17章，了解如何使用格式化方法。然而，在这里就个作过多的解释了。</p>
+<p>读取包含文件</p>
+<p>C++派文件开头的包含编译指令总是有一种魔咒的力量，新手C++程序员通过阅读和体验来了解哪个</p>
+<h3>第 58 页</h3>
+<p>头文件添加哪些功能，再一一包含它们，以使程序能够i运行。不要将包含义件作为神秘的知识而依赖;可以随使打开、阅读它刑。它们都是文本文件，因此可以很轻松地阅读它们。被包含在程序中的所有文件都存在于计算机中，或位于计算机可以使用的地方。找到那些妥使用的包含义件.看看它们包含的内容。您将会很快地知道，所使用的源文件和头文件都是知识和信息的很好来ilt-在有些情况下，它们都是最好的文档。当使用灵复杂的包含文件，并开始在应用程序中使用其他，非标准库时，这种习惯将非常有帮助。</p>
+<h3>3.3.3 浮点常量</h3>
+<p>在程序中书写浮点常蠢的时候，程序将把它存储为哪种浮点类型呢?在默认情况下，像8.24和2.4E8这样的浮点常盘都属于double类型.如果希望常量为110at 类型，请使用f或F后缀.对于longdouble类型，可使用i或L后缀(由于l看起来像数字1，因此L是更好的选择〉。下面是一些示例:</p>
+<pre><code class="language-cpp">1.234f /1 a float constant
+2.45E20F /1 a float constant
+2.345324E28 /1 a doubl e constant
+2.2L /1 a long double constant</code></pre>
+<h3>3.3.4 浮点数的优缺点</h3>
+<p>与整数相比，浮点数有两大优点.首先，它们可以表示整数之间的{1I.其次，由于有缩放因子，它们可以表示的范围大得多.另一方面，浮点运算的速度通常比，要数运算慢，且精度将降低.程序清单3.9说明了放后-点。</p>
+<p>程序清单3.9fltadd.cpp</p>
+<pre><code class="language-cpp">1/ fl t add.cpp --precision problems with float
+#incl ude &lt;iostream&gt;
+int rnain(}
+using namespace std;
+f loat a : 2.34E+22f ;
+f loat b : a + 1.Of;
+cout &lt;&lt; &quot;a = &quot; &lt;&lt; a &lt;&lt; endl ;
+cout &lt;&lt; &quot;b -a = &quot; &lt;&lt; b -a &lt;&lt; endl;
+retur n 0;</code></pre>
+<p>注意:有些基于ANSIC之前的编译器的老式C++ 实现，不支持浮点常受后缀f。如果出现这样的问题，可以用2.34E+22代替2.34E+22f，用(f1oat)1.0代替1.0(，。</p>
+<p>该程序将数字加1.然后减去原来的数字.结果应该为1.下面是在某个系统上运行时该程序的输出:</p>
+<p>a : 2.34e+022</p>
+<p>b -a = 0</p>
+<p>问题在于，2.34E+22是一个小数点左边有23位的数字。加上1 ，就是在第23位加10但110at 类型只能表示数字中的前6 位或前7位，因此修改第23位对这个值不会有任何影响.</p>
+<p>将类型分类</p>
+<p>C++对基本类型进行分类，形成了芳千个族。4尾型剑gnedchar 、short、川和long 统称为符号整型;它们的无符号版本统称为无符号整型õC++门新增了longlongo bool 、char、wchar_t、符号~数和无符号整型统称为整型õC++ II新增了charl6_t和char32_tofloat、doub le和longdouble 统称为浮点型。整数和浮点型统称算术( arithmetic )类型。</p>
+<h3>第 59 页</h3>
+<h2>3.4 C+ +算术运算待</h2>
+<p>读者可能还对学校里作的算术练习记忆犹新，在计算机上也能够获得同样的乐趣.C++使用运算符来运算。它提供了几种运算符来完成5种基本的算术计算:力日法、减法、乘法、除法以及求模。每种运算符都使用两个值〈操作数〉来计算结架。运算符及其操作数构成了表达式.例如，在下面的语句中:</p>
+<pre><code class="language-cpp">int wheels = 4 + 2;</code></pre>
+<p>4和2都是操作数.+是加法运算符.4+2则是一个表达式，其值为6.</p>
+<p>下面是5种基本的C++算术运算符.</p>
+<p>• +运算符对操作数执行加法运算。例如.4+20等于24.</p>
+<p>• _运算符从第一个数中减去第二个数。例如.12-3等于9.</p>
+<p>• .运算符将操作数相乘.例如.28叫等于112.</p>
+<p>• /运算符用第一个数除以第二个数。例如.1000β等于200。如果两个操作数都是整数，则结果为</p>
+<p>商的整数部分.例如1.17/3等于5.小数部分被丢弃.</p>
+<p>• %运算符求楼。也就是说，它生成第一个数除以第二个数后的余数。例如.19%6为1.因为1 9</p>
+<p>是6的3倍余1.两个操作数必须都是整型，将该运算符用于浮点数将导致编译错误.如果其中</p>
+<p>一个是负数，则结果的符号满足如下规则:(a!b). b +西%b= a。</p>
+<p>当然，变最和常量都可以用作操作数，程序清单3. 10说明了这一点.由于%的操作数只能是‘应数，因此将在后面的例子中讨论它.</p>
+<p>程序清单3.10arith .cpp</p>
+<pre><code class="language-cpp">// arith.cpp --some C++ arithmetic
+掉ínclude&lt;iostream&gt;
+int main ()
+using namespace std;
+float hats , heads;
+cout.setf(ios_base: : fixed, ios_base::floatfield); // fixed-point
+cout &lt;&lt; &quot;E:nter a number: ~;
+cin &gt;&gt; hats;
+cout &lt;&lt; &quot;Enter anot her number: &quot;;
+cin &gt;&gt; heads;
+cout &lt;&lt; &quot;hats =: .. &lt;&lt; hats &lt;&lt; .; heads = 11 &lt;&lt; heads &lt;&lt; endl;
+cout &lt;&lt; &quot;hats + heads ~ &quot; &lt;&lt; hats + heads &lt;&lt; endl;
+cout &lt;&lt; &quot;hats -heads = &quot; &lt;&lt; hats -heads &lt;&lt; endl;
+cout &lt;&lt; &quot;hats • heads = &quot; &lt;&lt; hats • heads &lt;&lt; endl;
+cout &lt;&lt; &quot;hats / heads = &quot; &lt;&lt; hats / heads &lt;&lt; endl;
+return 0;</code></pre>
+<p>下丽是该程序的输出，从中可知C忡能够完成简单的算术运算:</p>
+<pre><code class="language-cpp">Enter a number: 50.25
+Enter another number: 11.17
+hats = 50.250000; heads ~ 11.170000
+hats + heads = 61 . 419998
+hats -heads = 39.080002
+hats • heads ~ 561.292480
+hats / heads = 4.498657</code></pre>
+<h3>第 60 页</h3>
+<blockquote><p>［本页文本层 OCR 严重损坏（该页扫描阴影/插图区产生了大量乱码字符），以下为原始抽取结果（未删改），内容以 PDF 第 78 页图像为准］</p></blockquote>
+<p>二-一…二L十却一…二T</p>
+<p>二</p>
+<p>…</p>
+<p>w</p>
+<p>一二</p>
+<p>…明…十-一…</p>
+<p>-一</p>
+<p>T一</p>
+<p>--</p>
+<p>一</p>
+<p>…</p>
+<p>俨二…一</p>
+<p>一二</p>
+<p>十</p>
+<p>十</p>
+<p>面川</p>
+<p>·</p>
+<p>一</p>
+<p>ζ</p>
+<p>-</p>
+<p>6一</p>
+<p>一</p>
+<p>-</p>
+<p>u</p>
+<p>一</p>
+<p>J</p>
+<p>-</p>
+<p>一二一7</p>
+<p>-</p>
+<p>Z</p>
+<p>对</p>
+<p>-f</p>
+<p>.</p>
+<p>三</p>
+<p>…</p>
+<p>十…</p>
+<p>一盯</p>
+<p>十</p>
+<p>tF</p>
+<p>b一二于L</p>
+<p>间</p>
+<p>二</p>
+<p>U刀-…</p>
+<p>-</p>
+<p>…ω</p>
+<p>y</p>
+<p>十</p>
+<p>A是四A</p>
+<p>二</p>
+<p>…</p>
+<p>w</p>
+<p>…</p>
+<p>…</p>
+<p>-</p>
+<p>世</p>
+<p>油…</p>
+<p>叫副</p>
+<p>z</p>
+<p>的</p>
+<p>前Z</p>
+<p>r也正</p>
+<p>…</p>
+<p>E翻卿E</p>
+<p>阿</p>
+<p>二一</p>
+<p>时的归</p>
+<p>时Mf</p>
+<p>S</p>
+<p>面</p>
+<p>d</p>
+<p>u</p>
+<p>一</p>
+<p>-…</p>
+<p>一</p>
+<p>h-</p>
+<p>M</p>
+<p>也</p>
+<p>一</p>
+<p>J…不</p>
+<p>机七</p>
+<p>…坦-f-</p>
+<p>一</p>
+<p>…-</p>
+<p>挣</p>
+<p>Ht</p>
+<p>M…</p>
+<p>u</p>
+<p>…</p>
+<p>f…</p>
+<p>-</p>
+<p>地主</p>
+<p>J二</p>
+<p>-…-</p>
+<p>二</p>
+<p>)一…</p>
+<p>→X</p>
+<p>他</p>
+<p>蒙</p>
+<p>"</p>
+<p>三</p>
+<p>二</p>
+<p>3…</p>
+<p>…</p>
+<p>-</p>
+<p>J</p>
+<p>)L</p>
+<p>E</p>
+<p>二</p>
+<p>→</p>
+<p>二</p>
+<p>Jru</p>
+<p>如</p>
+<p>气</p>
+<p>叶u-</p>
+<p>M</p>
+<p>r在J叫</p>
+<p>十</p>
+<p>立</p>
+<p>hJJ二</p>
+<p>可</p>
+<p>币·</p>
+<p>二</p>
+<p>一…w</p>
+<p>…--</p>
+<p>点十</p>
+<p>l十</p>
+<p>--</p>
+<p>…</p>
+<p>…</p>
+<p>飞一</p>
+<p>读</p>
+<p>…</p>
+<p>:委一…</p>
+<p>-f</p>
+<p>拉</p>
+<p>…</p>
+<p>z</p>
+<p>;…</p>
+<p>T</p>
+<p>…-</p>
+<p>牛</p>
+<p>Y一王</p>
+<p>脱</p>
+<p>-</p>
+<p>u</p>
+<p>…</p>
+<p>十-</p>
+<p>一多</p>
+<p>:</p>
+<p>…</p>
+<p>灿</p>
+<p>…</p>
+<p>略?…</p>
+<p>使</p>
+<p>畹</p>
+<p>y1</p>
+<p>寸v</p>
+<p>~</p>
+<p>一←</p>
+<p>脚创</p>
+<p>…</p>
+<p>十…</p>
+<p>他如…一</p>
+<p>Z例十</p>
+<p>…</p>
+<p>时毛1=</p>
+<p>…</p>
+<p>二</p>
+<p>h</p>
+<p>二</p>
+<p>~飞u</p>
+<p>f</p>
+<p>w</p>
+<p>u</p>
+<p>5础-</p>
+<p>…</p>
+<p>←</p>
+<p>-</p>
+<p>-h</p>
+<p>在-兰</p>
+<p>一</p>
+<p>一</p>
+<p>t</p>
+<p>γ</p>
+<p>用…</p>
+<p>一</p>
+<p>…</p>
+<p>直</p>
+<p>…</p>
+<p>二</p>
+<p>W酬</p>
+<p>T</p>
+<p>乍扫</p>
+<p>一</p>
+<p>苟</p>
+<p>…t</p>
+<p>主</p>
+<p>h</p>
+<p>…</p>
+<p>操成年</p>
+<p>一h</p>
+<p>晤</p>
+<p>邵刊</p>
+<p>…十个</p>
+<p>些</p>
+<p>…</p>
+<p>旁</p>
+<p>…</p>
+<p>…</p>
+<p>以</p>
+<p>几</p>
+<p>u伽町</p>
+<p>J明</p>
+<p>二</p>
+<p>算二二</p>
+<p>先时二…刷如……二…平二</p>
+<p>-</p>
+<p>哨m</p>
+<p>程</p>
+<p>宫</p>
+<p>-</p>
+<p>…</p>
+<p>i</p>
+<p>~</p>
+<p>毛的</p>
+<p>·</p>
+<p>→</p>
+<p>…</p>
+<p>?刷</p>
+<p>均</p>
+<p>F轨-</p>
+<p>言</p>
+<p>阴</p>
+<p>二一十</p>
+<p>一</p>
+<p>时二</p>
+<p>吼二</p>
+<p>一一-</p>
+<p>坦</p>
+<p>-</p>
+<p>阳…</p>
+<p>气…</p>
+<p>茫乞刊(·</p>
+<p>二叫</p>
+<p>卒</p>
+<p>阳</p>
+<p>J一?一</p>
+<p>二</p>
+<p>-旧当</p>
+<p>F…</p>
+<p>…</p>
+<p>·制</p>
+<p>二r</p>
+<p>中C</p>
+<p>呵</p>
+<p>二</p>
+<p>也</p>
+<p>前</p>
+<p>…·</p>
+<p>U</p>
+<p>符</p>
+<p>…</p>
+<p>…</p>
+<p>…</p>
+<p>-</p>
+<p>一</p>
+<p>…</p>
+<p>桔其刊…</p>
+<p>一一</p>
+<p>…</p>
+<p>…</p>
+<p>…阔</p>
+<p>→也</p>
+<p>叫</p>
+<p>;</p>
+<p>…一</p>
+<p>时一</p>
+<p>…丛</p>
+<p>叫</p>
+<p>..</p>
+<p>阳</p>
+<p>栩比…叹→…</p>
+<p>旦</p>
+<p>…</p>
+<p>…f</p>
+<p>…</p>
+<p>树</p>
+<p>J</p>
+<p>ι</p>
+<p>.绍二</p>
+<p>…</p>
+<p>i-</p>
+<p>-二</p>
+<p>问</p>
+<p>一←</p>
+<p>旦</p>
+<p>，</p>
+<p>…一-f</p>
+<p>先</p>
+<p>…</p>
+<p>栩</p>
+<p>儿</p>
+<p>制M的</p>
+<p>平</p>
+<p>?…川</p>
+<p>…</p>
+<p>三十</p>
+<p>呵</p>
+<p>C</p>
+<p>十E</p>
+<p>二-</p>
+<p>地</p>
+<p>…</p>
+<p>飞</p>
+<p>纠</p>
+<p>、</p>
+<p>十</p>
+<p>…</p>
+<p>…</p>
+<p>s优</p>
+<p>J</p>
+<p>部Y…伊</p>
+<p>二</p>
+<p>二</p>
+<p>…</p>
+<p>锵</p>
+<p>t</p>
+<p>二…去一-</p>
+<p>二二</p>
+<p>二</p>
+<p>…</p>
+<p>在u)</p>
+<p>阳</p>
+<p>婴</p>
+<p>二</p>
+<p>哥:一</p>
+<p>二</p>
+<p>J丁段…问t</p>
+<p>操算</p>
+<p>T</p>
+<p>…J</p>
+<p>算</p>
+<p>w</p>
+<p>-~</p>
+<p>K</p>
+<p>也仁</p>
+<p>如</p>
+<p>川口十</p>
+<p>二</p>
+<p>川</p>
+<p>脚</p>
+<p>斗</p>
+<p>二z恍…</p>
+<p>二</p>
+<p>因</p>
+<p>仰J</p>
+<p>问</p>
+<p>讨除…</p>
+<p>吧</p>
+<p>如</p>
+<p>野</p>
+<p>战U</p>
+<p>M…一，二幽</p>
+<p>f</p>
+<p>山根</p>
+<p>r</p>
+<p>选重</p>
+<p>阴十暂u硝…</p>
+<p>-，</p>
+<p>z航</p>
+<p>U</p>
+<p>运</p>
+<p>…</p>
+<p>数</p>
+<p>邮</p>
+<p>Uh</p>
+<p>…</p>
+<p>果U</p>
+<p>…</p>
+<p>…</p>
+<p>:</p>
+<p>毗</p>
+<p>γ辑</p>
+<p>a加H</p>
+<p>…</p>
+<p>综</p>
+<p>二</p>
+<p>草R…</p>
+<p>市</p>
+<p>L</p>
+<p>…</p>
+<p>机</p>
+<p>先算</p>
+<p>唱</p>
+<p>e在算</p>
+<p>v</p>
+<p>…</p>
+<p>%…m</p>
+<p>十</p>
+<p>脱</p>
+<p>t</p>
+<p>左翩</p>
+<p>叫盹</p>
+<p>川h说附</p>
+<p>黯</p>
+<p>邵</p>
+<p>脑快</p>
+<p>辑d</p>
+<p>叽</p>
+<p>J</p>
+<p>二以乘H…</p>
+<p>…后</p>
+<p>时</p>
+<p>…阴</p>
+<p>阳</p>
+<p>二</p>
+<p>-</p>
+<p>酬啊→翩i阳</p>
+<p>阳</p>
+<p>…的们…</p>
+<p>牛出</p>
+<p>mm</p>
+<p>棚缸</p>
+<p>均品十一性</p>
+<p>一</p>
+<p>-</p>
+<p>…</p>
+<p>-注，十J</p>
+<p>脱一</p>
+<p>…:…</p>
+<p>阳</p>
+<p>当k</p>
+<p>…</p>
+<p>…二…</p>
+<p>二ι</p>
+<p>…</p>
+<p>I部</p>
+<p>一</p>
+<p>一</p>
+<p>-</p>
+<p>ω</p>
+<p>一</p>
+<p>1</p>
+<p>…</p>
+<p>m</p>
+<p>…</p>
+<p>k</p>
+<p>…-u封…</p>
+<p>;</p>
+<p>叫</p>
+<p>-町</p>
+<p>m</p>
+<p>u2</p>
+<p>…-z二</p>
+<p>阳</p>
+<p>U</p>
+<p>子</p>
+<p>十r…</p>
+<p>…</p>
+<p>四ι</p>
+<p>:</p>
+<p>…</p>
+<p>制…</p>
+<p>二郡…</p>
+<p>阶…</p>
+<p>…</p>
+<p>运</p>
+<p>二</p>
+<p>-ω必“</p>
+<p>时</p>
+<p>先十芫</p>
+<p>-</p>
+<p>川</p>
+<p>「</p>
+<p>二J在:←</p>
+<p>U一…</p>
+<p>附</p>
+<p>-</p>
+<p>坦</p>
+<p>(板明…制阿悄</p>
+<p>岳</p>
+<p>算</p>
+<p>Vr</p>
+<p>f</p>
+<p>盹川…</p>
+<p>一</p>
+<p>A</p>
+<p>叫</p>
+<p>伫</p>
+<p>→</p>
+<p>二两有川约实</p>
+<p>一</p>
+<p>R者U</p>
+<p>…抨</p>
+<p>时</p>
+<p>决</p>
+<p>切的出</p>
+<p>…</p>
+<p>山</p>
+<p>孔符</p>
+<p>四</p>
+<p>如果</p>
+<p>吵</p>
+<p>让</p>
+<p>对阳</p>
+<p>拉</p>
+<p>情所</p>
+<p>叫问</p>
+<p>序州</p>
+<p>阳Mr</p>
+<p>统都</p>
+<p>撇m</p>
+<p>切</p>
+<p>眯</p>
+<p>ι</p>
+<p>子</p>
+<p>…</p>
+<p>l第增</p>
+<p>哪</p>
+<p>ya-附</p>
+<p>怀</p>
+<p>盯</p>
+<p>…介</p>
+<p>机叫</p>
+<p>附r</p>
+<p>…</p>
+<p>嘟法取~</p>
+<p>机</p>
+<p>的十</p>
+<p>d</p>
+<p>…</p>
+<p>类削…</p>
+<p>-‘..</p>
+<p>\</p>
+<p>除得</p>
+<p>…</p>
+<p>u</p>
+<p>z…</p>
+<p>…</p>
+<p>丢</p>
+<p>阴</p>
+<p>曾</p>
+<p>四睬公的~果…</p>
+<p>叫</p>
+<p>有</p>
+<p>阶</p>
+<p>L</p>
+<p>舰</p>
+<p>叫叫茸四叫</p>
+<p>则分悻</p>
+<p>问</p>
+<p>除</p>
+<p>…</p>
+<p>序</p>
+<p>U</p>
+<p>刷</p>
+<p>一</p>
+<p>K</p>
+<p>刊</p>
+<p>情</p>
+<p>叭</p>
+<p>也m该来。</p>
+<p>町阳向</p>
+<p>呵</p>
+<p>程序清单3“蜘11 S</p>
+<p>L</p>
+<p>diyid百万PI!一</p>
+<p>z</p>
+<p>肌际</p>
+<p>一的…</p>
+<p>1/ div航i:de.cpp --ïnt eger and floating.-point d i vision</p>
+<p>比</p>
+<p>c-</p>
+<p>阳</p>
+<p>#inlode &lt;iostream&gt;-</p>
+<p>…</p>
+<p>队</p>
+<p>i nt mainO</p>
+<p>呵</p>
+<p>{</p>
+<p>例…</p>
+<pre><code class="language-cpp">usiñg namespacecstðT
+cout. setf (ios_base: : fixed, ios_base:: floatflerd J ;</code></pre>
+<p>吁</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;Integer division: 9/5 = &quot; &lt;&lt; 9 / 5 &lt;&lt;endl;
+cout &lt;&lt; &quot;Floating-point division : 9.0/5.0 = &quot;;</code></pre>
+<p>副</p>
+<p>中</p>
+<p>部</p>
+<p>…</p>
+<h3>第 61 页</h3>
+<pre><code class="language-cpp">cout &lt;&lt; 9.0 / 5.0 &lt;&lt; endl;
+cout &lt;&lt; &quot;Mixed division: 9.0/5 = &quot; &lt;&lt; 9.0 / 5 &lt;&lt;endl;
+cout &lt;&lt; &quot;double constants : 1e7/9.0 = &quot;;
+cout &lt;&lt; 1 .e7 I 9.0&lt;&lt; endl;
+cout &lt;&lt; &quot;f l oat constants: le7f/9.0f = &quot;;
+cout &lt;&lt; 1.e7f / 9 .0f&lt;&lt; endl;
+return 0;</code></pre>
+<p>注意:如果编译器不接受set代)中的ios_base，i青使用ios。</p>
+<p>有些基于ANSIC之前的编译器的C忡实现不支持浮点常莹的f后缀。如采面临这样的问题，可以用(float) l.e7 I (float) 9.0 代替l.e7f 19.0f。</p>
+<p>有些实现，会删除结尾的零。</p>
+<p>下丽使用某种实现时，程序消单3.11中程片“的输出:</p>
+<pre><code class="language-cpp">Integer divi s ion: 9/5 = 1
+Fl oating-poínt division: 9.0/5.0 = 1.800000
+Mixed d i visi on: 9. 0/ 5 = 1.800000
+double constants : 1e7/9.0 = 1111111 . 111111
+float constants: 1e7f/9 . 0t = 1111111.125000</code></pre>
+<p>从第一行输出可知，整数9除以5的结果为整数1.4/5的小数部分(或0.8)被丢弃。在本fj.后面学习求模运算符时，将会看到这种除法的实际戚朋.接下来的两行表明，当至少有一个操作数是浮点数时，结果为1. 8 .实际上，对不同类型进行运算时，C++将把它们全部转换为|司一类型.本章稍后将介绍这种自动转换.最后两行的相对精度表明.如果两个操作数都是double类型，则结果为double类型;如果两个操作数都是float类型，贝。结果为float类型。记住，浮点常盘在默认情况下为double类型.</p>
+<p>运算符重载简介</p>
+<p>在程序:青羊3.11中，除法运算符表示了3种不同的运算:int除法、float徐法和double除法。C++根据上下文(这里是操作钦的类型)来确定运算符的含义。使用相同的符号进行多种操作叫做运算符重载( operator overloading)o C++有一些内茸的重载示例。C++还允许扩展运算符重载，以便能够用于用户定义的类，因此，在这里看到的是一个重妥的OOP属性(参见图3 .4)。</p>
+<p>im 类型Jong 类烈</p>
+<p>915 9υSL</p>
+<p>执行int 除法执行long 除法</p>
+<p>doubJe类型floal 类型</p>
+<p>9.0/5.0 9.0f/5.01</p>
+<p>|执行ω叫法|执行n删除法</p>
+<p>罔3 .4各种除法</p>
+<p>3 .4 .3 求模运算符</p>
+<p>t忆起求模运算符来说，多数人更熟悉加、减、乘、除，因此这里花些时间介绍这种运算符.求模运算</p>
+<h3>第 62 页</h3>
+<p>符返回‘寝数除法的余数。它与整数除法相结合，尤其适用于解决要求将-个最分成不同的赃数单元的问题，例如将英寸转换为英尺和英寸，或者-将美元转换办元、角、分、愿。第21苦的程序消单2.6将重量单位英.右转换为磅与程序清单:U.2则将确转换为英石。记住，’--:-英石等于14磅，多数英国浴室都使用这种单位。、‘ .该程序使用整数除法来计算含多少英右，再用院棋运凭2寄来说算余下多少磅。.<em>γ一</em>-</p>
+<p>• “:”:-.z 7 .,; <em>‘，..士王~ .“’-..~--:-.=:二·二..二..- 刊三千~~‘.:: ~ 主二斗争二号二f乙二二二、:二工二</em>.土矿</p>
+<p>二、程序清单3“.12 :.‘ modulus.叩p，~ 产、.~二”--;-/1二m口durus .cpp ~.-’. uses .%. opera.tor .to∞nvert .lbs tO..stone. .‘ ’. . <em> .</em>…J --</p>
+<p>_,</p>
+<p>二ZT二工-~斗include弘&lt;i.Qstre酬:&gt;=:三...;...~ --~7‘-’;<em> • -:-</em>-“‘”: 一一-了.;’ -.<em>工-. -.7..r “~亏一</em>.-飞.~二兰，:&gt;.:--;-‘-;--...,,<em> ’</em>-=-‘ ..:... .扩-:’.←→~<em> . -•::</em>..._____:_ ~节... ... -:. ...:. ,:-:-‘.~ =:’” illt mãïn (二二.:...“”“”~=-‘.:<em>一---JTf士-. 干-... ’:. ...:</em> ...:~.一.气力斗一:.-:.-二三-二</p>
+<p>1</p>
+<p>,using n二mespace.std;飞.:‘’:~ t~.二..</p>
+<pre><code class="language-cpp">onst i-nt bs_per..stn
+-
+,.cl;= 14j</code></pre>
+<p>. . . , ...ι、.~</p>
+<p>‘“φ、-’、主nt1.bS;飞呵，ι.. 咱‘ξ--.::，‘ι:._ . --.”:’丘_cput..&lt;$二Ent可扩。ur四ight.ili pouhds: “: 与‘<em>: ’, </em>:‘ ’: ‘,一子-’ .”. c.ln飞$ ~llis;-. , ‘，.’号九二7:‘...:，;.~二.___:<em>~.“.:</em>. &lt;;.c~: ...γ;- . -:.:~气-~二三了飞...~ .:.:<em>..:: </em>.. ，--;:二</p>
+<p>‘-, . ~...:;<em>’一</em>.-‘，:飞-气-:-~• •• <em>“ ..J一</em>.<em> </em> ïrit-àt。由= ’lbs / Lõá主er.:..stni1/ wh01e唱tone一-:-:-，二.int. pounds .=-‘l.bs茸Lbs...per;_串tn;/./ remainder .irr poundS”二七。证汪t.:-“运&lt;:”lbs飞&lt;. .气: p阴ound也$、缸←←4吃&lt;&lt;-S饥toï百.ne元e’.~ι-弓~.二二-二.厅气~~二二亏了、.斗士尘?汽.- -:-</p>
+<p>--, ,-</p>
+<p><em>寸7~</em>._二工.“‘-:-:’-&lt;&lt;” ‘stone. ’ ~ “&lt;&lt;. p~.nds &lt;:&lt; . ,. PQ!,l!l一Q”(s) . \也二I__-=四‘，..，，--’_.，_γ 飞了τ亏一_气. ~: ‘ ..:..</p>
+<p>...: ---=,. -• _ ',': ': . :.:...</p>
+<p><em>~嗣..</em>:. ~巳_-:土二-‘.=→r'eturn玩· 一-一一.<em>-‘“;--.:.，..-~.:=...-::-</em>’-‘-.-二.<em>-‘-..-.，:令.飞午一--’.-.~~ . ø， ，‘-</em> :.~.-.;::τ-子一一τ、<em>.</em>~三;7.:三三毛主丽是吃程厚的运行椅百二二二手二二主士;干旷:二寻二、. .~-王三、.=::: ’. ‘二斗注沪..’、士-7τ- 气Entér‘ your四ight:in'p∞ndS”飞J: 81 ..’一..</p>
+<p>. lBl..pounds二re12. .s白ne-;n pω时间‘.,. _...:.,.</p>
+<p>在表达式; lbslL民~I'o_s由中，同乡~哇作数的类型都是‘ inr.:-所μ讨:鲁哇由于辈辈除法ö;:“”“lbs旦--m:生181，?、院以表达式的值为12.- 12和14的乘积是168 ，…所以~81与14相除的余数是.9，.这就是Ibs’~. . Lbs~pei-二百.二1二二-的值..现在即使在感情上还没肴适应版面质董革{i'lj:::-@在陈王1B傲þ;f.T-~英00旅翩翩质量学位转‘二ζ=‘二’.换问画画准备6-‘----;.:二二-ι二士”..-之二二十γ.<em>二</em>.-一. <em>二飞.’.: ‘.:. ’: .品中「巧F~:弓~.:...-:i::i:-~“‘::’~~τ;;:.:，..:..，~-=-”“”:‘气-..-τ，---.-. .:...=-= 一气~飞-:---:-一一、-一-二二二</em>.τ二.一. .<em>，τ二~ --:---=</em>.’.-.“:，，，，: :=..-τ=二二三二二::2J.;.，i;”~ 气类型转换·二.T二二二τzr:f-4一‘-~’;“‘.”“二..._ -二-’-‘:”’.; ~;___，_;.:..;..~‘.:~二-tz JtJt’“” .‘“ ., .’. C卡车宫的;荣毅允许根据需敦选择不肉的类型，这也使计算机的缺作更复杂。例如J将两个short徨相γ、</p>
+<p>·加涉及到的硬件编译指令可能会与将两个long值相加:不同L由李有if 种整型和j 种深点类凿，因此计算-</p>
+<p>\扎·机需要处理大量丰同的情况，尤其是对不同的类型进行运tt:盹O.为处理这种潜在的混乱，. 白?自动执行很、多类型转换3号ν川、</p>
+<p>飞牛:将←种算术英型的值赋绘另~种挥才豆类型臼变盘时“C+f将对值进行转换、‘.</p>
+<p>• 表达式中包含不同的类型时.C忡将对值迸行转换;</p>
+<p>• 将参数传递给函数时，C件将对值进行转换。</p>
+<p>如果不知道进行这些自动转换时将发生的精况，将无法理解-些程序的结果，因此下面详细地介绍这些规则j、</p>
+<p>l初始化，和赋位进行的转换</p>
+<p>C忡允许将一种类型的值赋给另一种类型的变量.这样做时，值将被转换为接收变蠢的类型.例如，假设5&amp;_loog‘的类型为long，也irty的类型失;sho此，而程序中包含这样的语句:</p>
+<p>50_10ng. = thirty; 11 assi伊linga sho:rt t6 ‘.a 10ng J于’:~=.7.‘吃“则进行赋值时产程序将也同f的信(通像是16 位)扩展为rong 缸〈通常为32 位):呵护展后将得到一个.新值，这全值被存储;在so_fong中亏而thirty胁内容不变←</p>
+<p>将一个值赋给值取岱范自主更大的类型通常不会军致什么问题.例如，将shorτ值赋给10吨变蚕并不会</p>
+<h3>第 63 页</h3>
+<p>飞改变这个倍r;只是占用的字节更多而Bó然而7将个很大的10l-1g值〈如211.1222333)赋给flòaf变量将二降低精度。因为floai 只在6 位有效数字，因此这3‘-值将被四舍五入为2.1J.122E9ι剧吨，肴些转换是安全的，有些则会带莱麻烦7 表3.3列出了_.些可能出现的转换问题。</p>
+<p>.襄3.3 ‘.:，.士ι-丁-二‘. . -、-...</p>
+<p>|</p>
+<p>~</p>
+<p>转换-;」e;-. 潜在的问题一,‘·</p>
+<p>将攻大的浮点类型转~为较小的浮点失望?如将-doubleI精度{有绥数位〉降低，值可能趟出目标类型的取值在旦国，在这,</p>
+<p>-、，</p>
+<p>飞转换为.tloàt-.-、」之飞φ .1种情况下.纺果将是不确定的</p>
+<p>1.‘小敛部分丢失原来的值可能揭出自衍决型的取值范阁.在这种</p>
+<p>将浮点类型转换为‘堕型|二</p>
+<p>f情况下，结果将霆~确定的二将校大的IE型转换到校小的‘些骂过，如将.Iong 转换为’short1 J系米的值可能超时目标类型的取值范围，通常只复制右边的字节:“ .</p>
+<p>, ·、</p>
+<p>将O ‘赋第扣01;::变量时，将被转换为false;而非零值将被转换为阳。</p>
+<p>将浮点位赋给整型将导致两千问题b首先，将浮点值转换为整型金将数事截摆(除蝇!J、数都知.其次，float 值对于M 变量来说可能太大了。在这种情况下，C++并没奋起义结果应该是什会:这意味结石园的实L现的反应可能不同，</p>
+<p>传统初始化的行为与赋值相同，程序消肇1.13演示了一些初始化进行的转换。</p>
+<p>程序清单3.1 3他assign.cpp</p>
+<pre><code class="language-cpp">/1 inìt .ëpp •• type changes orriniti.alization-
+垃inc lude&lt;iostream&gt;
+int main ()</code></pre>
+<p>C</p>
+<pre><code class="language-cpp">using namespace std;
+cout&#x27;τsetf{ios basë，:fixed‘主。sbase &quot;:floatfieldt;</code></pre>
+<p>float tr臼.3; 1/ int converted to floaL一一-</p>
+<pre><code class="language-cpp">int.. guess (3. 9812 L 1/ doublce converted to int
+int debt = 7,2&amp;12; 1/ resul t not defined ín C..
+cout &lt;&lt; &quot;tree = &quot; &lt;&lt; tree &lt;&lt; endl;
+cout &lt;&lt; &quot;guess = &quot; &lt;&lt; guess &lt;&lt; endl;
+cout &lt;&lt; &quot;debt = &quot; &lt;&lt; debt &lt;&lt; endl;
+return 0;</code></pre>
+<p>下面是该程序在某个系统中的输出:</p>
+<pre><code class="language-cpp">tree = 3.000000
+guess = 3
+debt = 1634811904</code></pre>
+<p>在这个程序中，将浮点值3.0赋给了tree.将3.9832赋给int变量阴暗ss导致这个值被截取为3.将浮点型转换为整型时，C++采取钱l{X(丢弃小数部分〉而不是四舍五入(查找最接近的‘应数〉。最后.int变量d胁t无法存储3.0E12，这导致C++没有对结果进行定义的情况发生。在这种系统中.debt的结果为1634811904.或大约1.6E09.</p>
+<p>当络将整数变最初始化为浮点值峙，有些编译器将提出毯告，指出这可能丢撑数摒.另饨，对于debt变麓，不同编译器显示的位也可睡不同←例如，在穷一个系统士运行该程序时，得到的值为</p>
+<p>21 47483647.</p>
+<p>2 以{}方-式4月始化院进行的转换(.Ç++ll):-</p>
+<p>C++斤粮使用大括号的初始化称为列表初始化(lis(.iñitia1iZation T.因为这种初始化常用于给复杂的数据类型提供倍列袋。与程序清单-B~3 所示的初她化方式相比，它对类型较按的要求更严格.真:体地说，歹也</p>
+<h3>第 64 页</h3>
+<p>农初始化不允许缩窄(narrowing) • llD变盘的类型可能无法表示赋给它的值.例如，不允许将浮点型转换为2棋盘~.在不同的整型之间转换或将整型转换为浮点型可能被允许，条件是编译器知道目标变窒能够正确地存储赋给它的值。例如，可将long变黛初始化为int倍，因为long总是至少与int一样长;相反方向的转换也可能被允许，只要inl 变量能够存储赋给它的long 常量:</p>
+<pre><code class="language-cpp">const int code ~ 66 ;
+int x : 66;
+char cl {3132S}; // narrowing, not al lowed
+char c2 = {66) ; // allowed because char can hold 66
+char c3 {code); // ditto
+char C4 = {x}; /1 not allowed, x i9 not constant</code></pre>
+<p>x = 31325;</p>
+<p>char c5 ~ x; /1 allowed by this f 。口nof initialization</p>
+<p>在上述代码中，初始化c4时.1~知道x的值为66.但在，编译器看来.x是一个变蠢，其值可能很大。编译器不会跟踪下述阶段可能发生的情况:从x被4日J始化到它被用来初始化c4 .</p>
+<p>3.表达式中的转换</p>
+<p>当间一个表达式中包含两种不阔的算术类型时，将出现什么情况呢?在这种情况下，C++将执行两种自动转换:首先，一些类型在出现时使会向ï;}J转换:其次，有些类型在与其他类型问时出现在表达式中时将被转换.</p>
+<p>先来看着自动转换。在计算表达式时.C++将bool、char、unsignedchar 、signedchar 和Ishort值转换为int.具体地说.true被转换为1.倒se 被转换为0。这些转换被称为整型提升( integral promotion)。例如，请看下丽的语句:</p>
+<pre><code class="language-cpp">short chickens ~ 20; // line 1
+short ducks = 35; /1 line 2
+short fowl : chickens + ducks; 11 line 3</code></pre>
+<p>为执行第3行话旬.C++程序取得chickens和ducks的值，并将它们辛苦换为int .然后，程序将结果转换为short类型，因为结果将被赋给一个short变量.这种说法可能有点拗口，但是情况确实如此。通结将int 类型选择为计算机最自然的类型，这意味着计算机使用这种类型时，运算速度可能敲快.</p>
+<p>还有其他一些整型提升:如果short比int 短，贝IJunsigned short 类型将被转换为inl:如果两种类型的长度相同，则unsi伊edshort 类型将被转换为unsignedint .这种规则确保了在对unsignedshort 进行提升的不会损失敏掘。</p>
+<p>同样.wchar_t 被提升成为下列类型中第一个宽度足够存储wchar_t取值范围的类型:int 、unsignedint 、long或unsigned long.</p>
+<p>将不同类型进行算术运算时，也会进行一些转换，例如将int和float相加时。当运算涉及两种类型时，较小的类型将被转换为较大的类型。例如，程序消单3.1J中的程序用9.0除以5 。由于9.0的类型为doubl e，因此程序在用5除之前，将5转换为double类型。总之，编译器通过校验表来确定在算术表达式中执行的转换。C++门对这个校验表稍做了修改，下面是C++II版本的校验表.编译器将依次查阅该列表.</p>
+<p>(1 )如果有一个操作数的类型是longdouble，则将另-个操作数转换为long double.</p>
+<p>( 2 )否则，如柴有一个操作数的类型是double .则将另一个操作数转换为double .</p>
+<p>(3)沓则，如果有一个操作数的类型是float，则将另一个操作数转换为float .</p>
+<p>( 4 )否则，说明操作数都是整型，因此执行整型提升.</p>
+<p>(5)在这种情况下，如果两个操作数都是有符号或无符号的.且其中一个操作数的级别比另一个低，则转换为级别高的类泪。</p>
+<p>(6)如果- 个操作数为有符号的，另一个操作数为无符号的，且无符号操作数的级别比有符号操作数</p>
+<h3>第 65 页</h3>
+<p>,</p>
+<p>‘ 7高，则将有符号操作数转换为无符寻跺作数所属的类型.</p>
+<p>(7).否则，如果有符号类型可表示无符号类型的所有可能取值，则将无符号操作数转换为有符号操作</p>
+<p>...,</p>
+<p>“.数所庸的类型。二” 、‘子</p>
+<p>( 8 )否则，将两个操作数都转换为有役号类型的王符号版本。-----</p>
+<p>ANSIC遵循的规则与IS020的C++相同7这与前述规则稍辛苦不同飞而传统K&amp;R_G-的规则又与ANSIC稍有邦同。例如b- 传统e_iã言总壁板tflo.号挺进为do.uble，即使两个操作数都是flo.at...<em> </em></p>
+<p>自在丽的列表谈到了整型级别的概念二简单地说f有衍号整型按级别从高到俯倏次1]lo.ng long、Io.ng 、in. 、sho.rt 和signedchar .无符号整型的排列顺序与有符号‘要型栩固.类主~char 、signeöchar z和unsignedchar的兹别相同工类茎~b-o.o.I的级别敲低.~wchar_r、ch低16_t 和chaä2_t 的级别与其底层类型榈陆---~ 二二</p>
+<p>御体递参数时的钱换-</p>
+<p>正如第7意将介绍的7传递参数时町的类型转换通常世C++函数原型控制，然而7位可以取消原型对-参数传递的控制，尽管这样做并不明智。在这种情况下，<em>C'I-+将对char 和sho.rt 类型Csigne&lt;F和un写igned)应用整型提升。另外，为保持岛传统e语言中大革代码的兼容性，在将参数传i总统取消原型对参数传边控制的ÆI数时.e++将float参数提升为double.</em> <em> </em> -二</p>
+<p>E 5量和]类型转换</p>
+<p>C++还允许通i1强制类型哇换机制显式地进行类型转换.C C++议识到，必须有参型规则，而有时又寄:一要推翻这些规则。〉强制类型转换的格这有两种.例如τ为将存储在变量;由o.nr中的int值转换为long1类型，-可以使用r述表达武中的了种:----(10n9): thorn 11- returns a type 10n9 cor.lVersion of thqrn -~， ,:: iông ( thô-rn广刀‘ rétu’:nsa:~type iong conirèr'SiÓn ‘of , th町、二句二二二千-</p>
+<p>-，强制类毅转换不会修改tho.m变瘦本身，而是创建?个新的、指定类型的笛，可以在表达式中使用这一个值。.~、,_. “ ‘ ’cout .~~ iIlt‘(; Ó’ ) ì /1‘d自p1”ays'the-integer, c~e for ‘Q’ . “~‘;:‘二’二-‘~.←</p>
+<p>强制转换的通用格-式如布77··二-飞</p>
+<p>,. _ . 『·、, .,..;. ., ... -.</p>
+<p>::(，typeNam~)、均1ue .:,.. 1/ :c。二.vé二白va1ue七二1沟éNam二~ type…·. .sl: --~J‘ ,_. ’.‘</p>
+<p>-‘-</p>
+<p>l、</p>
+<p>. ‘, ‘ :’typeName (value)τ/ I convert s _valuè . to. typeName二type.，~飞第种格式来自C语言，第二种格式是纯粹的C忡.毒瓦格式的想法是，要让强制类型转换r就像是属数</p>
+<p>"、，</p>
+<p>. 调用;L这样对内宣类型的强制类型转换就像是为用只定义的类设计的类型转换.</p>
+<p>C件还引入J4个强制类型转换运算符，对它们的使用要求更为严格，这将在第1 S :‘!在介绍.在这四个--运算符中，.static_ω，st&lt;&gt;ïlJ肩子将值从-~种数值类型转换为另一种数值类型?例如，可生以像下面这样将tho市</p>
+<p>~ -_</p>
+<p>转换为Io.ng 类型:</p>
+<p>，stàtic_cast&lt;1ong~~~?9r~) 二.; 1 .r，etur吨ι type. 1onq_ç&lt;?~version of thorn ‘ ~二二</p>
+<p>推而户乞.可以这梓做z--stati(:o_cast&lt;typeNail1e&gt; .(value) _‘ tI eoilverts飞ìal ue.,to typeNàme t yPe.“ ,</p>
+<p>S阳strup认为，C语言式的强制类型转换由于有过多的有能性而极其危险，这将在第IS意更深入地讨论.运算符statíc-‘-cast&lt;&gt;比传统强制类型转换更严格.</p>
+<p>‘程序消单3’，1 4演示了这两种基本的强制类型转换和s臼tic..:.cast&lt;&gt;~可以将该程序第→部公想象为一今，-功能强大的生态模拟程底的一部分.._‘该程序执行浮点计算，结果被转换方鸟和动物的数庄.得到的结果取’J决于何时进行转换.计算3咏s-l!古首先将浑束值相加，_然后在赋值时，将总数有按劳rÎnt..但计算oats和，c∞ts时，首先通淫强制类型转换将浮点值转换为int，然后刑‘算总和.程序的最后r部分演示了如何通;i1_强制类型转换来显示char ’值的ASCIl码。</p>
+<p>--</p>
+<h3>第 66 页</h3>
+<p>程序清单3.14typecast.cpp</p>
+<pre><code class="language-cpp">// typecast.cpp --forcing type changes
+#incl ude &lt; 立。s tream&gt;
+1nt main ()
+using namespace std;
+i nt auks , bat s , coots;
+// the fol l owing statement adds the values as d。飞lble，
+// then converts the result to int
+auks = 19.99 + 11.99;
+// these statements add values as int
+bats = (int) 19.99 + (int) 11.99; // old C s归tax</code></pre>
+<p>c∞ts = int (19.99)φint (11.99); // new C++即让缸</p>
+<pre><code class="language-cpp">cout &lt;&lt; &quot;auks :; It &lt;&lt; auks &lt;&lt; &quot;, bats = &quot; &lt;&lt; bats;
+cout &lt;&lt;&quot; coots = &quot; &lt;&lt; coots &lt;&lt; endl;
+char ch = &#x27;Z&#x27;;
+cout &lt;&lt; &#x27; The code for &#x27; &lt;&lt; ch &lt;&lt; &quot; i9&quot;; // print as char
+cout &lt;&lt; int(ch) &lt;&lt; endl; // print a9 int
+cout &lt;&lt; &quot;Yes , the code is &quot;;
+cout &lt;&lt; static_castcint&gt; (ch) &lt;&lt; endl; // u9ing static_cast
+ret urn 0;</code></pre>
+<p>下面是该程序的运行结果z</p>
+<pre><code class="language-cpp">auk9 = 31, bats = 30. coots = 30
+The code for Z i9 90
+Yes , the code i9 90</code></pre>
+<p>首先，将19.99和11.99相加，结果为31.98.将这个值赋给int 变是auks时，它被截短为31.但在进行2日法运算之前使用强制类型转换时，这两个值将被截短为19和11 ，因此bats和coots的值都为30 .接下来，两条cout 语句使用强制类型转换将char 类型的值转换为川，再显示它.这些转换导致∞ut将值打印为整数，而不是字符.</p>
+<p>该程序指出了使用强制类型转换的两个原因.首先，可能有一些值被存储沟douhle 类型，但要使用它伯来计算得到一个时类型的值.例如，可能要用浮点数来对齐网格或辛辛模拟整数值〈如人口).程序员可能希望在计算时将值视为int，强制类型转按允许直接这样傲。注意如将值转换为函，然后相加得到的结果，与先将值稍加，然后转换末时是不同的，至少对于这些值来说是不同的.</p>
+<p>程序的第二部分指出了簸常见的使用强制类型转换的原因-一一使一种格式的数据能够满足不同的期望.例如，在程序清单3.14中_char 变蠢ch存储的是字母Z的编码百-将∞ut周:击ch 将显示字也Z，因为ch 盹类型为char.但通过将ch强制转换为int 类Ecou哨采用面模式，从而打印存储在西中的ASCIl码.</p>
+<p>3:在5C++刊中的auto声瞬二</p>
+<p>C++川新增了一个工具，让编译器能够根据初始值的类型推断变蠢的类型.为此，官重新-定义王auto e的含义。auto 是一个C语言关键字，但很少使用，有芙其以前的含义，请参阅第9意.在初始化声明牛，.如果使用关键字auto，而不指定变景的类型，编译器将把变量的类型设、置成J号码始值相同;二</p>
+<pre><code class="language-cpp">&#x27;auto n二100;;&quot;... 11 n is &#x27;ïnt
+auto x = 1.5; // x is double</code></pre>
+<p>. auto y = .1.3百12L;// Y. i:s ‘long doubIe...<em> -~“” ! .“ -一一’. .</em>”<em> ... ...‘ •• ..品.争、一•• •• .γ·</em>.、‘-、一一一~. ;‘~;-;-.~、-二，ιJ一、-.. • .,</p>
+<p>. ... . .. ‘..岛，‘.一二’..~ -~. 、. -. -</p>
+<p>• . …..., ...<em>-</em>. :... ·ε飞r、.</p>
+<p>.吨.、...庐、‘</p>
+<h3>第 67 页</h3>
+<p>然而，自动推断类型荆F为这种简单情况而设诈的丁事实卦，如果将其Jfft这种简单饿航甚窒可能让您误入歧途。例如，假设您要将x 、y和z都指定为double类型，并编写了如下代码:</p>
+<pre><code class="language-cpp">auto x = 0.0; // ok, x is double because 0.0 i s double
+double y = 0; //ok, 0 automat icall y converted to 0.0
+auto z = 0; //∞ps， z is int because 0 is int</code></pre>
+<p>显式地声明类型时，将变璧初始化。(而不是0.0)不会导致任何问题，但采用自动类型推断时，这却会导致问题。</p>
+<p>处理复杂类型，如标准摸块库(STL)中的类型时，自动类型推断的有时才能显现出来。例如，对于下述C++98 代码2</p>
+<pre><code class="language-cpp">std::vector&lt;double&gt; scores;
+std::vector&lt;double&gt;: :iterator pv = Bcores .begin();</code></pre>
+<p>C忡11允许您将其重写为下而这样:</p>
+<pre><code class="language-cpp">std: :vector&lt;double&gt; scores;
+auto pv = scores.begin{) ;</code></pre>
+<p>本书后面讨论相关的主题时，将再次提到auto的这种新含义.</p>
+<h2>3.5 总结</h2>
+<p>C++的基本类型分为两组3一组由存储为整数的值组成，另一组由存储为浮点格式的值组成.整m之</p>
+<p>间通过存储值时使用的内存盘及有无符号来区分。整型从最小到最大依次是:bool、ch缸、signedchar、unsigned ch肌short 、unsignedshort、川、uns阳edint、long、unsigned10ng以及C忡门新增的long10ng和unsignedlong long .还有一种wchar_t类型，它在这个序列中的位置取决于实现。C++11新增了类型charl6_t和char32_t.它们的宽度足以分别存储16和32位的字符编码.C++确保了char 足够大，能够存储系统基本字符集中的任何成员，而wchar_t则可以存储系统扩展字符集中的任意成员，short至少为“位，而int 至少与short 一样长，long 至少为32位，且至少和int 一样长.确切的长度取决于实现.</p>
+<p>字符通过其数值编码来表示。ν0系统决定了编码是被解释为字符还是数字。</p>
+<p>浮点类型可以表示小数值以及比整型能够表示的值大得多的值。3种浮点类型分别是f10at、double和10ng double. C++确保f10at不比double 长，而double不比1ongdouble 长. 通常，f10at 使用32位内存，double使用64 位.long doub1e使用80到128位.</p>
+<p>通过提供.&amp;;种长度不同、有符号或无符寻的类型，C++使程序员能够根据非主定的数据姿求逃掉合适的类型τ</p>
+<p>C++使用运算符来提供对数宅类型肝算术运算:加、减z乘、除和习之模。当两个运算符~同于个操fF数进行;操作时，._C++前优先级和结合性规则可以确定先执行哪种操作.</p>
+<p>对变量商值ι在运算阜使用不向类带使翩翩陕型转换时，C+锵把信块一种类型转授为另一种类型.很多类型转换都是二“安全的气即瓦以在不损女和改变数据的情阶下去成转换z例如，可以把int 值转-换为long 筒，. mJ15.失出现任何问题.对手兵他F些转换，如将浮点类型转换为整型飞则需要更加小心.-::”一飞开始，i毒草委可能觉得大量的C忡基本类型有些多余..1~其是考虑到各种转换规则时。\但是很可能最终二:“”. _ M J、将发现6某些时候，以只奄一种类型是需要的，此盹1~将感谢ç++提供T 这种类型。</p>
+<h2>3.6 j之手题'</h2>
+<p>一-).为科汰。+有多种费亟于γ、-一“<em>;”</em>“ ...‘:’-尸川、二…二2己建P月1牙下述描述槐符的变蠢ι”之_..</p>
+<p>J 于--~..--~“”‘:’:‘川合</p>
+<p>. . -.<em>-“,-E牛，一…品...</em>-平-.之”一-~...“ _</p>
+<p>一εγ飞-‘•主_.、-._.,-‘ v 一__ . <em>..</em> 一、“.”“ 、、.<em>-</em>-. _... 气’</p>
+<p>-.,.</p>
+<p>.</p>
+<p>』三，=“ -，，，，”，<em> 、“”</em>“ _，<em>飞...</em>-=~τ-=~ ..，，:胁…叮-.气呛: ..?一一气‘’” _一-‘</p>
+<p>-</p>
+<p><em>..</em>-旬_-.</p>
+<p>，、一. . 、</p>
+<h3>第 68 页</h3>
+<p>a. SROrt 整数，值为80</p>
+<p>b. unsigned int 整数，值为42110</p>
+<p>c.值为10000∞000的整数1. C忡提供了什么措施来防止超出整型的范围?4 . 331.与33之间有什么区别?</p>
+<p>5.下爵两条C++语句是否等价?char grade ~ 65;char grade =且，.</p>
+<p>6.如何使用C++来找出编碍88表示的字符?指出至少两种方法。工将long 值赋给f10at变盘会导致舍入误差，将long.值赋给doubl已变量呢?将longlong 值赋给douMe变最呢?</p>
+<p>8.下列C++表达式的结果分别是多少?</p>
+<p>a. 8 * Y + 2</p>
+<p>b. 6 * 3/4</p>
+<p>ι.3/4*6</p>
+<p>d. 6.0 * 3/4</p>
+<p>e. 15 % 4</p>
+<p>9.假设x1和过是两个double变置，您要将官们作为整数栩加，再将结果赋给一个整型变量.话编写一条完成这项任务的C+斗语句。如果要将它们作为double值相加并转换为int呢?</p>
+<p>10.下丽每条语句声明的变量都是什么类型?</p>
+<p>a. auto cars = 15 b. auto iou = 150.37f</p>
+<p>c:-auto leveL= ‘B'd._ auto crat = U’ IU000021.5-S‘</p>
+<p>e. auto fract = 8.25f/2.5 3.7一一编程练、弓-1.编写一个少程序，要求商户使用一个孩数指出自己的身高(单位为英寸)，然后将身高转换为英尺--和英寸ι该程序使用下划线字符来指示输入佼黠另外，使原仨吵const 符号常盘来表示转换因子。-2.编‘写一个小程序，要求以几英尺儿基寸的方式徐入其身高，并以磅为单位输入其佬窒.(佼胜3个变量来存储这些信息。)该程序报省3王BMJ( BQ.dy ~~S lndex ... 休军指数).为了计算BMJ.该程序以英寸二的方式tli出用户的身高(l英只为12英寸)~并将以英τt为单位的身高转换为以米为单位的泉高(þ:英寸=0:0254 ;l长).然后，将以磅为单位的体重转换宠以:r克为单位的体重(þ千克=2.2磅〉二最后，计算相应的BMJ-=一体垂〈千如除以身E高〈米〉的~方.用符号常量’表示备耕转换因牙._J.编写一个程序，-姿求用沪以度z牙、秒的方式输入一个纬度二然后以度为单位显示核纬度.r度为-60分，-[分等手60秒，请以符穹常莹的方式表示这些值.对于每个输入值，应使用L个独立的变量存储它、下面是该程序运行时的情而「由lt，erιlati tude叠n- degrees, m.ínutes 户andseconds“FiÏ”sf, enter_thË二degrees:- 37-Next , enter-the mínutes-of arc:-51 Finally;-回eerthe seconds of arc:主9 37- degrees ~ 51 minutes , -l9-seconds = 37 ..85-53“ degrees</p>
+<h3>第 69 页</h3>
+<p>4.编写一个程序仇要求用户以技数方式输入秒赞〈使用long或longIõng变量存储) ，然后以天、小叶、分钟和秒的访贫显示这段时间.使用符号常量来表示每天存多少小时、每小时有多少分钟以及每分钟有多少秒.该程应盹输出应年F丽类似=</p>
+<pre><code class="language-cpp">Em:er the number of seconds-: 31600000
+3 16 0000ιseconds = 365 days; 11 hours , 46 minutes-, 40- seconds..</code></pre>
+<p>5.编写一个程庄，要求用户输入全球当能件λ 口和美国当前的人口〈或其他-国家的人口〉。将这些信息存储在longlong 变盘中-;并让程序显示美阵(或其也同家)的人口占全球入口的尊分比r 该程序的输出应与下面类1!X:</p>
+<pre><code class="language-cpp">Enter the world &#x27; s population: 6898758899
+Enter the populati。罚。t t he US.: n078&#x27;3781</code></pre>
+<p>The population of the US is 4.504.92 苦。fthe wor}!吕popula ti。古?</p>
+<p>6.编写一个程序，要求用户输入驱车里程愤里〉剌阴汽油最(1m:仑)，-然辰指出汽率耗油量妄为-一加仑的蛋程.如果愿意，也可以让程序要求用户即公里为单位输大距离，并以弗为单位输λ过梅毒，然后指出欧洲风格的结果一-fl.11每100公里的稳汹量仔1，)“-</p>
+<p>7.编写一个程序，姿态用户按欧洲风格输入汽车的税汹蠢〈每100公里消施的汽~量工卦))，然后将其转换为美国β啪的辈革油量一一每加仑多少英里。注意，除了使用不向前单位计盘夕仁美国方法t距离产燃料〉与欧、洲苏法〈燃料/距离〉栩反。100公里等毛62 .14 某县l加仓等于3 .875-丹。因此，1 9mpg大量~合12.4νrOOkm .-~27mp巨大约合8.71 / 100km .</p>
+<hr>
+<p>本章对应原书小节结构见文件开头。</p>
+  <footer class="lesson-footer">
+    StudyMate · 第 3 章 处理数据 · 本地学习工作区
+  </footer>
+</article>
+
+<script src="../../assets/sayo/sayo.js"></script>
+<script>LearnTheme.wire(document.getElementById('attachment-theme-checkbox'));</script>
+</body>
+</html>
