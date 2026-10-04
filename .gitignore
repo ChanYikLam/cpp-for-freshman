@@ -1,0 +1,8 @@
+# 生成/构建中间产物
+.studymate-stage/
+.stage/
+build/
+*.o
+*.out
+*.exe
+.DS_Store
