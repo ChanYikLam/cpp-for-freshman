@@ -278,7 +278,7 @@ def main(argv):
     # ⑤ 根目录再放一份术语表与资源清单：方便直接翻，不经过科目主页
     for slug in slugs:
         src_subj = os.path.join(src_subjects, slug)
-        for name in ('GLOSSARY.html', 'RESOURCES.html'):
+        for name in ('GLOSSARY.html', 'GLOSSARY-EASY.html', 'RESOURCES.html'):
             s = os.path.join(src_subj, name)
             if not os.path.isfile(s):
                 continue
@@ -516,6 +516,8 @@ GLOSSARY_STYLE = """<style>
 .learn-glossary-callout__go{display:inline-block;margin-top:10px;padding:7px 14px;border-radius:999px;
  background:var(--syo-accent,#0a6c4f);color:#fff;font-size:.875rem;font-weight:600;text-decoration:none}
 .learn-glossary-callout__go:hover{filter:brightness(1.08)}
+.learn-glossary-callout__go--alt{margin-left:8px;background:transparent;color:var(--syo-accent,#0a6c4f);
+ border:1px solid color-mix(in srgb,var(--syo-accent,#0a6c4f) 45%,transparent)}
 </style>"""
 
 GLOSSARY_CALLOUT = GLOSSARY_STYLE + """
@@ -525,7 +527,9 @@ GLOSSARY_CALLOUT = GLOSSARY_STYLE + """
   </p>
   <p class="learn-glossary-callout__body">每个计算机专有名词都在这里写了「为什么需要它、它是什么、不要用哪个说法代替它」。
   看书时卡在某个词上，直接来这里查——不用往前翻找它在哪一章出现过。</p>
-  <a class="learn-glossary-callout__go" href="{HREF}">打开术语表 →</a>
+  <p class="learn-glossary-callout__body"><b>完全没接触过计算机？先看大白话版</b>——每个词都拿生活里的东西打比方。</p>
+  <a class="learn-glossary-callout__go" href="{HREF_EASY}">大白话版（推荐先看）→</a>
+  <a class="learn-glossary-callout__go learn-glossary-callout__go--alt" href="{HREF}">规范版</a>
 </section>
 """
 
@@ -555,7 +559,8 @@ def inject_glossary_links(docs, slugs):
             anchor = f'<main class="syo-container learn-main" id="learn-content">'
             if anchor in text and not in_comment(text, text.find(anchor)):
                 text = text.replace(
-                    anchor, anchor + '\n' + GLOSSARY_CALLOUT.replace('{HREF}', 'GLOSSARY.html'), 1)
+                    anchor, anchor + '\n' + (GLOSSARY_CALLOUT.replace('{HREF_EASY}', 'GLOSSARY-EASY.html')
+                        .replace('{HREF}', 'GLOSSARY.html')), 1)
                 write_text(page, text)
                 made += 1
 
@@ -573,7 +578,8 @@ def inject_glossary_links(docs, slugs):
             if pos >= 0 and not in_comment(text, pos):
                 # 首页在站点根，术语表在 <slug>/GLOSSARY.html，相对路径要带上科目目录
                 text = text[:pos + len(anchor)] + '\n' + \
-                    GLOSSARY_CALLOUT.replace('{HREF}', f'{slug}/GLOSSARY.html') + \
+                    (GLOSSARY_CALLOUT.replace('{HREF_EASY}', f'{slug}/GLOSSARY-EASY.html')
+                        .replace('{HREF}', f'{slug}/GLOSSARY.html')) + \
                     text[pos + len(anchor):]
                 write_text(home, text)
                 made += 1

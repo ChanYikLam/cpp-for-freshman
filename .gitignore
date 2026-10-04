@@ -12,3 +12,7 @@ a.out
 
 # 系统垃圾
 .DS_Store
+
+# Python 字节码（跨解释器版本没用，不该进仓库；zip 包同理，见上面的 dist/）
+__pycache__/
+*.pyc
